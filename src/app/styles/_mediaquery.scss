@@ -1,0 +1,29 @@
+$media_queries: (
+    'small-screen': "only screen and (max-width: 576px)",
+    'mobile': "only screen and (min-width: 577px) and (max-width: 767px)",
+    'tablet': "only screen and (min-width: 768px) and (max-width: 991px)",
+    'small-desktop': "only screen and (min-width: 992px) and (max-width: 1199px)",
+    'large-desktop': "only screen and (min-width: 1200px)"
+);
+
+// Mixin to generate media queries for given breakpoints
+@mixin for_breakpoint($breakpoints...) {
+    $conditions: ();
+
+    @each $breakpoint in $breakpoints {
+
+        // If the key exists in the map
+        @if map-has-key($media_queries, $breakpoint) {
+            $conditions: join($conditions, map-get($media_queries, $breakpoint), comma);
+        }
+
+        // If the key doesn't exist in the map, assume it's a custom query string
+        @else {
+            $conditions: join($conditions, $breakpoint, comma);
+        }
+    }
+
+    @media #{$conditions} {
+        @content;
+    }
+}

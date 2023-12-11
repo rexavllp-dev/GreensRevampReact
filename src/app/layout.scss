@@ -1,0 +1,9 @@
+@import "./styles/mediaquery";
+
+.main-wrapper {
+  margin-top: 148px;
+
+  @include for_breakpoint("tablet") {
+    margin-top: 100px
+  }
+}

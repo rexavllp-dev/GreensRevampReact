@@ -1,0 +1,172 @@
+@import "../../app/styles/colors";
+@import "../../app/styles/mediaquery";
+
+.custombtn.primary {
+  outline: none;
+  border-radius: 6px;
+  background: #32893b;
+  outline: none;
+  border: none;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.custombtn.primary:hover {
+  // background: #1fa72d;
+  transition: background 0.2s ease-in-out;
+}
+
+.custombtn.primary:active {
+  border: 1px solid #1fa72d;
+  box-shadow: 3px 2px 22px 1px rgba(24, 23, 23, 0.24);
+}
+
+.custombtn.primary .custombtn-label {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  color: #ffffff;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.custombtn.secondary {
+  outline: none;
+  border-radius: 50px;
+  border: 1.5px solid #000;
+  background: transparent;
+  outline: none;
+  padding: 7px 12px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    border: none;
+    padding: 7px 0px;
+  }
+}
+
+.custombtn.secondary:hover {
+  background: #000;
+  transition: background 0.2s ease-in-out;
+  @include for_breakpoint("small-screen", "mobile") {
+    background: transparent;
+  }
+}
+
+.custombtn.secondary .custombtn-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 12px;
+    border-bottom: 1px solid #000;
+  }
+}
+
+.custombtn.secondary:hover .custombtn-label {
+  color: #fff;
+  @include for_breakpoint("small-screen", "mobile") {
+    color: #000;
+  }
+}
+
+.custombtn.teritary {
+  outline: none;
+  border-radius: 4px;
+  background: #fff;
+  outline: none;
+  border: 1px solid #32893b;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.custombtn.teritary:hover {
+  background: #f6faf6;
+  transition: background 0.2s ease-in-out;
+}
+
+.custombtn.teritary .custombtn-label {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  color: #32893b;
+}
+
+.custombtn.white {
+  outline: none;
+  border-radius: 4px;
+  background: #fff;
+  outline: none;
+  border: none;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.custombtn.white:hover {
+  background: #f6faf6;
+  transition: background 0.2s ease-in-out;
+}
+
+.custombtn.white .custombtn-label {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  color: #3a3a3a;
+}
+
+//transparent btn
+.custombtn.transparent {
+  outline: none;
+  border-radius: 6px;
+  background: transparent;
+  border: 1.5px solid #32893b;
+  outline: none;
+  // border: none;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.custombtn.transparent:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 3px 2px 22px 1px rgba(24, 23, 23, 0.24);
+  /* Lowering the shadow */
+  // background: #32893b;
+  // transition: background 0.2s ease-in-out;
+}
+
+.custombtn.transparent:hover .custombtn-label {
+  // color: #fff;
+}
+
+.custombtn.transparent .custombtn-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #32893b;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 14px;
+  }
+}

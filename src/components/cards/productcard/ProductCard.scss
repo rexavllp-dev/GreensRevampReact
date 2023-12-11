@@ -1,0 +1,131 @@
+@import "../../../app/styles/colors";
+@import "../../../app/styles/mediaquery";
+
+.productcard {
+  width: 280px;
+  min-width: 280px;
+  padding: 20px;
+  position: relative;
+
+  @include for_breakpoint("mobile", "small-screen") {
+    width: 164px;
+    min-width: 164px;
+    padding: 10px;
+  }
+  &:hover {
+    // box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    // width: 300px;
+    // min-width: 300px;
+    // transition: all 0.3s ease-in-out;
+
+    .cardimage {
+      width: 180px;
+      height: 180px;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+  .icon {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .cardimg_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 193px;
+  }
+
+  .cardimage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 173px;
+    height: 173px;
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .productdetails {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    gap: 13px;
+
+    .topsection {
+      display: flex;
+      justify-content: space-between;
+
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        white-space: nowrap;
+
+        @include for_breakpoint("mobile", "small-screen") {
+          gap: 4px;
+        }
+      }
+
+      .right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        .staricon {
+          padding-bottom: 1px;
+        }
+      }
+    }
+
+    .badgecontainer {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .bottomsection {
+    display: flex;
+    justify-content: center;
+  }
+
+  .productbtn {
+    outline: none;
+    border-radius: 50px;
+    border: 1.5px solid #32893b;
+    background: transparent;
+    outline: none;
+    padding: 7px 12px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: #32893b;
+      .productbtn_text {
+        color: #fff;
+      }
+    }
+
+    .productbtn_text {
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      color: #32893b;
+
+      @include for_breakpoint("small-screen", "mobile") {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.productbadge {
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #ffe68d;
+  display: flex;
+  align-items: center;
+}

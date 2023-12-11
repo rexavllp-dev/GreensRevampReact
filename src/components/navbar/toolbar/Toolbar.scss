@@ -1,0 +1,42 @@
+@import "../../../app/styles/mediaquery";
+
+.toolbar {
+  height: 48px;
+  border-bottom: 1px solid #afdcb4;
+  background: #fff;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  justify-content: center;
+  z-index: 100;
+
+  @include for_breakpoint("small-screen", "mobile", "tablet") {
+    display: none;
+  }
+
+  .itemlabel {
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    @include for_breakpoint("tablet") {
+      font-size: 14px;
+    }
+  
+    &:hover {
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+  .bold {
+    font-weight: 600;
+    &:hover {
+      font-weight: 700;
+    }
+  }
+}

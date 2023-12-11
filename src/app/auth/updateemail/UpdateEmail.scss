@@ -1,0 +1,45 @@
+@import "../../../app/styles/mediaquery";
+
+.updateemail-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+  @include for_breakpoint("small-screen", "mobile") {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .updateemail {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 205px;
+    margin-bottom: 150px;
+
+    
+  @include for_breakpoint("small-screen", "mobile") {
+   width: 100%;
+   margin-top: 160px;
+   margin-bottom: 140px;
+  }
+
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    //   align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .formwrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 20px;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@import "../../../app/styles/mediaquery";
+
+.categorycard-wrapper {
+  .categrorycard {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    &:hover {
+      transition: all 0.4s ease-in-out;
+    }
+  }
+
+  .imgcontainer {
+    /* height: 100%;
+  width: 100%; */
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    &:hover {
+      // transition: all 0.4s ease-in-out;
+      transform: scale(1.02); 
+    }
+  }
+
+  .categrorycard .title {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 1;
+    // font-size: 18px;
+    // font-weight: 600;
+    @include for_breakpoint("small-screen", "mobile") {
+      display: none;
+    }
+  }
+
+  .cardtitle {
+    display: none;
+    @include for_breakpoint("small-screen", "mobile") {
+      display: block;
+      margin-top: 15px;
+    }
+  }
+}

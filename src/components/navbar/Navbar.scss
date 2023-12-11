@@ -1,0 +1,243 @@
+@import "../../app/styles/mediaquery";
+
+.navbar-wrapper {
+  border-bottom: 1px solid #e3e3e3;
+  background: #fff;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  // padding: 15px 30px 12px 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  z-index: 1000;
+  // background-color: green;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    height: 138px;
+    padding: 16px 20px 20px 20px;
+    border-bottom: 1px solid #afdcb4;
+  }
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    gap: 18px;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      display: none;
+    }
+
+    .left {
+      display: flex;
+      gap: 19px;
+
+      .logo {
+        padding-top: 10px;
+        // width: 227px;
+        width: 217px;
+      }
+
+      .drawerbtn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        min-width: 32px;
+        width: 32px;
+      }
+      .drawerbtn-label {
+        font-size: 15px;
+        font-weight: 500;
+        color: #111;
+
+        &:hover {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .center_section {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-width: 350px;
+      // width: 463px;
+      max-width: 463px;
+    }
+
+    .center {
+      width: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      // justify-content: flex-end;
+
+      .navitems {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+
+        .item.country,
+        .item.lang {
+          .ar {
+            font-size: 20px;
+            font-weight: 700;
+            width: 34px;
+            &:hover {
+              font-size: 21px;
+              font-weight: 800;
+            }
+          }
+
+          .en {
+            font-size: 16px;
+            font-weight: 700;
+            &:hover {
+              font-weight: 800;
+            }
+          }
+
+          @include for_breakpoint("tablet") {
+            display: none;
+          }
+        }
+
+        .item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+
+          .icon {
+            width: 24px;
+            height: 24px;
+          }
+
+          .item-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #111;
+            white-space: nowrap;
+
+            @include for_breakpoint("tablet", "small-desktop") {
+              display: none;
+            }
+
+            &:hover {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbarmobile {
+    display: none;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      .left {
+        width: 70px;
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 5px;
+
+        .logo {
+          width: 154px;
+        }
+      }
+
+      .right {
+        width: 70px;
+        .navitems {
+          display: flex;
+          align-items: center;
+          gap: 23px;
+        }
+      }
+    }
+
+    // .left {
+    //   display: flex;
+    //   gap: 19px;
+
+    //   .logo {
+    //     padding-top: 10px;
+    //   }
+
+    //   .drawerbtn {
+    //     display: flex;
+    //     align-items: center;
+    //     gap: 8px;
+    //     cursor: pointer;
+    //   }
+    //   .drawerbtn-label {
+    //     font-size: 15px;
+    //     font-weight: 500;
+    //     color: #111;
+
+    //     &:hover {
+    //       font-weight: 600;
+    //     }
+    //   }
+    // }
+
+    // .center {
+    //   display: flex;
+    //   align-items: center;
+    // }
+
+    // .right {
+    //   display: flex;
+    //   align-items: center;
+
+    //   .navitems {
+    //     display: flex;
+    //     align-items: center;
+    //     gap: 25px;
+    //     min-width: 300px;
+
+    //     .item {
+    //       display: flex;
+    //       align-items: center;
+    //       gap: 8px;
+    //       cursor: pointer;
+
+    //       .item-label {
+    //         font-size: 15px;
+    //         font-weight: 500;
+    //         color: #111;
+
+    //         &:hover {
+    //           font-weight: 600;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+  }
+}

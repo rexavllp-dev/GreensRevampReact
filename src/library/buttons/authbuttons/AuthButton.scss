@@ -1,0 +1,31 @@
+@import "../../../app/styles/mediaquery";
+
+.authbutton {
+  height: 50px;
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  gap: 10px;
+  transition: 0.2s all; 
+
+  @include for_breakpoint("small-screen", "mobile") {
+    height: 42px;
+  }
+
+  p{
+    @include for_breakpoint("small-screen", "mobile") {
+      font-weight: 500 !important;
+    }
+  }
+}
+
+
+.authbutton:active {
+  transform: scale(0.99); 
+  /* Scaling button to 0.98 to its original size */ 
+  box-shadow: 1px 1px 1px 1px rgba(24, 23, 23, 0.24); 
+}

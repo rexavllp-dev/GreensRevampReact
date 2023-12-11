@@ -1,0 +1,65 @@
+@import "../styles/mediaquery";
+
+
+.productlist-wrapper {
+
+    padding: 24px 20px 78px 20px;
+
+    .itemcard-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-top: 47px;
+        padding-bottom: 20px;
+  
+        @include for_breakpoint("small-screen", "mobile") {
+          // padding-top: 22px;
+          padding-top: 28px;
+        }
+  
+        .header {
+          display: flex;
+          justify-content: space-between;
+  
+          @include for_breakpoint("small-screen", "mobile") {
+            justify-content: flex-start;
+          }
+  
+          .leftsection {
+            width: 80px;
+  
+            @include for_breakpoint("small-screen", "mobile") {
+              display: none;
+            }
+          }
+  
+          .scrollbuttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+  
+            @include for_breakpoint("small-screen", "mobile") {
+              display: none;
+            }
+          }
+        }
+  
+        .items {
+          padding-top: 24px;
+          display: flex;
+          gap: 16px;
+          overflow-x: auto;
+          scroll-behavior: smooth;
+          -ms-overflow-style: none; /* Internet Explorer 10+ */
+          scrollbar-width: none; /* Firefox */
+          &::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+          }
+  
+          @include for_breakpoint("small-screen", "mobile") {
+            padding-top: 20px;
+          }
+        }
+      }
+  
+}
+

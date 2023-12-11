@@ -1,0 +1,18 @@
+.customcard {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .customcard .title {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .customcard .btn {
+    position: absolute;
+    top: 70px;
+    left: 25px;
+  }

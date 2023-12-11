@@ -1,0 +1,15 @@
+.togglebtn-wrapper {
+  // width: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  .togglebtn-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #4d4d4d;
+  }
+}
+
+.group[data-selected="true"] .group-data-\[selected\=true\]\:bg-success {
+  background-color: #32893b;
+}

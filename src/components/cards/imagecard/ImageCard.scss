@@ -1,0 +1,69 @@
+@import "../../../app/styles/colors";
+@import "../../../app/styles/mediaquery";
+
+.imagecard_wrapper {
+  overflow: hidden;
+  &:hover {
+    transition: all 0.4s ease-in-out;
+  }
+
+  .imagecard {
+    position: relative;
+    // border-radius: 6px;
+    overflow: hidden;
+    /* height: 300px;
+    width: 100%; */
+    transition: transform 0.3s ease;
+    &:hover {
+      transform: scale(1.01); 
+    }
+  }
+
+  .imagecard .content {
+    position: absolute;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    @include for_breakpoint("small-screen", "mobile") {
+      padding-left: 16px;
+      padding-top: 24px;
+    }
+
+   
+  }
+
+  .imagecard .bottomcontent {
+    position: absolute;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    @include for_breakpoint("small-screen", "mobile") {
+      padding-left: 16px;
+      padding-top: 24px;
+    }
+  }
+
+
+
+  .imagecard .bottombtn {
+   
+  }
+
+  .imagecard .icon {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1;
+    @include for_breakpoint("small-screen", "mobile") {
+     display: none;
+    }
+  }
+}

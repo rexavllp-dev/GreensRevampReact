@@ -1,0 +1,116 @@
+@import "../../../app/styles/mediaquery";
+
+
+.customsearch-fullwidth-wrapper {
+  // width: 100%;
+  // min-width: 463px;
+  // width: 463px;
+  width: 100%;
+
+
+  @include for_breakpoint("small-screen", "mobile") {
+    width: 100%;
+  }
+
+  .customsearch-fullwidth {
+    outline: none;
+    border: none;
+    background-color: #f0fff2;
+    /* padding: 12px 62px 12px 125px; */
+    height: 40px;
+    border-radius: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 40px;
+    padding-right: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      width: 100%;
+      font-size: 14px;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    &:hover {
+      background-color: #e5fce8;
+    }
+  }
+}
+
+.customsearch-wrapper {
+  position: relative;
+  width: 100%;
+
+  .customsearch {
+    outline: none;
+    border: none;
+    background-color: #f0fff2;
+    /* padding: 12px 62px 12px 125px; */
+    height: 40px;
+    border-radius: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 22px;
+    padding-right: 22px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      width: 100%;
+      font-size: 14px;
+      padding-left: 22px;
+      padding-right: 22px;
+    }
+    &:hover {
+      background-color: #e5fce8;
+    }
+
+    .searchicon {
+      position: absolute;
+      top: 7px;
+      left: 10px;
+
+      // @include for_breakpoint("small-screen", "mobile") {
+      //   left: 20px;
+      // }
+    }
+  }
+
+  input::placeholder {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      font-size: 14px;
+    }
+  }
+
+  input {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      font-size: 14px;
+    }
+  }
+}

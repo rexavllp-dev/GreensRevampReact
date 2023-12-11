@@ -1,0 +1,67 @@
+@import '../../../app/styles/mediaquery';
+
+.verifyemail-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .verifyemail {
+    width: 658px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 205px;
+    margin-bottom: 220px;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      width: 100%;
+      margin-top: 160px;
+      margin-bottom: 180px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .refresh {
+      padding-top: 34px;
+    }
+
+
+    .changeemail {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+
+      p {
+        color: #000;
+        font-size: 20px;
+        font-weight: 400;
+
+        @include for_breakpoint("small-screen", "mobile") {
+          font-size: 16px;
+        }
+      }
+
+      .changebtn {
+        cursor: pointer;
+        color: #32893b;
+        font-size: 20px;
+        font-weight: 400;
+        margin-left: 5px;
+        // border-bottom: 1px solid #32893b;
+        text-decoration: underline;
+
+        @include for_breakpoint("small-screen", "mobile") {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}

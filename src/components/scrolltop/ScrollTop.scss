@@ -1,0 +1,15 @@
+.back_btn_icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  border: 1px solid snow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #32893b;
+  cursor: pointer;
+  z-index: 10;
+}

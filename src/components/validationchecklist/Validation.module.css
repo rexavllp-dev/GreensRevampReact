@@ -1,0 +1,22 @@
+.wrapper p {
+    color: rgb(192, 192, 192);
+    font-size: 12px;
+    padding-top: 2px;
+  }
+
+  .wrapper {
+    padding-top: 5px;
+  }
+  
+  .wrapper .passed {
+    /* color: green; */
+    color: black;
+  }
+  
+  .wrapper .passed:before {
+    content: "✔";
+    color: green;
+    display: inline-block;
+    margin-right: 0.4em;
+  }
+  

@@ -1,0 +1,173 @@
+@import "../../app/styles/colors";
+@import "../../app/styles/mediaquery";
+
+.footer-wrapper {
+  background-color: map-get($colors, secondary);
+  min-height: 412px;
+  padding: 48px 40px 20px 40px;
+  width: 100%;
+  overflow: hidden;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    padding: 40px 20px 34px 20px;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    gap: 20px;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      gap: 82px;
+    }
+
+    .top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+
+      @include for_breakpoint("small-screen", "mobile") {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .left {
+
+        .logo{
+          width: 280px;
+        }
+        @include for_breakpoint("small-screen", "mobile") {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      .socialmedia {
+        padding-top: 28px;
+        padding-bottom: 28px;
+
+        @include for_breakpoint("small-screen", "mobile") {
+          padding-top: 14px;
+          padding-bottom: 40px;
+        }
+
+        .icons {
+          display: flex;
+          cursor: pointer;
+        }
+
+        .title {
+
+          @include for_breakpoint("small-screen", "mobile") {
+           display: none;
+          }
+        }
+      }
+
+      .navsections {
+        display: flex;
+        // gap: 20px;
+        gap: 60px;
+
+        @include for_breakpoint("small-screen", "mobile") {
+          flex-direction: column;
+          gap: 32px;
+        }
+        section {
+          .title {
+            padding-bottom: 30px;
+            @include for_breakpoint("small-screen", "mobile") {
+              padding-bottom: 12px;
+            }
+          }
+          .subsections {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+          }
+        }
+      }
+    }
+
+    .bottom {
+      min-height: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+
+      @include for_breakpoint("small-screen", "mobile") {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .subscribe {
+        width: 50%;
+        padding-bottom: 25px;
+
+        @include for_breakpoint("small-screen", "mobile") {
+          width: 100%;
+        }
+        .title {
+          padding-bottom: 10px;
+        }
+        .inputsection {
+          padding-top: 25px;
+          max-width: 331px;
+
+          @include for_breakpoint("small-screen", "mobile") {
+            max-width: 100%;
+            width: 100%;
+          }
+        }
+      }
+
+      .right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        .payment {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          align-self: flex-end;
+          padding-bottom: 32px;
+
+          @include for_breakpoint("small-screen", "mobile") {
+            align-items: center;
+            align-self: center;
+          }
+          .icons {
+            padding-top: 28px;
+            display: flex;
+            gap: 24px;
+          }
+        }
+        .terms {
+          display: flex;
+          align-content: center;
+          gap: 24px;
+          white-space: nowrap;
+          @include for_breakpoint("small-screen", "mobile") {
+            flex-direction: column-reverse;
+          }
+
+          .links-container {
+            display: flex;
+            gap: 24px;
+            white-space: nowrap;
+            align-items: center;
+            @include for_breakpoint("small-screen", "mobile") {
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

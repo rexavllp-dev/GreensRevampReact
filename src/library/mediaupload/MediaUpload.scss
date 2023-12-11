@@ -1,0 +1,56 @@
+@import "../../app/styles/mediaquery";
+
+.mediaupload-wrapper {
+  .label-container {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    .infoicon {
+      cursor: pointer;
+      padding-bottom: 2px;
+    }
+  }
+
+  .label {
+    color: #4d4d4d;
+    font-size: 14px;
+    font-weight: 400;
+    padding-bottom: 4px;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      font-size: 12px;
+    }
+    span {
+      padding-left: 2px;
+      color: #f41260;
+    }
+  }
+  .mediaupload-invalid {
+    border-bottom: 2px solid #f41260 !important;
+    // color: #f41260 !important;
+  }
+
+  .mediaupload {
+    position: relative;
+    height: 50px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: #949494;
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      height: 42px;
+    }
+
+    .icon {
+      position: absolute;
+      right: 12px;
+    }
+  }
+}
