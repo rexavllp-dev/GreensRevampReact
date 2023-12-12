@@ -62,7 +62,19 @@ export default function SearchDropdown() {
     const [visible, setVisible] = React.useState(false);
 
     const handleSearch = () => {
-        router.push('/products/search', { scroll: true });
+        if (!keyword) {
+            return;
+        }
+        router.push(`/products/search/?q=${keyword}`, { scroll: true });
+    }
+    const onKeyUp = (e) => {
+        if (!keyword) {
+            return;
+        }
+        if (e.key === 'Enter') {
+            router.push(`/products/search/?q=${keyword}`, { scroll: true });
+            // this.search(); 
+        }
     }
 
 
@@ -92,6 +104,8 @@ export default function SearchDropdown() {
                         <CustomSearch name={'product'} value={keyword}
                             onChange={(e) => setKeyword(e.target.value)}
                             // placeholder={'Search for a product or Item code'}
+                            onKeyUp={onKeyUp}
+                            onSearchClick={handleSearch}
                             isInput={true}
                             ref={searchRef}
                             fullWidth={true}
@@ -154,7 +168,7 @@ export default function SearchDropdown() {
                                 <div className="recentproducts">
                                     {
                                         products?.map((item, index) => (
-                                            <div className="product" key={item.id} onClick={() => { handleSearch(item.id) }}>
+                                            <div className="product" key={item.id}>
                                                 <div className="image">
                                                     <Image
                                                         src={item.img}

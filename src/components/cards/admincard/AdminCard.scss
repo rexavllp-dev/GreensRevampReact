@@ -1,0 +1,35 @@
+.admincard {
+  border-radius: 8px;
+  border: 1px solid #32893b;
+  background-color: #f2fef4;
+  width: 265px;
+  height: 145px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+
+  .icon{
+    display:flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+
+  .header,
+  .footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .btn {
+      cursor: pointer;
+      &:hover {
+        transform: scale(0.98);
+      }
+    }
+  }
+}

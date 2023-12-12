@@ -1,0 +1,109 @@
+"use client"
+import React from 'react'
+import './AdminSidebar.scss'
+import CustomTypography from '@/library/typography/CustomTypography'
+import Link from 'next/link'
+import Image from 'next/image'
+import { companyLogo } from '@/assets/images'
+import { RxHamburgerMenu } from "react-icons/rx";
+import { usePathname } from 'next/navigation'
+
+const AdminSidebar = () => {
+    const pathname = usePathname()
+    console.log(pathname)
+
+    const sidebarItems = [
+        {
+            id: 1,
+            name: 'Dashboard',
+            url: '/admin/dashboard',
+        },
+        {
+            id: 2,
+            name: 'Products',
+            url: '/admin/products',
+        },
+        {
+            id: 3,
+            name: 'Sales',
+            url: '/admin/sales',
+        },
+        {
+            id: 4,
+            name: 'Tracking',
+            url: '/admin/tracking',
+        },
+        {
+            id: 5,
+            name: 'Cancellations',
+            url: '/admin/cancellations',
+        },
+        {
+            id: 6,
+            name: 'Returns',
+            url: '/admin/returns',
+        },
+        {
+            id: 7,
+            name: 'Replaces',
+            url: '/admin/replaces',
+        },
+        {
+            id: 8,
+            name: 'Coupons',
+            url: '/admin/coupons',
+        },
+        {
+            id: 9,
+            name: 'Giftcards',
+            url: '/admin/giftcards',
+        },
+        {
+            id: 10,
+            name: 'Advanced',
+            url: '/admin/advanced',
+        },
+        {
+            id: 11,
+            name: 'Catalogue',
+            url: '/admin/catalogue',
+        },
+        {
+            id: 12,
+            name: 'Recipes',
+            url: '/admin/recipes',
+        }
+
+    ]
+    return (
+        <div className='adminsidebar'>
+            <div className="sidebar">
+                <div className="header">
+                    <Link href="/admin/dashboard">
+                        <div className="logo">
+                            <Image src={companyLogo} />
+                        </div>
+                    </Link>
+                    <div className="menuicon">
+                        <RxHamburgerMenu size={24} />
+                    </div>
+                </div>
+
+                <div className="sidebaritems">
+                    {sidebarItems.map((item) => {
+
+                        return (
+                            <Link href={item.url}>
+                                <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}>
+                                    <CustomTypography content={item.name} color={pathname.includes(item.url) ? 'WHITE' : 'BLACK'} size='MEDIUM-SMALL' weight='SEMI-BOLD' />
+                                </div>
+                            </Link>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default AdminSidebar

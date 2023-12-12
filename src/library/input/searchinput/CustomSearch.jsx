@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { SearchIcon } from '@/assets/icons'
 
 const CustomSearch = ({
-  value, onChange, name, placeholder, label, fullWidth, isInput
+  value, onChange, name, placeholder, label, fullWidth, isInput, onKeyUp, onSearchClick
 }) => {
   const searchRef = useRef();
   useEffect(() => {
@@ -19,7 +19,7 @@ const CustomSearch = ({
         fullWidth ?
           <div className='customsearch-wrapper'>
             <div className="customsearch">
-              <div className={'searchicon'}>
+              <div className={'searchicon'} onClick={onSearchClick}>
                 <Image src={SearchIcon} />
               </div>
 
@@ -28,6 +28,7 @@ const CustomSearch = ({
                 ref={searchRef}
                 type="text"
                 value={value}
+                onKeyUp={onKeyUp}
                 onChange={onChange}
                 className={'customsearch'}
                 placeholder={placeholder}
@@ -37,7 +38,7 @@ const CustomSearch = ({
           </div>
           :
           <div className="customsearch-fullwidth-wrapper">
-            <div className="customsearch-fullwidth" style={{justifyContent: value.length ? 'flex-start' : 'center'}}>
+            <div className="customsearch-fullwidth" style={{ justifyContent: value.length ? 'flex-start' : 'center' }}>
               <div className={'searchicon'}>
                 <Image src={SearchIcon} />
               </div>

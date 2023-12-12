@@ -1,0 +1,22 @@
+.advanced-settings-wrapper {
+  padding: 20px 20px 70px 20px;
+
+  .title {
+    padding-bottom: 30px;
+    padding-top: 20px;
+    padding-left: 20px;
+  }
+  
+  .advanced-settings {
+      display: grid;
+      width: 100%;
+      justify-content: space-evenly;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(265px, auto));
+      
+      // @include for_breakpoint("small-screen", "mobile") {
+          //   grid-template-columns: repeat(auto-fit, minmax(164px, auto));
+          // }
+        }
+        
+    }
