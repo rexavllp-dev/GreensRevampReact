@@ -1,0 +1,31 @@
+@import "../../../app/styles/mediaquery";
+
+.input-wrapper {
+  height: 40px;
+  border: 1px solid #979595;
+  outline: none;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    height: 30px;
+  }
+}
+
+.custominput-label {
+  font-family: Plus Jakarta Sans;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4d4d4d;
+  padding-bottom: 2px;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 12px;
+    padding-bottom: 0px;
+  }
+}
+
+.custom-input {
+  font-family: Plus Jakarta Sans;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4d4d4d;
+}

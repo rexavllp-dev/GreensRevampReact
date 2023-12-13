@@ -95,7 +95,7 @@ const AdminSidebar = () => {
                         return (
                             <Link href={item.url}>
                                 <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}>
-                                    <CustomTypography content={item.name} color={pathname.includes(item.url) ? 'WHITE' : 'BLACK'} size='MEDIUM-SMALL' weight='SEMI-BOLD' />
+                                    <CustomTypography content={item.name} color={pathname.includes(item.url) ? 'WHITE' : 'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                 </div>
                             </Link>
                         )

@@ -26,7 +26,7 @@ export default function AdvancedSettings() {
         {
             id: 4,
             name: 'Users',
-            url: '/admin/users',
+            url: '/admin/advanced/users',
         },
         // Facebook Feed
         {

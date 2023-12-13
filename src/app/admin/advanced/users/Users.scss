@@ -1,0 +1,25 @@
+.adminusers {
+  padding: 20px 20px;
+
+  .title {
+    padding-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header {
+
+    display: flex;
+    justify-content: space-between;
+    .searchinput {
+      width: 300px;
+      margin-bottom: 20px;
+    }
+
+    .right {
+        display: flex;
+        gap: 20px;
+    }
+  }
+}

@@ -170,3 +170,42 @@
     font-size: 14px;
   }
 }
+
+//transparent btn
+.custombtn.danger {
+  outline: none;
+  border-radius: 6px;
+  background: transparent;
+  border: 1.5px solid #bb2124;
+  outline: none;
+  // border: none;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.custombtn.danger:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 3px 2px 22px 1px rgba(24, 23, 23, 0.24);
+  /* Lowering the shadow */
+  // background: #32893b;
+  // transition: background 0.2s ease-in-out;
+}
+
+.custombtn.danger:hover .custombtn-label {
+  // color: #fff;
+}
+
+.custombtn.danger .custombtn-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #bb2124;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 14px;
+  }
+}

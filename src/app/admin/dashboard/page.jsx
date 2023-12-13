@@ -1,10 +1,11 @@
+import CustomTable from "@/components/customtable/CustomTable";
 
 
-export default function AdminDashboard(){
+export default function AdminDashboard() {
 
     return (
         <div>
-            Admin Dashboard
+         Dashboard
         </div>
     )
 }
