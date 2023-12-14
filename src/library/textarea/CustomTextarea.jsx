@@ -1,8 +1,22 @@
-import React from 'react'
+import { Textarea } from '@nextui-org/react';
+import React from 'react';
+import './CustomTextarea.scss';
 
-const CustomTextarea = () => {
+const CustomTextarea = ({label, placeholder}) => {
   return (
-    <div>CustomTextarea</div>
+    <Textarea
+      variant="bordered"
+      label={label}
+      labelPlacement="outside"
+      placeholder={placeholder}
+      classNames={{
+        label: "custominput-label",
+        inputWrapper: ["rounded", 'input-wrapper'],
+        input: [
+          "custom-input"
+        ]
+      }}
+    />
   )
 }
 

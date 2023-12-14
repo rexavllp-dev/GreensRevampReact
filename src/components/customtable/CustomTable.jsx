@@ -8,10 +8,12 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { Avatar, Button, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
 import { IoMdMore } from "react-icons/io";
 import './CustomTable.scss';
+import { useRouter } from 'next/navigation';
 
 
 export default function CustomTable() {
     const [rowData, setRowData] = useState([]);
+    const router = useRouter();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -64,7 +66,7 @@ export default function CustomTable() {
                                     key="view"
                                     description="Allows you to view the file"
                                     onClick={() => {
-                                        window.alert('View file');
+                                      router.push('/admin/advanced/users/details')
                                     }}
                                 >
                                     View
@@ -73,7 +75,7 @@ export default function CustomTable() {
                                     key="edit"
                                     description="Allows you to edit the file"
                                     onClick={() => {
-                                        window.alert('Edit file');
+                                        router.push('/admin/advanced/users/details')
                                     }}
                                 >
                                     Edit

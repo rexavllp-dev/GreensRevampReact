@@ -1,11 +1,19 @@
 .adminusers {
   padding: 20px 20px;
 
+  .breadcrumb{
+    padding-bottom: 18px;
+  }
+
   .title {
     padding-bottom: 30px;
     display: flex;
     align-items: center;
     gap: 10px;
+
+    .backbtn {
+      cursor: pointer;
+  }
   }
 
   .header {

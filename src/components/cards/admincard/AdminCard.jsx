@@ -17,7 +17,7 @@ export default function AdminCard({ title, url }) {
             <div className="footer">
                 <CustomTypography content={8} size="EXTRA-LARGE" color="BLACK" weight="SEMI-    BOLD" />
                 <div className="btn">
-                    <CustomTypography content="Create" weight="MEDIUM" color="BLACK" size="MEDIUM" />
+                    {/* <CustomTypography content="Create" weight="MEDIUM" color="BLACK" size="MEDIUM" /> */}
                 </div>
             </div>
         </div>

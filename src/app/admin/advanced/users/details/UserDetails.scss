@@ -1,0 +1,27 @@
+.userdetails {
+  padding-top: 67px;
+  background-color: #f4f4f4;
+
+  .breadcrumb {
+    padding-left: 20px;
+    padding-bottom: 18px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .backbtn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
