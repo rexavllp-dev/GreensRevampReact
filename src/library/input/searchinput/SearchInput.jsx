@@ -11,7 +11,7 @@ const SearchInput = () => {
             variant='bordered'
             classNames={{
                 label: "custominput-label",
-                inputWrapper: ["rounded", 'input-wrapper'],
+                inputWrapper: ["rounded", 'search-input-wrapper '],
                 input: [
                     "custom-input"
                 ]

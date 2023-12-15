@@ -13,10 +13,12 @@ import useWindowSize from '@/hooks/useWindowSize'
 import { isEmailValid } from '@/utils/helpers/IsEmailValid'
 import { fromJSON } from 'postcss'
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules'
+import { useTranslation } from 'next-i18next';
 
 const IndividualRegister = () => {
 
     const router = useRouter();
+    const { t } = useTranslation('common');
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
@@ -270,6 +272,9 @@ const IndividualRegister = () => {
             <div className='or'>
                 <CustomTypography content="OR" color="GRAY-DARK" size="SMALL" weight="MEDIUM" />
             </div>
+
+            <h1>{t('welcome')}</h1>
+            <p>{t('about')}</p>
 
             <div className='form'>
                 <CustomInput name='first_name' type='text'

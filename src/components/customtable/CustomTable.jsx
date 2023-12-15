@@ -30,7 +30,7 @@ export default function CustomTable() {
     }, []);
 
     const [columnDefs] = useState([
-        { headerName: 'Id', field: 'id', checkboxSelection: true, filter: false },
+        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection : true, filter: false },
         {
             headerName: 'First Name', field: 'name'
         },

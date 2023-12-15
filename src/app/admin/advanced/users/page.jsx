@@ -19,7 +19,7 @@ export default function Users() {
                 <BreadCrumbs />
             </div>
             <div className="title">
-                <div className="backbtn">
+                <div className="backbtn" onClick={() => router.back()}>
                     <FaArrowLeft />
                 </div>
                 <CustomTypography content={"Users"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />

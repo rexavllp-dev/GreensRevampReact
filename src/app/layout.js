@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" dir="rtr" className='light'>
+    <html lang="en" dir="rtl" className='light'>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
         <link rel="preconnect" href="https://fonts.googleapis.com" />

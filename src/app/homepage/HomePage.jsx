@@ -420,6 +420,8 @@ const HomePage = () => {
   const secondInstaFeedRow = instagramFeeds?.slice(instaFeedMidIndex);
 
 
+ 
+
   return (
     <div className='homepage-wrapper'>
       <div className="homepage">
