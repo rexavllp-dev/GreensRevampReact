@@ -1,0 +1,16 @@
+{
+  "explore_btn": "Explore",
+  "shop_now_btn": "Shop Now",
+  "home_search_placeholder": "Search for a product or SKU",
+  "signin" : "Sign In",
+  "signup" : "Sign Up",
+  "add_to_cart": "Add to Cart",
+  "shop_by_category" : "Shop by Category",
+  "shop_by_brands" : "Shop your Favorite Brands",
+  "shop_by_season" : "Shop by Season",
+  "recently_viewed": "Recently Viewed",
+  "top_trending_products" : "Top Trending Products",
+  "made_for_professionals" : "Made for Professionals",
+  "more_from_the_feed" : "More From The Feed",
+  "follow_us" : "Follow us"
+}

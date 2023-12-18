@@ -3,6 +3,8 @@ import { ToastContainer } from 'react-toastify'
 import './globals.css'
 import { ThemeProvider } from '@/providers/ThemeProvider'
 import ToastProvider from '@/providers/ToastProvider'
+import { AuthProvider } from '@/providers/AuthProvider'
+import { LanguageProvider, useLanguage } from '@/providers/LanguageProvider'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -11,9 +13,11 @@ export const metadata = {
   description: 'Greens International',
 }
 
+// export default function RootLayout({ children }) {
 export default function RootLayout({ children }) {
+
   return (
-    <html lang="en" dir="rtl" className='light'>
+    <html lang="en" dir="ltr" className='light'>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,9 +26,13 @@ export default function RootLayout({ children }) {
       </head>
       <body >
         <ThemeProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
+          <AuthProvider>
+            <LanguageProvider >
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+            </LanguageProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

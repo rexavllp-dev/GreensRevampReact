@@ -35,15 +35,16 @@ import Chatbot from '@/components/chatbot/Chatbot';
 import HeroSectionTiles from './components/HeroSectionTiles';
 import useWindowSize from '@/hooks/useWindowSize';
 import ImageSlider from '@/components/slider/ImageSlider';
+import { useSelector } from 'react-redux';
+import { useLanguage } from '@/providers/LanguageProvider';
 // import { useWindowWidth } from '@react-hook/window-size';
 
 const HomePage = () => {
 
-  // const onlyWidth = useWindowWidth()
-  // const isMobileView = onlyWidth < 767;
-  // const onlyWidth = useWindowWidth()
   const { width, height } = useWindowSize();
   const isMobileView = width < 767;
+
+  const { getTranslation } = useLanguage()
 
   const categoryRef = useRef();
   const seasonRef = useRef();
@@ -419,9 +420,6 @@ const HomePage = () => {
   const firstInstaFeedRow = instagramFeeds?.slice(0, instaFeedMidIndex);
   const secondInstaFeedRow = instagramFeeds?.slice(instaFeedMidIndex);
 
-
- 
-
   return (
     <div className='homepage-wrapper'>
       <div className="homepage">
@@ -438,7 +436,7 @@ const HomePage = () => {
         <div className="categories-wrapper">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Shop by Category" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('shop_by_category')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('categoryRef', 'left')} />
               <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('categoryRef', 'right')} />
@@ -459,7 +457,7 @@ const HomePage = () => {
         <div className="brands-wrapper">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Shop your Favorite Brands" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('shop_by_brands')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('brandRef', 'left')} />
               <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('brandRef', 'right')} />
@@ -514,7 +512,7 @@ const HomePage = () => {
         <div className="categories-wrapper">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Shop by Season" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('shop_by_season')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('seasonRef', 'left')} />
               <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('seasonRef', 'right')} />
@@ -558,7 +556,7 @@ const HomePage = () => {
         <div className="categories-wrapper ">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Recently viewed" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('recently_viewed')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'}
@@ -588,7 +586,7 @@ const HomePage = () => {
         <div className="categories-wrapper">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Top Trending Products" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('top_trending_products')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'}
@@ -618,7 +616,7 @@ const HomePage = () => {
         <div className="categories-wrapper mb-5">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="Made for Professionals" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('made_for_professionals')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'}
@@ -674,7 +672,7 @@ const HomePage = () => {
         <div className="categories-wrapper instagram-section">
           <div className="header">
             <div className="leftsection"></div>
-            <CustomTypography content="More from the Feed" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            <CustomTypography content={getTranslation('more_from_the_feed')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
             <div className="scrollbuttons">
               <CustomIconButton variant={'secondary'}
@@ -737,7 +735,7 @@ const HomePage = () => {
             </div>
             :
             <div className="header">
-              <CustomTypography content="Follow us" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-LARGE" />
+              <CustomTypography content={getTranslation('follow_us')} weight="SEMI-BOLD" color="BLACK" size="MEDIUM-LARGE" />
               <Image src={InstaIconGreen} height={31} width={31} />
             </div>
         }

@@ -7,37 +7,39 @@ import {
     homewallImg1, homewallImg2
 } from '@/assets/images'
 import ImageCard from '@/components/cards/imagecard/ImageCard'
+import { useLanguage } from '@/providers/LanguageProvider'
 
 const HeroSectionTiles = () => {
+    const { getTranslation } = useLanguage();
     return (
         <div className="homepage-tile-container">
 
             <div className="homepage-tile-webview">
                 <div className="section-one">
-                    <ImageCard title={'Cake Toppers'} img={Tile1} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
-                    <ImageCard title={'Edibles'} img={homewallImg2} buttonText={'Shop Now'} cardHeight={"612px"} cardWidth={"100%"} />
-                    <ImageCard title={'Feves'} img={Tile7} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={'Cake Toppers'} img={Tile1} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={'Edibles'} img={homewallImg2} buttonText={getTranslation('shop_now_btn')} cardHeight={"612px"} cardWidth={"100%"} />
+                    <ImageCard title={'Feves'} img={Tile7} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
                 </div>
                 <div className="section-two">
-                    <ImageCard title={'Hello Christmas'} img={homewallImg1} buttonText={'Explore'} cardHeight={"394px"} cardWidth={'100%'} />
+                    <ImageCard title={'Hello Christmas'} img={homewallImg1} buttonText={getTranslation('explore_btn')} cardHeight={"394px"} cardWidth={'100%'} />
                     <div className="subsection-one">
                         <div className="leftsection">
-                            <ImageCard title={'Cellphane Cookie Bags'} img={Tile4} buttonText={'Explore'} cardHeight={"250px"} cardWidth={'100%'} />
+                            <ImageCard title={'Cellphane Cookie Bags'} img={Tile4} buttonText={getTranslation('explore_btn')} cardHeight={"250px"} cardWidth={'100%'} />
                         </div>
                         <div className="rightsection">
-                            <ImageCard title={'Cake Mixes'} img={Tile5} buttonText={'Explore'} cardHeight={"250px"} cardWidth={'100%'} />
+                            <ImageCard title={'Cake Mixes'} img={Tile5} buttonText={getTranslation('explore_btn')} cardHeight={"250px"} cardWidth={'100%'} />
                         </div>
                     </div>
                     <div className="subsection-two">
-                        <ImageCard title={'Loyalty points on every purchase *'} img={Tile6} buttonText={'Signup'} cardHeight={"250px"} cardWidth={'100%'} />
-                        <ImageCard title={'Christmas Panettone'} img={Tile8} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
+                        <ImageCard title={'Loyalty points on every purchase *'} img={Tile6} buttonText={getTranslation('signup')} cardHeight={"250px"} cardWidth={'100%'} />
+                        <ImageCard title={'Christmas Panettone'} img={Tile8} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
                     </div>
 
                 </div>
                 <div className="section-three">
-                    <ImageCard title={'Decoration Stamps'} img={Tile2} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
-                    <ImageCard title={'Wrap your Gifts'} img={Tile3} buttonText={'Shop Now'} cardHeight={"612px"} cardWidth={"100%"} />
-                    <ImageCard title={'Silicone Moulds'} img={Tile9} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={'Decoration Stamps'} img={Tile2} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={'Wrap your Gifts'} img={Tile3} buttonText={getTranslation('shop_now_btn')} cardHeight={"612px"} cardWidth={"100%"} />
+                    <ImageCard title={'Silicone Moulds'} img={Tile9} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
                 </div>
             </div>
 
@@ -45,31 +47,31 @@ const HeroSectionTiles = () => {
 
             <div className="homepage-tile-mobileview">
                 <div className="top">
-                    <ImageCard title={'Hello Christmas'} img={homewallImg1} buttonText={'Explore'} cardHeight={"190px"} cardWidth={'100%'} />
-                    <ImageCard title={'Cake Toppers'} img={Tile1} buttonText={'Shop Now'} cardHeight={"190px"} cardWidth={"100%"} />
+                    <ImageCard title={'Hello Christmas'} img={homewallImg1} buttonText={getTranslation('explore_btn')} cardHeight={"190px"} cardWidth={'100%'} />
+                    <ImageCard title={'Cake Toppers'} img={Tile1} buttonText={getTranslation('shop_now_btn')} cardHeight={"190px"} cardWidth={"100%"} />
 
                     <div className="rightsplit">
                         <div className="leftsection">
-                            <ImageCard title={'Wrap your Gifts'} img={Tile3} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
+                            <ImageCard title={'Wrap your Gifts'} img={Tile3} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
                         </div>
                         <div className="rightsection">
-                            <ImageCard title={'Decoration Stamps'} img={Tile2} buttonText={'Shop Now'} cardHeight={"142px"} cardWidth={"100%"} />
-                            <ImageCard title={'Cellphane Cookie Bags'} img={Tile4} buttonText={'Explore'} cardHeight={"142px"} cardWidth={'100%'} />
+                            <ImageCard title={'Decoration Stamps'} img={Tile2} buttonText={getTranslation('shop_now_btn')} cardHeight={"142px"} cardWidth={"100%"} />
+                            <ImageCard title={'Cellphane Cookie Bags'} img={Tile4} buttonText={getTranslation('explore_btn')} cardHeight={"142px"} cardWidth={'100%'} />
                         </div>
                     </div>
-                    <ImageCard title={'Cake Mixes'} img={Tile5} buttonText={'Explore'} cardHeight={"190px"} cardWidth={'100%'} />
+                    <ImageCard title={'Cake Mixes'} img={Tile5} buttonText={getTranslation('explore_btn')} cardHeight={"190px"} cardWidth={'100%'} />
 
                     <div className="leftsplit">
                         <div className="leftsection">
-                            <ImageCard title={'Silicone Moulds'} img={Tile9} buttonText={'Shop Now'} cardHeight={"142px"} cardWidth={"100%"} />
-                            <ImageCard title={'Feves'} img={Tile7} buttonText={'Shop Now'} cardHeight={"142px"} cardWidth={"100%"} />
+                            <ImageCard title={'Silicone Moulds'} img={Tile9} buttonText={getTranslation('shop_now_btn')} cardHeight={"142px"} cardWidth={"100%"} />
+                            <ImageCard title={'Feves'} img={Tile7} buttonText={getTranslation('shop_now_btn')} cardHeight={"142px"} cardWidth={"100%"} />
 
                         </div>
                         <div className="rightsection">
-                            <ImageCard title={'Edibles'} img={homewallImg2} buttonText={'Shop Now'} cardHeight={"300px"} cardWidth={"100%"} />
+                            <ImageCard title={'Edibles'} img={homewallImg2} buttonText={getTranslation('shop_now_btn')} cardHeight={"300px"} cardWidth={"100%"} />
                         </div>
                     </div>
-                    <ImageCard title={'Christmas Panettone'} img={Tile8} buttonText={'Shop Now'} cardHeight={"190px"} cardWidth={"100%"} />
+                    <ImageCard title={'Christmas Panettone'} img={Tile8} buttonText={getTranslation('shop_now_btn')} cardHeight={"190px"} cardWidth={"100%"} />
                     <ImageCard title={'Loyalty points on every purchase *'} img={Tile6} buttonText={'Signup'} cardHeight={"190px"} cardWidth={'100%'} />
 
                 </div>

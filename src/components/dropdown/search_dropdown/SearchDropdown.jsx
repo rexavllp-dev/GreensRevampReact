@@ -7,6 +7,7 @@ import { ProductImg } from "@/assets/images";
 import Image from "next/image";
 import { CloseIcon } from "@/assets/icons";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/providers/LanguageProvider";
 
 const suggestions = [
     {
@@ -56,7 +57,9 @@ const products = [
 ]
 export default function SearchDropdown() {
     const searchRef = useRef();
-    const router  = useRouter()
+    const router  = useRouter();
+
+    const { getTranslation } = useLanguage();
 
     const [keyword, setKeyword] = React.useState('');
     const [visible, setVisible] = React.useState(false);
@@ -93,7 +96,7 @@ export default function SearchDropdown() {
                 <CustomSearch
                     name={'product'} value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder={'Search for a product or SKU'}
+                    placeholder={getTranslation('home_search_placeholder')}
                 // disabled={true}
                 />
             </div>

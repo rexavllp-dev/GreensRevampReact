@@ -3,8 +3,11 @@ import React from 'react';
 import './ProductCard.scss';
 import CustomTypography from '@/library/typography/CustomTypography';
 import { StarIcon, heartIconBlack } from '@/assets/icons';
+import { useLanguage } from '@/providers/LanguageProvider';
 
 const ProductCard = ({ img, title, price, previous_price, rating }) => {
+
+  const { getTranslation } = useLanguage();
 
   const Badge = () => {
     return (
@@ -22,10 +25,10 @@ const ProductCard = ({ img, title, price, previous_price, rating }) => {
         <div className="cardimage">
           {/* <Image src={productImage} /> */}
           <Image src={img}
-           fill objectFit='cover' 
-           alt='img'
+            fill objectFit='cover'
+            alt='img'
           //  width={173} height={173} 
-           />
+          />
 
         </div>
       </div>
@@ -53,7 +56,7 @@ const ProductCard = ({ img, title, price, previous_price, rating }) => {
         <div className="bottomsection">
           <button className={'productbtn'}>
             <div className='productbtn_text' >
-              Add to Cart
+              {getTranslation('add_to_cart')}
             </div >
           </button >
         </div>

@@ -11,12 +11,21 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import SearchDropdown from '../dropdown/search_dropdown/SearchDropdown';
 import MainSidebar from '../sidebar/main_sidebar/MainSidebar';
 import Link from 'next/link';
+import { useLanguage } from '@/providers/LanguageProvider';
 
 
 const Navbar = () => {
 
-    const [lang, setLang] = React.useState('ar');
+    const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+    const handleSwitchLanguage = ()=>{
+        if(language === 'ar'){
+            switchLanguage('en');
+        }else if(language === 'en'){
+            switchLanguage('ar');
+        }
+    }
 
     return (
         <>
@@ -55,7 +64,7 @@ const Navbar = () => {
                                     <div className="icon">
                                         <Image src={userIcon} />
                                     </div>
-                                    <p className='item-label'>Sign In</p>
+                                    <p className='item-label'>{getTranslation('signin')}</p>
                                 </div>
                             </Link>
 
@@ -71,8 +80,9 @@ const Navbar = () => {
 
 
 
-                            <div className={lang === 'ar' ? "item pb-2 lang" : "item lang"} onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>
-                                {lang === 'ar' ?
+                            <div className={language === 'ar' ? "item pb-2 lang" : "item lang"}
+                            onClick={handleSwitchLanguage}>
+                                {language === 'ar' ?
                                     <p className="ar">
                                         عربي
                                     </p>
