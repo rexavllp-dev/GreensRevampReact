@@ -19,7 +19,7 @@ const NavCard = ({
                 </div>
 
                 <div style={{ borderRadius: '50%', width: '42px', height: '42px', overflow: 'hidden', position: 'relative' }}>
-                    <Image src={categoryImg1} layout="fill" objectFit="cover" />
+                    <Image src={categoryImg1} layout="fill" objectFit="cover" alt="category" />
                 </div>
             </div>
         </div >

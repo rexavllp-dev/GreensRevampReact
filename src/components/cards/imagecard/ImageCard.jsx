@@ -75,7 +75,7 @@ const ImageCard = ({ title, img, cardHeight,
                 />
                 {haveIcon &&
                     <div className="icon">
-                        <Image src={icon} height={31} width={31} />
+                        <Image src={icon} height={31} width={31} alt="icon" />
                     </div>
                 }
             </div >

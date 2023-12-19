@@ -1,6 +1,6 @@
 const appConfig = {
     server: {
-        baseUrl: 'http://localhost:4000/api/',
+        baseUrl: 'http://192.168.10.134:5000/api/v1/',
     }
 };
 

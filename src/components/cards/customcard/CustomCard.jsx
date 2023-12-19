@@ -11,7 +11,7 @@ const CustomCard = ({ title, img, cardHeight, cardWidth, buttonText, haveButton 
                 <div className="btn">
                     <CustomButton label={buttonText} variant='secondary'/>
                 </div>
-                <Image src={img} width={cardWidth} height={cardHeight} />
+                <Image src={img} width={cardWidth} alt='product' height={cardHeight} />
             </div>
         </div >
     )

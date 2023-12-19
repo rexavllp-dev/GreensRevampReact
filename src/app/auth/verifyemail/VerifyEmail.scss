@@ -11,8 +11,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-top: 205px;
-    margin-bottom: 220px;
+    margin-top: 265px;
+    margin-bottom: 270px;
 
     @include for_breakpoint("small-screen", "mobile") {
       width: 100%;

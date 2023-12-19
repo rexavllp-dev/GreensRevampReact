@@ -12,6 +12,9 @@ import { useRouter } from 'next/navigation'
 import useWindowSize from '@/hooks/useWindowSize'
 import { isEmailValid } from '@/utils/helpers/IsEmailValid'
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules'
+import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
+import { userRegister } from '@/services/features/authSlice'
 
 const IndividualRegister = () => {
 
@@ -20,16 +23,24 @@ const IndividualRegister = () => {
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
 
+    const dispatch = useDispatch();
+    const { } = useSelector(state => state.auth)
+
     const [formData, setFormData] = React.useState({
         first_name: '',
         last_name: '',
         mobile: '',
+        usr_mobile_country_code: '',
         email: '',
         password: '',
         confirm_password: '',
         agree: false,
         subscribe: false,
     })
+
+    useEffect(() => {
+        console.log(formData);
+    }, [formData])
 
     const [errors, setErrors] = React.useState({
         first_name: {
@@ -65,7 +76,7 @@ const IndividualRegister = () => {
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
                 setFormData((prev) => ({
-                    ...prev, mobile: e.target.value
+                    ...prev, mobile: e.target.value, usr_mobile_country_code: country
                 }))
             }
         } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
@@ -256,7 +267,31 @@ const IndividualRegister = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-            router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
+            let data = {
+                "usr_firstname": formData.first_name,
+                "usr_lastname": formData.last_name,
+                "usr_mobile_number": formData.mobile,
+                "usr_mobile_country_code": formData.usr_mobile_country_code,
+                "usr_password": formData.password,
+                "usr_email": formData.email,
+                "usr_tos_accepted": formData.agree,
+                "usr_newsletter_accepted": formData.subscribe,
+                // "usr_company": 10
+            }
+
+            dispatch(userRegister(data)).then((res) => {
+                console.log(res)
+                if (res.payload?.status === 201) {
+                    toast.success(res.payload?.message);
+                    router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                toast.error(err.message);
+            })
+
+            // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
         }
     }
 

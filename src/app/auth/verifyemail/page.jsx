@@ -41,9 +41,9 @@ const VerifyEmail = () => {
             </div>
 
           </div>
-          <div className='refresh'>
+          {/* <div className='refresh'>
             <CustomTypography content='This page will automatically refresh' size='MEDIUM-LARGE' color='GRAY-DARK' weight='MEDIUM' />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

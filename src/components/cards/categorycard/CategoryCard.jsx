@@ -42,6 +42,7 @@ const CategoryCard = ({ title, img, cardWidth, cardHeight, haveTitle, imgPadding
                     <Image src={img} 
                     fill={true} 
                     objectFit='contain' 
+                    alt='product'
                     // width={cardWidth} height={cardHeight}
                      />
                 </div>

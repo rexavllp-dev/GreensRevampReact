@@ -5,16 +5,34 @@ export const auth = {
     //User register
     userRegister: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/auth/usr_register', data)
+            Axios.post('/users/register', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
-    //User register
+    //Company register
     companyRegister: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/auth/company_register', data)
+            Axios.post('/company', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Verify email
+    verifyEmail: (token) => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/verify-email?token=${token}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //get user info
+    getUserInfo: (token) => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/getuserinfo/${token}`)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

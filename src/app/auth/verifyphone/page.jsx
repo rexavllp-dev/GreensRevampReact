@@ -7,16 +7,27 @@ import CustomButton from '@/library/buttons/CustomButton'
 import { useRouter, useSearchParams } from 'next/navigation';
 import useWindowSize from '@/hooks/useWindowSize';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfo } from '@/services/features/authSlice';
 
 const VerifyPhone = () => {
     const router = useRouter()
+    const dispatch = useDispatch();
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
 
     const searchParams = useSearchParams()
     let from = searchParams.get('orgin');
+    let token = searchParams.get('token');
 
+    const { userInfo } = useSelector((state) => state.auth)
+
+    useEffect(() => {
+        dispatch(getUserInfo(token))
+    }, [])
+
+    console.log(userInfo)
 
     const [timeRemaining, setTimeRemaining] = useState(parseTime('00:60'));
 
@@ -66,7 +77,7 @@ const VerifyPhone = () => {
                     <div className="header">
                         <p className="title">Verify Your Phone Number</p>
                         <div className="changenumber">
-                            <p>Enter OTP received in +971 1239840 </p>
+                            <p>Enter OTP received in {userInfo?.result?.usr_mobile_number}</p>
                             <Link href={{
                                 pathname: '/auth/updatenum', query: {
                                     orgin: from

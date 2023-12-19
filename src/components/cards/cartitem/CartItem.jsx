@@ -10,7 +10,7 @@ export default function CartItem() {
         <div className="cart-item">
             <div className="image-wrapper">
                 <div className="image">
-                    <Image width={100} height={100} src={ProductImg} />
+                    <Image width={100} height={100} alt="product" src={ProductImg} />
                 </div>
                 <CountButton />
             </div>

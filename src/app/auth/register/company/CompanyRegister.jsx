@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomButton from '@/library/buttons/CustomButton'
 import AuthButton from '@/library/buttons/authbuttons/AuthButton'
 import CustomCheckbox from '@/library/checkbox/CustomCheckbox'
@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import useWindowSize from '@/hooks/useWindowSize';
 import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
+import { companyRegister } from '@/services/features/authSlice';
 
 const CompanyRegister = () => {
     const router = useRouter();
@@ -34,7 +35,9 @@ const CompanyRegister = () => {
         password: '',
         confirm_password: '',
         landline: '',
+        company_landline_country_code: '',
         mobile: '',
+        usr_mobile_country_code: '',
         trn_number: '',
         trade_license_expiry: '',
         vat_certificate: {},
@@ -42,6 +45,10 @@ const CompanyRegister = () => {
         agree: false,
         subscribe: false,
     })
+
+    useEffect(() => {
+        console.log(formData)
+    }, [formData])
 
     const [errors, setErrors] = React.useState({
         company_name: {
@@ -329,12 +336,28 @@ const CompanyRegister = () => {
 
     const handleInputChange = ({ e, country }) => {
 
-        if (e.target.name === 'mobile' || e.target.name === 'trn_number' || e.target.name === 'landline') {
+        if (e.target.name === 'mobile') {
             const re = /^[0-9\b]+$/;
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
                 setFormData((prev) => ({
-                    ...prev, [e.target.name]: e.target.value
+                    ...prev, ['mobile']: e.target.value, usr_mobile_country_code: country
+                }))
+            }
+        } else if (e.target.name === 'landline') {
+            const re = /^[0-9\b]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, ['landline']: e.target.value, company_landline_country_code: country
+                }))
+            }
+        } else if (e.target.name === 'trn_number') {
+            const re = /^[0-9\b]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, ['trn_number']: e.target.value
                 }))
             }
         } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
@@ -385,7 +408,28 @@ const CompanyRegister = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-            router.push('/auth/verifyemail/?orgin=company', { scroll: true });
+
+            let data = {
+                "company_name": formData.company_name,
+                "company_landline": formData.company_landline,
+                "company_vat_certificate": formData.company_vat_certificate,
+                "company_landline_country_code": formData.company_landline_country_code,
+                "company_trn_number": formData.trn_number,
+                "company_trade_license": formData.trade_license,
+                "company_trade_license_expiry": formData.trade_license_expiry
+
+            }
+            dispatch(companyRegister(data)).then((res) => {
+                if (res.status == 200) {
+                    toast.success(res.message);
+                    router.push('/auth/verifyemail/?orgin=company', { scroll: true });
+                } else {
+                    toast.error(res.message);
+                }
+            }).catch((err) => {
+                toast.error(err.message);
+            })
+            // router.push('/auth/verifyemail/?orgin=company', { scroll: true });
         }
     }
 

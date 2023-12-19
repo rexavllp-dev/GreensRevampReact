@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="left">
             <div className="logo">
               <Link href="/">
-                <Image src={companyLogoLight} />
+                <Image src={companyLogoLight} alt="logo" />
               </Link>
             </div>
 
@@ -28,11 +28,11 @@ const Footer = () => {
                 <CustomTypography content='Follow us' color='QUATERNARY' size='REGULAR' weight='SEMI-BOLD' />
               </div>
               <div className="icons">
-                <Image src={instagramIcon} />
-                <Image src={linkedinIcon} />
-                <Image src={youtubeIcon} />
-                <Image src={facebookIcon} />
-                <Image src={TikTokIcon} />
+                <Image src={instagramIcon} alt="instagram" />
+                <Image src={linkedinIcon} alt="linkedin" />
+                <Image src={youtubeIcon} alt="youtube" />
+                <Image src={facebookIcon} alt="facebook" />
+                <Image src={TikTokIcon} alt="tiktok" />
               </div>
             </div>
           </div>
@@ -95,8 +95,8 @@ const Footer = () => {
             <div className="payment">
               <CustomTypography content='*VAT applicable on all products' color='QUATERNARY' size='SMALL-REGULAR' weight='THIN' />
               <div className="icons">
-                <Image src={GooglePayIcon} />
-                <Image src={ApplePayIcon} />
+                <Image src={GooglePayIcon} alt="googlepay" />
+                <Image src={ApplePayIcon}  />
                 <Image src={MasterCardIcon} />
                 <Image src={VisaIcon} />
               </div>

@@ -114,7 +114,7 @@ export default function SearchDropdown() {
                             fullWidth={true}
                         />
                         <div className="closebtn" onClick={() => setVisible(false)}>
-                            <Image src={CloseIcon} />
+                            <Image src={CloseIcon} alt="close" />
                         </div>
                     </div>
                     {
