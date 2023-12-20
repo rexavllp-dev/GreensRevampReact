@@ -12,7 +12,7 @@ const initialState = {
 
 export const getAllCountries = createAsyncThunk('getAllCountries', async () => {
     try {
-        const response = await countries.getAllCountries()
+        const response = await countries.getAllCountries();
         return response.data
     } catch (error) {
         return error.response.data;

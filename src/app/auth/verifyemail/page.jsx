@@ -11,19 +11,14 @@ const VerifyEmail = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   let from = searchParams.get('orgin');
+  let token = searchParams.get('token');
 
   return (
     <>
       <div className="verifyemail-wrapper">
         <div className="verifyemail">
           <div className="header">
-            <Link href={{
-              pathname: '/auth/verifyphone', query: {
-                orgin: from
-              }
-            }} >
               <CustomTypography content='Verify your Email' size='SUPER-LARGE' color='PURE-BLACK' weight='SEMI-BOLD' />
-            </Link>
             {/* <CustomTypography content='Verify using the link received on your inbox.' size='LARGE' color='PURE-BLACK' weight='REGULAR' /> */}
 
 
@@ -31,7 +26,8 @@ const VerifyEmail = () => {
               <p>Verify using the link received in customer@email.com
                 <Link href={{
                   pathname: '/auth/updateemail', query: {
-                    orgin: from
+                    orgin: from,
+                    token: token
                   }
                 }} >
                   <span className="changebtn">Change</span>

@@ -13,7 +13,20 @@ const initialState = {
     isUserInfoLoaded: false,
     isUserInfoError: false,
     userInfo: {},
+    isUserEmailUpdating: false,
+    isUserEmailUpdated: false,
+    isUserEmailUpdateError: false,
+    isUserMobileUpdating: false,
+    isUserMobileUpdated: false,
+    isUserMobileUpdateError: false,
 
+    isOtpSending: false,
+    isOtpSent: false,
+    isOtpSendingError: false,
+
+    isOtpVerifying:false,
+    isOtpVerified: false,
+    isOtpVerifyError: false,
 }
 
 export const login = createAsyncThunk('login', async (data, thunkAPI) => {
@@ -67,6 +80,46 @@ export const companyRegister = createAsyncThunk('companyRegister', async (data, 
 export const getUserInfo = createAsyncThunk('getUserInfo', async (data, thunkAPI) => {
     try {
         const response = await auth.getUserInfo(data)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateUserEmail = createAsyncThunk('updateUserEmail', async ({ data, token }, thunkAPI) => {
+    try {
+        const response = await auth.updateUserEmail(data, token)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateUserMobile = createAsyncThunk('updateUserMobile', async ({ data, token }, thunkAPI) => {
+    try {
+        const response = await auth.updateUserMobile(data, token)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const resendOtp = createAsyncThunk('resendOtp', async ({ token }, thunkAPI) => {
+    try {
+        const response = await auth.resendOtp(token)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data }, thunkAPI) => {
+    try {
+        const response = await auth.verifyOtp(data)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -137,6 +190,77 @@ const authSlice = createSlice({
                 state.isUserInfoError = true;
             })
 
+            .addCase(updateUserEmail.pending, (state, action) => {
+                state.isUserEmailUpdating = true;
+                state.isUserEmailUpdated = false;
+                state.isUserEmailUpdateError = false;
+            })
+
+            .addCase(updateUserEmail.fulfilled, (state, action) => {
+                state.isUserEmailUpdating = false;
+                state.isUserEmailUpdated = true;
+                state.isUserEmailUpdateError = false;
+            })
+
+            .addCase(updateUserEmail.rejected, (state, action) => {
+                state.isUserEmailUpdating = false;
+                state.isUserEmailUpdated = false;
+                state.isUserEmailUpdateError = true;
+            })
+
+            .addCase(updateUserMobile.pending, (state, action) => {
+                state.isUserMobileUpdating = true;
+                state.isUserMobileUpdated = false;
+                state.isUserMobileUpdateError = false;
+            })
+
+            .addCase(updateUserMobile.fulfilled, (state, action) => {
+                state.isUserMobileUpdating = false;
+                state.isUserMobileUpdated = true;
+                state.isUserMobileUpdateError = false;
+            })
+
+            .addCase(updateUserMobile.rejected, (state, action) => {
+                state.isUserMobileUpdating = false;
+                state.isUserMobileUpdated = false;
+                state.isUserMobileUpdateError = true;
+            })
+
+            .addCase(resendOtp.pending, (state, action) => {
+                state.isOtpSending = true;
+                state.isOtpSent = false;
+                state.isOtpSendingError = false;
+            })
+
+            .addCase(resendOtp.fulfilled, (state, action) => {
+                state.isOtpSending = false;
+                state.isOtpSent = true;
+                state.isOtpSendingError = false;
+            })
+
+            .addCase(resendOtp.rejected, (state, action) => {
+                state.isOtpSending = false;
+                state.isOtpSent = false;
+                state.isOtpSendingError = true;
+            })
+
+            .addCase(verifyOtp.pending, (state, action) => {
+                state.isOtpVerifying = true;
+                state.isOtpVerified = false;
+                state.isOtpVerifyError = false;
+            })
+
+            .addCase(verifyOtp.fulfilled, (state, action) => {
+                state.isOtpVerifying = false;
+                state.isOtpVerified = true;
+                state.isOtpVerifyError = false;
+            })
+
+            .addCase(verifyOtp.rejected, (state, action) => {
+                state.isOtpVerifying = false;
+                state.isOtpVerified = false;
+                state.isOtpVerifyError = true;
+            })
     }
 })
 

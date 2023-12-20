@@ -38,4 +38,37 @@ export const auth = {
         })
     },
 
+    //Update user email
+    updateUserEmail: (data, token) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update_email/${token}`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Update user mobile
+    updateUserMobile: (data, token) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update_mobile_number/${token}`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Resend OTP
+    resendOtp: (token) => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/resendotp/${token}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Verify OTP
+    verifyOtp: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/users/verify-otp`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

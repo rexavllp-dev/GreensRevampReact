@@ -8,7 +8,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import useWindowSize from '@/hooks/useWindowSize';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo } from '@/services/features/authSlice';
+import { getUserInfo, resendOtp, verifyOtp } from '@/services/features/authSlice';
+import { toast } from 'react-toastify';
 
 const VerifyPhone = () => {
     const router = useRouter()
@@ -23,11 +24,14 @@ const VerifyPhone = () => {
 
     const { userInfo } = useSelector((state) => state.auth)
 
+    const [formData, setFormData] = useState({
+        otp: ''
+    })
+
     useEffect(() => {
         dispatch(getUserInfo(token))
     }, [])
 
-    console.log(userInfo)
 
     const [timeRemaining, setTimeRemaining] = useState(parseTime('00:60'));
 
@@ -65,8 +69,48 @@ const VerifyPhone = () => {
         if (from === 'company') {
             router.push('/welcome', { scroll: true })
         } else {
-            router.push('/', { scroll: true })
+
+            dispatch(verifyOtp({ data: { token, otp: formData.otp } })).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message, {
+                        toastId: 'success1',
+                    });
+                    router.push('/', { scroll: true });
+                } else {
+                    toast.error(res.payload?.message, {
+                        toastId: 'fail1',
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         }
+    }
+
+    const handleInputChange = (e) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (e.target?.value === '' || re.test(e.target?.value)) {
+            setFormData((prev) => ({
+                ...prev, otp: e.target.value
+            }))
+        }
+    }
+
+    const handleResendOtp = () => {
+        dispatch(resendOtp({ token })).then((res) => {
+            if (res.payload?.status === 200) {
+                toast.success(res.payload?.message, {
+                    toastId: 'success1',
+                });
+            } else {
+                toast.error(res.payload?.message, {
+                    toastId: 'fail1',
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
 
@@ -93,10 +137,10 @@ const VerifyPhone = () => {
                     </div>
 
                     <div className="timer">
-                        <CustomTypography content={`${formatTime(timeRemaining)} remaining`} size='MEDIUM-LARGE' color='GRAY-DARK' weight='MEDIUM' />
+                        {/* <CustomTypography content={`${formatTime(timeRemaining)} remaining`} size='MEDIUM-LARGE' color='GRAY-DARK' weight='MEDIUM' /> */}
                     </div>
                     <div className="formwrapper">
-                        <CustomInput type='text' placeholder='OTP' label={'OTP'} isRequired={false} />
+                        <CustomInput type='text' placeholder='OTP' value={FormData.otp} name={'otp'} onChange={handleInputChange} label={'OTP'} isRequired={false} />
                         {/* <Link href={{
                             pathname: '/', query: {
                                 orgin: from
@@ -106,7 +150,9 @@ const VerifyPhone = () => {
                             onClick={handleVerify}
                         />
                         {/* </Link> */}
-                        <CustomButton label='Resend OTP' variant='transparent' height={isMobileView ? '42px' : '50px'} />
+                        <CustomButton label='Resend OTP' variant='transparent' height={isMobileView ? '42px' : '50px'}
+                            onClick={handleResendOtp}
+                        />
                     </div>
                 </div>
             </div>

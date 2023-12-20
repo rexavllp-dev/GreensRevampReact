@@ -282,8 +282,9 @@ const IndividualRegister = () => {
             dispatch(userRegister(data)).then((res) => {
                 console.log(res)
                 if (res.payload?.status === 201) {
+                    let token = res.payload?.result?.userToken?.token;
                     toast.success(res.payload?.message);
-                    router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
+                    router.push(`/auth/verifyemail/?orgin=individual&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message);
                 }
@@ -315,6 +316,7 @@ const IndividualRegister = () => {
                     isInvalid={errors.first_name.error}
                     errMsg={errors.first_name.message}
                 />
+
                 <CustomInput
                     name='last_name'
                     type='text'

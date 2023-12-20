@@ -46,10 +46,6 @@ const CompanyRegister = () => {
         subscribe: false,
     })
 
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
-
     const [errors, setErrors] = React.useState({
         company_name: {
             error: false,
@@ -408,8 +404,17 @@ const CompanyRegister = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-
             let data = {
+                "usr_firstname": formData.first_name,
+                "usr_lastname": formData.last_name,
+                "usr_mobile_number": formData.mobile,
+                "usr_mobile_country_code": formData.usr_mobile_country_code,
+                "usr_password": formData.password,
+                "usr_email": formData.email,
+                "usr_tos_accepted": formData.agree,
+                "usr_newsletter_accepted": formData.subscribe,
+                // "usr_company": 10
+
                 "company_name": formData.company_name,
                 "company_landline": formData.company_landline,
                 "company_vat_certificate": formData.company_vat_certificate,
@@ -417,11 +422,11 @@ const CompanyRegister = () => {
                 "company_trn_number": formData.trn_number,
                 "company_trade_license": formData.trade_license,
                 "company_trade_license_expiry": formData.trade_license_expiry
-
             }
+
             dispatch(companyRegister(data)).then((res) => {
-                if (res.status == 200) {
-                    toast.success(res.message);
+                if (res.payload?.status == 200) {
+                    toast.success(res.payload?.message);
                     router.push('/auth/verifyemail/?orgin=company', { scroll: true });
                 } else {
                     toast.error(res.message);

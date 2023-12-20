@@ -8,15 +8,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import useWindowSize from '@/hooks/useWindowSize';
 import Link from 'next/link';
 import { isEmailValid } from '@/utils/helpers/IsEmailValid';
+import { updateUserEmail } from '@/services/features/authSlice';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 const UpdateEmail = () => {
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
 
     const searchParams = useSearchParams()
     let from = searchParams.get('orgin');
+    let token = searchParams.get('token');
 
     const [formData, setFormData] = React.useState({
         email: ''
@@ -58,12 +63,24 @@ const UpdateEmail = () => {
                 message: ''
             }
         }))
-
     }
 
     const handleSubmit = () => {
         if (validateForm()) {
-            router.push(`/auth/verifyemail/?orgin=${from}`, { scroll: true });
+            let data = {
+                "usr_email": formData.email,
+            }
+
+            dispatch(updateUserEmail({data, token})).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message);
+                    router.push(`/auth/verifyemail/?orgin=${from}`, { scroll: true });
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                toast.error(err.message);
+            }) 
         }
     }
 
