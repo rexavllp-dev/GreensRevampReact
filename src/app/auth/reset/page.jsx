@@ -4,17 +4,23 @@ import CustomButton from '@/library/buttons/CustomButton'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomTypography from '@/library/typography/CustomTypography'
 import "./ResetPassword.scss"
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import useWindowSize from '@/hooks/useWindowSize'
 import { toast } from 'react-toastify'
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules'
+import { useDispatch } from 'react-redux'
+import { resetPassword } from '@/services/features/authSlice'
 
 const ResetPassword = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
+
+    const searchParams = useSearchParams()
+    let token = searchParams.get('token');
 
     const [formData, setFormData] = React.useState({
         password: '',
@@ -50,7 +56,7 @@ const ResetPassword = () => {
     const validateForm = () => {
         let isValid = true;
 
-      
+
         // Validate password
         if (!formData.password?.length) {
             setErrors((prevErrors) => ({
@@ -121,9 +127,23 @@ const ResetPassword = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-            toast.success("Password reset successfully!");
+
+            let data = {
+                "usr_password": formData.password,
+                token: token
+            }
+
+            dispatch(resetPassword({ data })).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message);
+                    router.push('/auth/login', { scroll: true });
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                toast.error(err.message);
+            })
             // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
-            router.push('/auth/login', { scroll: true });
         }
     }
 

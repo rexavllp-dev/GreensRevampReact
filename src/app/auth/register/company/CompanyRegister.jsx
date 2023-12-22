@@ -17,9 +17,12 @@ import useWindowSize from '@/hooks/useWindowSize';
 import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
 import { companyRegister } from '@/services/features/authSlice';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const CompanyRegister = () => {
     const router = useRouter();
+    const  dispatch = useDispatch();
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getFullYear() + 2, currentDate.getMonth(), currentDate.getDate());
 
@@ -34,7 +37,7 @@ const CompanyRegister = () => {
         email: '',
         password: '',
         confirm_password: '',
-        landline: '',
+        company_landline: '',
         company_landline_country_code: '',
         mobile: '',
         usr_mobile_country_code: '',
@@ -340,12 +343,12 @@ const CompanyRegister = () => {
                     ...prev, ['mobile']: e.target.value, usr_mobile_country_code: country
                 }))
             }
-        } else if (e.target.name === 'landline') {
+        } else if (e.target.name === 'company_landline') {
             const re = /^[0-9\b]+$/;
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
                 setFormData((prev) => ({
-                    ...prev, ['landline']: e.target.value, company_landline_country_code: country
+                    ...prev, ['company_landline']: e.target.value, company_landline_country_code: country
                 }))
             }
         } else if (e.target.name === 'trn_number') {
@@ -401,6 +404,28 @@ const CompanyRegister = () => {
     }
 
 
+    const handleFileUpload = (event) => {
+
+        const files = event.target.files;
+        const file = files[0];
+
+        const fieldName = event.target.name;
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [fieldName]: file
+        }))
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [event.target.name]: {
+                error: false,
+                message: ''
+            }
+        }))
+    }
+
+
 
     const handleSubmit = () => {
         if (validateForm()) {
@@ -424,12 +449,12 @@ const CompanyRegister = () => {
                 "company_trade_license_expiry": formData.trade_license_expiry
             }
 
-            dispatch(companyRegister(data)).then((res) => {
-                if (res.payload?.status == 200) {
+            dispatch(companyRegister({ data })).then((res) => {
+                if (res.payload?.status == 201) {
                     toast.success(res.payload?.message);
                     router.push('/auth/verifyemail/?orgin=company', { scroll: true });
                 } else {
-                    toast.error(res.message);
+                    toast.error(res.payload?.message);
                 }
             }).catch((err) => {
                 toast.error(err.message);
@@ -438,26 +463,6 @@ const CompanyRegister = () => {
         }
     }
 
-    const handleFileUpload = (event) => {
-
-        const files = event.target.files;
-        const file = files[0];
-
-        const fieldName = event.target.name;
-
-        setFormData((prevData) => ({
-            ...prevData,
-            [fieldName]: file
-        }))
-
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [event.target.name]: {
-                error: false,
-                message: ''
-            }
-        }))
-    }
 
 
     return (
@@ -492,7 +497,7 @@ const CompanyRegister = () => {
                     }}
                 />
 
-                <CustomPhoneInput name={'landline'} value={formData.landline}
+                <CustomPhoneInput name={'company_landline'} value={formData.company_landline}
                     label='Landline' isRequired={false} placeholder={'Landline'}
                     // isInvalid={errors.landline.error}
                     // errMsg={errors.landline.message}

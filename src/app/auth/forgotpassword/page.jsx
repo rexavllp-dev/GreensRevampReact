@@ -7,10 +7,14 @@ import "./ForgotPassword.scss"
 import { useRouter } from 'next/navigation'
 import useWindowSize from '@/hooks/useWindowSize'
 import { isEmailValid } from '@/utils/helpers/IsEmailValid'
+import { forgotPassword } from '@/services/features/authSlice'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const ForgotPassword = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
@@ -63,8 +67,22 @@ const ForgotPassword = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
+
+            let data = {
+                usr_email: formData.email
+            }
+
+            dispatch(forgotPassword({ data })).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message);
+                }else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                toast.error(err.message);
+            })
             // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
-            router.push('/auth/reset', { scroll: true });
+            // router.push('/auth/reset', { scroll: true });
         }
     }
 
@@ -95,7 +113,7 @@ const ForgotPassword = () => {
 
                 <div className='footer'>
                     <CustomTypography content="Remember your password?" color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
-                    <CustomButton label='Login with password' onClick={() => router.push('/auth/login/?view=p')}  fullWidth variant='transparent' height={isMobileView ? '42px' : '50px'} />
+                    <CustomButton label='Login with password' onClick={() => router.push('/auth/login/?view=p')} fullWidth variant='transparent' height={isMobileView ? '42px' : '50px'} />
                 </div>
             </div>
         </div>

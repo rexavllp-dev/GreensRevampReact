@@ -2,6 +2,41 @@
 import Axios from '../axios/Axios.js';
 export const auth = {
 
+    //User login
+    login: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/login', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //User login with OTP
+    loginWithOtp: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/login-otp', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Verify login OTP
+    verifyLoginOtp: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/verify-login-otp', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Reset login OTP
+    resendLoginOtp: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/resend-login-otp', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
     //User register
     userRegister: (data) => {
         return new Promise((resolve, reject) => {
@@ -63,10 +98,34 @@ export const auth = {
                 .catch(error => reject(error))
         })
     },
+    //Resend Email
+    resendEmail: (token) => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/resendemail/${token}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
     //Verify OTP
     verifyOtp: (data) => {
         return new Promise((resolve, reject) => {
             Axios.post(`/users/verify-otp`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Forgot password
+    forgotPassword: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/users/forgot-password`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Reset password
+    resetPassword: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/users/reset-password`, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

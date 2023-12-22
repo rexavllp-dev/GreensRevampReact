@@ -9,11 +9,19 @@ import "./LoginPage.scss"
 import { useRouter, useSearchParams } from 'next/navigation'
 import useWindowSize from '@/hooks/useWindowSize'
 import { isEmailValid } from '@/utils/helpers/IsEmailValid'
+import { useDispatch } from 'react-redux'
+import { login, loginWithOtp } from '@/services/features/authSlice'
+import { toast } from 'react-toastify'
+import { Cookies } from 'react-cookie'
+
+// set up cookies
+const cookies = new Cookies();
 
 
 const LoginPage = () => {
 
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
@@ -23,12 +31,17 @@ const LoginPage = () => {
 
     const [isLoginWithOTP, setIsLoginWithOTP] = React.useState(true)
     const [formData, setFormData] = React.useState({
+        mobile: '',
         email_or_mobile: '',
         password: '',
         keep_me_signed: false
     })
 
     const [errors, setErrors] = React.useState({
+        mobile: {
+            error: false,
+            message: ''
+        },
         email_or_mobile: {
             error: false,
             message: ''
@@ -43,12 +56,26 @@ const LoginPage = () => {
         if (from === 'p') {
             setIsLoginWithOTP(false)
         }
+        console.log(cookies.get('token'))
+        // cookies.set('token', 'itsmrtoken', { maxAge: 60 * 60 * 24 })
     }, [from])
 
     const handleInputChange = ({ e, country }) => {
-        setFormData((prev) => ({
-            ...prev, [e.target.name]: e.target.value
-        }))
+
+        if (e.target.name === 'mobile') {
+            const re = /^[0-9\b]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, mobile: e.target.value
+                }))
+            }
+        } else {
+            setFormData((prev) => ({
+                ...prev, [e.target.name]: e.target.value
+            }))
+
+        }
 
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -94,13 +121,59 @@ const LoginPage = () => {
         return isValid;
     };
 
+    const validateMobile = () => {
+        let isValid = true;
+        // Validate mobile
+        if (!formData.mobile?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                mobile: { error: true, message: 'Mobile number is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                mobile: { error: false, message: '' }
+            }));
+        }
+
+        return isValid;
+    };
+
 
     const handleSubmit = () => {
         if (isLoginWithOTP) {
-            router.push('/auth/verifyphone', { scroll: true });
+            if (validateMobile()) {
+                let data = {
+                    usr_mobile_number: formData.mobile,
+                }
+
+                dispatch(loginWithOtp({ data })).then((res) => {
+                    if (res.payload?.status == 200) {
+                        toast.success(res.payload?.message);
+                        router.push(`/auth/verifylogin?p=${formData.mobile}`, { scroll: true });
+                    } else {
+                        toast.error(res.payload?.message);
+                    }
+                })
+            }
         } else {
             if (validateForm()) {
-                router.push('/', { scroll: true });
+                let data = {
+                    usr_email: formData.email_or_mobile,
+                    usr_password: formData.password
+                }
+
+                dispatch(login({ data })).then((res) => {
+                    if (res.payload?.status == 200) {
+                        toast.success(res.payload?.message);
+                        router.push('/', { scroll: true });
+                    } else {
+                        toast.error(res.payload?.message);
+                    }
+                }).catch((err) => {
+                    toast.error("Login failed");
+                })
             }
         }
     }
@@ -115,52 +188,63 @@ const LoginPage = () => {
                 <CustomTypography content="OR" color="GRAY-DARK" size="SMALL" weight="MEDIUM" />
             </div>
 
-
             <div className='form'>
-                <CustomInput name='email_or_mobile' type='text'
-                    maxLength={100}
-                    placeholder='Email / Mobile Number' label={'Email / Mobile Number'}
-                    isRequired={true}
-                    onChange={(e) => { handleInputChange({ e }) }}
-                    value={formData.email_or_mobile}
-                    isInvalid={errors.email_or_mobile.error}
-                    errMsg={errors.email_or_mobile.message}
-                />
-
                 {
-                    !isLoginWithOTP && <>
-                        <CustomInput
-                            isInvalid={errors.password.error}
-                            errMsg={errors.password.message}
-                            type='password'
-                            name={'password'}
-                            value={formData.password}
-                            onChange={(e) => { handleInputChange({ e }) }}
-                            placeholder="Password"
-                            label={'Password'}
+                    isLoginWithOTP ?
+                        <CustomInput name='mobile' type='text'
+                            maxLength={100}
+                            placeholder='Mobile Number' label={'Mobile Number'}
                             isRequired={true}
-                            haveProgress={false}
+                            onChange={(e) => { handleInputChange({ e }) }}
+                            value={formData.mobile}
+                            isInvalid={errors.mobile.error}
+                            errMsg={errors.mobile.message}
                         />
+                        :
 
-                        <div className='checkbox-group'>
-                            <CustomCheckbox
-                                isRequired={false}
-                                label={<p>Keep me signed in</p>}
-                                name='checkbox'
-                                value={formData.keep_me_signed} onChange={(value) => { setFormData({ ...formData, keep_me_signed: value }) }}
+                        <>
+                            <CustomInput name='email_or_mobile' type='text'
+                                maxLength={100}
+                                placeholder='Email / Mobile Number' label={'Email / Mobile Number'}
+                                isRequired={true}
+                                onChange={(e) => { handleInputChange({ e }) }}
+                                value={formData.email_or_mobile}
+                                isInvalid={errors.email_or_mobile.error}
+                                errMsg={errors.email_or_mobile.message}
                             />
-                        </div>
-                        <div className="actionbtn-wrapper">
-                            <div className="actionbtn" onClick={() => { setIsLoginWithOTP(true) }}>
-                                <CustomTypography content="Login using OTP" color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
-                            </div>
-                            <div className="actionbtn" onClick={() => { router.push('/auth/forgotpassword') }}>
-                                <CustomTypography content="Forgot Password?" style={{ cursor: 'pointer', borderBottom: '1px solid', display: 'inline' }} color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
-                            </div>
-                        </div>
-                    </>
-                }
 
+                            <CustomInput
+                                isInvalid={errors.password.error}
+                                errMsg={errors.password.message}
+                                type='password'
+                                name={'password'}
+                                value={formData.password}
+                                onChange={(e) => { handleInputChange({ e }) }}
+                                placeholder="Password"
+                                label={'Password'}
+                                isRequired={true}
+                                haveProgress={false}
+                            />
+
+                            <div className='checkbox-group'>
+                                <CustomCheckbox
+                                    isRequired={false}
+                                    label={<p>Keep me signed in</p>}
+                                    name='checkbox'
+                                    value={formData.keep_me_signed} onChange={(value) => { setFormData({ ...formData, keep_me_signed: value }) }}
+                                />
+                            </div>
+                            <div className="actionbtn-wrapper">
+                                <div className="actionbtn" onClick={() => { setIsLoginWithOTP(true) }}>
+                                    <CustomTypography content="Login using OTP" color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
+                                </div>
+                                <div className="actionbtn" onClick={() => { router.push('/auth/forgotpassword') }}>
+                                    <CustomTypography content="Forgot Password?" style={{ cursor: 'pointer', borderBottom: '1px solid', display: 'inline' }} color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
+                                </div>
+                            </div>
+                        </>
+
+                }
 
                 <CustomButton fullWidth label={isLoginWithOTP ? 'Get OTP' : 'Login'} onClick={handleSubmit} variant='primary' height={isMobileView ? '42px' : '50px'} />
                 {

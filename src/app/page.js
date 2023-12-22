@@ -6,12 +6,13 @@ import ScrollTop from '@/components/scrolltop/ScrollTop'
 import "./layout.scss"
 
 export default function Home() {
+
   return (
     <div>
       <Navbar />
 
       <div className='main-wrapper' >
-        <HomePage />
+          <HomePage />
       </div>
       <ScrollTop/>
       <Footer />
