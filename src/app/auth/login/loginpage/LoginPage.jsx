@@ -56,8 +56,7 @@ const LoginPage = () => {
         if (from === 'p') {
             setIsLoginWithOTP(false)
         }
-        console.log(cookies.get('token'))
-        // cookies.set('token', 'itsmrtoken', { maxAge: 60 * 60 * 24 })
+        // cookies.set('accessToken', 'itsmrtoken', { maxAge: 60 * 60 * 24 })
     }, [from])
 
     const handleInputChange = ({ e, country }) => {
@@ -165,6 +164,7 @@ const LoginPage = () => {
                 }
 
                 dispatch(login({ data })).then((res) => {
+                    console.log(res)
                     if (res.payload?.status == 200) {
                         toast.success(res.payload?.message);
                         router.push('/', { scroll: true });

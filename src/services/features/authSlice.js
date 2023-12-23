@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../actions/auth";
 import { handleLogin } from "@/utils/auth";
 import { Cookies } from "react-cookie";
+import { Axios } from "axios";
 
 // set up cookies
 const cookies = new Cookies()
@@ -65,17 +66,18 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
         // localStorage.setItem('token', response.data.result?.token)
         // localStorage.setItem('user', JSON.stringify(response.data.result?.user))
 
+        console.log(response.data.result.accessToken)
         // Token set in Cookies
-        cookies.set('token', response.data.result?.token);
+        cookies.set('accessToken', response.data.result?.accessToken);
 
-        Axios.interceptors.request.use((config) => {
-            config.headers['Authorization'] = `Bearer ${response.data.result?.token}`;
+        Axios.interceptors?.request.use((config) => {
+            config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
             return config;
         });
 
         return thunkAPI.fulfillWithValue(response.data)
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
+        return thunkAPI.rejectWithValue(error);
     }
 })
 
@@ -84,9 +86,9 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
         const response = await auth.loginWithOtp(data);
 
         // Token set in Cookies
-        cookies.set('token', response.data.result?.token)
+        cookies.set('accessToken', response.data.result?.accessToken)
         Axios.interceptors.request.use((config) => {
-            config.headers['Authorization'] = `Bearer ${response.data.result?.token}`;
+            config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
             return config;
         });
 

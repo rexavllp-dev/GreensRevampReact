@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/providers/ThemeProvider'
 import ToastProvider from '@/providers/ToastProvider'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { LanguageProvider, useLanguage } from '@/providers/LanguageProvider'
+import { Cookies } from 'react-cookie'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -12,9 +13,12 @@ export const metadata = {
   title: 'Greens International',
   description: 'Greens International',
 }
+const cookies = new Cookies();
 
-// export default function RootLayout({ children }) {
+// export default function RootLayout({ children }) { 
 export default function RootLayout({ children }) {
+
+  console.log(cookies.get('accessToken'))
 
   return (
     <html lang="en" dir="ltr" className='light'>

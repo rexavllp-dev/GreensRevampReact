@@ -9,7 +9,7 @@ const cookies = new Cookies();
 const instance = axios.create({
   baseURL: appConfig.server?.baseUrl || '',
   headers: {
-    Authorization: `Bearer ${cookies.get('token') || ''}`,
+    Authorization: `Bearer ${cookies.get('accessToken') || ''}`,
   },
 });
 
