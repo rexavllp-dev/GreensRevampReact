@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import { login, loginWithOtp } from '@/services/features/authSlice'
 import { toast } from 'react-toastify'
 import { Cookies } from 'react-cookie'
+import Axios from '../../../../services/axios/Axios'
 
 // set up cookies
 const cookies = new Cookies();
@@ -56,6 +57,10 @@ const LoginPage = () => {
         if (from === 'p') {
             setIsLoginWithOTP(false)
         }
+
+        Axios.get('/users/checkrefresh')
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
         // cookies.set('accessToken', 'itsmrtoken', { maxAge: 60 * 60 * 24 })
     }, [from])
 

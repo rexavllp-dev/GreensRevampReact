@@ -69,6 +69,7 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
         console.log(response.data.result.accessToken)
         // Token set in Cookies
         cookies.set('accessToken', response.data.result?.accessToken);
+        cookies.set('refreshToken', response.data.result?.refreshToken);
 
         Axios.interceptors?.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
@@ -87,6 +88,7 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
 
         // Token set in Cookies
         cookies.set('accessToken', response.data.result?.accessToken)
+        cookies.set('refreshToken', response.data.result?.refreshToken);
         Axios.interceptors.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
             return config;
