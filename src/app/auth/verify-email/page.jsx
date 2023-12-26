@@ -12,6 +12,7 @@ const EmailVerificationSuccess = () => {
     const dispatch = useDispatch();
     const searchParams = useSearchParams()
     let token = searchParams.get('token');
+    let from = searchParams.get('orgin');
 
     useEffect(() => {
         const verifyEmailAddress = async () => {
@@ -20,7 +21,7 @@ const EmailVerificationSuccess = () => {
                     toast.success(res.payload?.message, {
                         toastId: 'success1',
                     });
-                    router.push(`/auth/verifyphone/?orgin=individual&token=${token}`, { scroll: true });
+                    router.push(`/auth/verifyphone/?orgin=${from}&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message, {
                         toastId: 'fail1',

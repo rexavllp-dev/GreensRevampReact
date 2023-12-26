@@ -18,6 +18,7 @@ const UpdateEmail = () => {
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
+    const [loading, setLoading] = React.useState(false);
 
     const searchParams = useSearchParams()
     let from = searchParams.get('orgin');
@@ -71,15 +72,18 @@ const UpdateEmail = () => {
                 "usr_email": formData.email,
             }
 
+            setLoading(true);
             dispatch(updateUserEmail({data, token})).then((res) => {
                 if (res.payload?.status === 200) {
                     toast.success(res.payload?.message);
-                    router.push(`/auth/verifyemail/?orgin=${from}`, { scroll: true });
+                    router.push(`/auth/verifyemail/?orgin=${from}&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message);
                 }
+                setLoading(false);
             }).catch((err) => {
                 toast.error(err.message);
+                setLoading(false);
             }) 
         }
     }
@@ -107,7 +111,7 @@ const UpdateEmail = () => {
                                 orgin: from
                             }
                         }} > */}
-                        <CustomButton label='Get Verification Email' onClick={handleSubmit} variant='primary' fullWidth height={isMobileView ? '42px' : '50px'}
+                        <CustomButton label='Get Verification Email' onClick={handleSubmit} loading={loading} variant='primary' fullWidth height={isMobileView ? '42px' : '50px'}
                         // onClick={() => { router.push('/auth/verifyemail', { scroll: true }) }}
                         />
                         {/* </Link> */}

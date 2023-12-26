@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '@/library/buttons/CustomButton'
 import AuthButton from '@/library/buttons/authbuttons/AuthButton'
 import CustomCheckbox from '@/library/checkbox/CustomCheckbox'
@@ -26,6 +26,8 @@ const LoginPage = () => {
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
+
+    const [loading, setLoading] = useState(false)
 
     const searchParams = useSearchParams()
     let from = searchParams.get('view');
@@ -57,11 +59,6 @@ const LoginPage = () => {
         if (from === 'p') {
             setIsLoginWithOTP(false)
         }
-
-        Axios.get('/users/checkrefresh')
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-        // cookies.set('accessToken', 'itsmrtoken', { maxAge: 60 * 60 * 24 })
     }, [from])
 
     const handleInputChange = ({ e, country }) => {
@@ -152,6 +149,7 @@ const LoginPage = () => {
                     usr_mobile_number: formData.mobile,
                 }
 
+                setLoading(true);
                 dispatch(loginWithOtp({ data })).then((res) => {
                     if (res.payload?.status == 200) {
                         toast.success(res.payload?.message);
@@ -159,6 +157,10 @@ const LoginPage = () => {
                     } else {
                         toast.error(res.payload?.message);
                     }
+                    setLoading(false);
+                }).catch((err) => {
+                    toast.error("Login failed");
+                    setLoading(false);
                 })
             }
         } else {
@@ -167,17 +169,18 @@ const LoginPage = () => {
                     usr_email: formData.email_or_mobile,
                     usr_password: formData.password
                 }
-
+                setLoading(true);
                 dispatch(login({ data })).then((res) => {
-                    console.log(res)
                     if (res.payload?.status == 200) {
                         toast.success(res.payload?.message);
                         router.push('/', { scroll: true });
                     } else {
                         toast.error(res.payload?.message);
                     }
+                    setLoading(false);
                 }).catch((err) => {
                     toast.error("Login failed");
+                    setLoading(false);
                 })
             }
         }
@@ -251,7 +254,7 @@ const LoginPage = () => {
 
                 }
 
-                <CustomButton fullWidth label={isLoginWithOTP ? 'Get OTP' : 'Login'} onClick={handleSubmit} variant='primary' height={isMobileView ? '42px' : '50px'} />
+                <CustomButton fullWidth label={isLoginWithOTP ? 'Get OTP' : 'Login'} onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'} />
                 {
                     isLoginWithOTP &&
                     <div className="bottom-action">

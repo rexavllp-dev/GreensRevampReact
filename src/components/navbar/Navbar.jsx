@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./Navbar.scss"
 import { companyLogo, companyLogoMobile } from '@/assets/images'
 import Image from "next/image"
@@ -12,19 +12,37 @@ import SearchDropdown from '../dropdown/search_dropdown/SearchDropdown';
 import MainSidebar from '../sidebar/main_sidebar/MainSidebar';
 import Link from 'next/link';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { getUser } from '@/services/authService';
+import { Cookies } from 'react-cookie';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { logout } from '@/services/features/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
+const cookies = new Cookies();
 
 const Navbar = () => {
 
+    const dispatch = useDispatch();
     const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-    const handleSwitchLanguage = ()=>{
-        if(language === 'ar'){
+    const [user, setUser] = React.useState(cookies.get('user'));
+    const { isLoggedIn } = useSelector(state => state.auth)
+
+    const handleSwitchLanguage = () => {
+        if (language === 'ar') {
             switchLanguage('en');
-        }else if(language === 'en'){
+        } else if (language === 'en') {
             switchLanguage('ar');
         }
+    }
+
+    useEffect(() => {
+            setUser(cookies.get('user'));
+    }, [isLoggedIn])
+
+    const handleLogout = () => {
+        dispatch(logout());
     }
 
     return (
@@ -59,14 +77,41 @@ const Navbar = () => {
                                 {/* <p className='item-label'>Wishlist</p> */}
                             </div>
 
-                            <Link href={'/auth/login'}>
-                                <div className="item">
-                                    <div className="icon">
-                                        <Image src={userIcon} />
-                                    </div>
-                                    <p className='item-label'>{getTranslation('signin')}</p>
-                                </div>
-                            </Link>
+
+                            {
+                                user ?
+                                    <Dropdown>
+                                        <DropdownTrigger>
+                                            <div className="item">
+                                                <div className="icon">
+                                                    <Image src={userIcon} />
+                                                </div>
+                                                <p className='item-label'>{user?.usr_firstname}</p>
+                                            </div>
+                                        </DropdownTrigger>
+                                        <DropdownMenu
+                                            aria-label="Single selection example"
+                                            variant="faded"
+                                        >
+                                            <DropdownItem
+                                                onClick={() => handleLogout()}
+                                                key={1}
+                                            >
+                                                Logout
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown >
+                                    :
+                                    <Link href={'/auth/login'}>
+                                        <div className="item">
+                                            <div className="icon">
+                                                <Image src={userIcon} />
+                                            </div>
+                                            <p className='item-label'>{getTranslation('signin')}</p>
+                                        </div>
+                                    </Link>
+                            }
+
 
                             <div className="item">
                                 <Link href="/cart">
@@ -81,7 +126,7 @@ const Navbar = () => {
 
 
                             <div className={language === 'ar' ? "item pb-2 lang" : "item lang"}
-                            onClick={handleSwitchLanguage}>
+                                onClick={handleSwitchLanguage}>
                                 {language === 'ar' ?
                                     <p className="ar">
                                         عربي
@@ -121,12 +166,41 @@ const Navbar = () => {
                                     <Image src={heartIcon} />
                                     <p className='item-label'>Wishlist</p>
                                 </div> */}
-                                <div className="item">
-                                    <Link href={'auth/login'}>
+                                {/* <Link href={'auth/login'}>
                                         <Image src={userIcon} />
-                                    </Link>
-                                    {/* <p className='item-label'>Sign In</p> */}
-                                </div>
+                                    </Link> */}
+
+                                {
+                                    user ?
+                                        <Dropdown>
+                                            <DropdownTrigger>
+                                                <div className="item">
+                                                    <div className="icon">
+                                                        <Image src={userIcon} />
+                                                    </div>
+                                                </div>
+                                            </DropdownTrigger>
+                                            <DropdownMenu
+                                                aria-label="Single selection example"
+                                                variant="faded"
+                                            >
+                                                <DropdownItem
+                                                    onClick={() => handleLogout()}
+                                                    key={1}
+                                                > Logout
+                                                </DropdownItem>
+                                            </DropdownMenu>
+                                        </Dropdown >
+                                        :
+                                        <div className="item">
+                                            <Link href={'/auth/login'}>
+                                                <div className="icon">
+                                                    <Image src={userIcon} />
+                                                </div>
+                                            </Link>
+                                        </div>
+                                }
+                                {/* <p className='item-label'>Sign In</p> */}
                                 <div className="item">
                                     <Link href="/cart">
                                         <Image src={cartIcon} />

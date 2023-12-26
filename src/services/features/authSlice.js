@@ -9,7 +9,7 @@ import { Axios } from "axios";
 const cookies = new Cookies()
 
 const initialState = {
-
+    isLoggedIn:false,
     isUserLogging: false,
     isUserLogged: false,
     isUserLoginError: false,
@@ -70,6 +70,7 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
         // Token set in Cookies
         cookies.set('accessToken', response.data.result?.accessToken);
         cookies.set('refreshToken', response.data.result?.refreshToken);
+        cookies.set('user', JSON.stringify(response.data.result?.user));
 
         Axios.interceptors?.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
@@ -89,6 +90,7 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
         // Token set in Cookies
         cookies.set('accessToken', response.data.result?.accessToken)
         cookies.set('refreshToken', response.data.result?.refreshToken);
+        cookies.set('user', JSON.stringify(response.data.result?.user));
         Axios.interceptors.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
             return config;
@@ -236,7 +238,14 @@ export const resetPassword = createAsyncThunk('resetPassword', async ({ data }, 
 const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.isLoggedIn = false;
+            cookies.remove("accessToken");
+            cookies.remove("refreshToken");
+            cookies.remove("user")
+        },
+    },
     extraReducers: (builder) => {
 
         builder
@@ -250,6 +259,7 @@ const authSlice = createSlice({
                 state.isUserLogging = false;
                 state.isUserLogged = true;
                 state.isUserLoginError = false;
+                state.isLoggedIn = true;
             })
 
             .addCase(login.rejected, (state, action) => {
@@ -269,6 +279,7 @@ const authSlice = createSlice({
                 state.isUserLogging = false;
                 state.isUserLogged = true;
                 state.isUserLoginError = false;
+                state.isLoggedIn = true;
             })
 
             .addCase(loginWithOtp.rejected, (state, action) => {
@@ -502,4 +513,6 @@ const authSlice = createSlice({
     }
 })
 
+
+export const { logout } = authSlice.actions;
 export default authSlice.reducer

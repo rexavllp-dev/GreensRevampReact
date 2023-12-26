@@ -19,7 +19,7 @@ const UpdateNum = () => {
     const isMobileView = width < 767;
     const dispatch = useDispatch();
 
-
+    const [loading, setLoading] = React.useState(false);
     const searchParams = useSearchParams()
     const from = searchParams.get('orgin');
     const token = searchParams.get('token');
@@ -37,16 +37,13 @@ const UpdateNum = () => {
         },
     });
 
-    const handleInputChange = ({ e, country }) => {
-
-        if (e.target.name === 'mobile') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, mobile: e.target.value, usr_mobile_country_code: country
-                }))
-            }
+    const handlePhoneChange = (name, value, countryCode) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (value === '' || re.test(value)) {
+            setFormData((prev) => ({
+                ...prev, [name]: value, usr_mobile_country_code: countryCode
+            }))
         }
     }
 
@@ -76,15 +73,18 @@ const UpdateNum = () => {
                 "usr_mobile_country_code": formData.usr_mobile_country_code,
             }
 
-            dispatch(updateUserMobile({data, token})).then((res) => {
+            setLoading(true)
+            dispatch(updateUserMobile({ data, token })).then((res) => {
                 if (res.payload?.status === 201) {
                     toast.success(res.payload?.message);
-                    router.push(`/auth/verifyphone/?orgin=${from}`, { scroll: true });
+                    router.push(`/auth/verifyphone/?orgin=${from}&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message);
                 }
+                setLoading(false)
             }).catch((err) => {
                 toast.error(err.message);
+                setLoading(false)
             })
         }
     }
@@ -104,8 +104,8 @@ const UpdateNum = () => {
                             value={formData.mobile}
                             placeholder='Mobile Number'
                             label='Mobile Number'
-                            onChange={(e, country) => {
-                                handleInputChange({ e, country })
+                            onChange={(value, country) => {
+                                handlePhoneChange('mobile', value, country)
                             }}
                             isInvalid={errors.mobile.error}
                             errMsg={errors.mobile.message}
@@ -118,6 +118,7 @@ const UpdateNum = () => {
                         <CustomButton label='Get OTP' variant='primary'
                             height={isMobileView ? '42px' : '50px'}
                             fullWidth
+                            loading={loading}
                             onClick={handleSubmit}
                         // onClick={() => { router.push('/auth/verifyphone', { scroll: true }) }}
                         />

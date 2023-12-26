@@ -19,6 +19,8 @@ const ForgotPassword = () => {
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
 
+    const [loading, setLoading] = React.useState(false)
+
     const [formData, setFormData] = React.useState({
         email: ''
     })
@@ -72,14 +74,17 @@ const ForgotPassword = () => {
                 usr_email: formData.email
             }
 
+            setLoading(true);
             dispatch(forgotPassword({ data })).then((res) => {
                 if (res.payload?.status === 200) {
                     toast.success(res.payload?.message);
                 }else {
                     toast.error(res.payload?.message);
                 }
+                setLoading(false)
             }).catch((err) => {
                 toast.error(err.message);
+                setLoading(false);
             })
             // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
             // router.push('/auth/reset', { scroll: true });
@@ -107,7 +112,7 @@ const ForgotPassword = () => {
 
                     <div className='submitbtn'>
                         <CustomTypography content="You will get a link to reset your password." color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
-                        <CustomButton fullWidth label='Continue' onClick={handleSubmit} variant='primary' height={isMobileView ? '42px' : '50px'} />
+                        <CustomButton fullWidth label='Continue' onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'} />
                     </div>
                 </div>
 

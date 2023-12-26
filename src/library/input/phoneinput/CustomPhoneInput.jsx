@@ -72,15 +72,20 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
     });
     const [isDropdownVisible, setIsDropdownVisible] = React.useState(false);
     const [showAllCountries, setShowAllCountries] = React.useState(false);
+    const [phoneNumber, setPhoneNumber] = React.useState('');
 
     useEffect(() => {
         dispatch(getAllCountries())
     }, [])
 
     const handleInputChange = (e) => {
-        // let countryCallingCode = '+' + getCountryCallingCode(selectedCountry)
+        setPhoneNumber(e.target.value);
         let countryId = selectedCountry.id;
-        onChange(e, countryId)
+        onChange(e.target.value, countryId)
+    }
+
+    const handleCountryChange = (country) => {
+        onChange(phoneNumber, country.id)
     }
 
     return (
@@ -116,6 +121,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
                                         onClick={() => {
                                             setSelectedCountry(country);
                                             setIsDropdownVisible(false);
+                                            handleCountryChange(country);
                                         }}
                                     >
                                         {country.country_name}
@@ -131,6 +137,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
                                         onClick={() => {
                                             setSelectedCountry(country);
                                             setIsDropdownVisible(false);
+                                            handleCountryChange(country);
                                         }}
                                     >
                                         {country.country_name}

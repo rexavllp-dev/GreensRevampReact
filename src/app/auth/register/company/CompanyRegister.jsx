@@ -22,12 +22,14 @@ import { toast } from 'react-toastify';
 
 const CompanyRegister = () => {
     const router = useRouter();
-    const  dispatch = useDispatch();
+    const dispatch = useDispatch();
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getFullYear() + 2, currentDate.getMonth(), currentDate.getDate());
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
+
+    const [loading, setLoading] = React.useState(false);
 
     const [formData, setFormData] = React.useState({
         company_name: '',
@@ -333,25 +335,34 @@ const CompanyRegister = () => {
         return isValid;
     };
 
+    useEffect(() => {
+        console.log(formData);
+    }, [formData])
+
+    const handlePhoneChange = (name, value, countryCode) => {
+        if (name === 'mobile') {
+            const re = /^[0-9\b]+$/;
+            // if value is not blank, then test the regex
+            if (value === '' || re.test(value)) {
+                setFormData((prev) => ({
+                    ...prev, [name]: value, usr_mobile_country_code: countryCode
+                }))
+            }
+        } else if (name === 'company_landline') {
+            const re = /^[0-9\b]+$/;
+            // if value is not blank, then test the regex
+            if (value === '' || re.test(value)) {
+                setFormData((prev) => ({
+                    ...prev, [name]: value, company_landline_country_code: countryCode
+                }))
+            }
+        }
+    }
+
+
     const handleInputChange = ({ e, country }) => {
 
-        if (e.target.name === 'mobile') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, ['mobile']: e.target.value, usr_mobile_country_code: country
-                }))
-            }
-        } else if (e.target.name === 'company_landline') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, ['company_landline']: e.target.value, company_landline_country_code: country
-                }))
-            }
-        } else if (e.target.name === 'trn_number') {
+        if (e.target.name === 'trn_number') {
             const re = /^[0-9\b]+$/;
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
@@ -448,16 +459,19 @@ const CompanyRegister = () => {
                 "company_trade_license": formData.trade_license,
                 "company_trade_license_expiry": formData.trade_license_expiry
             }
-
+            setLoading(true);
             dispatch(companyRegister({ data })).then((res) => {
                 if (res.payload?.status == 201) {
+                    let token = res.payload?.result?.userToken?.token;
                     toast.success(res.payload?.message);
-                    router.push('/auth/verifyemail/?orgin=company', { scroll: true });
+                    router.push(`/auth/verifyemail/?orgin=company&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message);
                 }
+                setLoading(false)
             }).catch((err) => {
                 toast.error(err.message);
+                setLoading(false)
             })
             // router.push('/auth/verifyemail/?orgin=company', { scroll: true });
         }
@@ -492,8 +506,8 @@ const CompanyRegister = () => {
                     label='Mobile Number' isRequired={true} placeholder={'Mobile Number'}
                     isInvalid={errors.mobile.error}
                     errMsg={errors.mobile.message}
-                    onChange={(e, country) => {
-                        handleInputChange({ e, country })
+                    onChange={(value, country) => {
+                        handlePhoneChange('mobile', value, country)
                     }}
                 />
 
@@ -501,8 +515,8 @@ const CompanyRegister = () => {
                     label='Landline' isRequired={false} placeholder={'Landline'}
                     // isInvalid={errors.landline.error}
                     // errMsg={errors.landline.message}
-                    onChange={(e, country) => {
-                        handleInputChange({ e, country })
+                    onChange={(value, country) => {
+                        handlePhoneChange('company_landline', value, country)
                     }}
                 />
 
@@ -596,7 +610,7 @@ const CompanyRegister = () => {
                         orgin: 'company'
                     }
                 }}> */}
-                <CustomButton fullWidth label='Create an account' onClick={handleSubmit} variant='primary' height={isMobileView ? '42px' : '50px'}
+                <CustomButton fullWidth label='Create an account' onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'}
                 //  onClick={() => { router.push('/auth/verifyemail', { scroll: true }) }}
                 />
                 {/* </Link> */}

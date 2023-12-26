@@ -11,6 +11,11 @@ import CustomButton from '@/library/buttons/CustomButton';
 import useWindowSize from '@/hooks/useWindowSize';
 import CountryDropdown from '@/components/dropdown/country_dropdown/CountryDropdown';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { Cookies } from 'react-cookie';
+import { logout } from '@/services/features/authSlice';
+
+const cookies = new Cookies();
 
 const MainSidebar = ({ open, onClose, routeModule }) => {
 
@@ -19,6 +24,19 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
   const [lang, setLang] = React.useState('ar');
 
   const router = useRouter()
+  const dispatch = useDispatch();
+
+  const [user, setUser] = React.useState(cookies.get('user'));
+  const { isLoggedIn } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    setUser(cookies.get('user'));
+  }, [isLoggedIn])
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
+
 
   const menuItems = [
     {
@@ -359,16 +377,16 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
       isMainMenu: true,
       isMobile: true,
     },
-    {
-      id: 15,
-      title: 'Sign out',
-      icon: SignoutIcon,
-      isIcon: true,
-      isActive: false,
-      link: '/help',
-      isMainMenu: true,
-      isMobile: true,
-    },
+    // {
+    //   id: 15,
+    //   title: 'Sign out',
+    //   icon: SignoutIcon,
+    //   isIcon: true,
+    //   isActive: false,
+    //   link: '/help',
+    //   isMainMenu: true,
+    //   isMobile: true,
+    // },
   ]
 
   // const mainMenuItems = [
@@ -707,6 +725,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
                   </div>
                 )
               }
+
               else {
                 return (
                   <div className="item" key={index} onClick={() => handleItemClick(item, navItems)}>
@@ -741,13 +760,31 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
 
             })
           }
-          {/* {
-            isMobileView && */}
-            <>
-              <CustomButton label='Login' variant='transparent' onClick={()=> router.push('/auth/login')} />
-              <CustomButton label='Create an account' variant='primary' onClick={()=> router.push('/auth/register')} />
-            </>
-          {/* } */}
+
+          {
+            user ?
+              (
+                isMainMenu &&
+                <div className="item" onClick={() => { handleLogout() }}>
+                  <div className="title">
+
+                    <div className="logo">
+                      <div className="img">
+                        <Image src={SignoutIcon}
+                          fill objectFit='cover' alt='logo' />
+                      </div>
+                    </div>
+
+                    <CustomTypography content={"Sign out"} color={'BLACK'} size='MEDIUM' weight='MEDIUM' />
+                  </div>
+                </div>
+              )
+              :
+              <>
+                <CustomButton label='Login' variant='transparent' onClick={() => router.push('/auth/login')} />
+                <CustomButton label='Create an account' variant='primary' onClick={() => router.push('/auth/register')} />
+              </>
+          }
         </div>
       </div>
     </div>

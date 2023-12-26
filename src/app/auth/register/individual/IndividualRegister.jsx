@@ -26,6 +26,8 @@ const IndividualRegister = () => {
     const dispatch = useDispatch();
     const { } = useSelector(state => state.auth)
 
+    const [loading, setLoading] = React.useState(false);
+
     const [formData, setFormData] = React.useState({
         first_name: '',
         last_name: '',
@@ -69,17 +71,19 @@ const IndividualRegister = () => {
         }
     })
 
+    const handlePhoneChange = (name, value, countryCode) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (value === '' || re.test(value)) {
+            setFormData((prev) => ({
+                ...prev, [name]: value, usr_mobile_country_code: countryCode
+            }))
+        }
+    }
+
     const handleInputChange = ({ e, country }) => {
 
-        if (e.target.name === 'mobile') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, mobile: e.target.value, usr_mobile_country_code: country
-                }))
-            }
-        } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
+        if (e.target.name === 'first_name' || e.target.name === 'last_name') {
             const firstLetter = e.target.value.charAt(0);
             if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
                 //First letter should not be a number
@@ -278,9 +282,8 @@ const IndividualRegister = () => {
                 "usr_newsletter_accepted": formData.subscribe,
                 // "usr_company": 10
             }
-
+            setLoading(true);
             dispatch(userRegister(data)).then((res) => {
-                console.log(res)
                 if (res.payload?.status === 201) {
                     let token = res.payload?.result?.userToken?.token;
                     toast.success(res.payload?.message);
@@ -288,8 +291,10 @@ const IndividualRegister = () => {
                 } else {
                     toast.error(res.payload?.message);
                 }
+                setLoading(false)
             }).catch((err) => {
                 toast.error(err.message);
+                setLoading(false)
             })
 
             // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
@@ -335,8 +340,8 @@ const IndividualRegister = () => {
                     value={formData.mobile}
                     placeholder='Mobile Number'
                     label='Mobile Number'
-                    onChange={(e, country) => {
-                        handleInputChange({ e, country })
+                    onChange={(value, country) => {
+                        handlePhoneChange('mobile', value, country)
                     }}
                     isInvalid={errors.mobile.error}
                     errMsg={errors.mobile.message}
@@ -399,7 +404,7 @@ const IndividualRegister = () => {
                         orgin: 'individual'
                     }
                 }}> */}
-                <CustomButton fullWidth label='Create an account' onClick={handleSubmit} variant='primary' height={isMobileView ? '42px' : '50px'}
+                <CustomButton fullWidth label='Create an account' onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'}
                 // onClick={() => { router.push('/auth/verifyemail', { scroll: true }) }}
                 />
                 {/* </Link> */}

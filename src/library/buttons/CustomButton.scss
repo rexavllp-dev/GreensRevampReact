@@ -11,13 +11,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
   transition: 0.2s all;
+
+  position: relative;
+
 }
 
 .custombtn.primary:hover {
   // background: #1fa72d;
   transition: background 0.2s ease-in-out;
+}
+
+.custombtn.primary:disabled {
+  // background-color: #5e5c5c; /* Light gray */
+  // color: #a0a0a0; /* Darker gray text on light gray background */
+
+  background: #5b9460;
+  cursor: not-allowed;
+  transition: none;
 }
 
 .custombtn.primary:active {
@@ -48,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
 
   @include for_breakpoint("small-screen", "mobile") {
     border: none;
@@ -92,7 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 .custombtn.teritary:hover {
@@ -117,7 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 .custombtn.white:hover {
@@ -144,7 +156,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
   transition: 0.2s all;
 }
 
@@ -183,7 +195,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
   transition: 0.2s all;
 }
 
@@ -209,3 +221,22 @@
     font-size: 14px;
   }
 }
+
+ 
+  .btn-spinner {
+    position: absolute;
+    right: 20px;
+    animation-name: spin;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

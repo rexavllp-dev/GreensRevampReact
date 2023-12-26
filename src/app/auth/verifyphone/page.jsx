@@ -24,13 +24,14 @@ const VerifyPhone = () => {
 
     const { userInfo } = useSelector((state) => state.auth)
 
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         otp: ''
     })
 
     useEffect(() => {
         dispatch(getUserInfo(token))
-    }, [])
+    }, [token])
 
 
     const [timeRemaining, setTimeRemaining] = useState(parseTime('00:60'));
@@ -69,7 +70,7 @@ const VerifyPhone = () => {
         if (from === 'company') {
             router.push('/welcome', { scroll: true })
         } else {
-
+            setLoading(true);
             dispatch(verifyOtp({ data: { token, otp: formData.otp } })).then((res) => {
                 if (res.payload?.status === 200) {
                     toast.success(res.payload?.message, {
@@ -81,8 +82,11 @@ const VerifyPhone = () => {
                         toastId: 'fail1',
                     });
                 }
+                setLoading(false);
             }).catch((err) => {
+                setLoading(false);
                 console.log(err);
+                
             })
         }
     }
@@ -101,11 +105,11 @@ const VerifyPhone = () => {
         dispatch(resendOtp({ token })).then((res) => {
             if (res.payload?.status === 200) {
                 toast.success(res.payload?.message, {
-                    toastId: 'success1',
+                    toastId: 'success2',
                 });
             } else {
                 toast.error(res.payload?.message, {
-                    toastId: 'fail1',
+                    toastId: 'fail2',
                 });
             }
         }).catch((err) => {
@@ -124,7 +128,8 @@ const VerifyPhone = () => {
                             <p>Enter OTP received in {userInfo?.result?.usr_mobile_number}</p>
                             <Link href={{
                                 pathname: '/auth/updatenum', query: {
-                                    orgin: from
+                                    orgin: from,
+                                    token: token
                                 }
                             }} >
                                 <span className="changebtn"
@@ -147,6 +152,7 @@ const VerifyPhone = () => {
                             }
                         }} > */}
                         <CustomButton fullWidth label='Verify' variant='primary' height={isMobileView ? '42px' : '50px'}
+                            loading={loading}
                             onClick={handleVerify}
                         />
                         {/* </Link> */}
