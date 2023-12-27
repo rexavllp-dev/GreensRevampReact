@@ -8,10 +8,21 @@ import CustomButton from "@/library/buttons/CustomButton";
 import { FaArrowLeft } from "react-icons/fa";
 import './Users.scss'
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "@/services/features/userSlice";
 
 
 export default function Users() {
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    const { allUsers } = useSelector(state => state.users)
+
+    useEffect(() => {
+        dispatch(getAllUsers({ data: {} }))
+    }, [])
+
 
     return (
         <div className="adminusers">
@@ -32,10 +43,11 @@ export default function Users() {
                 <div className="right">
                     <CustomButton label='Download Behaviour Report' variant='transparent' height={'42px'} />
                     <CustomButton label="Delete" variant="danger" height={'42px'} />
-                    <CustomButton label="Create New" variant="primary" height={'42px'} onClick={() => router.push('/admin/advanced/users/create')} />
+                    <CustomButton label="Create New" variant="primary" height={'42px'}
+                        onClick={() => router.push('/admin/advanced/users/create')} />
                 </div>
             </div>
-            <CustomTable />
+            <CustomTable rowData={allUsers?.result}/>
         </div>
     )
 }

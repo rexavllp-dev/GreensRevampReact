@@ -1,7 +1,6 @@
 
-
+'use client';
 import React from 'react'
-import './Accounts.scss'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomSelect from '@/library/select/custom-select/CustomSelect'
 import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
@@ -10,8 +9,14 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
 import { Tab, Tabs } from '@nextui-org/react'
 import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
+import { getSingleUser } from '@/services/features/userSlice'
+import { useSearchParams } from 'next/navigation'
+import './Accounts.scss'
 
 const Accounts = () => {
+
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id');
 
     const [selectedTab, setSelectedTab] = React.useState("");
     const roles = [
@@ -80,6 +85,13 @@ const Accounts = () => {
             message: ''
         }
     })
+
+
+    const { singleUser } = useSelector(state => state.users)
+
+    useEffect(() => {
+        dispatch(getSingleUser(id))
+    }, [])
 
 
 

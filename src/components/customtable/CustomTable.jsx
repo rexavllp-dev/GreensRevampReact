@@ -9,10 +9,11 @@ import { Avatar, Button, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSec
 import { IoMdMore } from "react-icons/io";
 import './CustomTable.scss';
 import { useRouter } from 'next/navigation';
+import { getAllUsers } from '@/services/features/userSlice';
+import { useDispatch } from 'react-redux';
 
 
-export default function CustomTable() {
-    const [rowData, setRowData] = useState([]);
+export default function CustomTable({ rowData }) {
     const router = useRouter();
 
     const defaultColDef = useMemo(() => {
@@ -30,12 +31,12 @@ export default function CustomTable() {
     }, []);
 
     const [columnDefs] = useState([
-        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection : true, filter: false },
+        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         {
-            headerName: 'First Name', field: 'name'
+            headerName: 'First Name', field: 'usr_firstname'
         },
         {
-            headerName: 'Last Name', field: 'last_name'
+            headerName: 'Last Name', field: 'usr_lastname'
         },
         { headerName: 'Role', field: 'role' },
         {
@@ -46,8 +47,8 @@ export default function CustomTable() {
                 )
             }
         },
-        { field: 'email' },
-        { field: 'phone' },
+        { field: 'usr_email', headerName: 'Email' },
+        { field: 'usr_mobile_number', headerName: 'Mobile' },
         {
             field: 'action',
             filter: false,
@@ -66,7 +67,7 @@ export default function CustomTable() {
                                     key="view"
                                     description="Allows you to view the file"
                                     onClick={() => {
-                                      router.push('/admin/advanced/users/details')
+                                        router.push('/admin/advanced/users/details')
                                     }}
                                 >
                                     View
@@ -101,11 +102,6 @@ export default function CustomTable() {
         }
     ]);
 
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then((response) => response.json())
-            .then((data) => setRowData(data));
-    }, []);
 
     return (
         <div

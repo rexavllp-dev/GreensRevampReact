@@ -21,43 +21,43 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
 
     const countries = [
         {
-            id: 478,
+            id: 229,
             country_name: 'United Arab Emirates',
             country_code: 'AE',
             country_dial_code: '+971'
         },
         {
-            id: 364,
+            id: 115,
             country_name: 'Kuwait',
             country_code: 'KW',
             country_dial_code: '+965'
         },
         {
-            id: 412,
+            id: 163,
             country_name: 'Oman',
             country_code: 'OM',
             country_dial_code: '+968'
         },
         {
-            id: 425,
+            id: 176,
             country_name: 'Qatar',
             country_code: 'QA',
             country_dial_code: '+974'
         },
         {
-            id: 440,
+            id: 191,
             country_name: 'Saudi Arabia',
             country_code: 'SA',
             country_dial_code: '+966'
         },
         {
-            id: 267,
+            id: 18,
             country_name: 'Bahrain',
             country_code: 'BH',
             country_dial_code: '+973'
         },
         {
-            id: 347,
+            id: 98,
             country_name: 'India',
             country_code: 'IN',
             country_dial_code: '+91'
@@ -65,7 +65,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
     ];
 
     const [selectedCountry, setSelectedCountry] = React.useState({
-        id: 478,
+        id: 229,
         country_name: 'United Arab Emirates',
         country_code: 'AE',
         country_dial_code: '+971'

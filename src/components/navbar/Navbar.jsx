@@ -38,7 +38,7 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-            setUser(cookies.get('user'));
+        setUser(cookies.get('user'));
     }, [isLoggedIn])
 
     const handleLogout = () => {

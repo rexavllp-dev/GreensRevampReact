@@ -440,27 +440,27 @@ const CompanyRegister = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-            let data = {
-                "usr_firstname": formData.first_name,
-                "usr_lastname": formData.last_name,
-                "usr_mobile_number": formData.mobile,
-                "usr_mobile_country_code": formData.usr_mobile_country_code,
-                "usr_password": formData.password,
-                "usr_email": formData.email,
-                "usr_tos_accepted": formData.agree,
-                "usr_newsletter_accepted": formData.subscribe,
-                // "usr_company": 10
 
-                "company_name": formData.company_name,
-                "company_landline": formData.company_landline,
-                "company_vat_certificate": formData.company_vat_certificate,
-                "company_landline_country_code": formData.company_landline_country_code,
-                "company_trn_number": formData.trn_number,
-                "company_trade_license": formData.trade_license,
-                "company_trade_license_expiry": formData.trade_license_expiry
-            }
+            const companyFormData = new FormData();
+
+            companyFormData.append('usr_firstname', formData.first_name);
+            companyFormData.append('usr_lastname', formData.last_name);
+            companyFormData.append('usr_mobile_number', formData.mobile);
+            companyFormData.append('usr_mobile_country_code', formData.usr_mobile_country_code);
+            companyFormData.append('usr_password', formData.password);
+            companyFormData.append('usr_email', formData.email);
+            companyFormData.append('usr_tos_accepted', formData.agree);
+            companyFormData.append('usr_newsletter_accepted', formData.subscribe);
+            companyFormData.append('company_name', formData.company_name);
+            companyFormData.append('company_landline', formData.company_landline);
+            companyFormData.append('company_vat_certificate', formData.company_vat_certificate);
+            companyFormData.append('company_landline_country_code', formData.company_landline_country_code);
+            companyFormData.append('company_trn_number', formData.trn_number);
+            companyFormData.append('company_trade_license', formData.trade_license);
+            companyFormData.append('company_trade_license_expiry', formData.trade_license_expiry?.toLocaleDateString('en-GB'));
+
             setLoading(true);
-            dispatch(companyRegister({ data })).then((res) => {
+            dispatch(companyRegister({ data : companyFormData })).then((res) => {
                 if (res.payload?.status == 201) {
                     let token = res.payload?.result?.userToken?.token;
                     toast.success(res.payload?.message);
@@ -468,7 +468,7 @@ const CompanyRegister = () => {
                 } else {
                     toast.error(res.payload?.message);
                 }
-                setLoading(false)
+                setLoading(false);
             }).catch((err) => {
                 toast.error(err.message);
                 setLoading(false)

@@ -49,7 +49,12 @@ export const auth = {
     //Company register
     companyRegister: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/company', data)
+            const config = {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              };
+            Axios.post('/company', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

@@ -9,7 +9,7 @@ import { Axios } from "axios";
 const cookies = new Cookies()
 
 const initialState = {
-    isLoggedIn:false,
+    isLoggedIn: false,
     isUserLogging: false,
     isUserLogged: false,
     isUserLoginError: false,
@@ -232,7 +232,6 @@ export const resetPassword = createAsyncThunk('resetPassword', async ({ data }, 
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
-
 
 
 const authSlice = createSlice({
