@@ -191,7 +191,7 @@ const LoginPage = () => {
     }
 
     const handleFacebookLogin = () => {
-        window.open('http://localhost:5000/api/v1/users/auth/facebook', '_self');
+        window.open('http://localhost:5000/api/v1/users/auth/facebook/callback', '_self');
     }
 
     return (

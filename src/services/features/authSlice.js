@@ -14,6 +14,10 @@ const initialState = {
     isUserLogged: false,
     isUserLoginError: false,
 
+    isOAuthVerifying: false,
+    isOAuthVerified: false,
+    isOAuthVerifyError: false,
+
     isLoginOtpVerifying: false,
     isLoginOtpVerified: false,
     isLoginOtpVerifyError: false,
@@ -78,6 +82,31 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
         });
 
         return thunkAPI.fulfillWithValue(response.data)
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+})
+
+export const oAuthSuccess = createAsyncThunk('oAuthSuccess', async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }, thunkAPI) => {
+    try {
+
+        let user = {
+            usr_firstname: usr_firstname,
+            lastname: usr_lastname,
+            usr_lastname: usr_email
+        }
+
+            // Token set in Cookies
+            cookies.set('accessToken', access_token);
+            cookies.set('refreshToken', refresh_token);
+            cookies.set('user', JSON.stringify(user));
+    
+            Axios.interceptors?.request.use((config) => {
+                config.headers['Authorization'] = `Bearer ${access_token}`;
+                return config;
+            });
+    
+            return thunkAPI.fulfillWithValue('Login success!')
     } catch (error) {
         return thunkAPI.rejectWithValue(error);
     }
@@ -265,6 +294,27 @@ const authSlice = createSlice({
                 state.isUserLogging = false;
                 state.isUserLogged = false;
                 state.isUserLoginError = true;
+            })
+
+
+            //oauth provider
+            .addCase(oAuthSuccess.pending, (state, action) => {
+                state.isOAuthVerifying = true;
+                state.isOAuthVerified = false;
+                state.isOAuthVerifyError = false;
+            })
+
+            .addCase(oAuthSuccess.fulfilled, (state, action) => {
+                state.isOAuthVerifying = false;
+                state.isOAuthVerified = true;
+                state.isOAuthVerifyError = false;
+                state.isLoggedIn = true;
+            })
+
+            .addCase(oAuthSuccess.rejected, (state, action) => {
+                state.isOAuthVerifying = false;
+                state.isOAuthVerified = false;
+                state.isOAuthVerifyError = true;
             })
 
             //login with otp
