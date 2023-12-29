@@ -1,6 +1,6 @@
 
-
-import React from 'react'
+'use client';
+import React, { useEffect } from 'react'
 import './Accounts.scss'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomSelect from '@/library/select/custom-select/CustomSelect'
@@ -26,6 +26,7 @@ const CreateAccount = () => {
         password: '',
         confirm_password: '',
         status: false,
+        notes:''
     })
 
     const [errors, setErrors] = React.useState({
@@ -55,19 +56,27 @@ const CreateAccount = () => {
         }
     })
 
+    const [loading, setLoading] = React.useState(false);
+
+    useEffect(()=>{
+        console.log(formData)
+    },[formData])
+
+
+    const handlePhoneChange = (name, value, countryCode) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (value === '' || re.test(value)) {
+            setFormData((prev) => ({
+                ...prev, [name]: value, usr_mobile_country_code: countryCode
+            }))
+        }
+    }
 
 
     const handleInputChange = ({ e, country }) => {
 
-        if (e.target.name === 'mobile') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, mobile: e.target.value
-                }))
-            }
-        } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
+        if (e.target.name === 'first_name' || e.target.name === 'last_name') {
             const firstLetter = e.target.value.charAt(0);
             if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
                 //First letter should not be a number
@@ -235,22 +244,36 @@ const CreateAccount = () => {
             }));
         }
 
-        // Validate agreed terms and conditions
-        if (!formData.agree) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                agree: { error: true, message: 'You have to agree terms and conditions to continue' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                agree: { error: false, message: '' }
-            }));
-        }
-
         return isValid;
     };
+
+    
+    const handleSubmit = () => {
+        if (validateForm()) {
+            let data = {
+                "usr_firstname": formData.first_name,
+                "usr_lastname": formData.last_name,
+                "usr_mobile_number": formData.mobile,
+                "usr_mobile_country_code": formData.usr_mobile_country_code,
+                "usr_password": formData.password,
+                "usr_email": formData.email,
+            }
+            setLoading(true);
+            dispatch(userRegister(data)).then((res) => {
+                if (res.payload?.status === 201) {
+                    let token = res.payload?.result?.userToken?.token;
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+                setLoading(false)
+            }).catch((err) => {
+                toast.error(err.message);
+                setLoading(false)
+            })
+
+        }
+    }
 
     return (
         <div className='accountdetails'>
@@ -295,12 +318,13 @@ const CreateAccount = () => {
                         value={formData.mobile}
                         placeholder='Mobile Number'
                         label='Mobile Number'
-                        onChange={(e, country) => {
-                            handleInputChange({ e, country })
+                        onChange={(value, country) => {
+                            handlePhoneChange('mobile', value, country)
                         }}
                         isInvalid={errors.mobile.error}
                         errMsg={errors.mobile.message}
                     />
+
                     <CustomSelect label={'Roles'} isRequired={true} data={roles} />
 
 
@@ -333,11 +357,11 @@ const CreateAccount = () => {
                         haveProgress={false}
                     />
                     <CustomToggleButton label='Status' isRequired={true} />
-                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} />
+                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Create Account" />
+                <CustomButton variant="primary" label="Create Account" loading={loading} onClick={handleSubmit} />
             </div>
 
 

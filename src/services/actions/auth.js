@@ -54,7 +54,7 @@ export const auth = {
                   'Content-Type': 'multipart/form-data',
                 },
               };
-            Axios.post('/company', data, config)
+            Axios.post('/company/register-company', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -79,9 +79,9 @@ export const auth = {
     },
 
     //Update user email
-    updateUserEmail: (data, token) => {
+    updateUserEmail: (data, token, from) => {
         return new Promise((resolve, reject) => {
-            Axios.put(`/users/update_email/${token}`, data)
+            Axios.put(`/users/update_email/${token}?from=${from}`, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -112,9 +112,9 @@ export const auth = {
         })
     },
     //Verify OTP
-    verifyOtp: (data) => {
+    verifyOtp: (data, from) => {
         return new Promise((resolve, reject) => {
-            Axios.post(`/users/verify-otp`, data)
+            Axios.post(`/users/verify-otp?from=${from}`, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

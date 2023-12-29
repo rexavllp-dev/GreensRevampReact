@@ -73,7 +73,7 @@ const UpdateEmail = () => {
             }
 
             setLoading(true);
-            dispatch(updateUserEmail({data, token})).then((res) => {
+            dispatch(updateUserEmail({data, token, from})).then((res) => {
                 if (res.payload?.status === 200) {
                     toast.success(res.payload?.message);
                     router.push(`/auth/verifyemail/?orgin=${from}&token=${token}`, { scroll: true });

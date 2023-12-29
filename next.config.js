@@ -2,7 +2,6 @@
 
 const nextConfig = {
     trailingSlash: true,
-    output: 'export',
     images: {
         domains: ["s3-alpha-sig.figma.com"],
         unoptimized: true

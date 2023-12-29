@@ -6,6 +6,10 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '@nextui-org/react';
 import "./LoginSuccess.scss"
 import { toast } from 'react-toastify';
+import { Cookies } from 'react-cookie';
+import { Axios } from 'axios';
+
+const cookies = new Cookies();
 
 const LoginSuccess = () => {
     const router = useRouter()
@@ -18,14 +22,44 @@ const LoginSuccess = () => {
     let usr_email = searchParams.get('usr_email');
 
     useEffect(() => {
-        dispatch(oAuthSuccess({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email })).then((res) => {
+        console.log(access_token)
+        console.log(refresh_token)
+        console.log(usr_firstname)
+        console.log(usr_lastname)
+        console.log(usr_email)
+
+        if (access_token && refresh_token && usr_firstname) {
+
+            let user = {
+                usr_firstname: usr_firstname,
+                usr_lastname: usr_lastname,
+                usr_email: usr_email
+            }
+
+            // Token set in Cookies
+            cookies.set('accessToken', access_token);
+            cookies.set('refreshToken', refresh_token);
+            cookies.set('user', JSON.stringify(user));
             toast.success('Login successfully!', {
                 toastId: 'loginSuccess'
             });
-        }).catch((error) => {
-            console.log(error);
-        })
-    }, [access_token]);
+            router.push('/');
+        }
+
+        else {
+            toast.error('Invalid authorization', {
+                toastId: 'loginError'
+            })
+        }
+        // oAuthSuccess({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }).then((res) => {
+        //     toast.success('Login successfully!', {
+        //         toastId: 'loginSuccess'
+        //     });
+        //     // router.push('/')
+        // }).catch((error) => {
+        //     console.log(error);
+        // })
+    }, [access_token, refresh_token, usr_email, usr_firstname, usr_lastname]);
 
     return (
         <div className="login-success">

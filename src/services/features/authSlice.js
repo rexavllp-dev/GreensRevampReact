@@ -1,7 +1,6 @@
 "use client"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../actions/auth";
-import { handleLogin } from "@/utils/auth";
 import { Cookies } from "react-cookie";
 import { Axios } from "axios";
 
@@ -87,30 +86,35 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
     }
 })
 
-export const oAuthSuccess = createAsyncThunk('oAuthSuccess', async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }, thunkAPI) => {
-    try {
+export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }) => {
 
-        let user = {
-            usr_firstname: usr_firstname,
-            lastname: usr_lastname,
-            usr_lastname: usr_email
-        }
+    
+    return new Promise((resolve, reject) => {
+        if (access_token && refresh_token) {
+
+            let user = {
+                usr_firstname: usr_firstname,
+                usr_lastname: usr_lastname,
+                usr_email: usr_email
+            }
 
             // Token set in Cookies
             cookies.set('accessToken', access_token);
             cookies.set('refreshToken', refresh_token);
             cookies.set('user', JSON.stringify(user));
-    
+
             Axios.interceptors?.request.use((config) => {
                 config.headers['Authorization'] = `Bearer ${access_token}`;
                 return config;
             });
-    
-            return thunkAPI.fulfillWithValue('Login success!')
-    } catch (error) {
-        return thunkAPI.rejectWithValue(error);
-    }
-})
+            resolve('Login successful')
+        } else {
+            reject('Invalid authorization')
+        }
+
+    })
+
+}
 
 export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, thunkAPI) => {
     try {
@@ -192,9 +196,9 @@ export const getUserInfo = createAsyncThunk('getUserInfo', async (data, thunkAPI
     }
 })
 
-export const updateUserEmail = createAsyncThunk('updateUserEmail', async ({ data, token }, thunkAPI) => {
+export const updateUserEmail = createAsyncThunk('updateUserEmail', async ({ data, token, from }, thunkAPI) => {
     try {
-        const response = await auth.updateUserEmail(data, token)
+        const response = await auth.updateUserEmail(data, token, from)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -202,7 +206,7 @@ export const updateUserEmail = createAsyncThunk('updateUserEmail', async ({ data
     }
 })
 
-export const updateUserMobile = createAsyncThunk('updateUserMobile', async ({ data, token }, thunkAPI) => {
+export const updateUserMobile = createAsyncThunk('updateUserMobile', async ({ data, token}, thunkAPI) => {
     try {
         const response = await auth.updateUserMobile(data, token)
         return thunkAPI.fulfillWithValue(response.data);
@@ -232,9 +236,19 @@ export const resendEmail = createAsyncThunk('resendEmail', async ({ token }, thu
     }
 })
 
-export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data }, thunkAPI) => {
+export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data,from }, thunkAPI) => {
     try {
-        const response = await auth.verifyOtp(data)
+        const response = await auth.verifyOtp(data, from)
+        console.log(response.data)
+        if(response.data.status === 201) {
+            cookies.set('accessToken', response.data.result?.accessToken)
+            cookies.set('refreshToken', response.data.result?.refreshToken);
+            cookies.set('user', JSON.stringify(response.data.result?.user));
+            Axios.interceptors.request.use((config) => {
+                config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
+                return config;
+            });
+        }
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -294,27 +308,6 @@ const authSlice = createSlice({
                 state.isUserLogging = false;
                 state.isUserLogged = false;
                 state.isUserLoginError = true;
-            })
-
-
-            //oauth provider
-            .addCase(oAuthSuccess.pending, (state, action) => {
-                state.isOAuthVerifying = true;
-                state.isOAuthVerified = false;
-                state.isOAuthVerifyError = false;
-            })
-
-            .addCase(oAuthSuccess.fulfilled, (state, action) => {
-                state.isOAuthVerifying = false;
-                state.isOAuthVerified = true;
-                state.isOAuthVerifyError = false;
-                state.isLoggedIn = true;
-            })
-
-            .addCase(oAuthSuccess.rejected, (state, action) => {
-                state.isOAuthVerifying = false;
-                state.isOAuthVerified = false;
-                state.isOAuthVerifyError = true;
             })
 
             //login with otp

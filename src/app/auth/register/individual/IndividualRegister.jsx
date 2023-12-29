@@ -40,10 +40,6 @@ const IndividualRegister = () => {
         subscribe: false,
     })
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData])
-
     const [errors, setErrors] = React.useState({
         first_name: {
             error: false,

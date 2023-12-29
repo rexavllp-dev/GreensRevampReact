@@ -14,6 +14,14 @@ const initialState = {
     isSingleUserLoaded: false,
     isSingleUserLoadError: false,
     singleUser: {},
+
+    isUserCreating:false,
+    isUserCreated: false,
+    isUserCreateError:false,
+
+    isUserUpdating:false,
+    isUserUpdated:false,
+    isUserUpdateError:false,
 }
 
 
@@ -30,6 +38,26 @@ export const getAllUsers = createAsyncThunk('getAllUsers', async ({ data }, thun
 export const getSingleUser = createAsyncThunk('getSingleUser', async (id, thunkAPI) => {
     try {
         const response = await users.getSingleUser(id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async (data, thunkAPI) => {
+    try {
+        const response = await users.createUserByAdmin(data)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async (data, thunkAPI) => {
+    try {
+        const response = await users.updateUserByAdmin(data)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

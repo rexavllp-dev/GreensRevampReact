@@ -9,11 +9,11 @@ const cookies = new Cookies();
 export default function Layout({ children }) {
     const router = useRouter()
 
-    const token = cookies.get('accessToken')
+    // const token = cookies.get('accessToken')
 
-    if (token && token !== "") {
-        router.push('/')
-    } else {
+    // if (token && token !== "") {
+    //     router.push('/')
+    // } else {
         return (
             <div>
                 <AuthNavbar />
@@ -21,5 +21,5 @@ export default function Layout({ children }) {
                 <AuthFooter />
             </div>
         );
-    }
+    // }
 }

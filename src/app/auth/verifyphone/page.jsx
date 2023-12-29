@@ -68,11 +68,30 @@ const VerifyPhone = () => {
 
     const handleVerify = () => {
         if (from === 'company') {
-            router.push('/welcome', { scroll: true })
+            setLoading(true);
+            dispatch(verifyOtp({ data: { token, otp: formData.otp }, from })).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message, {
+                        toastId: 'success1',
+                    });
+                    router.push('/welcome', { scroll: true })
+                } else {
+                    toast.error(res.payload?.message, {
+                        toastId: 'fail1',
+                    });
+                }
+                setLoading(false);
+            }).catch((err) => {
+                setLoading(false);
+                console.log(err);
+
+            })
+          
         } else {
             setLoading(true);
-            dispatch(verifyOtp({ data: { token, otp: formData.otp } })).then((res) => {
-                if (res.payload?.status === 200) {
+            dispatch(verifyOtp({ data: { token, otp: formData.otp }, from })).then((res) => {
+                console.log(res.payload)
+                if (res.payload?.status === 201) {
                     toast.success(res.payload?.message, {
                         toastId: 'success1',
                     });
@@ -86,7 +105,7 @@ const VerifyPhone = () => {
             }).catch((err) => {
                 setLoading(false);
                 console.log(err);
-                
+
             })
         }
     }
