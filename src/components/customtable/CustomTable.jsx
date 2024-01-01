@@ -9,8 +9,7 @@ import { Avatar, Button, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSec
 import { IoMdMore } from "react-icons/io";
 import './CustomTable.scss';
 import { useRouter } from 'next/navigation';
-import { getAllUsers } from '@/services/features/userSlice';
-import { useDispatch } from 'react-redux';
+import { FiDownload } from 'react-icons/fi';
 
 
 export default function CustomTable({ rowData }) {
@@ -38,17 +37,65 @@ export default function CustomTable({ rowData }) {
         {
             headerName: 'Last Name', field: 'usr_lastname'
         },
-        { headerName: 'Role', field: 'role' },
+        // { headerName: 'Role', field: 'role' },
         {
             headerName: 'Status', field: 'status',
             cellRenderer: (params) => {
+                const isActive = params.data?.is_status;
                 return (
-                    <Chip color="success" variant="dot">Active</Chip>
+                    <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
                 )
             }
         },
         { field: 'usr_email', headerName: 'Email' },
         { field: 'usr_mobile_number', headerName: 'Mobile' },
+        {
+            field: 'certificates',
+            filter: false,
+            cellRenderer: (params) => {
+                if (!params.data?.usr_company) {
+                    return null
+                }
+                return (
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <div style={{ display: 'flex', height: '100%', alignItems: 'center', paddingLeft: '30px', cursor: 'pointer' }}>
+                                <FiDownload size={20} />
+                            </div>
+                        </DropdownTrigger>
+                        <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                            <DropdownSection title="" showDivider>
+                                    <DropdownItem
+                                        key="view"
+                                        description="Download vat certificate"
+                                    >
+                                        Vat certificate
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        key="edit"
+                                        description="Download trade license"
+                                    >
+                                        Trade license
+                                    </DropdownItem>
+                            </DropdownSection>
+                            {/* <DropdownSection title="Danger zone">
+                                <DropdownItem
+                                    key="delete"
+                                    className="text-danger"
+                                    color="danger"
+                                    description="Permanently delete the file"
+                                    onClick={() => {
+                                        window.alert('Delete file');
+                                    }}
+                                >
+                                    Delete
+                                </DropdownItem>
+                            </DropdownSection> */}
+                        </DropdownMenu>
+                    </Dropdown>
+                )
+            }
+        },
         {
             field: 'action',
             filter: false,
@@ -67,7 +114,7 @@ export default function CustomTable({ rowData }) {
                                     key="view"
                                     description="Allows you to view the file"
                                     onClick={() => {
-                                        router.push('/admin/advanced/users/details')
+                                        router.push(`/admin/advanced/users/${params.data?.id}`)
                                     }}
                                 >
                                     View
@@ -76,7 +123,7 @@ export default function CustomTable({ rowData }) {
                                     key="edit"
                                     description="Allows you to edit the file"
                                     onClick={() => {
-                                        router.push('/admin/advanced/users/details')
+                                        router.push(`/admin/advanced/users/${params.data?.id}`)
                                     }}
                                 >
                                     Edit

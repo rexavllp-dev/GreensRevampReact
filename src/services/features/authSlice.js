@@ -9,6 +9,7 @@ const cookies = new Cookies()
 
 const initialState = {
     isLoggedIn: false,
+    authCount: 0,
     isUserLogging: false,
     isUserLogged: false,
     isUserLoginError: false,
@@ -71,9 +72,13 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
 
         console.log(response.data.result.accessToken)
         // Token set in Cookies
-        cookies.set('accessToken', response.data.result?.accessToken);
-        cookies.set('refreshToken', response.data.result?.refreshToken);
-        cookies.set('user', JSON.stringify(response.data.result?.user));
+        // cookies.set('accessToken', response.data.result?.accessToken);
+        // cookies.set('refreshToken', response.data.result?.refreshToken);
+        // cookies.set('user', JSON.stringify(response.data.result?.user));
+
+        localStorage && localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        localStorage && localStorage.setItem('accessToken', response.data.result?.accessToken);
+        localStorage && localStorage.setItem('refreshToken', response.data.result?.refreshToken);
 
         Axios.interceptors?.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
@@ -88,7 +93,7 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
 
 export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }) => {
 
-    
+
     return new Promise((resolve, reject) => {
         if (access_token && refresh_token) {
 
@@ -99,9 +104,13 @@ export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname,
             }
 
             // Token set in Cookies
-            cookies.set('accessToken', access_token);
-            cookies.set('refreshToken', refresh_token);
-            cookies.set('user', JSON.stringify(user));
+            // cookies.set('accessToken', access_token);
+            // cookies.set('refreshToken', refresh_token);
+            // cookies.set('user', JSON.stringify(user));
+
+            localStorage && localStorage.setItem('user', JSON.stringify(user));
+            localStorage && localStorage.setItem('accessToken', access_token);
+            localStorage && localStorage.setItem('refreshToken', refresh_token);
 
             Axios.interceptors?.request.use((config) => {
                 config.headers['Authorization'] = `Bearer ${access_token}`;
@@ -121,13 +130,11 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
         const response = await auth.loginWithOtp(data);
 
         // Token set in Cookies
-        cookies.set('accessToken', response.data.result?.accessToken)
-        cookies.set('refreshToken', response.data.result?.refreshToken);
-        cookies.set('user', JSON.stringify(response.data.result?.user));
-        Axios.interceptors.request.use((config) => {
-            config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
-            return config;
-        });
+        // cookies.set('accessToken', response.data.result?.accessToken)
+        // cookies.set('refreshToken', response.data.result?.refreshToken);
+        // cookies.set('user', JSON.stringify(response.data.result?.user));
+
+
 
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -138,6 +145,15 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
 export const verifyLoginOtp = createAsyncThunk('verifyLoginOtp', async ({ data }, thunkAPI) => {
     try {
         const response = await auth.verifyLoginOtp(data);
+
+        localStorage && localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        localStorage && localStorage.setItem('accessToken', response.data.result?.accessToken);
+        localStorage && localStorage.setItem('refreshToken', response.data.result?.refreshToken);
+        // Axios.interceptors.request.use((config) => {
+        //     config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
+        //     return config;
+        // });
+
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -206,7 +222,7 @@ export const updateUserEmail = createAsyncThunk('updateUserEmail', async ({ data
     }
 })
 
-export const updateUserMobile = createAsyncThunk('updateUserMobile', async ({ data, token}, thunkAPI) => {
+export const updateUserMobile = createAsyncThunk('updateUserMobile', async ({ data, token }, thunkAPI) => {
     try {
         const response = await auth.updateUserMobile(data, token)
         return thunkAPI.fulfillWithValue(response.data);
@@ -236,19 +252,23 @@ export const resendEmail = createAsyncThunk('resendEmail', async ({ token }, thu
     }
 })
 
-export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data,from }, thunkAPI) => {
+export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data, from }, thunkAPI) => {
     try {
         const response = await auth.verifyOtp(data, from)
-        console.log(response.data)
-        if(response.data.status === 201) {
-            cookies.set('accessToken', response.data.result?.accessToken)
-            cookies.set('refreshToken', response.data.result?.refreshToken);
-            cookies.set('user', JSON.stringify(response.data.result?.user));
-            Axios.interceptors.request.use((config) => {
-                config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
-                return config;
-            });
-        }
+
+        // cookies.set('accessToken', response.data.result?.accessToken)
+        // cookies.set('refreshToken', response.data.result?.refreshToken);
+        // cookies.set('user', JSON.stringify(response.data.result?.user));
+
+        localStorage && localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        localStorage && localStorage.setItem('accessToken', response.data.result?.accessToken);
+        localStorage && localStorage.setItem('refreshToken', response.data.result?.refreshToken);
+
+
+        // Axios.interceptors.request.use((config) => {
+        //     config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
+        //     return config;
+        // });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -283,9 +303,14 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.isLoggedIn = false;
+            state.authCount = + 1;
             cookies.remove("accessToken");
             cookies.remove("refreshToken");
             cookies.remove("user")
+
+            localStorage && localStorage.removeItem('user');
+            localStorage && localStorage.removeItem('accessToken');
+            localStorage && localStorage.removeItem('refreshToken');
         },
     },
     extraReducers: (builder) => {
@@ -302,6 +327,7 @@ const authSlice = createSlice({
                 state.isUserLogged = true;
                 state.isUserLoginError = false;
                 state.isLoggedIn = true;
+                state.authCount = + 1;
             })
 
             .addCase(login.rejected, (state, action) => {
@@ -322,6 +348,7 @@ const authSlice = createSlice({
                 state.isUserLogged = true;
                 state.isUserLoginError = false;
                 state.isLoggedIn = true;
+                state.authCount = + 1;
             })
 
             .addCase(loginWithOtp.rejected, (state, action) => {
@@ -341,6 +368,8 @@ const authSlice = createSlice({
                 state.isLoginOtpVerifying = false;
                 state.isLoginOtpVerified = true;
                 state.isLoginOtpVerifyError = false;
+                state.isLoggedIn = true;
+                state.authCount = + 1;
             })
 
             .addCase(verifyLoginOtp.rejected, (state, action) => {

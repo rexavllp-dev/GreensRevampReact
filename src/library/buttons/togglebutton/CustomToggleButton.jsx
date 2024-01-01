@@ -2,14 +2,14 @@ import React from 'react'
 import './CustomToggleButton.scss'
 import { Switch, cn, select } from '@nextui-org/react'
 
-const CustomToggleButton = ({ label }) => {
-    const [isSelected, setIsSelected] = React.useState(true);
+const CustomToggleButton = ({ label, value, onChange }) => {
+    // const [isSelected, setIsSelected] = React.useState(true);
 
     return (
         <div className='togglebtn-wrapper'>
             <p className='togglebtn-label'>{label}</p>
             <Switch
-                isSelected={isSelected} onValueChange={setIsSelected}
+                isSelected={value} onValueChange={onChange}
                 color='success'
                 classNames={{
                     base: cn(
@@ -23,7 +23,7 @@ const CustomToggleButton = ({ label }) => {
                     ),
                 }}
             >
-                <p className='togglebtn-label'> {isSelected ? "Active" : "Inactive"}</p>
+                <p className='togglebtn-label'> {value ? "Active" : "Inactive"}</p>
             </Switch>
         </div>
     )

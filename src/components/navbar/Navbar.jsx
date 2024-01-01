@@ -26,8 +26,8 @@ const Navbar = () => {
     const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-    const [user, setUser] = React.useState(cookies.get('user'));
-    const { isLoggedIn } = useSelector(state => state.auth)
+    const [user, setUser] = React.useState(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')))
+    const { isLoggedIn, authCount } = useSelector(state => state.auth)
 
     const handleSwitchLanguage = () => {
         if (language === 'ar') {
@@ -38,8 +38,8 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        setUser(cookies.get('user'));
-    }, [isLoggedIn])
+        setUser(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')));
+    }, [isLoggedIn, localStorage, authCount])
 
     const handleLogout = () => {
         dispatch(logout());
@@ -102,7 +102,7 @@ const Navbar = () => {
                                         </DropdownMenu>
                                     </Dropdown >
                                     :
-                                    <Link href={'/auth/login'}>
+                                    <Link href={'/auth/login'} prefetch={false}>
                                         <div className="item">
                                             <div className="icon">
                                                 <Image src={userIcon} />
@@ -114,7 +114,7 @@ const Navbar = () => {
 
 
                             <div className="item">
-                                <Link href="/cart">
+                                <Link href="/cart" prefetch={false}>
                                     <div className="icon">
                                         <Image src={cartIcon} />
                                     </div>
@@ -192,8 +192,8 @@ const Navbar = () => {
                                             </DropdownMenu>
                                         </Dropdown >
                                         :
-                                        <div className="item">
-                                            <Link href={'/auth/login'}>
+                                        <div className="item" >
+                                            <Link href={'/auth/login'} prefetch={false}>
                                                 <div className="icon">
                                                     <Image src={userIcon} />
                                                 </div>
@@ -202,7 +202,7 @@ const Navbar = () => {
                                 }
                                 {/* <p className='item-label'>Sign In</p> */}
                                 <div className="item">
-                                    <Link href="/cart">
+                                    <Link href="/cart" prefetch={false}>
                                         <Image src={cartIcon} />
                                     </Link>
                                     {/* <p className='item-label'>Cart</p> */}

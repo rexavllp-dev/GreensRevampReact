@@ -26,15 +26,16 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
   const router = useRouter()
   const dispatch = useDispatch();
 
-  const [user, setUser] = React.useState(cookies.get('user'));
-  const { isLoggedIn } = useSelector(state => state.auth);
+  const [user, setUser] = React.useState(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')));
+  const { isLoggedIn, authCount} = useSelector(state => state.auth);
 
   useEffect(() => {
-    setUser(cookies.get('user'));
-  }, [isLoggedIn])
+    setUser(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')));
+  }, [isLoggedIn, localStorage, authCount]);
 
   const handleLogout = () => {
     dispatch(logout());
+    onClose();
   }
 
 

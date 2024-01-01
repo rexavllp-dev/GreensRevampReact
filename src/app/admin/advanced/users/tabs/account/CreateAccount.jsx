@@ -9,8 +9,17 @@ import CustomTextarea from '@/library/textarea/CustomTextarea'
 import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
 import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
+import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
+import { createUserByAdmin } from '@/services/features/userSlice';
+import { isEmailValid } from '@/utils/helpers/IsEmailValid';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const CreateAccount = () => {
+
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const roles = [
         { label: 'Customer', value: 1 },
@@ -25,8 +34,8 @@ const CreateAccount = () => {
         email: '',
         password: '',
         confirm_password: '',
-        status: false,
-        notes:''
+        status: true,
+        notes: ''
     })
 
     const [errors, setErrors] = React.useState({
@@ -58,9 +67,9 @@ const CreateAccount = () => {
 
     const [loading, setLoading] = React.useState(false);
 
-    useEffect(()=>{
-        console.log(formData)
-    },[formData])
+    useEffect(() => {
+        console.log(formData);
+    }, [formData])
 
 
     const handlePhoneChange = (name, value, countryCode) => {
@@ -247,7 +256,7 @@ const CreateAccount = () => {
         return isValid;
     };
 
-    
+
     const handleSubmit = () => {
         if (validateForm()) {
             let data = {
@@ -257,16 +266,18 @@ const CreateAccount = () => {
                 "usr_mobile_country_code": formData.usr_mobile_country_code,
                 "usr_password": formData.password,
                 "usr_email": formData.email,
+                "notes": formData.notes,
+                "is_status": formData.status
             }
             setLoading(true);
-            dispatch(userRegister(data)).then((res) => {
-                if (res.payload?.status === 201) {
-                    let token = res.payload?.result?.userToken?.token;
+            dispatch(createUserByAdmin({ data })).then((res) => {
+                if (res.payload?.status === 200) {
                     toast.success(res.payload?.message);
+                    router.back()
                 } else {
                     toast.error(res.payload?.message);
                 }
-                setLoading(false)
+                setLoading(false);
             }).catch((err) => {
                 toast.error(err.message);
                 setLoading(false)
@@ -326,8 +337,6 @@ const CreateAccount = () => {
                     />
 
                     <CustomSelect label={'Roles'} isRequired={true} data={roles} />
-
-
                 </div>
 
                 <div className="stack">
@@ -356,7 +365,9 @@ const CreateAccount = () => {
                         isRequired={false}
                         haveProgress={false}
                     />
-                    <CustomToggleButton label='Status' isRequired={true} />
+                    <CustomToggleButton label='Status' isRequired={true} value={formData.status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                    />
                     <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>

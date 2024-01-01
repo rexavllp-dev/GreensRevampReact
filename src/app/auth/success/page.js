@@ -22,12 +22,6 @@ const LoginSuccess = () => {
     let usr_email = searchParams.get('usr_email');
 
     useEffect(() => {
-        console.log(access_token)
-        console.log(refresh_token)
-        console.log(usr_firstname)
-        console.log(usr_lastname)
-        console.log(usr_email)
-
         if (access_token && refresh_token && usr_firstname) {
 
             let user = {
@@ -37,9 +31,20 @@ const LoginSuccess = () => {
             }
 
             // Token set in Cookies
-            cookies.set('accessToken', access_token);
-            cookies.set('refreshToken', refresh_token);
-            cookies.set('user', JSON.stringify(user));
+            // cookies.set('accessToken', access_token);
+            // cookies.set('refreshToken', refresh_token);
+            // cookies.set('user', JSON.stringify(user));
+
+            localStorage && localStorage.setItem('user', JSON.stringify(user));
+            localStorage && localStorage.setItem('accessToken', access_token);
+            localStorage && localStorage.setItem('refreshToken', refresh_token);
+
+            
+            Axios.interceptors?.request.use((config) => {
+                config.headers['Authorization'] = `Bearer ${access_token}`;
+                return config;
+            });
+
             toast.success('Login successfully!', {
                 toastId: 'loginSuccess'
             });

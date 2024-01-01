@@ -1,6 +1,6 @@
 
 'use client';
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomSelect from '@/library/select/custom-select/CustomSelect'
 import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
@@ -9,14 +9,17 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
 import { Tab, Tabs } from '@nextui-org/react'
 import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
-import { getSingleUser } from '@/services/features/userSlice'
+import { getSingleUser, updateUserByAdmin } from '@/services/features/userSlice'
 import { useSearchParams } from 'next/navigation'
 import './Accounts.scss'
+import { useDispatch, useSelector } from 'react-redux';
+import { isEmailValid } from '@/utils/helpers/IsEmailValid';
+import { toast } from 'react-toastify';
 
-const Accounts = () => {
+const Accounts = ({ userId }) => {
 
-    const searchParams = useSearchParams()
-    const id = searchParams.get('id');
+
+    const dispatch = useDispatch();
 
     const [selectedTab, setSelectedTab] = React.useState("");
     const roles = [
@@ -24,6 +27,7 @@ const Accounts = () => {
         { label: 'Admin', value: 2 },
         { label: 'Delivery', value: 3 },
     ]
+    const [loading, setLoading] = React.useState(false);
 
     const [formData, setFormData] = React.useState({
 
@@ -34,6 +38,7 @@ const Accounts = () => {
         password: '',
         confirm_password: '',
         status: false,
+        notes: '',
         address: [
             {
                 address_line_1: 'Signature of Sugar DIP1 Tamcom - مجمع دبي للإستثمار - دبي - United Arab Emirates Dubai, United Arab Emirates',
@@ -86,26 +91,45 @@ const Accounts = () => {
         }
     })
 
-
     const { singleUser } = useSelector(state => state.users)
 
-    useEffect(() => {
-        dispatch(getSingleUser(id))
-    }, [])
 
+    React.useEffect(() => {
+        if (userId) {
+            dispatch(getSingleUser(userId))
+        }
+    }, [userId])
+
+    useEffect(() => {
+        if (singleUser) {
+            setFormData((prev) => ({
+                ...prev,
+                first_name: singleUser?.result?.usr_firstname,
+                last_name: singleUser?.result?.usr_lastname,
+                mobile: singleUser?.result?.usr_mobile_number,
+                usr_mobile_country_code: singleUser?.result?.usr_mobile_country_code,
+                email: singleUser?.result?.usr_email,
+                status: singleUser?.result?.status,
+                notes: singleUser?.result?.notes,
+                status: singleUser?.result?.is_status
+            }))
+        }
+    }, [singleUser])
+
+    const handlePhoneChange = (name, value, countryCode) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (value === '' || re.test(value)) {
+            setFormData((prev) => ({
+                ...prev, [name]: value, usr_mobile_country_code: countryCode
+            }))
+        }
+    }
 
 
     const handleInputChange = ({ e, country }) => {
 
-        if (e.target.name === 'mobile') {
-            const re = /^[0-9\b]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, mobile: e.target.value
-                }))
-            }
-        } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
+        if (e.target.name === 'first_name' || e.target.name === 'last_name') {
             const firstLetter = e.target.value.charAt(0);
             if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
                 //First letter should not be a number
@@ -148,8 +172,8 @@ const Accounts = () => {
                 message: ''
             }
         }))
-
     }
+
 
     const validateForm = () => {
         let isValid = true;
@@ -209,86 +233,37 @@ const Accounts = () => {
             }));
         }
 
-        // Validate password
-        if (!formData.password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password is required' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(UPPERCASE_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one uppercase letter' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(NUMBER_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one number' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(SPECIAL_CHARS_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one special character' }
-            }));
-            isValid = false;
-        }
-        else if (formData.password?.length < 8) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must be at least 8 characters long' }
-            }));
-            isValid = false;
-        }
-        else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: false, message: '' }
-            }));
-        }
-
-        // Validate confirm password
-        if (!formData.confirm_password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Confirm password is required' }
-            }));
-            isValid = false;
-        }
-        else if ((formData.password !== formData.confirm_password) || (!formData.confirm_password?.length)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Passwords do not match' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: false, message: '' }
-            }));
-        }
-
-        // Validate agreed terms and conditions
-        if (!formData.agree) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                agree: { error: true, message: 'You have to agree terms and conditions to continue' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                agree: { error: false, message: '' }
-            }));
-        }
-
         return isValid;
     };
+
+
+
+    const handleSubmit = () => {
+        if (validateForm()) {
+            let data = {
+                "usr_firstname": formData.first_name,
+                "usr_lastname": formData.last_name,
+                "usr_mobile_number": formData.mobile,
+                "usr_mobile_country_code": formData.usr_mobile_country_code,
+                "usr_password": formData.password,
+                "usr_email": formData.email,
+                "notes": formData.notes,
+                "is_status": formData.status
+            }
+            setLoading(true);
+            dispatch(updateUserByAdmin({ data, id: userId })).then((res) => {
+                if (res.payload?.status === 200) {
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+                setLoading(false)
+            }).catch((err) => {
+                toast.error(err.message);
+                setLoading(false)
+            })
+        }
+    }
 
     return (
         <div className='accountdetails'>
@@ -335,22 +310,23 @@ const Accounts = () => {
                         value={formData.mobile}
                         placeholder='Mobile Number'
                         label='Mobile Number'
-                        onChange={(e, country) => {
-                            handleInputChange({ e, country })
+                        onChange={(value, country) => {
+                            handlePhoneChange('mobile', value, country)
                         }}
                         isInvalid={errors.mobile.error}
                         errMsg={errors.mobile.message}
                     />
-
                     <CustomSelect label={'Roles'} isRequired={true} data={roles} />
-                    <CustomToggleButton label='Status' isRequired={true} />
-                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} />
+                    <CustomToggleButton label='Status' isRequired={true} value={formData.status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                    />
+                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
 
                 <div className="stack">
                     <div className="shippingdetails">
                         <div className="shippingdetails-header">
-                            <CustomTypography content={'Shipping Details'} color={'BLACK'} size='LARGE' weight='MEDIUM' />
+                            <CustomTypography content={'Address Details'} color={'BLACK'} size='LARGE' weight='MEDIUM' />
                         </div>
 
                         <Tabs
@@ -407,14 +383,12 @@ const Accounts = () => {
                             }
                         </Tabs>
 
-
                     </div>
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
             </div>
-
 
         </div>
     )

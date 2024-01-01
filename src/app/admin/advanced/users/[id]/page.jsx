@@ -9,7 +9,9 @@ import "./UserDetails.scss"
 import { useRouter } from 'next/navigation'
 import Accounts from '../tabs/account/Accounts';
 
-const UserDetails = () => {
+const UserDetails = ({ params }) => {
+
+    const id = params.id;
 
     const router = useRouter();
 
@@ -17,7 +19,7 @@ const UserDetails = () => {
         {
             id: 1,
             label: "Account",
-            component: <Accounts />
+            component: <Accounts userId={id} />
         },
         {
             id: 2,

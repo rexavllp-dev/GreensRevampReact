@@ -19,4 +19,22 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
+
+    //Create user by admin
+    createUserByAdmin: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/admin/create-user`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Update user by admin
+    updateUserByAdmin: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update-user/${id}`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

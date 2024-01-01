@@ -1,15 +1,9 @@
 "use client";
 import React from "react";
-import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
-import CustomInput from "@/library/input/custominput/CustomInput";
-import CustomPhoneInput from "@/library/input/phoneinput/CustomPhoneInput";
+import { Tabs, Tab } from "@nextui-org/react";
 import './CustomTabs.scss'
-import CustomToggleButton from "@/library/buttons/togglebutton/CustomToggleButton";
-import CustomTextarea from "@/library/textarea/CustomTextarea";
-import CustomTypography from "@/library/typography/CustomTypography";
-import CustomButton from "@/library/buttons/CustomButton";
-import CustomSelect from "@/library/select/custom-select/CustomSelect";
-import Accounts from "@/app/admin/advanced/users/tabs/account/Accounts";
+import { useDispatch, useSelector } from "react-redux";
+import { getSingleUser } from "@/services/features/userSlice";
 
 export default function CustomTabs({ tabs }) {
   const [selected, setSelected] = React.useState("photos");
@@ -32,7 +26,7 @@ export default function CustomTabs({ tabs }) {
           tabs.map((obj, i) => (
             <Tab key={obj.id} title={obj.label}>
               {
-                  obj.component
+                obj.component
               }
             </Tab>
           ))

@@ -45,7 +45,7 @@ export const getSingleUser = createAsyncThunk('getSingleUser', async (id, thunkA
     }
 })
 
-export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async (data, thunkAPI) => {
+export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async ({data}, thunkAPI) => {
     try {
         const response = await users.createUserByAdmin(data)
         return thunkAPI.fulfillWithValue(response.data);
@@ -55,9 +55,9 @@ export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async (da
     }
 })
 
-export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async (data, thunkAPI) => {
+export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async ({data, id}, thunkAPI) => {
     try {
-        const response = await users.updateUserByAdmin(data)
+        const response = await users.updateUserByAdmin(data, id)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -112,6 +112,25 @@ const userSlice = createSlice({
                 state.isSingleUserLoading = false;
                 state.isSingleUserLoaded = false;
                 state.isSingleUserLoadError = true;
+            })
+
+
+            .addCase(updateUserByAdmin.pending, (state, action) => {
+                state.isUserUpdating = true;
+                state.isUserUpdated = false;
+                state.isUserUpdateError = false;
+            })
+
+            .addCase(updateUserByAdmin.fulfilled, (state, action) => {
+                state.isUserUpdating = false;
+                state.isUserUpdated = true;
+                state.isUserUpdateError = false;
+            })
+
+            .addCase(updateUserByAdmin.rejected, (state, action) => {
+                state.isUserUpdating = false;
+                state.isUserUpdated = false;
+                state.isUserUpdateError = true;
             })
 
 
