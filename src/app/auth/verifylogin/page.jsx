@@ -84,7 +84,7 @@ const VerifyLogin = () => {
             setFormData((prev) => ({
                 ...prev, otp: e.target.value
             }))
-        }
+    }
     }
 
     const handleResendOtp = () => {

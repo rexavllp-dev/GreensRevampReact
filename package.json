@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "serve": "npx serve@latest out",
-    "servenext": "npx serve@latest"
+    "serve": "npx serve@latest out"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.3",

@@ -106,109 +106,11 @@ export default function CustomTable({ rowData }) {
                                           });
                                         // window.open(`http://localhost:5000/download/${encodeURIComponent(params.data.company_trade_license)}`, '_blank')
 
-                                        // const anchor = document.createElement('a');
-                                        // anchor.href = fileUrl;
-                                        // anchor.setAttribute('download', 'downloaded_file.png');
-                                        // // anchor.style.display = 'none';
-
-                                        // document.body.appendChild(anchor);
-
-                                        // anchor.click();
-
-                                        // document.body.removeChild(anchor);
-                                        // const handleDownload = async () => {
-                                        //     try {
-
-                                        //         const response = await fetch(`/ api / download ? url = ${ encodeURIComponent(params.data.company_trade_license)
-                                        //         console.log(response)
-                                        //         // const response = await fetch(params.data.company_trade_license);
-                                        //         // if (!response.ok) {
-                                    //         //     throw new Error('Download failed');
-                                    //         // }
-
-                                    //         const blob = await response.blob();
-                                    //         const url = window.URL.createObjectURL(blob);
-
-                                    //         const link = document.createElement('a');
-                                    //         link.href = url;
-                                    //         link.setAttribute('download', 'filename.ext'); // Set the desired filename
-                                    //         document.body.appendChild(link);
-                                    //         link.click();
-                                    //         document.body.removeChild(link);
-                                    //     } catch (error) {
-                                    //         console.error('Error downloading file:', error);
-                                    //     }
-                                    // };
-                                    // handleDownload();
-
-
-
-                                    // let downloadImage = url => {
-                                    //     let urlArray = url.split("/")
-                                    //     let bucket = urlArray[3]
-                                    //     let key = `${urlArray[4]}/${urlArray[5]}`
-                                    //     let s3 = new AWS.S3({ params: { Bucket: bucket }})
-                                    //     let params = {Bucket: bucket, Key: key}
-                                    //     s3.getObject(params, (err, data) => {
-                                    //         console.log(data)
-                                    //       let blob=new Blob([data.Body], {type: data.ContentType});
-                                    //       let link=document.createElement('a');
-                                    //       link.href=window.URL.createObjectURL(blob);
-                                    //       link.download=url;
-                                    //       link.click();
-                                    //     })
-                                    //   }
-                                    //   downloadImage( params.data.company_trade_license )
-                                    // const handleDownload = async () => {
-                                    //         try {
-                                    //           const response = await fetch(`/app/api/download?url=${encodeURIComponent(params.data.company_trade_license)}`);
-                                    //           console.log(response)
-                                    //           const blob = await response?.body?.blob();
-
-                                    //           const url = window.URL.createObjectURL(new Blob([blob]));
-                                    //           const link = document.createElement('a');
-                                    //           link.href = url;
-                                    //           link.setAttribute('download', params.data.company_trade_license);
-                                    //           document.body.appendChild(link);
-                                    //           link.click();
-                                    //           document.body.removeChild(link);
-                                    //         } catch (error) {
-                                    //           console.error('Error downloading file:', error);
-                                    //         }
-                                    //       };
-                                    //       handleDownload()
-
-
-
-                                    // axios.get(params.data.company_trade_license).then((response) => {
-                                    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-                                    //     const link = document.createElement('a');
-                                    //     link.href = url;
-                                    //     link.setAttribute('download', params.data.company_trade_license);
-                                    //     document.body.appendChild(link);
-                                    //     link.click();
-                                    // }).catch((error) => {
-                                    //     console.log(error)
-                                    // })
-                                    // }
                                 }}
                                 >
                                 Trade license
                             </DropdownItem>
                         </DropdownSection>
-                        {/* <DropdownSection title="Danger zone">
-                                <DropdownItem
-                                    key="delete"
-                                    className="text-danger"
-                                    color="danger"
-                                    description="Permanently delete the file"
-                                    onClick={() => {
-                                        window.alert('Delete file');
-                                    }}
-                                >
-                                    Delete
-                                </DropdownItem>
-                            </DropdownSection> */}
                     </DropdownMenu>
                     </Dropdown >
                 )
@@ -226,9 +128,9 @@ export default function CustomTable({ rowData }) {
                             </div>
                         </DropdownTrigger>
                         <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                            <DropdownSection title="Actions" showDivider>
+                            <DropdownSection title="Actions" showDivider={false}>
 
-                                <DropdownItem
+                                {/* <DropdownItem
                                     key="view"
                                     description="Allows you to view the file"
                                     onClick={() => {
@@ -236,7 +138,7 @@ export default function CustomTable({ rowData }) {
                                     }}
                                 >
                                     View
-                                </DropdownItem>
+                                </DropdownItem> */}
                                 <DropdownItem
                                     key="edit"
                                     description="Allows you to edit the file"
