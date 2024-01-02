@@ -61,7 +61,7 @@ const VerifyLogin = () => {
 
     const handleVerify = () => {
         dispatch(verifyLoginOtp({ data: { usr_mobile_number: phoneNumber, otp: formData.otp } })).then((res) => {
-            console.log(res)
+            // console.log(res)
             if (res.payload?.status === 200) {
                 toast.success("Login successfully", {
                     toastId: 'success1',

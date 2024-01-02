@@ -155,7 +155,8 @@ const LoginPage = () => {
                         toast.success(res.payload?.message);
                         router.push(`/auth/verifylogin?p=${formData.mobile}`, { scroll: true });
                     } else {
-                        toast.error(res.payload?.message);
+                        console.log(res)
+                        toast.error(res.payload?.response?.data?.message);
                     }
                     setLoading(false);
                 }).catch((err) => {
@@ -175,7 +176,7 @@ const LoginPage = () => {
                         toast.success(res.payload?.message);
                         router.push('/', { scroll: true });
                     } else {
-                        toast.error(res.payload?.message);
+                        toast.error(res.payload?.response?.data?.message);
                     }
                     setLoading(false);
                 }).catch((err) => {

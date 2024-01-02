@@ -297,11 +297,19 @@ const IndividualRegister = () => {
         }
     }
 
+    const handleGoogleLogin = () => {
+        window.open('http://localhost:5000/api/v1/users/auth/google', '_self');
+    }
+
+    const handleFacebookLogin = () => {
+        window.open('http://localhost:5000/api/v1/users/auth/facebook/callback', '_self');
+    }
+
     return (
         <div className='individual-register'>
             <div className='thirdparty'>
-                <AuthButton label={'Sign in with Google'} icon={'GoogleIcon'} backgroundColor={'#8571FF'} />
-                <AuthButton label={'Sign in with Facebook'} icon={'FacebookIcon'} backgroundColor={'#7694FF'} />
+                <AuthButton label={'Sign in with Google'} icon={'GoogleIcon'} backgroundColor={'#8571FF'} onClick={() => { handleGoogleLogin() }} />
+                <AuthButton label={'Sign in with Facebook'} icon={'FacebookIcon'} backgroundColor={'#7694FF'} onClick={() => { handleFacebookLogin() }} />
             </div>
             <div className='or'>
                 <CustomTypography content="OR" color="GRAY-DARK" size="SMALL" weight="MEDIUM" />

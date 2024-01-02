@@ -10,6 +10,8 @@ import { IoMdMore } from "react-icons/io";
 import './CustomTable.scss';
 import { useRouter } from 'next/navigation';
 import { FiDownload } from 'react-icons/fi';
+import axios from 'axios';
+import AWS from 'aws-sdk';
 
 
 export default function CustomTable({ rowData }) {
@@ -65,20 +67,136 @@ export default function CustomTable({ rowData }) {
                         </DropdownTrigger>
                         <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                             <DropdownSection title="" showDivider>
-                                    <DropdownItem
-                                        key="view"
-                                        description="Download vat certificate"
-                                    >
-                                        Vat certificate
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        key="edit"
-                                        description="Download trade license"
-                                    >
-                                        Trade license
-                                    </DropdownItem>
-                            </DropdownSection>
-                            {/* <DropdownSection title="Danger zone">
+                                <DropdownItem
+                                    key="view"
+                                    description="Download vat certificate"
+                                    onClick={() => {
+                                        axios({
+                                            url: `http://localhost:5000/download/${encodeURIComponent(params.data.company_vat_certificate)}`,
+                                            method: 'GET',
+                                            responseType: 'blob', // important
+                                          }).then((response) => {
+                                            const url = window.URL.createObjectURL(new Blob([response.data]));
+                                            const link = document.createElement('a');
+                                            link.href = url;
+                                            link.setAttribute('download', params.data.company_vat_certificate);
+                                            document.body.appendChild(link);
+                                            link.click();
+                                          });
+                                    }}
+                                >
+                                    Vat certificate
+                                </DropdownItem>
+                                <DropdownItem
+                                    key="edit"
+                                    description="Download trade license"
+                                    onClick={() => {
+
+                                        axios({
+                                            url: `http://localhost:5000/download/${encodeURIComponent(params.data.company_trade_license)}`,
+                                            method: 'GET',
+                                            responseType: 'blob', // important
+                                          }).then((response) => {
+                                            const url = window.URL.createObjectURL(new Blob([response.data]));
+                                            const link = document.createElement('a');
+                                            link.href = url;
+                                            link.setAttribute('download', params.data.company_trade_license);
+                                            document.body.appendChild(link);
+                                            link.click();
+                                          });
+                                        // window.open(`http://localhost:5000/download/${encodeURIComponent(params.data.company_trade_license)}`, '_blank')
+
+                                        // const anchor = document.createElement('a');
+                                        // anchor.href = fileUrl;
+                                        // anchor.setAttribute('download', 'downloaded_file.png');
+                                        // // anchor.style.display = 'none';
+
+                                        // document.body.appendChild(anchor);
+
+                                        // anchor.click();
+
+                                        // document.body.removeChild(anchor);
+                                        // const handleDownload = async () => {
+                                        //     try {
+
+                                        //         const response = await fetch(`/ api / download ? url = ${ encodeURIComponent(params.data.company_trade_license)
+                                        //         console.log(response)
+                                        //         // const response = await fetch(params.data.company_trade_license);
+                                        //         // if (!response.ok) {
+                                    //         //     throw new Error('Download failed');
+                                    //         // }
+
+                                    //         const blob = await response.blob();
+                                    //         const url = window.URL.createObjectURL(blob);
+
+                                    //         const link = document.createElement('a');
+                                    //         link.href = url;
+                                    //         link.setAttribute('download', 'filename.ext'); // Set the desired filename
+                                    //         document.body.appendChild(link);
+                                    //         link.click();
+                                    //         document.body.removeChild(link);
+                                    //     } catch (error) {
+                                    //         console.error('Error downloading file:', error);
+                                    //     }
+                                    // };
+                                    // handleDownload();
+
+
+
+                                    // let downloadImage = url => {
+                                    //     let urlArray = url.split("/")
+                                    //     let bucket = urlArray[3]
+                                    //     let key = `${urlArray[4]}/${urlArray[5]}`
+                                    //     let s3 = new AWS.S3({ params: { Bucket: bucket }})
+                                    //     let params = {Bucket: bucket, Key: key}
+                                    //     s3.getObject(params, (err, data) => {
+                                    //         console.log(data)
+                                    //       let blob=new Blob([data.Body], {type: data.ContentType});
+                                    //       let link=document.createElement('a');
+                                    //       link.href=window.URL.createObjectURL(blob);
+                                    //       link.download=url;
+                                    //       link.click();
+                                    //     })
+                                    //   }
+                                    //   downloadImage( params.data.company_trade_license )
+                                    // const handleDownload = async () => {
+                                    //         try {
+                                    //           const response = await fetch(`/app/api/download?url=${encodeURIComponent(params.data.company_trade_license)}`);
+                                    //           console.log(response)
+                                    //           const blob = await response?.body?.blob();
+
+                                    //           const url = window.URL.createObjectURL(new Blob([blob]));
+                                    //           const link = document.createElement('a');
+                                    //           link.href = url;
+                                    //           link.setAttribute('download', params.data.company_trade_license);
+                                    //           document.body.appendChild(link);
+                                    //           link.click();
+                                    //           document.body.removeChild(link);
+                                    //         } catch (error) {
+                                    //           console.error('Error downloading file:', error);
+                                    //         }
+                                    //       };
+                                    //       handleDownload()
+
+
+
+                                    // axios.get(params.data.company_trade_license).then((response) => {
+                                    //     const url = window.URL.createObjectURL(new Blob([response.data]));
+                                    //     const link = document.createElement('a');
+                                    //     link.href = url;
+                                    //     link.setAttribute('download', params.data.company_trade_license);
+                                    //     document.body.appendChild(link);
+                                    //     link.click();
+                                    // }).catch((error) => {
+                                    //     console.log(error)
+                                    // })
+                                    // }
+                                }}
+                                >
+                                Trade license
+                            </DropdownItem>
+                        </DropdownSection>
+                        {/* <DropdownSection title="Danger zone">
                                 <DropdownItem
                                     key="delete"
                                     className="text-danger"
@@ -91,14 +209,14 @@ export default function CustomTable({ rowData }) {
                                     Delete
                                 </DropdownItem>
                             </DropdownSection> */}
-                        </DropdownMenu>
-                    </Dropdown>
+                    </DropdownMenu>
+                    </Dropdown >
                 )
-            }
+}
         },
-        {
-            field: 'action',
-            filter: false,
+{
+    field: 'action',
+        filter: false,
             cellRenderer: (params) => {
                 return (
                     <Dropdown>
@@ -146,27 +264,27 @@ export default function CustomTable({ rowData }) {
                     </Dropdown>
                 )
             }
-        }
+}
     ]);
 
 
-    return (
-        <div
-            className="ag-theme-alpine"
-            style={{ height: '450px' }}
-        >
-            <AgGridReact
-                id="staff_grid"
-                rowData={rowData}
-                columnDefs={columnDefs}
-                style={{ height: '100%', width: '100%' }}
-                pagination={true}
-                paginationPageSize={10}
-                defaultColDef={defaultColDef}
-                rowSelection="multiple"
-                onCellClicked={(value) => console.log(value)}
-            ></AgGridReact>
-        </div>
-    )
+return (
+    <div
+        className="ag-theme-alpine"
+        style={{ height: '450px' }}
+    >
+        <AgGridReact
+            id="staff_grid"
+            rowData={rowData}
+            columnDefs={columnDefs}
+            style={{ height: '100%', width: '100%' }}
+            pagination={true}
+            paginationPageSize={10}
+            defaultColDef={defaultColDef}
+            rowSelection="multiple"
+            onCellClicked={(value) => console.log(value)}
+        ></AgGridReact>
+    </div>
+)
 }
 
