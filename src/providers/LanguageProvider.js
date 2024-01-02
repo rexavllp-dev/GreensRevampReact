@@ -14,12 +14,12 @@ export const LanguageProvider = ({ children }) => {
     const [direction, setDirection] = useState('ltr');
 
     const switchLanguage = (newLanguage) => {
-        localStorage.setItem('language', newLanguage)
+         typeof window !== "undefined" && window.localStorage.setItem('language', newLanguage)
         setLanguage(newLanguage);
     };
 
     const switchDirection = (newDirection) => {
-        localStorage.setItem('direction', newDirection)
+         typeof window !== "undefined" && window.localStorage.setItem('direction', newDirection)
         setDirection(newDirection);
     };
 

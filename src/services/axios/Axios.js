@@ -1,12 +1,9 @@
 "use client";
 import appConfig from '@/config/appConfig';
 import axios from 'axios';
-import { Cookies } from 'react-cookie';
-// set up cookies
-const cookies = new Cookies();
 
-const token = localStorage && localStorage.getItem('accessToken')
-const refreshToken = localStorage && localStorage.getItem('refreshToken')
+const token =  typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+const refreshToken =  typeof window !== "undefined" && window.localStorage.getItem('refreshToken')
 
 const instance = axios.create({
   baseURL: appConfig.server?.baseUrl || '',

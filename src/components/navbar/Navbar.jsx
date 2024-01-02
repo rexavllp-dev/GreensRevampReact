@@ -26,7 +26,7 @@ const Navbar = () => {
     const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-    const [user, setUser] = React.useState(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')))
+    const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
     const { isLoggedIn, authCount } = useSelector(state => state.auth)
 
     const handleSwitchLanguage = () => {
@@ -38,8 +38,8 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        setUser(localStorage && localStorage.getItem('user') && (localStorage.getItem('user') !== 'undefined') && JSON.parse(localStorage.getItem('user')));
-    }, [isLoggedIn, localStorage, authCount])
+        setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
+    }, [isLoggedIn, authCount])
 
     const handleLogout = () => {
         dispatch(logout());

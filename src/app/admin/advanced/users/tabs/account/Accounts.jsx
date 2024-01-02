@@ -245,7 +245,6 @@ const Accounts = ({ userId }) => {
                 "usr_lastname": formData.last_name,
                 "usr_mobile_number": formData.mobile,
                 "usr_mobile_country_code": formData.usr_mobile_country_code,
-                "usr_password": formData.password,
                 "usr_email": formData.email,
                 "notes": formData.notes,
                 "is_status": formData.status

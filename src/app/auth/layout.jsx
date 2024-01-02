@@ -11,7 +11,7 @@ export default function Layout({ children }) {
     const router = useRouter()
 
     // const token = cookies.get('accessToken')
-    const token = localStorage && localStorage.getItem('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
 
     if (token && token !== "" && token !== "undefined") {
         router.push('/')

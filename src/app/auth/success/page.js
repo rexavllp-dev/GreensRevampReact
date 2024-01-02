@@ -35,9 +35,9 @@ const LoginSuccess = () => {
             // cookies.set('refreshToken', refresh_token);
             // cookies.set('user', JSON.stringify(user));
 
-            localStorage && localStorage.setItem('user', JSON.stringify(user));
-            localStorage && localStorage.setItem('accessToken', access_token);
-            localStorage && localStorage.setItem('refreshToken', refresh_token);
+            typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(user));
+            typeof window !== "undefined" && window.localStorage.setItem('accessToken', access_token);
+            typeof window !== "undefined" && window.localStorage.setItem('refreshToken', refresh_token);
 
             
             Axios.interceptors?.request.use((config) => {
