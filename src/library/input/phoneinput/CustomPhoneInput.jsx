@@ -12,7 +12,7 @@ import en from 'react-phone-number-input/locale/en'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCountries } from '@/services/features/countrySlice';
 
-export default function CustomPhoneInput({ label, placeholder, value, isRequired, onChange, name, getCountry, isInvalid, errMsg, ...rest }) {
+export default function CustomPhoneInput({ label, placeholder, value, isRequired, disabled, onChange, name, getCountry, isInvalid, errMsg, ...rest }) {
     const dispatch = useDispatch();
     // `value` will be the parsed phone number in E.164 format.
     // Example: "+12133734253".
@@ -96,7 +96,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
 
                 <div>
                     <div className="customphonecountry" onBlur={() => setIsDropdownVisible(false)} tabIndex={1}>
-                        <div className={isInvalid ? 'phonecountry invalid-input' : "phonecountry"}
+                        <div className={disabled ? ("phonecountry disabled") : (isInvalid ? 'phonecountry invalid-input' : "phonecountry")}
                             onClick={() => setIsDropdownVisible(!isDropdownVisible)}
                         >
                             <div className="icon">
@@ -161,6 +161,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
                         className={isInvalid ? 'phone-input invalid-input' : 'phone-input'}
                         placeholder={placeholder ? placeholder : 'Phone Number'}
                         onChange={handleInputChange}
+                        disabled={disabled}
                     />
                 </div>
 

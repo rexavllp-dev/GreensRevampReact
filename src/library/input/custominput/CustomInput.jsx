@@ -7,7 +7,7 @@ import { EyeSlashFilledIcon } from "./EyeSlashFilledIcon";
 import InfoIcon from '@/components/customicons/InfoIcon';
 import ValidationChecklist from '@/components/validationchecklist/ValidationChecklist';
 
-const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequired, haveInfo, info, isInvalid, errMsg, haveProgress, maxLength }) => {
+const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequired, haveInfo, info, isInvalid, errMsg, haveProgress, maxLength, disabled }) => {
 
   const [isVisible, setIsVisible] = React.useState(false);
 
@@ -94,6 +94,7 @@ const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequir
           className={isInvalid ? 'custom-text-input invalid-input' : 'custom-text-input'} //'custom-text-input'
           type='text'
           placeholder={placeholder}
+          disabled={disabled}
         />
         <p className="errmsg">{isInvalid ? errMsg : ''}</p>
       </div>
@@ -133,6 +134,7 @@ const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequir
           className={isInvalid ? 'custom-text-input invalid-input' : 'custom-text-input'} //'custom-text-input'
           type='text'
           placeholder={placeholder}
+          disabled={disabled}
         />
         <p className="errmsg">{isInvalid ? errMsg : ''}</p>
       </div>
@@ -148,6 +150,7 @@ const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequir
           maxLength={maxLength}
           // isInvalid={isInvalid}
           // errorMessage={isInvalid ? errMsg : ''}
+          disabled={disabled}
           name={name}
           value={value}
           onChange={handlePasswordChange}

@@ -1,6 +1,12 @@
 @import "../../../app/styles/mediaquery";
 
 .custom-select-container {
+  .input-wrapper {
+    &:disabled {
+      border: 1px solid #ccc !important;
+      pointer-events: none;
+    }
+  }
   .label-container {
     display: flex;
     align-items: center;
@@ -9,6 +15,7 @@
     .invalid-label {
       // color: #f41260 !important;
     }
+  
 
     .label {
       color: #4d4d4d;

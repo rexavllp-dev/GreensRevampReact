@@ -10,6 +10,15 @@
   }
 }
 
+.togglebtndisabled {
+  pointer-events: none !important;
+  
+
+  .group[data-selected="true"] .group-data-\[selected\=true\]\:bg-success {
+    background-color: #3e6e43;
+  }
+}
+
 .group[data-selected="true"] .group-data-\[selected\=true\]\:bg-success {
   background-color: #32893b;
 }

@@ -15,6 +15,8 @@ import './Accounts.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
+import { FaRegEdit } from "react-icons/fa";
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
 
 const Accounts = ({ userId }) => {
 
@@ -28,6 +30,9 @@ const Accounts = ({ userId }) => {
         { label: 'Delivery', value: 3 },
     ]
     const [loading, setLoading] = React.useState(false);
+
+    const [isDisabled, setIsDisabled] = React.useState(true);
+
 
     const [formData, setFormData] = React.useState({
 
@@ -117,6 +122,7 @@ const Accounts = ({ userId }) => {
     }, [singleUser])
 
     const handlePhoneChange = (name, value, countryCode) => {
+        if (isDisabled) return;
         const re = /^[0-9\b]+$/;
         // if value is not blank, then test the regex
         if (value === '' || re.test(value)) {
@@ -128,6 +134,7 @@ const Accounts = ({ userId }) => {
 
 
     const handleInputChange = ({ e, country }) => {
+        if (isDisabled) return;
 
         if (e.target.name === 'first_name' || e.target.name === 'last_name') {
             const firstLetter = e.target.value.charAt(0);
@@ -263,15 +270,19 @@ const Accounts = ({ userId }) => {
             })
         }
     }
+    
+
 
     return (
         <div className='accountdetails'>
 
             <div className="form">
-
-                <div className="stack">
-
-
+                <div className="loginstack stack">
+                    <div className="editbtn">
+                        <div className="btn" onClick={() => { setIsDisabled(!isDisabled) }}>
+                            <FaRegEdit size={20} />
+                        </div>
+                    </div>
                     <CustomInput name='first_name' type='text'
                         maxLength={100}
                         placeholder='First Name' label={'First Name'}
@@ -280,6 +291,7 @@ const Accounts = ({ userId }) => {
                         value={formData.first_name}
                         isInvalid={errors.first_name.error}
                         errMsg={errors.first_name.message}
+                        disabled={isDisabled}
                     />
                     <CustomInput
                         name='last_name'
@@ -292,6 +304,7 @@ const Accounts = ({ userId }) => {
                         value={formData.last_name}
                         isInvalid={errors.last_name.error}
                         errMsg={errors.last_name.message}
+                        disabled={isDisabled}
                     />
                     <CustomInput name={'email'} type='email'
                         placeholder="Email Address"
@@ -300,6 +313,7 @@ const Accounts = ({ userId }) => {
                         label={'Email Address'} isRequired={true}
                         value={formData.email}
                         onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
                     />
 
 
@@ -314,12 +328,17 @@ const Accounts = ({ userId }) => {
                         }}
                         isInvalid={errors.mobile.error}
                         errMsg={errors.mobile.message}
+                        disabled={isDisabled}
                     />
-                    <CustomSelect label={'Roles'} isRequired={true} data={roles} />
+                    <CustomSelect label={'Roles'} isRequired={true} data={roles} disabled={isDisabled} />
                     <CustomToggleButton label='Status' isRequired={true} value={formData.status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                        disabled={isDisabled}
                     />
-                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'}
+                        value={formData.notes} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
                 </div>
 
                 <div className="stack">
@@ -386,9 +405,8 @@ const Accounts = ({ userId }) => {
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" disabled={isDisabled} loading={loading} onClick={handleSubmit} />
             </div>
-
         </div>
     )
 }

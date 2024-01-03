@@ -92,6 +92,19 @@
     height: 40px;
   }
 }
+.phone-input-wrapper .phone-input:disabled {
+    border: 1px solid #ccc;
+}
+
+.disabled {
+  border: 1px solid #ccc !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.phone-input-wrapper .phone-input:disabled + .phonecountry {
+  border: 1px solid #ccc;
+}
 
 .phone-input-wrapper {
   .invalid-input {

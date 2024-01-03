@@ -4,6 +4,10 @@
 .input-wrapper {
     height: 50px;
     border: 1px solid #000;
+
+    &:disabled {
+        border: 1px solid #ccc;
+    }
   
     @include for_breakpoint("small-screen", "mobile") {
       height: 40px;
@@ -28,5 +32,7 @@
     font-size: 14px;
     font-weight: 400;
     color: #4d4d4d;
+
+   
   }
   
