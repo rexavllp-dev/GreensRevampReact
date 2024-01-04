@@ -17,16 +17,22 @@ export default function AdvancedSettings() {
             name: 'Media',
             url: '/admin/media',
         },
-        {
-            id: 3,
-            name: 'Menu',
-            url: '/admin/menu',
-        },
+        // Verification Settings
+        // {
+        //     id: 19,
+        //     name: 'Verification',
+        //     url: '/admin/advanced/verification',
+        // },
         // Users
         {
             id: 4,
             name: 'Users',
             url: '/admin/advanced/users',
+        },
+        {
+            id: 3,
+            name: 'Menu',
+            url: '/admin/menu',
         },
         // Facebook Feed
         {

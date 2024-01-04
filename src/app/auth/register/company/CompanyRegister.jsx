@@ -452,15 +452,18 @@ const CompanyRegister = () => {
             companyFormData.append('usr_tos_accepted', formData.agree);
             companyFormData.append('usr_newsletter_accepted', formData.subscribe);
             companyFormData.append('company_name', formData.company_name);
-            companyFormData.append('company_landline', formData.company_landline);
             companyFormData.append('company_vat_certificate', formData.vat_certificate);
-            companyFormData.append('company_landline_country_code', formData.company_landline_country_code);
             companyFormData.append('company_trn_number', formData.trn_number);
             companyFormData.append('company_trade_license', formData.trade_license);
             companyFormData.append('company_trade_license_expiry', formData.trade_license_expiry?.toLocaleDateString('en-GB'));
 
+            if (formData.company_landline?.trim()) {
+                companyFormData.append('company_landline', formData.company_landline);
+                companyFormData.append('company_landline_country_code', formData.company_landline_country_code);
+            }
+
             setLoading(true);
-            dispatch(companyRegister({ data : companyFormData })).then((res) => {
+            dispatch(companyRegister({ data: companyFormData })).then((res) => {
                 if (res.payload?.status == 201) {
                     let token = res.payload?.result?.userToken?.token;
                     toast.success(res.payload?.message);
@@ -477,7 +480,7 @@ const CompanyRegister = () => {
         }
     }
 
-    
+
 
 
     return (

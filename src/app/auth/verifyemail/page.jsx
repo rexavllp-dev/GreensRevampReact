@@ -6,13 +6,19 @@ import AuthNavbar from '@/components/navbar/authnavbar/AuthNavbar'
 import AuthFooter from '@/components/footer/authfooter/AuthFooter'
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { getUserInfo } from '@/services/features/authSlice';
+import { getUserInfo, resendEmail } from '@/services/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import useWindowSize from '@/hooks/useWindowSize';
+import { toast } from 'react-toastify';
+import CustomButton from '@/library/buttons/CustomButton';
 
 const VerifyEmail = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const searchParams = useSearchParams()
+
+  const { width, height } = useWindowSize();
+  const isMobileView = width < 767;
 
   let from = searchParams.get('orgin');
   let token = searchParams.get('token');
@@ -22,6 +28,22 @@ const VerifyEmail = () => {
   useEffect(() => {
     dispatch(getUserInfo(token))
   }, [token])
+
+  const handleResentEmail = () => {
+    dispatch(resendEmail({ token })).then((res) => {
+      if (res.payload?.status === 200) {
+        toast.success(res.payload?.message, {
+          toastId: 'success2',
+        });
+      } else {
+        toast.error(res.payload?.message, {
+          toastId: 'fail2',
+        });
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
 
   return (
@@ -46,6 +68,9 @@ const VerifyEmail = () => {
               </p>
 
             </div>
+            <CustomButton label='Resend Email' variant='transparent' height={isMobileView ? '42px' : '50px'}
+              onClick={handleResentEmail}
+            />
 
           </div>
           {/* <div className='refresh'>

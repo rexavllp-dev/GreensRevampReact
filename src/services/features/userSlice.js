@@ -22,6 +22,10 @@ const initialState = {
     isUserUpdating:false,
     isUserUpdated:false,
     isUserUpdateError:false,
+
+    isCompanyStatusUpdating:false,
+    isCompanyStatusUpdated:false,
+    isCompanyStatusUpdateError:false,
 }
 
 
@@ -58,6 +62,16 @@ export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async ({d
 export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async ({data, id}, thunkAPI) => {
     try {
         const response = await users.updateUserByAdmin(data, id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateCompanyStatus = createAsyncThunk('updateCompanyStatus', async ({data, id}, thunkAPI) => {
+    try {
+        const response = await users.updateCompanyStatus(data, id)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -131,6 +145,24 @@ const userSlice = createSlice({
                 state.isUserUpdating = false;
                 state.isUserUpdated = false;
                 state.isUserUpdateError = true;
+            })
+
+            .addCase(updateCompanyStatus.pending, (state, action) => {
+                state.isCompanyStatusUpdating = true;
+                state.isCompanyStatusUpdated = false;
+                state.isCompanyStatusUpdateError = false;
+            })
+
+            .addCase(updateCompanyStatus.fulfilled, (state, action) => {
+                state.isCompanyStatusUpdating = false;
+                state.isCompanyStatusUpdated = true;
+                state.isCompanyStatusUpdateError = false;
+            })
+
+            .addCase(updateCompanyStatus.rejected, (state, action) => {
+                state.isCompanyStatusUpdating = false;
+                state.isCompanyStatusUpdated = false;
+                state.isCompanyStatusUpdateError = true;
             })
 
 

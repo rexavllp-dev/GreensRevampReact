@@ -91,7 +91,7 @@ const VerifyPhone = () => {
             setLoading(true);
             dispatch(verifyOtp({ data: { token, otp: formData.otp }, from })).then((res) => {
                 console.log(res.payload)
-                if (res.payload?.status === 201) {
+                if (res.payload?.status === 200) {
                     toast.success(res.payload?.message, {
                         toastId: 'success1',
                     });

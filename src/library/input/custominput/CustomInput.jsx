@@ -148,6 +148,14 @@ const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequir
           variant="bordered"
           isRequired={isRequired}
           maxLength={maxLength}
+          onPaste={(e) => {
+            e.preventDefault();
+            return false;
+          }}
+          onCopy={(e) => {
+            e.preventDefault();
+            return false;
+          }}
           // isInvalid={isInvalid}
           // errorMessage={isInvalid ? errMsg : ''}
           disabled={disabled}

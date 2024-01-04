@@ -37,4 +37,13 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
+
+    //Update company status
+    updateCompanyStatus: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update-company-status/${id}`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

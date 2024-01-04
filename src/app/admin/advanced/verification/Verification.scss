@@ -1,0 +1,36 @@
+.adminverification {
+    padding: 20px 20px;
+  
+    .breadcrumb{
+      padding-bottom: 18px;
+    }
+  
+    .title {
+      padding-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  
+      .backbtn {
+        cursor: pointer;
+        padding-top: 3px;
+    }
+    }
+  
+    .header {
+  
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      .searchinput {
+        width: 300px;
+        margin-bottom: 20px;
+      }
+  
+      .right {
+          display: flex;
+          gap: 20px;
+      }
+    }
+  }
+  

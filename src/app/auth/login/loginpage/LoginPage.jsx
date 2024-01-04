@@ -188,7 +188,7 @@ const LoginPage = () => {
     }
 
     const handleGoogleLogin = () => {
-      window.open('http://localhost:5000/api/v1/users/auth/google', '_self');
+        window.open('http://localhost:5000/api/v1/users/auth/google', '_self');
     }
 
     const handleFacebookLogin = () => {
@@ -220,9 +220,11 @@ const LoginPage = () => {
                         :
 
                         <>
-                            <CustomInput name='email_or_mobile' type='text'
+                            <CustomInput
+                                name='email_or_mobile'
+                                type='text'
                                 maxLength={100}
-                                placeholder='Email / Mobile Number' label={'Email / Mobile Number'}
+                                placeholder='Email Address' label={'Email Address'}
                                 isRequired={true}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.email_or_mobile}
