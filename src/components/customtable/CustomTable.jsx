@@ -51,6 +51,7 @@ export default function CustomTable({ rowData }) {
         },
         { field: 'usr_email', headerName: 'Email' },
         { field: 'usr_mobile_number', headerName: 'Mobile' },
+        { field: 'registration_method', headerName: 'Method of Registration' },
         {
             field: 'created_at', headerName: 'Created At',
         },

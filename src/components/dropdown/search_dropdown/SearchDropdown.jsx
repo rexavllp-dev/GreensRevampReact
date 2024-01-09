@@ -3,9 +3,9 @@ import React, { useRef } from "react";
 import CustomSearch from "@/library/input/searchinput/CustomSearch";
 import './SeachDropdown.scss';
 import CustomTypography from "@/library/typography/CustomTypography";
-import { ProductImg } from "@/assets/images";
+import { ProductImg } from "../../../../public/images";
 import Image from "next/image";
-import { CloseIcon } from "@/assets/icons";
+import { CloseIcon } from "../../../../public/icons";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/providers/LanguageProvider";
 

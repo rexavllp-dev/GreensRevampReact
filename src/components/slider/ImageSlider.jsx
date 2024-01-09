@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "./slick.css";
 import "./slick-theme.css";
 import Image from "next/image";
-import { Category1, categoryImg2, companyLogo } from "@/assets/images";
+import { Category1, categoryImg2, companyLogo } from "../../../public/images";
 
 const SimpleSlider = () => {
     const settings = {

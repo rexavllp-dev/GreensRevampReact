@@ -105,6 +105,10 @@ const Accounts = ({ userId }) => {
         }
     }, [userId])
 
+    React.useEffect(() => {
+        console.log(formData)
+    }, [formData])
+
     useEffect(() => {
         if (singleUser) {
             setFormData((prev) => ({
@@ -137,34 +141,34 @@ const Accounts = ({ userId }) => {
         if (isDisabled) return;
 
         if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-            const firstLetter = e.target.value.charAt(0);
-            if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
-                //First letter should not be a number
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
-                //First letter should not be a number
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else {
-                const re = /^[A-Za-z0-9\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(e.target?.value)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
+            // const firstLetter = e.target.value.charAt(0);
+            // if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else {
+            const re = /^[A-Za-z\s'.-]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, [e.target.name]: e.target.value
+                }))
             }
+            // }
 
         } else {
             setFormData((prev) => ({
@@ -270,7 +274,7 @@ const Accounts = ({ userId }) => {
             })
         }
     }
-    
+
 
 
     return (
@@ -321,6 +325,7 @@ const Accounts = ({ userId }) => {
                         isRequired={true}
                         name={'mobile'}
                         value={formData.mobile}
+                        country={formData.usr_mobile_country_code}
                         placeholder='Mobile Number'
                         label='Mobile Number'
                         onChange={(value, country) => {

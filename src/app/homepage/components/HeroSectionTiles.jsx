@@ -5,7 +5,7 @@ import {
     Tile5, Tile6, Tile7, Tile8,
     Tile9,
     homewallImg1, homewallImg2
-} from '@/assets/images'
+} from '../../../../public/images'
 import ImageCard from '@/components/cards/imagecard/ImageCard'
 import { useLanguage } from '@/providers/LanguageProvider'
 

@@ -26,7 +26,7 @@ export default function Documents({ data }) {
                     <div
                         onClick={() => {
                             axios({
-                                url: `http://localhost:5000/download/${encodeURIComponent(data?.company_vat_certificate)}`,
+                                url: `https://api.greens-intl.ae/download/${encodeURIComponent(data?.company_vat_certificate)}`,
                                 method: 'GET',
                                 responseType: 'blob', // important
                             }).then((response) => {
@@ -64,7 +64,7 @@ export default function Documents({ data }) {
                     <div
                         onClick={() => {
                             axios({
-                                url: `http://localhost:5000/download/${encodeURIComponent(data?.company_trade_license)}`,
+                                url: `https://api.greens-intl.ae/download/${encodeURIComponent(data?.company_trade_license)}`,
                                 method: 'GET',
                                 responseType: 'blob', // important
                             }).then((response) => {

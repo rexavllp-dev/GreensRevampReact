@@ -80,34 +80,35 @@ const IndividualRegister = () => {
     const handleInputChange = ({ e, country }) => {
 
         if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-            const firstLetter = e.target.value.charAt(0);
-            if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
-                //First letter should not be a number
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
-                //First letter should not be a number
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else {
-                const re = /^[A-Za-z0-9\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(e.target?.value)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
+            // const firstLetter = e.target.value.charAt(0);
+            // if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else {
+            // const re = /^[A-Za-z0-9\s'.-]+$/;
+            const re = /^[A-Za-z\s'.-]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, [e.target.name]: e.target.value
+                }))
             }
+            // }
 
         } else {
             setFormData((prev) => ({
@@ -298,11 +299,11 @@ const IndividualRegister = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.open('http://localhost:5000/api/v1/users/auth/google', '_self');
+        window.open('https://api.greens-intl.ae/api/v1/users/auth/google', '_self');
     }
 
     const handleFacebookLogin = () => {
-        window.open('http://localhost:5000/api/v1/users/auth/facebook/callback', '_self');
+        window.open('https://api.greens-intl.ae/api/v1/users/auth/facebook/callback', '_self');
     }
 
     return (
@@ -342,6 +343,7 @@ const IndividualRegister = () => {
                     isRequired={true}
                     name={'mobile'}
                     value={formData.mobile}
+                    country={formData.usr_mobile_country_code}
                     placeholder='Mobile Number'
                     label='Mobile Number'
                     onChange={(value, country) => {

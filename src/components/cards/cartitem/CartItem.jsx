@@ -1,6 +1,6 @@
 import CustomTypography from '@/library/typography/CustomTypography'
 import './CartItem.scss'
-import { ProductImg } from '@/assets/images'
+import { ProductImg } from '../../../../public/images'
 import Image from 'next/image'
 import CountButton from '@/library/buttons/countbtn/CountButton'
 import CustomButton from '@/library/buttons/CustomButton'

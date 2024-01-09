@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import { SearchIcon } from "@/assets/icons";
+import { SearchIcon } from "../../../../public/icons";
 import { Input } from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";
 import "./SearchInput.scss";

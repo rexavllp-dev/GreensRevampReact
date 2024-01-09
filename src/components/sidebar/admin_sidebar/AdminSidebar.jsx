@@ -4,7 +4,7 @@ import './AdminSidebar.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Link from 'next/link'
 import Image from 'next/image'
-import { companyLogo } from '@/assets/images'
+import { companyLogo } from '../../../../public/images'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { usePathname } from 'next/navigation'
 

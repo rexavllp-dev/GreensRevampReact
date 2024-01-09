@@ -1,6 +1,6 @@
 import React from 'react'
 import "./NavCard.scss"
-import { categoryImg1 } from '@/assets/images'
+import { categoryImg1 } from '../../../../public/images'
 import { MdKeyboardArrowRight } from "react-icons/md";
 import CustomTypography from '@/library/typography/CustomTypography';
 import Image from 'next/image';

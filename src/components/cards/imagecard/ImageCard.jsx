@@ -6,7 +6,7 @@ import Image from 'next/image'
 import CustomButton from '@/library/buttons/CustomButton'
 import CustomTypography from '@/library/typography/CustomTypography'
 import PropTypes from 'prop-types';
-import { InstaIconOrg } from '@/assets/icons'
+import { InstaIconOrg } from '../../../../public/icons'
 
 const ImageCard = ({ title, img, cardHeight,
     cardWidth, buttonText, objectFit,

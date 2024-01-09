@@ -15,17 +15,17 @@ const initialState = {
     isSingleUserLoadError: false,
     singleUser: {},
 
-    isUserCreating:false,
+    isUserCreating: false,
     isUserCreated: false,
-    isUserCreateError:false,
+    isUserCreateError: false,
 
-    isUserUpdating:false,
-    isUserUpdated:false,
-    isUserUpdateError:false,
+    isUserUpdating: false,
+    isUserUpdated: false,
+    isUserUpdateError: false,
 
-    isCompanyStatusUpdating:false,
-    isCompanyStatusUpdated:false,
-    isCompanyStatusUpdateError:false,
+    isCompanyStatusUpdating: false,
+    isCompanyStatusUpdated: false,
+    isCompanyStatusUpdateError: false,
 }
 
 
@@ -49,7 +49,7 @@ export const getSingleUser = createAsyncThunk('getSingleUser', async (id, thunkA
     }
 })
 
-export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async ({data}, thunkAPI) => {
+export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async ({ data }, thunkAPI) => {
     try {
         const response = await users.createUserByAdmin(data)
         return thunkAPI.fulfillWithValue(response.data);
@@ -59,7 +59,7 @@ export const createUserByAdmin = createAsyncThunk('createUserByAdmin', async ({d
     }
 })
 
-export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async ({data, id}, thunkAPI) => {
+export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async ({ data, id }, thunkAPI) => {
     try {
         const response = await users.updateUserByAdmin(data, id)
         return thunkAPI.fulfillWithValue(response.data);
@@ -69,9 +69,29 @@ export const updateUserByAdmin = createAsyncThunk('updateUserByAdmin', async ({d
     }
 })
 
-export const updateCompanyStatus = createAsyncThunk('updateCompanyStatus', async ({data, id}, thunkAPI) => {
+export const updateCompanyStatus = createAsyncThunk('updateCompanyStatus', async ({ data, id }, thunkAPI) => {
     try {
         const response = await users.updateCompanyStatus(data, id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const approveCompany = createAsyncThunk('approveCompany', async ({ id }, thunkAPI) => {
+    try {
+        const response = await users.approveCompany(id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const rejectCompany = createAsyncThunk('rejectCompany', async ({ id }, thunkAPI) => {
+    try {
+        const response = await users.rejectCompany(id)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -147,19 +167,40 @@ const userSlice = createSlice({
                 state.isUserUpdateError = true;
             })
 
-            .addCase(updateCompanyStatus.pending, (state, action) => {
+
+            //approve company
+            .addCase(approveCompany.pending, (state, action) => {
                 state.isCompanyStatusUpdating = true;
                 state.isCompanyStatusUpdated = false;
                 state.isCompanyStatusUpdateError = false;
             })
 
-            .addCase(updateCompanyStatus.fulfilled, (state, action) => {
+            .addCase(approveCompany.fulfilled, (state, action) => {
                 state.isCompanyStatusUpdating = false;
                 state.isCompanyStatusUpdated = true;
                 state.isCompanyStatusUpdateError = false;
             })
 
-            .addCase(updateCompanyStatus.rejected, (state, action) => {
+            .addCase(approveCompany.rejected, (state, action) => {
+                state.isCompanyStatusUpdating = false;
+                state.isCompanyStatusUpdated = false;
+                state.isCompanyStatusUpdateError = true;
+            })
+
+            //reject company
+            .addCase(rejectCompany.pending, (state, action) => {
+                state.isCompanyStatusUpdating = true;
+                state.isCompanyStatusUpdated = false;
+                state.isCompanyStatusUpdateError = false;
+            })
+
+            .addCase(rejectCompany.fulfilled, (state, action) => {
+                state.isCompanyStatusUpdating = false;
+                state.isCompanyStatusUpdated = true;
+                state.isCompanyStatusUpdateError = false;
+            })
+
+            .addCase(rejectCompany.rejected, (state, action) => {
                 state.isCompanyStatusUpdating = false;
                 state.isCompanyStatusUpdated = false;
                 state.isCompanyStatusUpdateError = true;

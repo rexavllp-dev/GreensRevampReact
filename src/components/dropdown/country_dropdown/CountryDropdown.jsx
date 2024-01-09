@@ -2,7 +2,7 @@
 import React from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import Image from "next/image.js";
-import { bahrainFlag, indiaFlag, kuwaitFlag, omanFlag, qatarFlag, saudiFlag, uaeFlag } from "@/assets/icons/index.js";
+import { bahrainFlag, indiaFlag, kuwaitFlag, omanFlag, qatarFlag, saudiFlag, uaeFlag } from "../../../../public/icons/index.js";
 import { ArrowDown } from "../../customicons";
 
 export default function CountryDropdown() {
@@ -12,37 +12,37 @@ export default function CountryDropdown() {
         {
             id: 1,
             name: 'United Arab Emirates',
-            flag: uaeFlag
+            flag: '/icons/uae.png'
         },
         {
             id: 2,
             name: 'Kuwait',
-            flag: kuwaitFlag
+            flag: '/icons/kuwait.png'
         },
         {
             id: 3,
             name: 'Oman',
-            flag: omanFlag
+            flag: '/icons/oman.png'
         },
         {
             id: 4,
             name: 'Qatar',
-            flag: qatarFlag
+            flag: '/icons/qatar.png'
         },
         {
             id: 5,
             name: 'Saudi Arabia',
-            flag: saudiFlag
+            flag: '/icons/qatar.png'
         },
         {
             id: 6,
             name: 'Bahrain',
-            flag: bahrainFlag
+            flag: '/icons/bahrain.png'
         },
         {
             id: 7,
             name: 'India',
-            flag: indiaFlag
+            flag: '/icons/india.png'
         }
     ]
 

@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect } from 'react'
 import "./Navbar.scss"
-import { companyLogo, companyLogoMobile } from '@/assets/images'
+import { companyLogo, companyLogoMobile } from '../../../public/images'
 import Image from "next/image"
-import { cartIcon, heartIcon, menuIcon, userIcon } from '@/assets/icons'
+import { cartIcon, heartIcon, menuIcon, userIcon } from '../../../public/icons'
 import Toolbar from './toolbar/Toolbar'
 import CustomSearch from '@/library/input/searchinput/CustomSearch'
 import CountryDropdown from '../dropdown/country_dropdown/CountryDropdown'
@@ -153,7 +153,7 @@ const Navbar = () => {
                         <div className='center'>
                             <Link href="/">
                                 <div className="logo">
-                                    <Image src={companyLogoMobile} />
+                                    <Image src={'/images/company_logo_mobile.png'} alt="logo" width={156} height={36} />
                                 </div>
                             </Link>
                         </div>

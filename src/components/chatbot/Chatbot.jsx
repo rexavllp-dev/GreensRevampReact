@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatIcon } from '@/assets/icons'
+import { ChatIcon } from '../../../public/icons'
 import React, { useRef } from 'react'
 import './Chatbot.scss'
 import Image from 'next/image';

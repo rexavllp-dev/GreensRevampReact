@@ -371,34 +371,34 @@ const CompanyRegister = () => {
                 }))
             }
         } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-            const firstLetter = e.target.value.charAt(0);
-            if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
-                //First letter should not be a number
+            // const firstLetter = e.target.value.charAt(0);
+            // if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
+            //     //First letter should not be a number
+            //     const re = /^[A-Za-z\s'.-]+$/;
+            //     // if value is not blank, then test the regex
+            //     if (e.target?.value === '' || re.test(firstLetter)) {
+            //         setFormData((prev) => ({
+            //             ...prev, [e.target.name]: e.target.value
+            //         }))
+            //     }
+            // } else {
                 const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
-                //First letter should not be a number
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(firstLetter)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
-            } else {
-                const re = /^[A-Za-z0-9\s'.-]+$/;
                 // if value is not blank, then test the regex
                 if (e.target?.value === '' || re.test(e.target?.value)) {
                     setFormData((prev) => ({
                         ...prev, [e.target.name]: e.target.value
                     }))
                 }
-            }
+            // }
         } else {
             setFormData((prev) => ({
                 ...prev, [e.target.name]: e.target.value

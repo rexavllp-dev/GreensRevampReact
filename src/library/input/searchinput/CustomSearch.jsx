@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import "./CustomSearch.scss"
 import Image from 'next/image'
-import { SearchIcon } from '@/assets/icons'
+import { SearchIcon } from '../../../../public/icons'
 
 const CustomSearch = ({
   value, onChange, name, placeholder, label, fullWidth, isInput, onKeyUp, onSearchClick

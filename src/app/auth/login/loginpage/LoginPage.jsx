@@ -156,7 +156,7 @@ const LoginPage = () => {
                         router.push(`/auth/verifylogin?p=${formData.mobile}`, { scroll: true });
                     } else {
                         console.log(res)
-                        toast.error(res.payload?.response?.data?.message);
+                        toast.error(res.payload?.message);
                     }
                     setLoading(false);
                 }).catch((err) => {
@@ -188,11 +188,11 @@ const LoginPage = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.open('http://localhost:5000/api/v1/users/auth/google', '_self');
+        window.open('https://api.greens-intl.ae/api/v1/users/auth/google', '_self');
     }
 
     const handleFacebookLogin = () => {
-        window.open('http://localhost:5000/api/v1/users/auth/facebook/callback', '_self');
+        window.open('https://api.greens-intl.ae/api/v1/users/auth/facebook/callback', '_self');
     }
 
     return (

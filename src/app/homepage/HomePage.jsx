@@ -22,13 +22,13 @@ import {
   categoryImg3, categoryImg4,
   eventImg1,
   giftCardTile,
-} from '@/assets/images'
+} from '../../../public/images'
 import './HomePage.scss'
 import CategoryCard from '@/components/cards/categorycard/CategoryCard'
 import ImageCard from '@/components/cards/imagecard/ImageCard'
 import CustomTypography from '@/library/typography/CustomTypography'
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
-import { InstaIconGreen } from '@/assets/icons';
+import { InstaIconGreen } from '../../../public/icons';
 import Image from 'next/image';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import Chatbot from '@/components/chatbot/Chatbot';

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import './ProductCard.scss';
 import CustomTypography from '@/library/typography/CustomTypography';
-import { StarIcon, heartIconBlack } from '@/assets/icons';
+import { StarIcon, heartIconBlack } from '../../../../public/icons';
 import { useLanguage } from '@/providers/LanguageProvider';
 
 const ProductCard = ({ img, title, price, previous_price, rating }) => {

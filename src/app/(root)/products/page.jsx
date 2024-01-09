@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '@/assets/images';
+import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../public/images';
 import CategoryCard from '@/components/cards/categorycard/CategoryCard';
 import useWindowSize from '@/hooks/useWindowSize';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';

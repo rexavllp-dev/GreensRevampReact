@@ -1,7 +1,7 @@
 "use client";
 import 'react-phone-number-input/style.css'
 import React, { useEffect, useState } from 'react';
-import { bahrainFlag, indiaFlag, kuwaitFlag, omanFlag, qatarFlag, saudiFlag, uaeFlag } from "@/assets/icons/index.js";
+import { bahrainFlag, indiaFlag, kuwaitFlag, omanFlag, qatarFlag, saudiFlag, uaeFlag } from "../../../../public/icons/index.js";
 import Image from 'next/image';
 import './CustomPhoneInput.scss'
 import PhoneArrowDown from '@/components/customicons/PhoneArrowDown';
@@ -12,12 +12,12 @@ import en from 'react-phone-number-input/locale/en'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCountries } from '@/services/features/countrySlice';
 
-export default function CustomPhoneInput({ label, placeholder, value, isRequired, disabled, onChange, name, getCountry, isInvalid, errMsg, ...rest }) {
+export default function CustomPhoneInput({ label, placeholder, value, isRequired, disabled, onChange, country, name, getCountry, isInvalid, errMsg, ...rest }) {
     const dispatch = useDispatch();
     // `value` will be the parsed phone number in E.164 format.
     // Example: "+12133734253".
 
-    const { allCountries } = useSelector((state) => state.countries)
+    const { allCountries } = useSelector((state) => state.countries);
 
     const countries = [
         {
@@ -75,12 +75,19 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
     const [phoneNumber, setPhoneNumber] = React.useState('');
 
     useEffect(() => {
-        dispatch(getAllCountries())
+        dispatch(getAllCountries());
     }, [])
+
+
+    useEffect(() => {
+        if (country && allCountries?.result?.length) {
+            setSelectedCountry(allCountries?.result?.find((c) => c.id === country));
+        }
+    }, [country, allCountries])
 
     const handleInputChange = (e) => {
         setPhoneNumber(e.target.value);
-        let countryId = selectedCountry.id;
+        let countryId = selectedCountry?.id;
         onChange(e.target.value, countryId)
     }
 
@@ -104,9 +111,9 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
                             </div>
                             <Image
                                 src={
-                                    `http://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.country_code}.svg`
+                                    `http://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry?.country_code}.svg`
                                 }
-                                alt={selectedCountry.country_name}
+                                alt={selectedCountry?.country_name}
                                 width={25}
                                 height={25}
                             />
@@ -152,7 +159,7 @@ export default function CustomPhoneInput({ label, placeholder, value, isRequired
                 </div>
 
                 <div className="phone-input-relative">
-                    <p>+ {getCountryCallingCode(selectedCountry.country_code)}</p>
+                    <p>+ {getCountryCallingCode(selectedCountry?.country_code)}</p>
                     <input
                         value={value}
                         type="text"

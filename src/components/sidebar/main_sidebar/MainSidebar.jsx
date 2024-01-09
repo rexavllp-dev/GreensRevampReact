@@ -4,9 +4,9 @@ import './MainSidebar.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Image from 'next/image'
 import { ArrowLeft, ArrowRight } from '@/components/customicons'
-import { BookIcon, CatelogueIcon, ChatIcon, ChatIconBlack, CloseIcon, DashboardIcon, GemIcon, GiftCardIcon, HelpingHandIcon, HomeIcon, KeyArrowRight, LockIcon, MenuSquare, RecipieIcon, SignoutIcon, WishListBlack, userIconBlack } from '@/assets/icons'
+import { BookIcon, CatelogueIcon, ChatIcon, ChatIconBlack, CloseIcon, DashboardIcon, GemIcon, GiftCardIcon, HelpingHandIcon, HomeIcon, KeyArrowRight, LockIcon, MenuSquare, RecipieIcon, SignoutIcon, WishListBlack, userIconBlack } from '../../../../public/icons'
 import ImgThumb from '@/components/customicons/ImgThumb';
-import { CataloueImg, Category1, Category2, Category3, Category4, Category5, Category6, companyLogo } from '@/assets/images';
+import { CataloueImg, Category1, Category2, Category3, Category4, Category5, Category6, companyLogo } from '../../../../public/images';
 import CustomButton from '@/library/buttons/CustomButton';
 import useWindowSize from '@/hooks/useWindowSize';
 import CountryDropdown from '@/components/dropdown/country_dropdown/CountryDropdown';

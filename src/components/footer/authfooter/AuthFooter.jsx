@@ -1,6 +1,6 @@
 import React from 'react'
 import './AuthFooter.scss';
-import { companyLogoLight } from '@/assets/images'
+import { companyLogoLight } from '../../../../public/images'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Image from 'next/image'
 import Link from 'next/link'

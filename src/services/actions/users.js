@@ -46,4 +46,22 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
+
+    //Approve company status
+    approveCompany: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/admin/approve/${id}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Reject company status
+    rejectCompany: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/admin/reject/${id}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }
