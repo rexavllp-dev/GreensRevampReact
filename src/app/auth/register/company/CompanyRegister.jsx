@@ -455,7 +455,8 @@ const CompanyRegister = () => {
             companyFormData.append('company_vat_certificate', formData.vat_certificate);
             companyFormData.append('company_trn_number', formData.trn_number);
             companyFormData.append('company_trade_license', formData.trade_license);
-            companyFormData.append('company_trade_license_expiry', formData.trade_license_expiry?.toLocaleDateString('en-GB'));
+            // companyFormData.append('company_trade_license_expiry', formData.trade_license_expiry?.toLocaleDateString('en-GB'));
+            companyFormData.append('company_trade_license_expiry', new Date(formData.trade_license_expiry));
 
             if (formData.company_landline?.trim()) {
                 companyFormData.append('company_landline', formData.company_landline);

@@ -37,9 +37,11 @@ import useWindowSize from '@/hooks/useWindowSize';
 import ImageSlider from '@/components/slider/ImageSlider';
 import { useSelector } from 'react-redux';
 import { useLanguage } from '@/providers/LanguageProvider';
+import appConfig from '@/config/appConfig';
 // import { useWindowWidth } from '@react-hook/window-size';
 
 const HomePage = () => {
+  const imageUrl = appConfig.server.imageUrl;
 
   const { width, height } = useWindowSize();
   const isMobileView = width < 767;
@@ -108,37 +110,37 @@ const HomePage = () => {
     {
       id: 1,
       title: 'Food Colours',
-      img: categoryImg2
+      img: imageUrl + '/images/category2.png'
     },
     {
       id: 2,
       title: 'Ingredients',
-      img: categoryImg1
+      img: imageUrl + '/images/category1.png'
     },
     {
       id: 3,
       title: 'Baking Supplies',
-      img: categoryImg3
+      img: imageUrl + '/images/category3.png'
     },
     {
       id: 4,
       title: 'Cake Decorations',
-      img: categoryImg4
+      img: imageUrl + '/images/category4.png'
     },
     {
       id: 5,
       title: 'Chocolate',
-      img: categoryImg1
+      img: imageUrl + '/images/category1.png'
     },
     {
       id: 6,
       title: 'Chocolate',
-      img: categoryImg2
+      img: imageUrl + '/images/category2.png'
     },
     {
       id: 7,
       title: 'Chocolate',
-      img: categoryImg4
+      img: imageUrl + '/images/category4.png'
     },
   ]
 

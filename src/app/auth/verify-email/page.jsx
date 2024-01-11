@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { verifyEmail } from '@/services/features/authSlice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
@@ -13,27 +13,32 @@ const EmailVerificationSuccess = () => {
     const searchParams = useSearchParams()
     let token = searchParams.get('token');
     let from = searchParams.get('orgin');
+    const [alreadyVerified, setAlreadyVerified] = useState(false);
 
     useEffect(() => {
+
         const verifyEmailAddress = async () => {
             dispatch(verifyEmail(token)).then((res) => {
                 if (res.payload?.status === 200) {
                     toast.success(res.payload?.message, {
                         toastId: 'success1',
                     });
+                    setAlreadyVerified(true);
                     router.push(`/auth/verifyphone/?orgin=${from}&token=${token}`, { scroll: true });
                 } else {
                     toast.error(res.payload?.message, {
                         toastId: 'fail1',
                     });
-                }   
+                }
             }).catch((err) => {
                 console.log(err);
             })
         };
 
         if (token) {
-            verifyEmailAddress();
+            if (!alreadyVerified) {
+                verifyEmailAddress();
+            }
         } else {
             console.error('Email verification token not found!');
         }

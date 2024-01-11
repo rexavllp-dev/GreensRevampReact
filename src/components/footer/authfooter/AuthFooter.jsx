@@ -4,6 +4,7 @@ import { companyLogoLight } from '../../../../public/images'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Image from 'next/image'
 import Link from 'next/link'
+import appConfig from '@/config/appConfig';
 
 const AuthFooter = () => {
     return (
@@ -11,7 +12,7 @@ const AuthFooter = () => {
             <div className="footer">
                 <div className="logo">
                     <Link href="/">
-                        <Image src={companyLogoLight} />
+                        <Image src={appConfig.server.imageUrl + '/images/company_logo_light.png'} width={280} height={80} alt="logo" />
                     </Link>
                 </div>
                 <div className="links">

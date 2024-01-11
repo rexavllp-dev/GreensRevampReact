@@ -10,6 +10,7 @@ import { Input } from '@nextui-org/react'
 import CustomButton from '@/library/buttons/CustomButton'
 import IconInput from '@/library/input/iconinput/IconInput'
 import CustomInput from '@/library/input/custominput/CustomInput';
+import appConfig from '@/config/appConfig';
 
 const Footer = () => {
   return (
@@ -19,7 +20,7 @@ const Footer = () => {
           <div className="left">
             <div className="logo">
               <Link href="/">
-                <Image src={companyLogoLight} alt="logo" />
+                <Image src={appConfig.server.imageUrl + '/images/company_logo_light.png'} width={280} height={80} alt="logo" />
               </Link>
             </div>
 

@@ -10,13 +10,13 @@ import { usePathname } from 'next/navigation'
 
 const AdminSidebar = () => {
     const pathname = usePathname()
-    console.log(pathname)
+    console.log(pathname);
 
     const sidebarItems = [
         {
             id: 1,
             name: 'Dashboard',
-            url: '/admin/dashboard',
+            url: '/admin',
         },
         {
             id: 2,
@@ -100,6 +100,14 @@ const AdminSidebar = () => {
                             </Link>
                         )
                     })}
+
+                    {/* {sidebarItems.map((item) => (
+                        <Link href={item.url} key={item.id}>
+                            <div className={pathname.startsWith(item.url) ? "item active" : "item"}>
+                                <CustomTypography content={item.name} color={pathname.startsWith(item.url) ? 'WHITE' : 'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                            </div>
+                        </Link>
+                    ))} */}
                 </div>
             </div>
         </div>

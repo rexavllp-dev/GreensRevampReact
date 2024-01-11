@@ -75,7 +75,7 @@ const UpdateNum = () => {
 
             setLoading(true)
             dispatch(updateUserMobile({ data, token })).then((res) => {
-                if (res.payload?.status === 201) {
+                if (res.payload?.success) {
                     toast.success(res.payload?.message);
                     router.push(`/auth/verifyphone/?orgin=${from}&token=${token}`, { scroll: true });
                 } else {

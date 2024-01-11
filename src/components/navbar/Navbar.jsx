@@ -17,10 +17,12 @@ import { Cookies } from 'react-cookie';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { logout } from '@/services/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import appConfig from '@/config/appConfig';
 
 const cookies = new Cookies();
 
 const Navbar = () => {
+    const imageUrl = appConfig.server.imageUrl;
 
     const dispatch = useDispatch();
     const { language, switchLanguage, getTranslation } = useLanguage();
@@ -153,7 +155,7 @@ const Navbar = () => {
                         <div className='center'>
                             <Link href="/">
                                 <div className="logo">
-                                    <Image src={'/images/company_logo_mobile.png'} alt="logo" width={156} height={36} />
+                                    <Image src={imageUrl + '/images/company_logo_mobile.png'} alt="logo" width={156} height={36} />
                                 </div>
                             </Link>
                         </div>

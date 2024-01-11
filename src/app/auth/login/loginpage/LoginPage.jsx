@@ -155,7 +155,6 @@ const LoginPage = () => {
                         toast.success(res.payload?.message);
                         router.push(`/auth/verifylogin?p=${formData.mobile}`, { scroll: true });
                     } else {
-                        console.log(res)
                         toast.error(res.payload?.message);
                     }
                     setLoading(false);
@@ -176,6 +175,13 @@ const LoginPage = () => {
                         toast.success(res.payload?.message);
                         router.push('/', { scroll: true });
                     } else {
+                        if (res.payload?.response?.data?.status == 422) {
+                            if (res.payload?.response?.data?.unverified == 'email') {
+                                router.push(`/auth/verifyemail/?orgin=${res.payload?.response?.data?.from}&token=${res.payload?.response?.data?.token}`, { scroll: true });
+                            } else {
+                                router.push(`/auth/verifyphone/?orgin=${res.payload?.response?.data?.from}&token=${res.payload?.response?.data?.token}`, { scroll: true });
+                            }
+                        }
                         toast.error(res.payload?.response?.data?.message);
                     }
                     setLoading(false);

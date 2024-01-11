@@ -69,7 +69,6 @@ const ImageCard = ({ title, img, cardHeight,
                 <Image
                     className='nextimg' src={img}
                     alt='img'
-
                     fill={true}
                     objectFit={objectFit ? objectFit : 'cover'}
                 />

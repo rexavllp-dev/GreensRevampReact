@@ -68,6 +68,14 @@ const VerifyLogin = () => {
                 });
                 router.push('/', { scroll: true });
             } else {
+
+                if (res.payload?.status == 422) {
+                    if (res.payload?.unverified == 'email') {
+                        router.push(`/auth/verifyemail/?orgin=${res.payload?.from}&token=${res.payload?.token}`, { scroll: true });
+                    } else {
+                        router.push(`/auth/verifyphone/?orgin=${res.payload?.from}&token=${res.payload?.token}`, { scroll: true });
+                    }
+                }
                 toast.error(res.payload?.message, {
                     toastId: 'fail1',
                 });
@@ -84,7 +92,7 @@ const VerifyLogin = () => {
             setFormData((prev) => ({
                 ...prev, otp: e.target.value
             }))
-    }
+        }
     }
 
     const handleResendOtp = () => {

@@ -1,48 +1,50 @@
 "use client";
 import React from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, image } from "@nextui-org/react";
 import Image from "next/image.js";
 import { bahrainFlag, indiaFlag, kuwaitFlag, omanFlag, qatarFlag, saudiFlag, uaeFlag } from "../../../../public/icons/index.js";
 import { ArrowDown } from "../../customicons";
+import appConfig from "@/config/appConfig.js";
 
 export default function CountryDropdown() {
+    const imageUrl = appConfig.server.imageUrl;
 
     const countries = [
         //Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, and the United Arab Emirates, India
         {
             id: 1,
             name: 'United Arab Emirates',
-            flag: '/icons/uae.png'
+            flag: imageUrl + '/icons/uae.png'
         },
         {
             id: 2,
             name: 'Kuwait',
-            flag: '/icons/kuwait.png'
+            flag: imageUrl + '/icons/kuwait.png'
         },
         {
             id: 3,
             name: 'Oman',
-            flag: '/icons/oman.png'
+            flag: imageUrl + '/icons/oman.png'
         },
         {
             id: 4,
             name: 'Qatar',
-            flag: '/icons/qatar.png'
+            flag: imageUrl + '/icons/qatar.png'
         },
         {
             id: 5,
             name: 'Saudi Arabia',
-            flag: '/icons/qatar.png'
+            flag: imageUrl + '/icons/qatar.png'
         },
         {
             id: 6,
             name: 'Bahrain',
-            flag: '/icons/bahrain.png'
+            flag: imageUrl + '/icons/bahrain.png'
         },
         {
             id: 7,
             name: 'India',
-            flag: '/icons/india.png'
+            flag: imageUrl + '/icons/india.png'
         }
     ]
 

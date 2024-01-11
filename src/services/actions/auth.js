@@ -51,9 +51,9 @@ export const auth = {
         return new Promise((resolve, reject) => {
             const config = {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
-              };
+            };
             Axios.post('/company/register-company', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
@@ -74,7 +74,7 @@ export const auth = {
         return new Promise((resolve, reject) => {
             Axios.get(`/users/getuserinfo/${token}`)
                 .then(response => resolve(response))
-                .catch(error => reject(error))
+                .catch(error => reject(error));
         })
     },
 
