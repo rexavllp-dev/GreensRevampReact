@@ -14,9 +14,12 @@ import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import './SeoTab.scss'
+import './ImagesTab.scss'
+import MediaUpload from '@/library/mediaupload/MediaUpload';
+import ImageUpload from '@/components/imageupload/ImageUpload';
+import { Divider } from '@nextui-org/react';
 
-const SeoTab = () => {
+const ImagesTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -67,10 +70,6 @@ const SeoTab = () => {
 
     const [loading, setLoading] = React.useState(false);
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData])
-
 
     const handlePhoneChange = (name, value, countryCode) => {
         const re = /^[0-9\b]+$/;
@@ -86,26 +85,7 @@ const SeoTab = () => {
     const handleInputChange = ({ e, country }) => {
 
         if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-            // const firstLetter = e.target.value.charAt(0);
-            // if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
-            //     //First letter should not be a number
-            //     const re = /^[A-Za-z\s'.-]+$/;
-            //     // if value is not blank, then test the regex
-            //     if (e.target?.value === '' || re.test(firstLetter)) {
-            //         setFormData((prev) => ({
-            //             ...prev, [e.target.name]: e.target.value
-            //         }))
-            //     }
-            // } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
-            //     //First letter should not be a number
-            //     const re = /^[A-Za-z\s'.-]+$/;
-            //     // if value is not blank, then test the regex
-            //     if (e.target?.value === '' || re.test(firstLetter)) {
-            //         setFormData((prev) => ({
-            //             ...prev, [e.target.name]: e.target.value
-            //         }))
-            //     }
-            // } else {
+
             const re = /^[A-Za-z\s'.-]+$/;
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
@@ -286,98 +266,93 @@ const SeoTab = () => {
         }
     }
 
+    const handleFileUpload = async (event) => {
+        let files = null;
+        dispatch(updateEvent({
+            event_id: id,
+            data: formData
+        })).then((response) => {
+            files = event.target.files;
+
+            const image = new Image();
+            image.src = URL.createObjectURL(files[0]);
+
+            let imgWidth, imgHeight;
+            image.onload = function () {
+                imgWidth = this.width;
+                imgHeight = this.height;
+
+                if (imgWidth == 1920 && imgHeight == 1080) {
+                    const imageFormData = new FormData();
+                    for (let i = 0; i < files.length; i++) {
+                        // setEventImages((prevImages) => [...prevImages, files[i]])
+                        imageFormData.append('event_image', files[i]);
+                    }
+                    // imageFormData.append('file', file);
+                    dispatch(uploadEventImg({ formData: imageFormData, event_id: id }))
+                }
+                else {
+                    toast.error("Please upload image of 1920x1080 dimensions")
+                }
+            };
+
+        }).catch((err) => {
+            console.log(err)
+            toast.error("Please fill the fields before upload")
+        })
+
+    }
+
+    const handleDeleteImage = (imgname) => {
+        dispatch(deleteEventImage({ data: { image_name: imgname }, event_id: id }))
+    }
+
+
     return (
-        <div className='seotab'>
+        <div className='imagestab'>
 
             <div className="form">
 
                 <div className="stack">
 
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='First Name' label={'First Name'}
-                        isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
-                    />
-                    <CustomInput
-                        name='last_name'
-                        type='text'
-                        maxLength={100}
-                        placeholder='Last Name'
-                        label={'Last Name'}
-                        isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.last_name}
-                        isInvalid={errors.last_name.error}
-                        errMsg={errors.last_name.message}
-                    />
-                    <CustomInput name={'email'} type='email'
-                        placeholder="Email Address"
-                        isInvalid={errors.email.error}
-                        errMsg={errors.email.message}
-                        label={'Email Address'} isRequired={true}
-                        value={formData.email}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                    />
-
-                    <CustomPhoneInput
-                        isRequired={true}
-                        name={'mobile'}
-                        value={formData.mobile}
-                        placeholder='Mobile Number'
-                        label='Mobile Number'
-                        onChange={(value, country) => {
-                            handlePhoneChange('mobile', value, country)
+                    <CustomTypography content='Base Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
+                    <ImageUpload
+                        name={'event_img_path'}
+                        handleFileUpload={handleFileUpload}
+                        // images={event?.images}
+                        handleDeleteImage={handleDeleteImage}
+                        haveUploadSize={true}
+                        uploadSize={{
+                            "width": '1920',
+                            "height": '1080'
                         }}
-                        isInvalid={errors.mobile.error}
-                        errMsg={errors.mobile.message}
+                        required={true}
                     />
 
-                    <CustomSelect label={'Roles'} isRequired={true} data={roles} />
                 </div>
 
                 <div className="stack">
-
-                    <CustomInput
-                        isInvalid={errors.password.error}
-                        errMsg={errors.password.message}
-                        type='password'
-                        name={'password'}
-                        value={formData.password}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        placeholder="Password"
-                        label={'Password'}
-                        isRequired={true}
-                        haveProgress={true}
+                    <CustomTypography content='Additional Images' color="BLACK" size="MEDIUM" weight="REGULAR" />
+                    <ImageUpload
+                        name={'event_img_path'}
+                        handleFileUpload={handleFileUpload}
+                        // images={event?.images}
+                        handleDeleteImage={handleDeleteImage}
+                        haveUploadSize={true}
+                        uploadSize={{
+                            "width": '1920',
+                            "height": '1080'
+                        }}
+                        required={true}
                     />
-                    <CustomInput
-                        isInvalid={errors.confirm_password.error}
-                        errMsg={errors.confirm_password.message}
-                        type='password'
-                        value={formData.confirm_password}
-                        name={'confirm_password'}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        placeholder="Confirm Password"
-                        label={'Confirm Password'}
-                        isRequired={false}
-                        haveProgress={false}
-                    />
-                    <CustomToggleButton label='Status' isRequired={true} value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
-                    />
-                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Create Account" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
             </div>
-
 
         </div>
     )
 }
 
-export default SeoTab
+export default ImagesTab

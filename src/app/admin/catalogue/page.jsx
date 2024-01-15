@@ -7,9 +7,12 @@ import CustomButton from "@/library/buttons/CustomButton";
 import { FaArrowLeft } from "react-icons/fa";
 import './Catalogue.scss'
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTables from "@/components/customtable/CustomTables";
+import CustomTable from "@/components/customtable/CustomTable";
+import { Avatar, Chip } from "@nextui-org/react";
+import { CameraIcon } from "@/components/customicons/CameraIcon";
 
 
 export default function Catalogue() {
@@ -17,6 +20,44 @@ export default function Catalogue() {
     const dispatch = useDispatch();
 
     const { allUsers } = useSelector(state => state.users)
+
+    const [columnDefs] = useState([
+        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        {
+            headerName: 'Thumbnail', field: 'prod_image',
+            cellRenderer: (params) => {
+                return (
+                    <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
+                        <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
+                    } />
+                )
+            }
+        },
+        {
+            headerName: 'Name', field: 'prod_name'
+        },
+        {
+            headerName: 'Stock', field: 'stock',
+        },
+        {
+            headerName: 'Price', field: 'price',
+        },
+        {
+            headerName: 'SKU', field: 'sku',
+        },
+        {
+            headerName: 'Brad Code', field: 'brand_code',
+        },
+        {
+            headerName: 'Status', field: 'status',
+            cellRenderer: (params) => {
+                const isActive = params.data?.is_status;
+                return (
+                    <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
+                )
+            }
+        },
+    ]);
 
     useEffect(() => {
         // dispatch(getAllUsers({ data: {} }))
@@ -45,7 +86,7 @@ export default function Catalogue() {
                         onClick={() => router.push('/admin/catalogue/create')} />
                 </div>
             </div>
-            <CustomTables rowData={allUsers?.result}/>
+            <CustomTable columnDefs={columnDefs} rowData={allUsers?.result}/>
         </div>
     )
 }

@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 export default function AdminCard({ title, url }) {
     const router = useRouter()
     return (
-        <div className="admincard">
+        <div className="admincard" onClick={() => router.push(url)}>
             <div className="header">
                 <CustomTypography content={title} weight="MEDIUM" color="BLACK" size="MEDIUM-LARGE" />
-                <div className="icon" onClick={() => router.push(url)}>
+                <div className="icon" >
                     <MdKeyboardArrowRight size={24} stroke='1' />
                 </div>
             </div>

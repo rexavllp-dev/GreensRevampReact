@@ -14,7 +14,7 @@ import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import './GeneralTab.scss'
+import './BadgesTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 
 const GeneralTab = () => {
@@ -83,33 +83,14 @@ const GeneralTab = () => {
     }
 
     return (
-        <div className='generaltab'>
+        <div className='badgestab'>
 
             <div className="form">
 
                 <div className="stack">
-
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Product Name' label={'Product Name'}
-                        isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
-                    />
-                    <CustomTextarea label={'Description'}
-                        placeholder={'Description'}
-                        name={'notes'} value={formData.notes}
-                        onChange={(e) => { handleInputChange({ e }) }} />
-
-
-                    <CustomSelect label={'Tax Class'} isRequired={true} data={roles} />
-                    <CustomSelect label={'Storage Type'} isRequired={true} data={roles} />
-                    <CustomSelect label={'Tags'} isRequired={true} data={roles} />
                     <CustomCalendar
                         name={'trade_license_expiry'}
-                        label='Expiry Date'
+                        label='New Product Start Date'
                         value={formData.trade_license_expiry}
                         // isInvalid={errors.trade_license_expiry.error}
                         // errMsg={errors.trade_license_expiry.message}
@@ -119,40 +100,33 @@ const GeneralTab = () => {
                         }}
                         isRequired={true}
                     />
+
+
+                    <CustomInput name='first_name' type='text'
+                        maxLength={100}
+                        placeholder='Enter back in stock days ' label={'Back in stock days'}
+                        isRequired={true}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.first_name}
+                        isInvalid={errors.first_name.error}
+                        errMsg={errors.first_name.message}
+                    />
                 </div>
 
                 <div className="stack">
-
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Brand Name' label={'Brand Name'}
+                    <CustomCalendar
+                        name={'trade_license_expiry'}
+                        label='New Product End Date'
+                        value={formData.trade_license_expiry}
+                        // isInvalid={errors.trade_license_expiry.error}
+                        // errMsg={errors.trade_license_expiry.message}
+                        onChange={(date) => {
+                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
+                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
+                        }}
                         isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
                     />
 
-                    <CustomSelect label={'Categories'} isRequired={true} data={roles} />
-                    <CustomSelect label={'Product Return Type'} isRequired={true} data={roles} />
-
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Sales Unit' label={'Sales Unit'}
-                        isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
-                    />
-
-                    <CustomToggleButton label='Dashboard Status' isRequired={true} value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
-                    />
-
-                    <CustomToggleButton label='Product Status' isRequired={true} value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
-                    />
                 </div>
             </div>
             <div className="savebtn">

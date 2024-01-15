@@ -14,9 +14,10 @@ import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import './ImagesTab.scss'
+import './PriceTab.scss'
+import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 
-const ImagesTab = () => {
+const PriceTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -287,7 +288,7 @@ const ImagesTab = () => {
     }
 
     return (
-        <div className='imagestab'>
+        <div className='pricetab'>
 
             <div className="form">
 
@@ -295,7 +296,7 @@ const ImagesTab = () => {
 
                     <CustomInput name='first_name' type='text'
                         maxLength={100}
-                        placeholder='First Name' label={'First Name'}
+                        placeholder='Price' label={'Price'}
                         isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.first_name}
@@ -306,73 +307,48 @@ const ImagesTab = () => {
                         name='last_name'
                         type='text'
                         maxLength={100}
-                        placeholder='Last Name'
-                        label={'Last Name'}
+                        placeholder='Special Price'
+                        label={'Special Price'}
                         isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.last_name}
                         isInvalid={errors.last_name.error}
                         errMsg={errors.last_name.message}
                     />
-                    <CustomInput name={'email'} type='email'
-                        placeholder="Email Address"
-                        isInvalid={errors.email.error}
-                        errMsg={errors.email.message}
-                        label={'Email Address'} isRequired={true}
-                        value={formData.email}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                    />
 
-                    <CustomPhoneInput
-                        isRequired={true}
-                        name={'mobile'}
-                        value={formData.mobile}
-                        placeholder='Mobile Number'
-                        label='Mobile Number'
-                        onChange={(value, country) => {
-                            handlePhoneChange('mobile', value, country)
-                        }}
-                        isInvalid={errors.mobile.error}
-                        errMsg={errors.mobile.message}
-                    />
+                    <CustomSelect label={'Special Price Type'} isRequired={true} data={roles} />
 
-                    <CustomSelect label={'Roles'} isRequired={true} data={roles} />
                 </div>
 
                 <div className="stack">
-
-                    <CustomInput
-                        isInvalid={errors.password.error}
-                        errMsg={errors.password.message}
-                        type='password'
-                        name={'password'}
-                        value={formData.password}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        placeholder="Password"
-                        label={'Password'}
+                    <CustomCalendar
+                        name={'trade_license_expiry'}
+                        label='Special Price Start'
+                        value={formData.trade_license_expiry}
+                        // isInvalid={errors.trade_license_expiry.error}
+                        // errMsg={errors.trade_license_expiry.message}
+                        onChange={(date) => {
+                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
+                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
+                        }}
                         isRequired={true}
-                        haveProgress={true}
                     />
-                    <CustomInput
-                        isInvalid={errors.confirm_password.error}
-                        errMsg={errors.confirm_password.message}
-                        type='password'
-                        value={formData.confirm_password}
-                        name={'confirm_password'}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        placeholder="Confirm Password"
-                        label={'Confirm Password'}
-                        isRequired={false}
-                        haveProgress={false}
+                    <CustomCalendar
+                        name={'trade_license_expiry'}
+                        label='Special Price End'
+                        value={formData.trade_license_expiry}
+                        // isInvalid={errors.trade_license_expiry.error}
+                        // errMsg={errors.trade_license_expiry.message}
+                        onChange={(date) => {
+                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
+                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
+                        }}
+                        isRequired={true}
                     />
-                    <CustomToggleButton label='Status' isRequired={true} value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
-                    />
-                    <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'} value={formData.notes} onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Create Account" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
             </div>
 
 
@@ -380,4 +356,4 @@ const ImagesTab = () => {
     )
 }
 
-export default ImagesTab
+export default PriceTab

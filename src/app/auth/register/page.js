@@ -40,7 +40,7 @@ const Register = () => {
                     </div>
 
                     <div className='switchbtn'>
-                        <CustomSwitchButton active={active} setActive={setActive} />
+                        <CustomSwitchButton active={active} setActive={setActive} labelOne="Individual" labelTwo="Company" />
                     </div>
 
                     {
