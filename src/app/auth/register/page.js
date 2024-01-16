@@ -28,7 +28,7 @@ const Register = () => {
 
                     <div className='headerbtn'>
                         <CustomTypography content="Already have an account?" color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
-                        <CustomButton label='Login' variant='transparent' height={isMobileView ? '42px' : '50px'} onClick={handleNavigateToLogin} />
+                        <CustomButton label='Sign In' variant='transparent' height={isMobileView ? '42px' : '50px'} onClick={handleNavigateToLogin} />
                         {/* <p className='h'> Already have an account?</p> */}
                     </div>
                     <div className='or'>

@@ -1,0 +1,21 @@
+.categories_section_wrapper {
+  padding: 24px;
+
+  .categories_section {
+    display: flex;
+    gap: 20px;
+    .categorytree {
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+    }
+
+    .forms {
+      width: 70%;
+    }
+
+    .categorytab {
+      max-width: 500px;
+    }
+  }
+}

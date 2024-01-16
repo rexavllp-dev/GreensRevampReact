@@ -18,6 +18,8 @@ import OptionsTab from './tabs/advanced/options/OptionsTab';
 import VariantsTab from './tabs/advanced/productvariants/VariantsTab';
 import RelatedProdTab from './tabs/advanced/relatedproducts/RelatedProdTab';
 import SearchableKeywords from './tabs/advanced/searchable/SearchableKeywords';
+import ReviewsTab from './tabs/advanced/reviews/ReviewsTab';
+import StockHistoryTab from './tabs/advanced/stockhistory/StockHistoryTab';
 
 const UserDetails = () => {
 
@@ -75,7 +77,7 @@ const UserDetails = () => {
         {
             id: 4,
             label: "Reviews",
-            component: <BadgesTab />
+            component: <ReviewsTab />
         },
         // {
         //     id: 5,
@@ -90,7 +92,7 @@ const UserDetails = () => {
         {
             id: 7,
             label: "Stock History",
-            component: <BadgesTab />
+            component: <StockHistoryTab />
         }
     ]
 

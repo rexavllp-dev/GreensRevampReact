@@ -43,6 +43,7 @@ const Accounts = ({ userId }) => {
         password: '',
         confirm_password: '',
         status: false,
+        attempt_blocked: false,
         notes: '',
         address: [
             {
@@ -120,7 +121,8 @@ const Accounts = ({ userId }) => {
                 email: singleUser?.result?.usr_email,
                 status: singleUser?.result?.status,
                 notes: singleUser?.result?.notes,
-                status: singleUser?.result?.is_status
+                status: singleUser?.result?.is_status,
+                attempt_blocked: singleUser?.result?.attempt_blocked
             }))
         }
     }, [singleUser])
@@ -258,7 +260,8 @@ const Accounts = ({ userId }) => {
                 "usr_mobile_country_code": formData.usr_mobile_country_code,
                 "usr_email": formData.email,
                 "notes": formData.notes,
-                "is_status": formData.status
+                "is_status": formData.status,
+                "attempt_blocked": formData.attempt_blocked
             }
             setLoading(true);
             dispatch(updateUserByAdmin({ data, id: userId })).then((res) => {
@@ -338,6 +341,10 @@ const Accounts = ({ userId }) => {
                     <CustomSelect label={'Roles'} isRequired={true} data={roles} disabled={isDisabled} />
                     <CustomToggleButton label='Status' isRequired={true} value={formData.status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                        disabled={isDisabled}
+                    />
+                    <CustomToggleButton label='Blocked' isRequired={true} value={formData.attempt_blocked}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, attempt_blocked: value })) }}
                         disabled={isDisabled}
                     />
                     <CustomTextarea label={'Notes'} placeholder={'Remarks'} name={'notes'}

@@ -61,6 +61,21 @@ export default function Users() {
                 }
             }
         },
+        {
+            field: 'attempt_blocked', headerName: 'Blocked', minWidth: 150,
+            cellRenderer: (params) => {
+                let blocked = params.data?.attempt_blocked;
+                if (blocked) {
+                    return (
+                        <Chip color={"danger"} variant="dot">{'Blocked'}</Chip>
+                    )
+                } else {
+                    return (
+                        <Chip color={"success"} variant="dot">{"Active"}</Chip>
+                    )
+                }
+            }
+        },
         { field: 'usr_email', headerName: 'Email', minWidth: 150 },
         { field: 'usr_mobile_number', headerName: 'Mobile', minWidth: 150 },
         { field: 'registration_method', headerName: 'Method of Registration', minWidth: 120 },

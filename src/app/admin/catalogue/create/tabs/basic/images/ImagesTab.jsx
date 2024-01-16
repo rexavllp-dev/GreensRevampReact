@@ -268,43 +268,11 @@ const ImagesTab = () => {
 
     const handleFileUpload = async (event) => {
         let files = null;
-        dispatch(updateEvent({
-            event_id: id,
-            data: formData
-        })).then((response) => {
-            files = event.target.files;
-
-            const image = new Image();
-            image.src = URL.createObjectURL(files[0]);
-
-            let imgWidth, imgHeight;
-            image.onload = function () {
-                imgWidth = this.width;
-                imgHeight = this.height;
-
-                if (imgWidth == 1920 && imgHeight == 1080) {
-                    const imageFormData = new FormData();
-                    for (let i = 0; i < files.length; i++) {
-                        // setEventImages((prevImages) => [...prevImages, files[i]])
-                        imageFormData.append('event_image', files[i]);
-                    }
-                    // imageFormData.append('file', file);
-                    dispatch(uploadEventImg({ formData: imageFormData, event_id: id }))
-                }
-                else {
-                    toast.error("Please upload image of 1920x1080 dimensions")
-                }
-            };
-
-        }).catch((err) => {
-            console.log(err)
-            toast.error("Please fill the fields before upload")
-        })
 
     }
 
     const handleDeleteImage = (imgname) => {
-        dispatch(deleteEventImage({ data: { image_name: imgname }, event_id: id }))
+
     }
 
 

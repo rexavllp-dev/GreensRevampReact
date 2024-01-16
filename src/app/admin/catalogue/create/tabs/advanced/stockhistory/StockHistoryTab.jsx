@@ -1,17 +1,14 @@
 
 import React, { useState } from 'react'
-import "./ReviewsTab.scss"
+import "./StockHistoryTab.scss"
 import CustomTable from '@/components/customtable/CustomTable'
 import { Chip } from '@nextui-org/react'
 import SearchInput from '@/library/input/searchinput/SearchInput'
 
-function ReviewsTab() {
+function StockHistoryTab() {
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
-        {
-            headerName: 'User Name', field: 'user_name'
-        },
         {
             headerName: 'Product', field: 'product',
         },
@@ -49,4 +46,4 @@ function ReviewsTab() {
     )
 }
 
-export default ReviewsTab
+export default StockHistoryTab

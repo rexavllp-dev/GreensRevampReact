@@ -19,7 +19,7 @@ export default function ProductsTab() {
     {
       id: 3,
       name: 'Categories',
-      url: '/admin/categories',
+      url: '/admin/products/categories',
     },
     {
       id: 4,

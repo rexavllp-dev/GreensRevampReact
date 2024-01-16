@@ -33,7 +33,7 @@ const Login = () => {
             <CustomTypography content="OR" color="GRAY-DARK" size="SMALL" weight="MEDIUM" />
           </div>
           <div className='header'>
-            <CustomTypography content="Login" color="BLACK" size="SUPER-LARGE" weight="MEDIUM" />
+            <CustomTypography content="Sign In" color="BLACK" size="SUPER-LARGE" weight="MEDIUM" />
             {/* <CustomTypography content="Lorem ipsum dolor" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
           </div>
           <LoginPage />

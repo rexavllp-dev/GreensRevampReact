@@ -261,7 +261,7 @@ const LoginPage = () => {
                             </div>
                             <div className="actionbtn-wrapper">
                                 <div className="actionbtn" onClick={() => { setIsLoginWithOTP(true) }}>
-                                    <CustomTypography content="Login using OTP" color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
+                                    <CustomTypography content="Sign in using OTP" color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
                                 </div>
                                 <div className="actionbtn" onClick={() => { router.push('/auth/forgotpassword') }}>
                                     <CustomTypography content="Forgot Password?" style={{ cursor: 'pointer', borderBottom: '1px solid', display: 'inline' }} color="GRAY-DARK" size="MEDIUM" weight="REGULAR" />
@@ -271,12 +271,12 @@ const LoginPage = () => {
 
                 }
 
-                <CustomButton fullWidth label={isLoginWithOTP ? 'Get OTP' : 'Login'} onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'} />
+                <CustomButton fullWidth label={isLoginWithOTP ? 'Get OTP' : 'Sign in'} onClick={handleSubmit} loading={loading} variant='primary' height={isMobileView ? '42px' : '50px'} />
                 {
                     isLoginWithOTP &&
                     <div className="bottom-action">
                         <div className="actionbtn" onClick={() => { setIsLoginWithOTP(false) }}>
-                            <CustomTypography content="Use password" style={{ cursor: 'pointer', borderBottom: '1px solid', display: 'inline' }} color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
+                            <CustomTypography content="Use Email Address" style={{ cursor: 'pointer', borderBottom: '1px solid', display: 'inline' }} color="PRIMARY" size="MEDIUM" weight="MEDIUM" />
                         </div>
                     </div>
                 }

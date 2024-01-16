@@ -76,9 +76,9 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
         // cookies.set('refreshToken', response.data.result?.refreshToken);
         // cookies.set('user', JSON.stringify(response.data.result?.user));
 
-         typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
-         typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
-         typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
+        typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
+        typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
 
         Axios.interceptors?.request.use((config) => {
             config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
@@ -108,9 +108,9 @@ export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname,
             // cookies.set('refreshToken', refresh_token);
             // cookies.set('user', JSON.stringify(user));
 
-             typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(user));
-             typeof window !== "undefined" && window.localStorage.setItem('accessToken', access_token);
-             typeof window !== "undefined" && window.localStorage.setItem('refreshToken', refresh_token);
+            typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(user));
+            typeof window !== "undefined" && window.localStorage.setItem('accessToken', access_token);
+            typeof window !== "undefined" && window.localStorage.setItem('refreshToken', refresh_token);
 
             Axios.interceptors?.request.use((config) => {
                 config.headers['Authorization'] = `Bearer ${access_token}`;
@@ -146,9 +146,9 @@ export const verifyLoginOtp = createAsyncThunk('verifyLoginOtp', async ({ data }
     try {
         const response = await auth.verifyLoginOtp(data);
 
-         typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
-         typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
-         typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
+        typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
+        typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
         // Axios.interceptors.request.use((config) => {
         //     config.headers['Authorization'] = `Bearer ${response.data.result?.accessToken}`;
         //     return config;
@@ -161,7 +161,7 @@ export const verifyLoginOtp = createAsyncThunk('verifyLoginOtp', async ({ data }
     }
 })
 
-export const resendLoginOtp = createAsyncThunk('resendLoginOtp', async ({ data }, thunkAPI) => {
+export const resendLoginOtp = createAsyncThunk('resendLoginOtp', async (data, thunkAPI) => {
     try {
         const response = await auth.resendLoginOtp(data);
         return thunkAPI.fulfillWithValue(response.data);
@@ -260,9 +260,9 @@ export const verifyOtp = createAsyncThunk('verifyOtp', async ({ data, from }, th
         // cookies.set('refreshToken', response.data.result?.refreshToken);
         // cookies.set('user', JSON.stringify(response.data.result?.user));
 
-         typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
-         typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
-         typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
+        typeof window !== "undefined" && window.localStorage.setItem('user', JSON.stringify(response.data.result?.user));
+        typeof window !== "undefined" && window.localStorage.setItem('accessToken', response.data.result?.accessToken);
+        typeof window !== "undefined" && window.localStorage.setItem('refreshToken', response.data.result?.refreshToken);
 
 
         // Axios.interceptors.request.use((config) => {
@@ -308,9 +308,9 @@ const authSlice = createSlice({
             cookies.remove("refreshToken");
             cookies.remove("user")
 
-             typeof window !== "undefined" && window.localStorage.removeItem('user');
-             typeof window !== "undefined" && window.localStorage.removeItem('accessToken');
-             typeof window !== "undefined" && window.localStorage.removeItem('refreshToken');
+            typeof window !== "undefined" && window.localStorage.removeItem('user');
+            typeof window !== "undefined" && window.localStorage.removeItem('accessToken');
+            typeof window !== "undefined" && window.localStorage.removeItem('refreshToken');
         },
     },
     extraReducers: (builder) => {

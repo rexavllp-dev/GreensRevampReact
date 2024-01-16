@@ -1,5 +1,5 @@
 .optionstab {
-    padding-right: 20px;
+  padding-right: 20px;
   .createoption {
     width: 100%;
     display: flex;
@@ -18,13 +18,13 @@
     gap: 24px;
     width: 100%;
 
-    .leftsection, .rightsection {
+    .leftsection,
+    .rightsection {
       width: 50%;
-
     }
   }
 
-  .searchinput{
+  .searchinput {
     margin-top: 20px;
     margin-bottom: 14px;
   }
@@ -34,4 +34,14 @@
     gap: 20px;
     width: 50%;
   }
+
+  .icon {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; /* Specify the animation property and duration */
+    
+    &:hover {
+      transform: scale(1.1); /* Specify the desired zoom-in factor */
+    }
+  }
+
 }

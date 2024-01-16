@@ -11,8 +11,8 @@ function SearchableKeywords() {
     return (
         <div className='searchablesection flex'>
             <div className="section">
-                <CustomTextarea label={'Description'}
-                    placeholder={'Description'}
+                <CustomTextarea label={'Enter Keywords'}
+                    placeholder={'Enter Keywords'}
                     name={'product_desc'} value={formData.product_desc}
                     onChange={(e) => { handleInputChange({ e }) }} />
                 <div className="flex justify-end mt-3">
