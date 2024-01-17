@@ -38,7 +38,9 @@ export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, 
                 readOnly
             />
             {showCalendar &&
-                <Calendar minDate={new Date()} onChange={handleCalendarChange} maxDate={maxDate} value={value} />
+                <Calendar minDate={new Date()}
+                 onChange={handleCalendarChange} 
+                 maxDate={maxDate} value={value} />
             }
             <p className="errmsg">{isInvalid ? errMsg : ''}</p>
         </div>

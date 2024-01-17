@@ -191,14 +191,14 @@ function Categories() {
 
   return (
     <div className='categories_section_wrapper'>
-      <div className="breadcrumb">
+      <div className="breadcrumb ">
         <BreadCrumbs />
       </div>
-      <div className="title mt-3 mb-3">
-        <div className="backbtn mb-3" onClick={() => router.back()}>
+      <div className="title flex items-center gap-3  mt-3 mb-5">
+        <div className="backbtn " onClick={() => router.back()}>
           <FaArrowLeft />
         </div>
-        <CustomTypography content={"Users"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
+        <CustomTypography content={"Categories"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
       </div>
       <div className='categories_section'>
         <div className="categorytree">

@@ -5,7 +5,7 @@ import CustomTypography from "@/library/typography/CustomTypography";
 import SearchInput from "@/library/input/searchinput/SearchInput";
 import CustomButton from "@/library/buttons/CustomButton";
 import { FaArrowLeft } from "react-icons/fa";
-import './Catalogue.scss'
+import './Tags.scss'
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ import { CameraIcon } from "@/components/customicons/CameraIcon";
 import { getAllProducts } from "@/services/features/productSlice";
 
 
-export default function Catalogue() {
+export default function Tags() {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ export default function Catalogue() {
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         {
-            headerName: 'Thumbnail', field: 'prod_image',
+            headerName: 'Logo', field: 'logo',
             cellRenderer: (params) => {
                 return (
                     <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
@@ -41,18 +41,6 @@ export default function Catalogue() {
             headerName: 'Name', field: 'prod_name'
         },
         {
-            headerName: 'Stock', field: 'stock',
-        },
-        {
-            headerName: 'Price', field: 'price',
-        },
-        {
-            headerName: 'SKU', field: 'sku',
-        },
-        {
-            headerName: 'Brad Code', field: 'brand_code',
-        },
-        {
             headerName: 'Status', field: 'status',
             cellRenderer: (params) => {
                 const isActive = params.data?.is_status;
@@ -61,15 +49,14 @@ export default function Catalogue() {
                 )
             }
         },
+        {
+            headerName: 'Created', field: 'created_at'
+        },
     ]);
-
-    useEffect(() => {
-        // dispatch(getAllUsers({ data: {} }))
-    }, [])
 
 
     return (
-        <div className="cataloguepage">
+        <div className="tagspage">
             <div className="breadcrumb">
                 <BreadCrumbs />
             </div>
@@ -77,7 +64,7 @@ export default function Catalogue() {
                 <div className="backbtn" onClick={() => router.back()}>
                     <FaArrowLeft />
                 </div>
-                <CustomTypography content={"Products"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
+                <CustomTypography content={"Tags"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
             </div>
 
             <div className="header">
@@ -85,9 +72,9 @@ export default function Catalogue() {
                     <SearchInput />
                 </div>
                 <div className="right">
-                    <CustomButton label="Delete" variant="danger" height={'42px'} />
-                    <CustomButton label="Create Product" variant="primary" height={'42px'}
-                        onClick={() => router.push('/admin/catalogue/create')} />
+                    {/* <CustomButton label="Delete" variant="danger" height={'42px'} /> */}
+                    <CustomButton label="Create Tags" variant="primary" height={'42px'}
+                        onClick={() => router.push('/admin/products/tags/create')} />
                 </div>
             </div>
             <CustomTable columnDefs={columnDefs} rowData={[]} />

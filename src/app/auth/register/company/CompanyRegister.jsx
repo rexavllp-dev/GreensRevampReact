@@ -391,13 +391,13 @@ const CompanyRegister = () => {
             //         }))
             //     }
             // } else {
-                const re = /^[A-Za-z\s'.-]+$/;
-                // if value is not blank, then test the regex
-                if (e.target?.value === '' || re.test(e.target?.value)) {
-                    setFormData((prev) => ({
-                        ...prev, [e.target.name]: e.target.value
-                    }))
-                }
+            const re = /^[A-Za-z\s'.-]+$/;
+            // if value is not blank, then test the regex
+            if (e.target?.value === '' || re.test(e.target?.value)) {
+                setFormData((prev) => ({
+                    ...prev, [e.target.name]: e.target.value
+                }))
+            }
             // }
         } else {
             setFormData((prev) => ({
@@ -478,6 +478,8 @@ const CompanyRegister = () => {
                 setLoading(false)
             })
             // router.push('/auth/verifyemail/?orgin=company', { scroll: true });
+        } else {
+            toast.error("Please enter all mandatory fields");
         }
     }
 

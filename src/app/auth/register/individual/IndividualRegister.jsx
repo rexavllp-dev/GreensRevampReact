@@ -295,6 +295,8 @@ const IndividualRegister = () => {
             })
 
             // router.push('/auth/verifyemail/?orgin=individual', { scroll: true });
+        }else {
+            toast.error("Please enter all mandatory fields");
         }
     }
 

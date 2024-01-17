@@ -88,46 +88,13 @@ const GeneralTab = () => {
             <div className="form">
 
                 <div className="stack">
-                    <CustomCalendar
-                        name={'trade_license_expiry'}
-                        label='New Product Start Date'
-                        value={formData.trade_license_expiry}
-                        // isInvalid={errors.trade_license_expiry.error}
-                        // errMsg={errors.trade_license_expiry.message}
-                        onChange={(date) => {
-                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
-                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
-                        }}
-                        isRequired={true}
-                    />
-
-
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Enter back in stock days ' label={'Back in stock days'}
-                        isRequired={true}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
-                    />
+                <CustomSelect label={'Choose Badge'} data={[]}
+                        name={'badges'} onChange={(e) => { }} />
                 </div>
 
-                <div className="stack">
-                    <CustomCalendar
-                        name={'trade_license_expiry'}
-                        label='New Product End Date'
-                        value={formData.trade_license_expiry}
-                        // isInvalid={errors.trade_license_expiry.error}
-                        // errMsg={errors.trade_license_expiry.message}
-                        onChange={(date) => {
-                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
-                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
-                        }}
-                        isRequired={true}
-                    />
+                {/* <div className="stack">
 
-                </div>
+                </div> */}
             </div>
             <div className="savebtn">
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />

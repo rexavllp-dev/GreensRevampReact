@@ -34,12 +34,12 @@ export default function ProductsTab() {
     {
       id: 6,
       name: 'Brands',
-      url: '/admin/brands',
+      url: '/admin/products/brands',
     },
     {
       id: 7,
       name: 'Tags',
-      url: '/admin/tags',
+      url: '/admin/products/tags',
     },
     {
       id: 8,

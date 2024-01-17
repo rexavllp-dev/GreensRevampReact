@@ -17,7 +17,7 @@ const CustomTextarea = ({label, placeholder, name, value, onChange, disabled}) =
         label: "custominput-label",
         inputWrapper: ["rounded", 'input-wrapper'],
         input: [
-          "custom-input"
+          "custom-input custom-textarea"
         ]
       }}
     />

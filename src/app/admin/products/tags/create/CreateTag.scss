@@ -1,0 +1,19 @@
+.brands_section_wrapper {
+    padding: 24px;
+  
+    .brands_section {
+      display: flex;
+      gap: 20px;
+  
+      .forms {
+        width: 70%;
+      }
+  
+      .brandstab {
+        display: flex;
+        flex-direction: column;
+        max-width: 500px;
+      }
+    }
+  }
+  

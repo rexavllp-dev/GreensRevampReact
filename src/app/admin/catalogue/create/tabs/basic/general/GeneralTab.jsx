@@ -5,46 +5,83 @@ import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomSelect from '@/library/select/custom-select/CustomSelect'
 import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
 import CustomTextarea from '@/library/textarea/CustomTextarea'
-import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
-import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
-import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
-import { createUserByAdmin } from '@/services/features/userSlice';
-import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './GeneralTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
+import { Card, Tab, Tabs } from '@nextui-org/react';
+import CustomMultiSelect from '@/library/select/custom-multi-select/CustomMultiSelect';
 
 const GeneralTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
+    const [selected, setSelected] = React.useState("English");
+
     const roles = [
         { label: 'Customer', value: 1 },
         { label: 'Admin', value: 2 },
-        { label: 'Delivery', value: 3 },
+        { label: 'Delivery', value: 3 }
+    ]
+
+    const categories = [
+        { label: 'category1', value: 1 },
+        { label: 'category2', value: 2 },
+    ]
+
+    const tags = [
+        { label: 'tag1', value: 1 },
+        { label: 'tag2', value: 2 },
+    ]
+
+    const storageTypes = [
+        { label: 'Frozen', value: 'Frozen' },
+        { label: 'Dry', value: 'Dry' },
+        { label: 'Chilled', value: 'Chilled' }
+    ]
+
+    const returnTypes = [
+        { label: 'Returnable', value: 'Returnable' },
+        { label: 'Non Returnable', value: 'Non Returnable' }
+    ]
+
+    const saleUnits = [
+        { label: 'Packet', value: 'Packet' },
+        { label: 'Piece', value: 'Piece' }
+    ]
+
+    const taxClasses = [
+        {
+            label: 'vat5%',
+            value: 'vat5%'
+        }
     ]
 
     const [formData, setFormData] = React.useState({
-        product_name: '',
-        product_desc:'',
-        tax_class: '',
-        storage_type:'',
-        tags:'',
-        expiry_date:'',
-        brand_name: '',
+        prd_name: '',
+        prd_description: '',
+        prd_tax_class: '',
+        prd_storage_type: '',
+        prd_tags: '',
+        prd_expiry_date: '',
+        prd_brand_id: '',
+        prd_sales_unit: '',
         categories: [],
 
         status: true,
     })
 
 
+    useEffect(() => {
+        console.table(formData)
+    }, [formData])
+
     const [loading, setLoading] = React.useState(false);
 
-    const handleInputChange = ({ e, country }) => {
+    const handleInputChange = ({ e }) => {
 
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
@@ -58,28 +95,49 @@ const GeneralTab = () => {
 
     }
 
+    const [languages, setLanguages] = React.useState([
+        {
+            name: 'English',
+        },
+        {
+            name: 'Arabic',
+        }
+    ])
+
     return (
         <div className='generaltab'>
 
             <div className="form">
 
                 <div className="stack">
+                    <Card className='p-3'>
+                        <Tabs aria-label="Options"
+                            selectedKey={selected}
+                            onSelectionChange={setSelected}
+                        >
+                            {
+                                languages.map((l, i) => (
+                                    <Tab key={l.name} title={l.name} className='flex flex-col gap-3'>
+                                        <CustomInput name='prd_name' type='text'
+                                            maxLength={100}
+                                            placeholder='Product Name' label={'Product Name'}
+                                            onChange={(e) => { handleInputChange({ e }) }}
+                                            value={formData.prd_name}
+                                        />
+                                        <CustomTextarea label={'Description'}
+                                            placeholder={'Description'}
+                                            name={'prd_description'} value={formData.prd_description}
+                                            onChange={(e) => { handleInputChange({ e }) }} />
+                                    </Tab>
+                                ))
+                            }
 
-                    <CustomInput name='product_name' type='text'
-                        maxLength={100}
-                        placeholder='Product Name' label={'Product Name'}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.product_name}
-                    />
-                    <CustomTextarea label={'Description'}
-                        placeholder={'Description'}
-                        name={'product_desc'} value={formData.product_desc}
-                        onChange={(e) => { handleInputChange({ e }) }} />
+                        </Tabs>
+                    </Card>
 
-
-                    <CustomSelect label={'Tax Class'} data={roles} />
-                    <CustomSelect label={'Storage Type'} data={roles} />
-                    <CustomSelect label={'Tags'} data={roles} />
+                    <CustomSelect label={'Tax Class'} data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Storage Type'} data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomMultiSelect label={'Tags'} data={tags} name={'prd_tags'} onChange={(e) => { handleInputChange({ e }) }} />
                     <CustomCalendar
                         name={'expiry_date'}
                         label='Expiry Date'
@@ -94,24 +152,15 @@ const GeneralTab = () => {
                 </div>
 
                 <div className="stack">
+                    <CustomSelect label={'Product Return Type'} data={returnTypes}
+                        name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Brand Name' label={'Brand Name'}
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                    />
+                    <CustomMultiSelect label={'Categories'} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomSelect label={'Categories'} data={roles} />
-                    <CustomSelect label={'Product Return Type'} data={roles} />
-
-                    <CustomInput name='first_name' type='text'
-                        maxLength={100}
-                        placeholder='Sales Unit' label={'Sales Unit'}
-
-                        onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                    />
+                    <CustomSelect label={'Product Return Type'} data={returnTypes}
+                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Sales Unit'} data={saleUnits}
+                        name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }} />
 
                     <CustomToggleButton label='Dashboard Status' value={formData.status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}

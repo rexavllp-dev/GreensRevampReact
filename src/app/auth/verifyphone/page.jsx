@@ -144,7 +144,7 @@ const VerifyPhone = () => {
                     <div className="header">
                         <p className="title">Verify Your Phone Number</p>
                         <div className="changenumber">
-                            <p>Enter OTP received in {userInfo?.result?.usr_mobile_number}</p>
+                            <p>Enter OTP received in {userInfo?.result?.country_dial_code ? (userInfo?.result?.country_dial_code + " " + userInfo?.result?.usr_mobile_number) : ''}</p>
                             <Link href={{
                                 pathname: '/auth/updatenum', query: {
                                     orgin: from,
