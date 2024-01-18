@@ -18,6 +18,7 @@ import './ImagesTab.scss'
 import MediaUpload from '@/library/mediaupload/MediaUpload';
 import ImageUpload from '@/components/imageupload/ImageUpload';
 import { Divider } from '@nextui-org/react';
+import { uploadProductImage } from '@/services/features/productSlice';
 
 const ImagesTab = () => {
 
@@ -82,193 +83,51 @@ const ImagesTab = () => {
     }
 
 
-    const handleInputChange = ({ e, country }) => {
-
-        if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-
-            const re = /^[A-Za-z\s'.-]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, [e.target.name]: e.target.value
-                }))
-            }
-            // }
-
-        } else {
-            setFormData((prev) => ({
-                ...prev, [e.target.name]: e.target.value
-            }))
-        }
-
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [e.target.name]: {
-                error: false,
-                message: ''
-            }
+    const handleInputChange = ({ e }) => {
+        setFormData((prev) => ({
+            ...prev, [e.target.name]: e.target.value
         }))
 
     }
 
-    const validateForm = () => {
-        let isValid = true;
-
-        // Validate first name
-        if (!formData.first_name?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                first_name: { error: true, message: 'First name is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                first_name: { error: false, message: '' }
-            }));
-        }
-
-        // Validate last name
-        if (!formData.last_name?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                last_name: { error: true, message: 'Last name is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                last_name: { error: false, message: '' }
-            }));
-        }
-
-        // Validate mobile
-        if (!formData.mobile?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                mobile: { error: true, message: 'Mobile number is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                mobile: { error: false, message: '' }
-            }));
-        }
-        // Validate email
-        if (!isEmailValid(formData.email)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: { error: true, message: 'Enter a valid email address' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: { error: false, message: '' }
-            }));
-        }
-
-        // Validate password
-        if (!formData.password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password is required' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(UPPERCASE_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one uppercase letter' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(NUMBER_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one number' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(SPECIAL_CHARS_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one special character' }
-            }));
-            isValid = false;
-        }
-        else if (formData.password?.length < 8) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must be at least 8 characters long' }
-            }));
-            isValid = false;
-        }
-        else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: false, message: '' }
-            }));
-        }
-
-        // Validate confirm password
-        if (!formData.confirm_password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Confirm password is required' }
-            }));
-            isValid = false;
-        }
-        else if ((formData.password !== formData.confirm_password) || (!formData.confirm_password?.length)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Passwords do not match' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: false, message: '' }
-            }));
-        }
-
-        return isValid;
-    };
 
 
     const handleSubmit = () => {
-        if (validateForm()) {
-            let data = {
-                "usr_firstname": formData.first_name,
-                "usr_lastname": formData.last_name,
-                "usr_mobile_number": formData.mobile,
-                "usr_mobile_country_code": formData.usr_mobile_country_code,
-                "usr_password": formData.password,
-                "usr_email": formData.email,
-                "notes": formData.notes,
-                "is_status": formData.status
-            }
-            setLoading(true);
-            dispatch(createUserByAdmin({ data })).then((res) => {
-                if (res.payload?.status === 200) {
-                    toast.success(res.payload?.message);
-                    router.back()
-                } else {
-                    toast.error(res.payload?.message);
-                }
-                setLoading(false);
-            }).catch((err) => {
-                toast.error(err.message);
-                setLoading(false)
-            })
 
-        }
+        setLoading(true);
+        dispatch(uploadProductImage({ data })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message);
+            }
+            setLoading(false);
+        }).catch((err) => {
+            toast.error(err.message);
+            setLoading(false)
+        })
     }
 
     const handleFileUpload = async (event) => {
         let files = null;
-
+        let isBaseImage;
+        if (event.target.name === 'prd_additional_img') {
+            isBaseImage = false;
+        } else {
+            isBaseImage = true;
+        }
+        files = event.target.files;
+        // const file = files[0];
+        const productFormData = new FormData();
+        productFormData.append('files', files);
+        productFormData.append('isBaseImage', isBaseImage);
+        dispatch(uploadProductImage({ data: productFormData, id: 10 })).then((response) => {
+            if (response.payload?.success) {
+                toast.success(response.payload?.message);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     const handleDeleteImage = (imgname) => {
@@ -285,15 +144,11 @@ const ImagesTab = () => {
 
                     <CustomTypography content='Base Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <ImageUpload
-                        name={'event_img_path'}
+                        name={'prd_base_img'}
                         handleFileUpload={handleFileUpload}
                         // images={event?.images}
                         handleDeleteImage={handleDeleteImage}
                         haveUploadSize={true}
-                        uploadSize={{
-                            "width": '1920',
-                            "height": '1080'
-                        }}
                         required={true}
                     />
 
@@ -302,15 +157,11 @@ const ImagesTab = () => {
                 <div className="stack">
                     <CustomTypography content='Additional Images' color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <ImageUpload
-                        name={'event_img_path'}
+                        name={'prd_additional_img'}
                         handleFileUpload={handleFileUpload}
                         // images={event?.images}
                         handleDeleteImage={handleDeleteImage}
                         haveUploadSize={true}
-                        uploadSize={{
-                            "width": '1920',
-                            "height": '1080'
-                        }}
                         required={true}
                     />
                 </div>

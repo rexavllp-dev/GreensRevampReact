@@ -37,7 +37,7 @@ const VerificationDetails = ({ params }) => {
 
     const handleVerify = () => {
         dispatch(approveCompany({ id: data?.usr_company })).then((response) => {
-            router.push('/admin/advanced/verification')
+            router.push('/admin/advanced/users')
             toast.success(response?.payload?.message)
         }).catch((error) => {
             console.log('failed to approve')
@@ -46,7 +46,7 @@ const VerificationDetails = ({ params }) => {
     }
     const handleReject = () => {
         dispatch(rejectCompany({ id: data?.usr_company })).then((response) => {
-            router.push('/admin/advanced/verification')
+            router.push('/admin/advanced/users')
             toast.success(response?.payload?.message)
         }).catch((error) => {
             console.log('failed to approve')
@@ -215,8 +215,10 @@ const VerificationDetails = ({ params }) => {
 
             <div>
                 <div className="btncontainer">
-                    <button className='verify' disabled={data?.verification_status} onClick={() => handleVerify()}>Verify</button>
-                    <button className='reject' disabled={!data?.verification_status} onClick={() => handleReject()}>Reject</button>
+                    <button className='verify' disabled={data?.status_name !== 'Pending Approval' && data?.verification_status}
+                        onClick={() => handleVerify()}>{data?.status_name !== 'Pending Approval' && data?.verification_status ? 'Verified' : 'Verify'}</button>
+                    <button className='reject' disabled={data?.status_name !== 'Pending Approval' && !data?.verification_status}
+                        onClick={() => handleReject()}>{data?.status_name !== 'Pending Approval' && !data?.verification_status ? 'Rejected' : 'Reject'}</button>
                 </div>
             </div>
         </div>

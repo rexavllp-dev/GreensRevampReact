@@ -13,6 +13,7 @@ import './GeneralTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import { Card, Tab, Tabs } from '@nextui-org/react';
 import CustomMultiSelect from '@/library/select/custom-multi-select/CustomMultiSelect';
+import { createProduct } from '@/services/features/productSlice';
 
 const GeneralTab = () => {
 
@@ -60,6 +61,13 @@ const GeneralTab = () => {
         }
     ]
 
+    const brands = [
+        {
+            label: 'Brand 1',
+            value: 1
+        }
+    ]
+
     const [formData, setFormData] = React.useState({
         prd_name: '',
         prd_description: '',
@@ -69,9 +77,10 @@ const GeneralTab = () => {
         prd_expiry_date: '',
         prd_brand_id: '',
         prd_sales_unit: '',
+        prd_return_type: '',
         categories: [],
-
-        status: true,
+        prd_status: false,
+        prd_dashboard_status: false,
     })
 
 
@@ -92,7 +101,21 @@ const GeneralTab = () => {
 
 
     const handleSubmit = () => {
+        setLoading(true);
+        let data = { ...formData, prd_expiry_date: new Date(formData.prd_expiry_date) }
+        dispatch(createProduct({ data: data })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+                let id = res.payload?.data[0]?.id;
+                router.push('/admin/catalogue/create/?id=' + id, { scroll: true });
 
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     const [languages, setLanguages] = React.useState([
@@ -141,11 +164,11 @@ const GeneralTab = () => {
                     <CustomCalendar
                         name={'expiry_date'}
                         label='Expiry Date'
-                        value={formData.expiry_date}
+                        value={formData.prd_expiry_date}
                         // isInvalid={errors.trade_license_expiry.error}
                         // errMsg={errors.trade_license_expiry.message}
                         onChange={(date) => {
-                            setFormData((prevData) => ({ ...prevData, expiry_date: date }));
+                            setFormData((prevData) => ({ ...prevData, prd_expiry_date: date }));
                             // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
                         }}
                     />
@@ -153,21 +176,22 @@ const GeneralTab = () => {
 
                 <div className="stack">
                     <CustomSelect label={'Product Return Type'} data={returnTypes}
-                        name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
+                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} />
 
                     <CustomMultiSelect label={'Categories'} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomSelect label={'Product Return Type'} data={returnTypes}
-                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Brands'} data={brands}
+                        name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
+
                     <CustomSelect label={'Sales Unit'} data={saleUnits}
                         name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomToggleButton label='Dashboard Status' value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                    <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
                     />
 
-                    <CustomToggleButton label='Product Status' value={formData.status}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
+                    <CustomToggleButton label='Product Status' value={formData.prd_status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
                     />
                 </div>
             </div>

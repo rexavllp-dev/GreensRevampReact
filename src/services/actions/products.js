@@ -12,18 +12,50 @@ export const products = {
     },
 
     //Create new product
-    createProduct: () => {
+    createProduct: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/products/create-product')
+            Axios.post('/products/create-product', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
     //Update product
-    updateProduct: () => {
+    updateProduct: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.put('/products/update-product')
+            Axios.put('/products/update-product', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Create price
+    createPrice: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-price', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Update price
+    updatePrice: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-price/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Upload Product image
+    uploadProductImage: (data, id) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.post('/products/images/' + id, data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

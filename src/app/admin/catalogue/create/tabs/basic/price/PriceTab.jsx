@@ -16,54 +16,25 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './PriceTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
+import { createPrice } from '@/services/features/productSlice';
 
 const PriceTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const roles = [
-        { label: 'Customer', value: 1 },
-        { label: 'Admin', value: 2 },
-        { label: 'Delivery', value: 3 },
+    const priceTypes = [
+        { label: 'Percentage', value: "percentage" },
+        { label: 'Fixed', value: 'fixed' },
     ]
 
     const [formData, setFormData] = React.useState({
-        first_name: '',
-        last_name: '',
-        mobile: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-        status: true,
-        notes: ''
-    })
-
-    const [errors, setErrors] = React.useState({
-        first_name: {
-            error: false,
-            message: ''
-        },
-        last_name: {
-            error: false,
-            message: ''
-        },
-        mobile: {
-            error: false,
-            message: ''
-        },
-        email: {
-            error: false,
-            message: ''
-        },
-        password: {
-            error: false,
-            message: ''
-        },
-        confirm_password: {
-            error: false,
-            message: ''
-        }
+        product_price: '',
+        special_price: '',
+        special_price_type: '',
+        special_price_start: '',
+        special_price_end: '',
+        product_id: ''
     })
 
     const [loading, setLoading] = React.useState(false);
@@ -72,219 +43,26 @@ const PriceTab = () => {
         console.log(formData);
     }, [formData])
 
-
-    const handlePhoneChange = (name, value, countryCode) => {
-        const re = /^[0-9\b]+$/;
-        // if value is not blank, then test the regex
-        if (value === '' || re.test(value)) {
-            setFormData((prev) => ({
-                ...prev, [name]: value, usr_mobile_country_code: countryCode
-            }))
-        }
-    }
-
-
-    const handleInputChange = ({ e, country }) => {
-
-        if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-            // const firstLetter = e.target.value.charAt(0);
-            // if (e.target.name === 'first_name' && !formData.first_name?.trim()) {
-            //     //First letter should not be a number
-            //     const re = /^[A-Za-z\s'.-]+$/;
-            //     // if value is not blank, then test the regex
-            //     if (e.target?.value === '' || re.test(firstLetter)) {
-            //         setFormData((prev) => ({
-            //             ...prev, [e.target.name]: e.target.value
-            //         }))
-            //     }
-            // } else if (e.target.name === 'last_name' && !formData.last_name?.trim()) {
-            //     //First letter should not be a number
-            //     const re = /^[A-Za-z\s'.-]+$/;
-            //     // if value is not blank, then test the regex
-            //     if (e.target?.value === '' || re.test(firstLetter)) {
-            //         setFormData((prev) => ({
-            //             ...prev, [e.target.name]: e.target.value
-            //         }))
-            //     }
-            // } else {
-            const re = /^[A-Za-z\s'.-]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, [e.target.name]: e.target.value
-                }))
-            }
-            // }
-
-        } else {
-            setFormData((prev) => ({
-                ...prev, [e.target.name]: e.target.value
-            }))
-        }
-
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [e.target.name]: {
-                error: false,
-                message: ''
-            }
+    const handleInputChange = ({ e }) => {
+        setFormData((prev) => ({
+            ...prev, [e.target.name]: e.target.value
         }))
-
     }
-
-    const validateForm = () => {
-        let isValid = true;
-
-        // Validate first name
-        if (!formData.first_name?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                first_name: { error: true, message: 'First name is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                first_name: { error: false, message: '' }
-            }));
-        }
-
-        // Validate last name
-        if (!formData.last_name?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                last_name: { error: true, message: 'Last name is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                last_name: { error: false, message: '' }
-            }));
-        }
-
-        // Validate mobile
-        if (!formData.mobile?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                mobile: { error: true, message: 'Mobile number is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                mobile: { error: false, message: '' }
-            }));
-        }
-        // Validate email
-        if (!isEmailValid(formData.email)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: { error: true, message: 'Enter a valid email address' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: { error: false, message: '' }
-            }));
-        }
-
-        // Validate password
-        if (!formData.password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password is required' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(UPPERCASE_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one uppercase letter' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(NUMBER_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one number' }
-            }));
-            isValid = false;
-        }
-        else if (!formData.password?.match(SPECIAL_CHARS_REGEX)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must contain at least one special character' }
-            }));
-            isValid = false;
-        }
-        else if (formData.password?.length < 8) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: true, message: 'Password must be at least 8 characters long' }
-            }));
-            isValid = false;
-        }
-        else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                password: { error: false, message: '' }
-            }));
-        }
-
-        // Validate confirm password
-        if (!formData.confirm_password?.length) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Confirm password is required' }
-            }));
-            isValid = false;
-        }
-        else if ((formData.password !== formData.confirm_password) || (!formData.confirm_password?.length)) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: true, message: 'Passwords do not match' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                confirm_password: { error: false, message: '' }
-            }));
-        }
-
-        return isValid;
-    };
 
 
     const handleSubmit = () => {
-        if (validateForm()) {
-            let data = {
-                "usr_firstname": formData.first_name,
-                "usr_lastname": formData.last_name,
-                "usr_mobile_number": formData.mobile,
-                "usr_mobile_country_code": formData.usr_mobile_country_code,
-                "usr_password": formData.password,
-                "usr_email": formData.email,
-                "notes": formData.notes,
-                "is_status": formData.status
+        setLoading(true);
+        dispatch(createPrice({ data: formData })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message);
             }
-            setLoading(true);
-            dispatch(createUserByAdmin({ data })).then((res) => {
-                if (res.payload?.status === 200) {
-                    toast.success(res.payload?.message);
-                    router.back()
-                } else {
-                    toast.error(res.payload?.message);
-                }
-                setLoading(false);
-            }).catch((err) => {
-                toast.error(err.message);
-                setLoading(false)
-            })
-
-        }
+            setLoading(false);
+        }).catch((err) => {
+            toast.error(err.message);
+            setLoading(false)
+        })
     }
 
     return (
@@ -294,54 +72,55 @@ const PriceTab = () => {
 
                 <div className="stack">
 
-                    <CustomInput name='first_name' type='text'
+                    <CustomInput name='product_price' type='text'
                         maxLength={100}
                         placeholder='Price' label={'Price'}
-                        isRequired={true}
+                        // isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.first_name}
-                        isInvalid={errors.first_name.error}
-                        errMsg={errors.first_name.message}
+                        value={formData.product_price}
+                    // isInvalid={errors.product_price.error}
+                    // errMsg={errors.product_price.message}
                     />
                     <CustomInput
-                        name='last_name'
+                        name='special_price'
                         type='text'
                         maxLength={100}
                         placeholder='Special Price'
                         label={'Special Price'}
-                        isRequired={true}
+                        // isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.last_name}
-                        isInvalid={errors.last_name.error}
-                        errMsg={errors.last_name.message}
+                        value={formData.special_price}
+                    // isInvalid={errors.special_price.error}
+                    // errMsg={errors.special_price.message}
                     />
 
-                    <CustomSelect label={'Special Price Type'} isRequired={true} data={roles} />
+                    <CustomSelect label={'Special Price Type'} data={priceTypes} name={'special_price_type'}
+                        onChange={(e) => { handleInputChange({ e }) }} />
 
                 </div>
 
                 <div className="stack">
                     <CustomCalendar
-                        name={'trade_license_expiry'}
+                        name={'special_price_start'}
                         label='Special Price Start'
-                        value={formData.trade_license_expiry}
-                        // isInvalid={errors.trade_license_expiry.error}
-                        // errMsg={errors.trade_license_expiry.message}
+                        value={formData.special_price_start}
+                        // isInvalid={errors.special_price_start.error}
+                        // errMsg={errors.special_price_start.message}
                         onChange={(date) => {
-                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
-                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
+                            setFormData((prevData) => ({ ...prevData, special_price_start: date }));
+                            // setErrors((prevErrors) => ({ ...prevErrors, special_price_start: { error: false, message: '' } }));
                         }}
                         isRequired={true}
                     />
                     <CustomCalendar
-                        name={'trade_license_expiry'}
+                        name={'special_price_end'}
                         label='Special Price End'
-                        value={formData.trade_license_expiry}
-                        // isInvalid={errors.trade_license_expiry.error}
-                        // errMsg={errors.trade_license_expiry.message}
+                        value={formData.special_price_end}
+                        // isInvalid={errors.special_price_end.error}
+                        // errMsg={errors.special_price_end.message}
                         onChange={(date) => {
-                            setFormData((prevData) => ({ ...prevData, trade_license_expiry: date }));
-                            // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
+                            setFormData((prevData) => ({ ...prevData, special_price_end: date }));
+                            // setErrors((prevErrors) => ({ ...prevErrors, special_price_end: { error: false, message: '' } }));
                         }}
                         isRequired={true}
                     />
