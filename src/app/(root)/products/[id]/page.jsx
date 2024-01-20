@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactStars from "react-rating-stars-component";
 import CustomTypography from '@/library/typography/CustomTypography';
 import CustomButton from '@/library/buttons/CustomButton';
@@ -10,6 +10,8 @@ import Image from 'next/image';
 import ImageGallery from '@/components/imagegallery/ImageGallery';
 import { CiHeart } from 'react-icons/ci';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleProduct } from '@/services/features/productSlice';
 
 const cartItems = [
     {
@@ -70,24 +72,31 @@ const additionalDetails = [
     },
 ]
 
-const ProductDetails = () => {
+const ProductDetails = ({ params }) => {
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
+    const dispatch = useDispatch()
+    const { singleProduct } = useSelector((state) => state.products)
 
     const handleItemClick = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
 
+    useEffect(() => {
+        dispatch(getSingleProduct({ id: params.id }))
+    }, [params]);
+
     return (
         <div className='product_details_wrapper'>
             <div className="prd_images-wrapper">
                 <div className="prd_images">
-                    <ImageGallery />
+                    <ImageGallery data={singleProduct} />
                 </div>
                 <div className="prd_description">
                     <CustomTypography content="Description" color="GREY" size="LARGE" weight="SEMI-BOLD" />
                     <CustomTypography content="Lorem ipsum dolor sit amet consectetur. Vel dis fusce tristique donec. Curabitur nulla sit sit feugiat. Sit arcu volutpat augue eget donec non. Pellentesque scelerisque rutrum at mi consectetur gravida consectetur bibendum. Est nec malesuada morbi vulputate vulputate quisque. Ac non tellus lorem elementum lorem. Arcu ullamcorper tempus id gravida a scelerisque parturient mattis nulla. Nulla enim donec ut scelerisque et. Lectus leo elit mi laoreet lorem purus ac fermentum. Mi eget ut ut nunc nibh lacinia volutpat risus. Sed dui eget vitae morbi ornare lobortis. Et quisque viverra sagittis turpis in posuere. Aenean potenti varius lorem morbi tempus sit eget id. Velit sapien egestas urna tincidunt malesuada. Pulvinar et tortor tellus rhoncus suscipit nisl pretium amet ut."
-                        color="GREY" size="MEDIUM-SMALL" weight="REGUALR" />
+                        color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
+                    />
                 </div>
 
                 <div className='addional_details mt-5'>
@@ -95,9 +104,7 @@ const ProductDetails = () => {
                         <div key={index} className="accordion-item">
                             <div
                                 className={`accordion-header ${expandedIndex === index ? 'expanded' : ''}`}
-
                             >
-
                                 <div className="accordianitem">
                                     <div className="flex items-center justify-between cursor-pointer" onClick={() => handleItemClick(index)}>
                                         <CustomTypography content={item.label} color="GREY" size="MEDIUM-LARGE" weight="MEDIUM" />
@@ -120,12 +127,13 @@ const ProductDetails = () => {
             <div className="prd_details">
 
                 <div className="prd_item">
-                    <CustomTypography content="CDA Wafer Happy New Year 1x12 Pcs - LCU2134" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                    <CustomTypography content={singleProduct?.data?.product?.prd_name} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                    {/* <CustomTypography content="CDA Wafer Happy New Year 1x12 Pcs - LCU2134" color="BLACK" size="LARGE" weight="SEMI-BOLD" /> */}
                 </div>
 
                 <div className="prd_item">
-                    <ReactStars 
-                    classNames={'mb-1'}
+                    <ReactStars
+                        classNames={'mb-1'}
                         count={5}
                         onChange={() => {
 

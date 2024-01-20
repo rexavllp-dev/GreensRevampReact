@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './PriceTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
-import { createPrice } from '@/services/features/productSlice';
+import { createPrice, updatePrice } from '@/services/features/productSlice';
 
 const PriceTab = ({ id, data }) => {
 
@@ -34,13 +34,13 @@ const PriceTab = ({ id, data }) => {
         special_price_type: '',
         special_price_start: '',
         special_price_end: '',
-        product_id: ''
+        product_id: id
     })
 
     const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        if (data?.data) {
+        if (data?.data?.product?.product_price) {
             setFormData((prev) => ({
                 product_price: data?.data?.product?.product_price,
                 special_price: data?.data?.product?.special_price,
@@ -62,17 +62,31 @@ const PriceTab = ({ id, data }) => {
 
     const handleSubmit = () => {
         setLoading(true);
-        dispatch(createPrice({ data: formData })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload?.message);
-            } else {
-                toast.error(res.payload?.message);
-            }
-            setLoading(false);
-        }).catch((err) => {
-            toast.error(err.message);
-            setLoading(false)
-        })
+        if (data?.data?.product?.product_price) {
+            dispatch(updatePrice({ data: formData, id: id })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+                setLoading(false);
+            }).catch((err) => {
+                toast.error(err.message);
+                setLoading(false);
+            })
+        } else {
+            dispatch(createPrice({ data: formData })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+                setLoading(false);
+            }).catch((err) => {
+                toast.error(err.message);
+                setLoading(false);
+            })
+        }
     }
 
     return (

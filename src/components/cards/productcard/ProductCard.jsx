@@ -4,10 +4,12 @@ import './ProductCard.scss';
 import CustomTypography from '@/library/typography/CustomTypography';
 import { StarIcon, heartIconBlack } from '../../../../public/icons';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { useRouter } from 'next/navigation';
 
-const ProductCard = ({ img, title, specialPrice, normalPrice, rating }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id }) => {
 
   const { getTranslation } = useLanguage();
+  const router = useRouter()
 
   const Badge = () => {
     return (
@@ -21,7 +23,9 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating }) => {
       <div className="icon">
         <Image src={heartIconBlack} width={16} height={16} alt='icon' />
       </div>
-      <div className="cardimg_wrapper">
+      <div className="cardimg_wrapper" onClick={() => {
+        router.push('/products/' + id )
+      }}>
         <div className="cardimage">
           {/* <Image src={productImage} /> */}
           <Image src={img}

@@ -69,24 +69,17 @@ const InventoryTab = ({ id, data }) => {
         }
     }, [data])
 
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
-
-
     const handleInputChange = ({ e, country }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
         }))
     }
 
-
     const handleSubmit = () => {
         setLoading(true);
         console.log('clikced')
 
-        const data = {
+        const newData = {
             sku: formData.sku,
             stock_availability: formData.stock_availability,
             inventory_management: JSON.parse(formData.inventory_management),
@@ -100,7 +93,7 @@ const InventoryTab = ({ id, data }) => {
         }
 
         if (data?.data?.product?.product_inventory_id) {
-            dispatch(updateInventory({ data: data, id: id })).then((res) => {
+            dispatch(updateInventory({ data: newData, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                 } else {
@@ -112,7 +105,7 @@ const InventoryTab = ({ id, data }) => {
                 setLoading(false)
             })
         } else {
-            dispatch(createInventory({ data: data })).then((res) => {
+            dispatch(createInventory({ data: newData })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                 } else {

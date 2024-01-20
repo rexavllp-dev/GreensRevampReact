@@ -121,7 +121,7 @@ export default function Catalogue() {
                         onClick={() => router.push('/admin/catalogue/manage')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data} />
+            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products} />
         </div>
     )
 }

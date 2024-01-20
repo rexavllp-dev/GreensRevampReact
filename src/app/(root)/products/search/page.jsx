@@ -146,14 +146,9 @@ const Search = () => {
 
     ]
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getAllProductsByUser())
-    },[])
-
-    useEffect(()=>{
-       console.log(allProductsByUser)
-    },[allProductsByUser])
-
+    }, [])
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
     const handleNav = (ref, direction) => {
@@ -200,16 +195,19 @@ const Search = () => {
                     className='products-wrapper'
                 >
                     {
-                        allProductsByUser?.data?.map(product => (
-                            <ProductCard key={product.product_id} title={product.prd_name} specialPrice={product.special_price}
-                                normalPrice={product.product_price} rating={product.rating} img={product.url} />
+                        allProductsByUser?.data?.products?.map(product => (
+                            <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name} specialPrice={product.special_price}
+                                normalPrice={product.product_price}
+                                rating={product.rating}
+                                img={product?.product_img?.find((img) => img.is_baseimage === true).url}
+                            />
                         ))
                     }
                 </div>
             </div>
 
             <div className='pagination-controls'>
-                <CustomPagination  />
+                <CustomPagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={5} />
             </div>
 
             {/* <div className="itemcard-wrapper">

@@ -29,7 +29,22 @@ const catalogueDetails = () => {
     const [active, setActive] = React.useState(0);
     const dispatch = useDispatch();
 
-    const { singleProduct } = useSelector(state => state.products)
+    const {
+        singleProduct,
+        isProductCreated,
+        isProductUpdated,
+        isPriceCreated,
+        isPriceUpdated,
+        isProductImageUploaded,
+        isProductSeoCreated,
+        isProductSeoUpdated
+    } = useSelector(state => state.products);
+
+    const {
+        isInventoryCreated,
+        isInventoryUpdated,
+    } = useSelector(state => state.inventory);
+
     const searchParams = useSearchParams()
     let id = searchParams.get('id');
 
@@ -37,7 +52,18 @@ const catalogueDetails = () => {
         if (id) {
             dispatch(getSingleProduct({ id }));
         }
-    }, [id])
+    }, [
+        id,
+        isProductCreated,
+        isProductUpdated,
+        isPriceCreated,
+        isPriceUpdated,
+        isProductImageUploaded,
+        isProductSeoCreated,
+        isInventoryCreated,
+        isInventoryUpdated,
+        isProductSeoUpdated
+    ])
 
 
     const basicTabs = [

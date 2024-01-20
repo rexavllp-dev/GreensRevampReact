@@ -13,7 +13,7 @@ export const inventory = {
     //Update inventory
     updateInventory: (data, productId) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/products/update-inventory/'+ productId, data)
+            Axios.put('/products/update-inventory/'+ productId, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
