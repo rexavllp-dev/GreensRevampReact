@@ -4,7 +4,7 @@ import "./CustomSelect.scss"
 import { Select, SelectItem } from '@nextui-org/select';
 
 
-const CustomSelect = ({ label, isRequired, isInvalid, data, name, onChange, disabled}) => {
+const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChange, disabled, isBool}) => {
     return (
         <div className="custom-select-container">
             <div className='label-container'>
@@ -17,6 +17,8 @@ const CustomSelect = ({ label, isRequired, isInvalid, data, name, onChange, disa
                 label=""
                 radius='none'
                 name={name}
+                // value={value}
+                selectedKeys={[value]}
                 variant='bordered'
                 selectionMode="single"
                 onChange={(e) => {onChange(e)}}

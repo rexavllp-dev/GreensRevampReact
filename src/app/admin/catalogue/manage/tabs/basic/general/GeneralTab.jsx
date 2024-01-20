@@ -7,26 +7,22 @@ import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButto
 import CustomTextarea from '@/library/textarea/CustomTextarea'
 import CustomButton from '@/library/buttons/CustomButton'
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter, useSearchParams } from 'next/navigation';
 import './GeneralTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import { Card, Tab, Tabs } from '@nextui-org/react';
 import CustomMultiSelect from '@/library/select/custom-multi-select/CustomMultiSelect';
-import { createProduct } from '@/services/features/productSlice';
+import { createProduct, getSingleProduct, updateProduct } from '@/services/features/productSlice';
 
-const GeneralTab = () => {
+const GeneralTab = ({id, data}) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
     const [selected, setSelected] = React.useState("English");
-
-    const roles = [
-        { label: 'Customer', value: 1 },
-        { label: 'Admin', value: 2 },
-        { label: 'Delivery', value: 3 }
-    ]
+    const [loading, setLoading] = React.useState(false);
+ 
 
     const categories = [
         { label: 'category1', value: 1 },
@@ -85,10 +81,25 @@ const GeneralTab = () => {
 
 
     useEffect(() => {
-        console.table(formData)
-    }, [formData])
+        if (data?.data) {
+            setFormData((prev) => ({
+                prd_name: data?.data?.product?.prd_name,
+                prd_description: data?.data?.product?.prd_description,
+                prd_tax_class: data?.data?.product?.prd_tax_class,
+                prd_storage_type: data?.data?.product?.prd_storage_type,
+                prd_tags: data?.data?.product?.prd_tags,
+                prd_expiry_date: new Date(data?.data?.product?.prd_expiry_date),
+                prd_brand_id: data?.data?.product?.prd_brand_id,
+                prd_sales_unit: data?.data?.product?.prd_sales_unit,
+                prd_return_type: data?.data?.product?.prd_return_type,
+                categories: [],
+                prd_status: data?.data?.product?.prd_status,
+                prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
+            }))
+        }
+    }, [data])
 
-    const [loading, setLoading] = React.useState(false);
+ 
 
     const handleInputChange = ({ e }) => {
 
@@ -103,19 +114,33 @@ const GeneralTab = () => {
     const handleSubmit = () => {
         setLoading(true);
         let data = { ...formData, prd_expiry_date: new Date(formData.prd_expiry_date) }
-        dispatch(createProduct({ data: data })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-                let id = res.payload?.data[0]?.id;
-                router.push('/admin/catalogue/create/?id=' + id, { scroll: true });
+        if (id) {
+            dispatch(updateProduct({ data: data, id })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
 
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((err) => {
-            console.log(err);
-        })
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            dispatch(createProduct({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                    let id = res.payload?.data[0]?.id;
+                    router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
+
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
 
     const [languages, setLanguages] = React.useState([
@@ -158,9 +183,9 @@ const GeneralTab = () => {
                         </Tabs>
                     </Card>
 
-                    <CustomSelect label={'Tax Class'} data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }} />
-                    <CustomSelect label={'Storage Type'} data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }} />
-                    <CustomMultiSelect label={'Tags'} data={tags} name={'prd_tags'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Tax Class'} value={formData.prd_tax_class} data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Storage Type'} value={formData.prd_storage_type} data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomMultiSelect label={'Tags'} value={formData.prd_tags} data={tags} name={'prd_tags'} onChange={(e) => { handleInputChange({ e }) }} />
                     <CustomCalendar
                         name={'expiry_date'}
                         label='Expiry Date'
@@ -175,15 +200,15 @@ const GeneralTab = () => {
                 </div>
 
                 <div className="stack">
-                    <CustomSelect label={'Product Return Type'} data={returnTypes}
+                    <CustomSelect label={'Product Return Type'} value={formData.prd_return_type} data={returnTypes}
                         name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomMultiSelect label={'Categories'} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomSelect label={'Brands'} data={brands}
+                    <CustomSelect label={'Brands'} value={formData.prd_brand_id} data={brands}
                         name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomSelect label={'Sales Unit'} data={saleUnits}
+                    <CustomSelect label={'Sales Unit'} value={formData.prd_sales_unit} data={saleUnits}
                         name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }} />
 
                     <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}

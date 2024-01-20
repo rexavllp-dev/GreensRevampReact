@@ -1,0 +1,75 @@
+import React from 'react'
+import CustomButton from "@/library/buttons/CustomButton"
+import CustomInput from "@/library/input/custominput/CustomInput"
+import CustomTextarea from "@/library/textarea/CustomTextarea"
+import { useDispatch } from "react-redux"
+
+
+const SeoTab = () => {
+
+
+    const [formData, setFormData] = React.useState({
+        brd_name: '',
+        brand_status: true,
+    })
+    const [loading, setLoading] = React.useState(false)
+
+    const dispatch = useDispatch()
+
+    const handleInputChange = ({ e }) => {
+        setFormData((prev) => ({
+            ...prev, [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleSubmit = () => {
+        const data = {
+            brd_name: formData.brd_name,
+            brand_status: formData.brand_status
+        }
+        dispatch(createBrand({ data: data })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+
+    }
+
+
+    return (
+        <div className="brandstab ">
+            <div className="stack mb-3">
+                <CustomInput name='meta_title' type='text'
+                    maxLength={100}
+                    placeholder='Meta Title' label={'Meta Title'}
+                    onChange={(e) => { handleInputChange({ e }) }}
+                    value={formData.meta_title}
+                />
+                <div className="mt-3">
+                    <CustomTextarea label={'Meta Description'}
+                        placeholder={'Meta Description'}
+                        name={'meta_scripts'} value={formData.meta_scripts}
+                        onChange={(e) => { handleInputChange({ e }) }} />
+                </div>
+            </div>
+
+            <div className="stack mb-3">
+                <CustomTextarea label={'Meta Scripts'}
+                    placeholder={'Meta Scripts'}
+                    name={'meta_description'} value={formData.meta_description}
+                    onChange={(e) => { handleInputChange({ e }) }} />
+            </div>
+            <div className="savebtn">
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => handleSubmit()} />
+            </div>
+        </div>
+    )
+}
+
+export default SeoTab

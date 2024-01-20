@@ -20,16 +20,10 @@ import ImageUpload from '@/components/imageupload/ImageUpload';
 import { Divider } from '@nextui-org/react';
 import { uploadProductImage } from '@/services/features/productSlice';
 
-const ImagesTab = () => {
+const ImagesTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
-
-    const roles = [
-        { label: 'Customer', value: 1 },
-        { label: 'Admin', value: 2 },
-        { label: 'Delivery', value: 3 },
-    ]
 
     const [formData, setFormData] = React.useState({
         first_name: '',
@@ -42,70 +36,13 @@ const ImagesTab = () => {
         notes: ''
     })
 
-    const [errors, setErrors] = React.useState({
-        first_name: {
-            error: false,
-            message: ''
-        },
-        last_name: {
-            error: false,
-            message: ''
-        },
-        mobile: {
-            error: false,
-            message: ''
-        },
-        email: {
-            error: false,
-            message: ''
-        },
-        password: {
-            error: false,
-            message: ''
-        },
-        confirm_password: {
-            error: false,
-            message: ''
-        }
-    })
+
 
     const [loading, setLoading] = React.useState(false);
 
 
-    const handlePhoneChange = (name, value, countryCode) => {
-        const re = /^[0-9\b]+$/;
-        // if value is not blank, then test the regex
-        if (value === '' || re.test(value)) {
-            setFormData((prev) => ({
-                ...prev, [name]: value, usr_mobile_country_code: countryCode
-            }))
-        }
-    }
-
-
-    const handleInputChange = ({ e }) => {
-        setFormData((prev) => ({
-            ...prev, [e.target.name]: e.target.value
-        }))
-
-    }
-
-
-
     const handleSubmit = () => {
 
-        setLoading(true);
-        dispatch(uploadProductImage({ data })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload?.message);
-            } else {
-                toast.error(res.payload?.message);
-            }
-            setLoading(false);
-        }).catch((err) => {
-            toast.error(err.message);
-            setLoading(false)
-        })
     }
 
     const handleFileUpload = async (event) => {
@@ -117,11 +54,11 @@ const ImagesTab = () => {
             isBaseImage = true;
         }
         files = event.target.files;
-        // const file = files[0];
+        const file = files[0];
         const productFormData = new FormData();
-        productFormData.append('files', files);
+        productFormData.append('files', file);
         productFormData.append('isBaseImage', isBaseImage);
-        dispatch(uploadProductImage({ data: productFormData, id: 10 })).then((response) => {
+        dispatch(uploadProductImage({ data: productFormData, id: id })).then((response) => {
             if (response.payload?.success) {
                 toast.success(response.payload?.message);
             }
@@ -133,7 +70,7 @@ const ImagesTab = () => {
     const handleDeleteImage = (imgname) => {
 
     }
-
+   
 
     return (
         <div className='imagestab'>
@@ -144,9 +81,10 @@ const ImagesTab = () => {
 
                     <CustomTypography content='Base Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <ImageUpload
+                        isProductImg={true}
                         name={'prd_base_img'}
                         handleFileUpload={handleFileUpload}
-                        // images={event?.images}
+                        images={[data?.data?.product?.product_img.find((img) => img.is_baseimage === true)]}
                         handleDeleteImage={handleDeleteImage}
                         haveUploadSize={true}
                         required={true}
@@ -157,9 +95,10 @@ const ImagesTab = () => {
                 <div className="stack">
                     <CustomTypography content='Additional Images' color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <ImageUpload
+                        isProductImg={true}
                         name={'prd_additional_img'}
                         handleFileUpload={handleFileUpload}
-                        // images={event?.images}
+                        images={data?.data?.product?.product_img?.filter(img => img.is_baseimage === false)}
                         handleDeleteImage={handleDeleteImage}
                         haveUploadSize={true}
                         required={true}

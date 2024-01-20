@@ -11,6 +11,23 @@ export const products = {
         })
     },
 
+    //Get all products by user
+    getAllProductsByUser: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-products')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get single Products
+    getSingleProduct: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-product/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
     //Create new product
     createProduct: (data) => {
         return new Promise((resolve, reject) => {
@@ -21,9 +38,9 @@ export const products = {
     },
 
     //Update product
-    updateProduct: (data) => {
+    updateProduct: (data, id) => {
         return new Promise((resolve, reject) => {
-            Axios.put('/products/update-product', data)
+            Axios.put('/products/update-product/' + id, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -62,5 +79,29 @@ export const products = {
     },
 
 
+    //Create Product Seo
+    createProductSeo: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-seo', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
+    //Update product seo
+    updateProductSeo: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-seo/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //get product seo
+    getProductSeo: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/get-seo/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

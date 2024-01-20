@@ -18,7 +18,7 @@ import './PriceTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import { createPrice } from '@/services/features/productSlice';
 
-const PriceTab = () => {
+const PriceTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -40,8 +40,18 @@ const PriceTab = () => {
     const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        console.log(formData);
-    }, [formData])
+        if (data?.data) {
+            setFormData((prev) => ({
+                product_price: data?.data?.product?.product_price,
+                special_price: data?.data?.product?.special_price,
+                special_price_type: data?.data?.product?.special_price_type,
+                special_price_start: new Date(data?.data?.product?.special_price_start),
+                special_price_end: new Date(data?.data?.product?.special_price_end),
+                product_id: id
+            }))
+
+        }
+    }, [data])
 
     const handleInputChange = ({ e }) => {
         setFormData((prev) => ({
@@ -69,7 +79,6 @@ const PriceTab = () => {
         <div className='pricetab'>
 
             <div className="form">
-
                 <div className="stack">
 
                     <CustomInput name='product_price' type='text'

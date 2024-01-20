@@ -5,18 +5,24 @@ import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomTextarea from '@/library/textarea/CustomTextarea'
 import CustomButton from '@/library/buttons/CustomButton'
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import './SeoTab.scss'
+import { createProductSeo } from '@/services/features/productSlice';
+import { toast } from 'react-toastify';
 
 const SeoTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+    const searchParams = useSearchParams()
+    let id = searchParams.get('id');
+
 
     const [formData, setFormData] = React.useState({
         meta_title: '',
-        meta_scripts: '',
+        meta_script: '',
         meta_description: '',
+        product_id: id,
     })
 
     const [loading, setLoading] = React.useState(false);
@@ -29,6 +35,18 @@ const SeoTab = () => {
 
 
     const handleSubmit = () => {
+        setLoading(true)
+        dispatch(createProductSeo({ data: formData })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((error) => {
+            console.log(error)
+            setLoading(false)
+        })
 
     }
 
@@ -47,14 +65,14 @@ const SeoTab = () => {
                     />
                     <CustomTextarea label={'Meta Description'}
                         placeholder={'Meta Description'}
-                        name={'meta_scripts'} value={formData.meta_scripts}
+                        name={'meta_description'} value={formData.meta_description}
                         onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
 
                 <div className="stack">
                     <CustomTextarea label={'Meta Scripts'}
                         placeholder={'Meta Scripts'}
-                        name={'meta_description'} value={formData.meta_description}
+                        name={'meta_script'} value={formData.meta_script}
                         onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>

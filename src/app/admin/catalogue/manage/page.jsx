@@ -1,12 +1,12 @@
 "use client";
 import CustomTabs from '@/components/customtabs/CustomTabs'
 import CustomTypography from '@/library/typography/CustomTypography'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import CustomButton from '@/library/buttons/CustomButton'
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs'
 import "./CreateCatalogue.scss"
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import GeneralTab from './tabs/basic/general/GeneralTab';
 import PriceTab from './tabs/basic/price/PriceTab';
 import InventoryTab from './tabs/basic/inventory/InventoryTab';
@@ -20,42 +20,56 @@ import RelatedProdTab from './tabs/advanced/relatedproducts/RelatedProdTab';
 import SearchableKeywords from './tabs/advanced/searchable/SearchableKeywords';
 import ReviewsTab from './tabs/advanced/reviews/ReviewsTab';
 import StockHistoryTab from './tabs/advanced/stockhistory/StockHistoryTab';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleProduct } from '@/services/features/productSlice';
 
-const UserDetails = () => {
+const catalogueDetails = () => {
 
     const router = useRouter();
     const [active, setActive] = React.useState(0);
+    const dispatch = useDispatch();
+
+    const { singleProduct } = useSelector(state => state.products)
+    const searchParams = useSearchParams()
+    let id = searchParams.get('id');
+
+    useEffect(() => {
+        if (id) {
+            dispatch(getSingleProduct({ id }));
+        }
+    }, [id])
+
 
     const basicTabs = [
         {
             id: 1,
             label: "General",
-            component: <GeneralTab />
+            component: <GeneralTab id={id} data={singleProduct} />
         },
         {
             id: 2,
             label: "Price",
-            component: <PriceTab />
+            component: <PriceTab id={id} data={singleProduct} />
         },
         {
             id: 3,
             label: "Inventory",
-            component: <InventoryTab />
+            component: <InventoryTab id={id} data={singleProduct} />
         },
         {
             id: 4,
             label: "Images",
-            component: <ImagesTab />
+            component: <ImagesTab id={id} data={singleProduct} />
         },
         {
             id: 5,
             label: "SEO",
-            component: <SeoTab />
+            component: <SeoTab id={id} data={singleProduct} />
         },
         {
             id: 6,
             label: "Badges",
-            component: <BadgesTab />
+            component: <BadgesTab id={id} data={singleProduct} />
         },
     ]
     const advancedTabs = [
@@ -127,4 +141,4 @@ const UserDetails = () => {
     )
 }
 
-export default UserDetails
+export default catalogueDetails

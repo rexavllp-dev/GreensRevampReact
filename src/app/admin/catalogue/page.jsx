@@ -10,20 +10,22 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTable from "@/components/customtable/CustomTable";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/react";
 import { CameraIcon } from "@/components/customicons/CameraIcon";
 import { getAllProducts } from "@/services/features/productSlice";
+import { IoMdMore } from "react-icons/io";
 
 
 export default function Catalogue() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    // const { allProducts } = useSelector(products => products.allProducts)
+    const { allProducts } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts())
     }, [])
+
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
@@ -38,13 +40,13 @@ export default function Catalogue() {
             }
         },
         {
-            headerName: 'Name', field: 'prod_name'
+            headerName: 'Name', field: 'prd_name'
         },
         {
             headerName: 'Stock', field: 'stock',
         },
         {
-            headerName: 'Price', field: 'price',
+            headerName: 'Price', field: 'product_price',
         },
         {
             headerName: 'SKU', field: 'sku',
@@ -53,14 +55,43 @@ export default function Catalogue() {
             headerName: 'Brad Code', field: 'brand_code',
         },
         {
-            headerName: 'Status', field: 'status',
+            headerName: 'Status', field: 'prd_status',
             cellRenderer: (params) => {
-                const isActive = params.data?.is_status;
+                const isActive = params.data?.prd_status;
                 return (
                     <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
                 )
             }
         },
+        {
+            field: 'action',
+            minWidth: 150,
+            filter: false,
+            cellRenderer: (params) => {
+                return (
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <div style={{ display: 'flex', height: '100%', alignItems: 'center', paddingLeft: '10px', cursor: 'pointer' }}>
+                                <IoMdMore size={20} />
+                            </div>
+                        </DropdownTrigger>
+                        <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                            <DropdownSection title="Actions" showDivider={false}>
+                                <DropdownItem
+                                    key="edit"
+                                    description="Allows you to edit the file"
+                                    onClick={() => {
+                                        router.push(`/admin/catalogue/manage/?id=${params.data?.id}`)
+                                    }}
+                                >
+                                    Edit
+                                </DropdownItem>
+                            </DropdownSection>
+                        </DropdownMenu>
+                    </Dropdown>
+                )
+            }
+        }
     ]);
 
     useEffect(() => {
@@ -87,10 +118,10 @@ export default function Catalogue() {
                 <div className="right">
                     <CustomButton label="Delete" variant="danger" height={'42px'} />
                     <CustomButton label="Create Product" variant="primary" height={'42px'}
-                        onClick={() => router.push('/admin/catalogue/create')} />
+                        onClick={() => router.push('/admin/catalogue/manage')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={[]} />
+            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data} />
         </div>
     )
 }

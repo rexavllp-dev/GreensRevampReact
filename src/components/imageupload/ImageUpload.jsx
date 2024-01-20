@@ -6,7 +6,7 @@ import CustomButton from '@/library/buttons/CustomButton';
 import CustomTypography from '@/library/typography/CustomTypography';
 
 
-const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon }) => {
+const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
 
     const inputFileRef = useRef()
 
@@ -23,7 +23,7 @@ const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage,
                         ref={inputFileRef}
                         type="file"
                         hidden
-                        name='files'
+                        name={name}
                         onClick={(event) => {
                             event.target.value = null
                         }}
@@ -45,12 +45,12 @@ const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage,
                         return (
                             <div className="imgcard">
                                 <div className="closeicon" onClick={() => handleDeleteImage(img)}>
-                                    <CloseIcon />
+                                    {/* <CloseIcon /> */}
                                 </div>
-                                {/* <img
-                                    src={appConfig.server['imageBaseUrl'] + img}
-                                    alt={img}
-                                /> */}
+                                <img
+                                    src={isProductImg ? img?.url : img}
+                                    alt={isProductImg ? img?.url : img}
+                                />
                             </div>
                         )
                     })}

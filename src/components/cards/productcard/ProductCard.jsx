@@ -5,7 +5,7 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import { StarIcon, heartIconBlack } from '../../../../public/icons';
 import { useLanguage } from '@/providers/LanguageProvider';
 
-const ProductCard = ({ img, title, price, previous_price, rating }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating }) => {
 
   const { getTranslation } = useLanguage();
 
@@ -38,9 +38,16 @@ const ProductCard = ({ img, title, price, previous_price, rating }) => {
         </div>
         <div className="topsection">
           <div className="left">
-            <CustomTypography content={price} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
-            <CustomTypography content={previous_price} style={{ textDecoration: 'line-through' }}
-              weight='SEMI-BOLD' color='GRAY-LIGHT' size='MEDIUM-SMALL' />
+            {
+              specialPrice !== null ?
+                <>
+                  <CustomTypography content={specialPrice} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
+                  <CustomTypography content={normalPrice} style={{ textDecoration: 'line-through' }}
+                    weight='SEMI-BOLD' color='GRAY-LIGHT' size='MEDIUM-SMALL' />
+                </>
+                :
+                <CustomTypography content={normalPrice} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
+            }
           </div>
           <div className="right">
             <CustomTypography content={rating} weight='MEDIUM' color='BLACK' size='REGULAR' />

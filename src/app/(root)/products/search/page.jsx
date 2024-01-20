@@ -1,27 +1,31 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../../public/images';
-import CategoryCard from '@/components/cards/categorycard/CategoryCard';
 import useWindowSize from '@/hooks/useWindowSize';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import CustomTypography from '@/library/typography/CustomTypography';
 import ProductCard from '@/components/cards/productcard/ProductCard';
-import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 import './Search.scss';
 import SearchFilter from '@/components/searchfilter/SearchFilter';
-import Image from 'next/image';
 import { CiFilter } from "react-icons/ci";
 import { GoSortDesc } from "react-icons/go";
 import CustomPagination from '@/components/pagination/CustomPagination';
 import NavCard from '@/components/cards/navcard/NavCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProductsByUser } from '@/services/features/productSlice';
 
 
 const Search = () => {
 
     const recommendedProdRef = React.useRef()
     const { width, height } = useWindowSize();
+    const dispatch = useDispatch();
     const isMobileView = width < 767;
     const [showFilter, setShowFilter] = React.useState(false);
+
+    const [currentPage, setCurrentPage] = React.useState(1);
+
+    const { allProductsByUser } = useSelector((state) => state.products)
 
 
     const categories = [
@@ -142,6 +146,14 @@ const Search = () => {
 
     ]
 
+    useEffect(()=>{
+        dispatch(getAllProductsByUser())
+    },[])
+
+    useEffect(()=>{
+       console.log(allProductsByUser)
+    },[allProductsByUser])
+
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
     const handleNav = (ref, direction) => {
@@ -188,16 +200,16 @@ const Search = () => {
                     className='products-wrapper'
                 >
                     {
-                        products.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                        allProductsByUser?.data?.map(product => (
+                            <ProductCard key={product.product_id} title={product.prd_name} specialPrice={product.special_price}
+                                normalPrice={product.product_price} rating={product.rating} img={product.url} />
                         ))
                     }
                 </div>
             </div>
 
             <div className='pagination-controls'>
-                <CustomPagination />
+                <CustomPagination  />
             </div>
 
             {/* <div className="itemcard-wrapper">

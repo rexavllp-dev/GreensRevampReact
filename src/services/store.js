@@ -4,6 +4,9 @@ import authSlice from "./features/authSlice";
 import countrySlice from "./features/countrySlice";
 import userSlice from "./features/userSlice";
 import productSlice from "./features/productSlice";
+import brandSlice from "./features/brandSlice";
+import categorySlice from "./features/categorySlice";
+import inventorySlice from "./features/inventorySlice";
 // import thunk from 'redux-thunk';
 
 export const store = configureStore({
@@ -11,7 +14,10 @@ export const store = configureStore({
         auth: authSlice,
         countries: countrySlice,
         users: userSlice,
-        products: productSlice
+        products: productSlice,
+        brands:  brandSlice,
+        categories: categorySlice,
+        inventory: inventorySlice
         // middleware: [thunk],
     }
 })

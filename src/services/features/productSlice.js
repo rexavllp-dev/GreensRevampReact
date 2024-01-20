@@ -8,6 +8,16 @@ const initialState = {
     isAllProductsLoadError: false,
     allProducts: [],
 
+    isAllProductsByUserLoading: false,
+    isAllProductsByUserLoaded: false,
+    isAllProductsByUserLoadError: false,
+    allProductsByUser: [],
+
+    isSingleProductLoading: false,
+    isSingleProductLoaded: false,
+    isSingleProductLoadError: false,
+    singleProduct: {},
+
     isProductCreating: false,
     isProductCreated: false,
     isProductCreateError: false,
@@ -28,11 +38,44 @@ const initialState = {
     isProductImageUploaded: false,
     isProductImageUploadError: false,
 
+    isProductSeoCreating: false,
+    isProductSeoCreated: false,
+    isProductSeoCreateError: false,
+
+    isProductSeoUpdating: false,
+    isProductSeoUpdated: false,
+    isProductSeoUpdateError: false,
+
+    isProductSeoLoading: false,
+    isProductSeoLoaded: false,
+    isProductSeoLoadError: false,
+
+
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async (data, thunkAPI) => {
     try {
         const response = await products.getAllProducts();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async (data, thunkAPI) => {
+    try {
+        const response = await products.getAllProductsByUser();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getSingleProduct = createAsyncThunk('getSingleProduct', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getSingleProduct(id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -50,9 +93,9 @@ export const createProduct = createAsyncThunk('createProduct', async ({ data }, 
     }
 })
 
-export const updateProduct = createAsyncThunk('updateProduct', async (data, thunkAPI) => {
+export const updateProduct = createAsyncThunk('updateProduct', async ({ data, id }, thunkAPI) => {
     try {
-        const response = await products.updateProduct();
+        const response = await products.updateProduct(data, id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -90,6 +133,36 @@ export const uploadProductImage = createAsyncThunk('uploadProductImage', async (
     }
 })
 
+export const createProductSeo = createAsyncThunk('createProductSeo', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createProductSeo(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateProductSeo = createAsyncThunk('updateProductSeo', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await products.updateProductSeo(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getProductSeo = createAsyncThunk('getProductSeo', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await products.getProductSeo(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 const productSlice = createSlice({
     name: "products",
     initialState,
@@ -116,6 +189,46 @@ const productSlice = createSlice({
                 state.isAllProductsLoading = false;
                 state.isAllProductsLoaded = false;
                 state.isAllProductsLoadError = true;
+            })
+
+            //Get all products by user
+            .addCase(getAllProductsByUser.pending, (state, action) => {
+                state.isAllProductsByUserLoading = true;
+                state.isAllProductsByUserLoaded = false;
+                state.isAllProductsByUserLoadError = false;
+            })
+
+            .addCase(getAllProductsByUser.fulfilled, (state, action) => {
+                state.isAllProductsByUserLoading = false;
+                state.isAllProductsByUserLoaded = true;
+                state.isAllProductsByUserLoadError = false;
+                state.allProductsByUser = action.payload;
+            })
+
+            .addCase(getAllProductsByUser.rejected, (state, action) => {
+                state.isAllProductsByUserLoading = false;
+                state.isAllProductsByUserLoaded = false;
+                state.isAllProductsByUserLoadError = true;
+            })
+
+            //Get single products
+            .addCase(getSingleProduct.pending, (state, action) => {
+                state.isSingleProductLoading = true;
+                state.isSingleProductLoaded = false;
+                state.isSingleProductLoadError = false;
+            })
+
+            .addCase(getSingleProduct.fulfilled, (state, action) => {
+                state.isSingleProductLoading = false;
+                state.isSingleProductLoaded = true;
+                state.isSingleProductLoadError = false;
+                state.singleProduct = action.payload;
+            })
+
+            .addCase(getSingleProduct.rejected, (state, action) => {
+                state.isSingleProductLoading = false;
+                state.isSingleProductLoaded = false;
+                state.isSingleProductLoadError = true;
             })
 
             //createProduct
@@ -212,6 +325,43 @@ const productSlice = createSlice({
                 state.isProductImageUploading = false;
                 state.isProductImageUploaded = false;
                 state.isProductImageUploadError = true;
+            })
+
+
+            .addCase(createProductSeo.pending, (state, action) => {
+                state.isProductSeoCreating = true;
+                state.isProductSeoCreated = false;
+                state.isProductSeoCreateError = false;
+            })
+
+            .addCase(createProductSeo.fulfilled, (state, action) => {
+                state.isProductSeoCreating = false;
+                state.isProductSeoCreated = true;
+                state.isProductSeoCreateError = false;
+            })
+
+            .addCase(createProductSeo.rejected, (state, action) => {
+                state.isProductSeoCreating = false;
+                state.isProductSeoCreated = false;
+                state.isProductSeoCreateError = true;
+            })
+
+            .addCase(updateProductSeo.pending, (state, action) => {
+                state.isProductSeoUpdating = true;
+                state.isProductSeoUpdated = false;
+                state.isProductSeoUpdateError = false;
+            })
+
+            .addCase(updateProductSeo.fulfilled, (state, action) => {
+                state.isProductSeoUpdating = false;
+                state.isProductSeoUpdated = true;
+                state.isProductSeoUpdateError = false;
+            })
+
+            .addCase(updateProductSeo.rejected, (state, action) => {
+                state.isProductSeoUpdating = false;
+                state.isProductSeoUpdated = false;
+                state.isProductSeoUpdateError = true;
             })
 
     }

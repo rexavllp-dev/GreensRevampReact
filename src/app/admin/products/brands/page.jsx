@@ -12,23 +12,23 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomTable from "@/components/customtable/CustomTable";
 import { Avatar, Chip } from "@nextui-org/react";
 import { CameraIcon } from "@/components/customicons/CameraIcon";
-import { getAllProducts } from "@/services/features/productSlice";
+import { getAllBrands } from "@/services/features/brandSlice";
 
 
 export default function Brands() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    // const { allProducts } = useSelector(products => products.allProducts)
+    const { allBrands } = useSelector(state => state.brands)
 
     useEffect(() => {
-        dispatch(getAllProducts())
+        dispatch(getAllBrands())
     }, [])
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         {
-            headerName: 'Logo', field: 'logo',
+            headerName: 'Logo', field: 'brd_logo',
             cellRenderer: (params) => {
                 return (
                     <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
@@ -38,12 +38,12 @@ export default function Brands() {
             }
         },
         {
-            headerName: 'Name', field: 'prod_name'
+            headerName: 'Name', field: 'brd_name'
         },
         {
-            headerName: 'Status', field: 'status',
+            headerName: 'Status', field: 'brand_status',
             cellRenderer: (params) => {
-                const isActive = params.data?.is_status;
+                const isActive = params.data?.brand_status;
                 return (
                     <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
                 )
@@ -74,10 +74,10 @@ export default function Brands() {
                 <div className="right">
                     {/* <CustomButton label="Delete" variant="danger" height={'42px'} /> */}
                     <CustomButton label="Create Brand" variant="primary" height={'42px'}
-                        onClick={() => router.push('/admin/products/brands/create')} />
+                        onClick={() => router.push('/admin/products/brands/manage')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={[]} />
+            <CustomTable columnDefs={columnDefs} rowData={allBrands?.data} />
         </div>
     )
 }
