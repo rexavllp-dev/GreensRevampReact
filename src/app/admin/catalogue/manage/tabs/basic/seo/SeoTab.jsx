@@ -7,15 +7,14 @@ import CustomButton from '@/library/buttons/CustomButton'
 import { useDispatch } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 import './SeoTab.scss'
-import { createProductSeo } from '@/services/features/productSlice';
+import { createProductSeo, updateProductSeo } from '@/services/features/productSlice';
 import { toast } from 'react-toastify';
 
-const SeoTab = () => {
+const SeoTab = ({ data, id }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
-    const searchParams = useSearchParams()
-    let id = searchParams.get('id');
+
 
 
     const [formData, setFormData] = React.useState({
@@ -27,6 +26,19 @@ const SeoTab = () => {
 
     const [loading, setLoading] = React.useState(false);
 
+
+    useEffect(() => {
+        if (data?.data?.product?.product_seo_id) {
+            setFormData((prev) => ({
+                meta_title: data?.data?.product?.meta_title,
+                meta_script: data?.data?.product?.meta_script,
+                meta_description: data?.data?.product?.meta_description,
+                product_id: id
+            }))
+
+        }
+    }, [data])
+
     const handleInputChange = ({ e, country }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
@@ -36,18 +48,32 @@ const SeoTab = () => {
 
     const handleSubmit = () => {
         setLoading(true)
-        dispatch(createProductSeo({ data: formData })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((error) => {
-            console.log(error)
-            setLoading(false)
-        })
+        if (data?.data?.product?.product_seo_id) {
+            dispatch(updateProductSeo({ data: formData, id: id })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((error) => {
+                console.log(error)
+                setLoading(false)
+            })
 
+        } else {
+            dispatch(createProductSeo({ data: formData })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((error) => {
+                console.log(error)
+                setLoading(false)
+            })
+        }
     }
 
     return (

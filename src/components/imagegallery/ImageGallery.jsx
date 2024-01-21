@@ -9,7 +9,7 @@ const ImageGallery = ({ data }) => {
     return (
         <div className="image_gallery">
             <Image src={images?.find((img) => img.is_baseimage === true) ?
-                images?.find((img) => img.is_baseimage === true).url :
+                images?.find((img) => img.is_baseimage === true)?.url :
                 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
             }
                 width={400}

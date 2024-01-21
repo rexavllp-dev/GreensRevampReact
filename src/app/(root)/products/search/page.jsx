@@ -147,8 +147,8 @@ const Search = () => {
     ]
 
     useEffect(() => {
-        dispatch(getAllProductsByUser())
-    }, [])
+        dispatch(getAllProductsByUser({page: currentPage, per_page:8}))
+    }, [currentPage])
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
     const handleNav = (ref, direction) => {
@@ -199,7 +199,10 @@ const Search = () => {
                             <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name} specialPrice={product.special_price}
                                 normalPrice={product.product_price}
                                 rating={product.rating}
-                                img={product?.product_img?.find((img) => img.is_baseimage === true).url}
+                                img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                    (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                    'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                                }
                             />
                         ))
                     }

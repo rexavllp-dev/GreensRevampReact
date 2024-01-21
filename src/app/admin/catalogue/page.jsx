@@ -33,9 +33,11 @@ export default function Catalogue() {
             headerName: 'Thumbnail', field: 'prod_image',
             cellRenderer: (params) => {
                 return (
-                    <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
-                        <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
-                    } />
+                    <Avatar showFallback src={
+                        (params.data?.product_img?.find((img) => img.is_baseimage === true)?.url)} fallback={
+                            // 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                            <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
+                        } />
                 )
             }
         },

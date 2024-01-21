@@ -12,9 +12,13 @@ export const products = {
     },
 
     //Get all products by user
-    getAllProductsByUser: () => {
+    getAllProductsByUser: ({ page, per_page }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/products/get-products')
+            let query = `/products/get-products`
+            if (page && per_page) {
+                query = query + `?page=${page}&per_page=${per_page}`
+            }
+            Axios.get(query)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

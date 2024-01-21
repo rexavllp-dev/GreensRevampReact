@@ -153,7 +153,6 @@ const PriceTab = ({ id, data }) => {
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
             </div>
 
-
         </div>
     )
 }

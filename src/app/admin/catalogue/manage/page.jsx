@@ -148,7 +148,7 @@ const catalogueDetails = () => {
                     <div className="backbtn" onClick={() => router.back()}>
                         <FaArrowLeft />
                     </div>
-                    <CustomTypography content={"Create Product"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
+                    <CustomTypography content={(id && singleProduct.data?.product?.prd_name) ? singleProduct.data?.product?.prd_name : "Create Product"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
                 </div>
                 <div className="exportbtn">
                     {/* <CustomButton label={"Export"} variant='transparent' height='40px' /> */}

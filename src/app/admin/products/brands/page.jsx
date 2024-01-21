@@ -31,7 +31,7 @@ export default function Brands() {
             headerName: 'Logo', field: 'brd_logo',
             cellRenderer: (params) => {
                 return (
-                    <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
+                    <Avatar showFallback src={params.data?.brd_logo} fallback={
                         <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
                     } />
                 )
