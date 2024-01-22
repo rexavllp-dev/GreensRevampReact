@@ -41,7 +41,7 @@ export const brands = {
     //Create Brand seo
     createBrandSeo: ({ data }) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/brands/create-seo/' + id, data)
+            Axios.post('/brands/create-seo', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

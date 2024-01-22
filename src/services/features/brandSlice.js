@@ -82,7 +82,7 @@ export const uploadBrandImage = createAsyncThunk('uploadBrandImage', async ({ da
 
 export const createBrandSeo = createAsyncThunk('createBrandSeo', async ({ data }, thunkAPI) => {
     try {
-        const response = await brands.createBrandSeo(data);
+        const response = await brands.createBrandSeo({data});
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

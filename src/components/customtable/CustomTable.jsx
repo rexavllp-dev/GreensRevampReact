@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -7,17 +7,13 @@ import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
-import { Avatar, Button, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
-import { IoMdMore } from "react-icons/io";
 import './CustomTable.scss';
 import { useRouter } from 'next/navigation';
-import { FiDownload } from 'react-icons/fi';
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import axios from 'axios';
 
 
-export default function CustomTable({ rowData, columnDefs, height }) {
+export default function CustomTable({ rowData, columnDefs, height, setSelectedRows, selectedRows }) {
     const router = useRouter();
+    const gridRef = useRef();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -34,7 +30,10 @@ export default function CustomTable({ rowData, columnDefs, height }) {
     }, []);
 
 
-
+    const onSelectionChanged = useCallback(() => {
+        var rows = gridRef.current.api.getSelectedRows();
+        setSelectedRows(rows);
+    })
 
     return (
         <div
@@ -46,6 +45,7 @@ export default function CustomTable({ rowData, columnDefs, height }) {
             }}
         >
             <AgGridReact
+                ref={gridRef}
                 id="staff_grid"
                 rowData={rowData}
                 columnDefs={columnDefs}
@@ -59,6 +59,8 @@ export default function CustomTable({ rowData, columnDefs, height }) {
                 suppressRowClickSelection={true}
                 suppressCellFocus={true}
                 rowSelection="multiple"
+                onSelectionChanged={onSelectionChanged}
+                // onRowSelected={(value) => console.log(value)}
                 onCellClicked={(value) => console.log(value)}
             ></AgGridReact>
         </div>

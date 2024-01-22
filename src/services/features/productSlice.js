@@ -50,7 +50,68 @@ const initialState = {
     isProductSeoLoaded: false,
     isProductSeoLoadError: false,
 
+    isOptionCreating: false,
+    isOptionCreated: false,
+    isOptionCreateError: false,
 
+    isProductOptionCreating: false,
+    isProductOptionCreated: false,
+    isProductOptionCreateError: false,
+
+    isOptionValueUpdating:false,
+    isOptionValueUpdated:false,
+    isOptionValueUpdateError: false,
+
+    isAllOptionsByProductLoading: false,
+    isAllOptionsByProductLoaded: false,
+    isAllOptionsByProductLoadError: false,
+    allOptionsByProduct: [],
+
+    isOptionValuesLoading: false,
+    isOptionValuesLoaded: false,
+    isOptionValuesLoadError: false,
+    optionValues: [],
+
+    isProductOptionDeleting:false,
+    isProductOptionDeleted:false,
+    isProductOptionDeleteError: false,
+
+    isProductOptionValueDeleting:false,
+    isProductOptionValueDeleted:false,
+    isProductOptionValueDeleteError: false,
+
+
+
+
+    isVariantCreating: false,
+    isVariantCreated: false,
+    isVariantCreateError: false,
+
+    isProductVariantCreating: false,
+    isProductVariantCreated: false,
+    isProductVariantCreateError: false,
+
+    isVariantValueUpdating:false,
+    isVariantValueUpdated:false,
+    isVariantValueUpdateError: false,
+
+    isAllVariantsByProductLoading: false,
+    isAllVariantsByProductLoaded: false,
+    isAllVariantsByProductLoadError: false,
+    allVariantsByProduct: [],
+
+    isVariantValuesLoading: false,
+    isVariantValuesLoaded: false,
+    isVariantValuesLoadError: false,
+    VariantValues: [],
+
+    isProductVariantDeleting:false,
+    isProductVariantDeleted:false,
+    isProductVariantDeleteError: false,
+
+    isProductVariantValueDeleting:false,
+    isProductVariantValueDeleted:false,
+    isProductVariantValueDeleteError: false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async (data, thunkAPI) => {
@@ -63,9 +124,9 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async (data, th
     }
 })
 
-export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({page, per_page}, thunkAPI) => {
+export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({ page, per_page }, thunkAPI) => {
     try {
-        const response = await products.getAllProductsByUser({page, per_page});
+        const response = await products.getAllProductsByUser({ page, per_page });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -162,6 +223,154 @@ export const getProductSeo = createAsyncThunk('getProductSeo', async ({ data, id
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+export const createOption = createAsyncThunk('createOption', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createOption(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createProductOption = createAsyncThunk('createProductOption', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createProductOption(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateOptionValue = createAsyncThunk('updateOptionValue', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await products.updateOptionValue(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAllOptionsByProductId = createAsyncThunk('getAllOptionsByProductId', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getAllOptionsByProductId(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getOptionValues = createAsyncThunk('getOptionValues', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getOptionValues(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteProductOption = createAsyncThunk('deleteProductOption', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.deleteProductOption(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteProductOptionValue = createAsyncThunk('deleteProductOptionValue', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.deleteProductOptionValue(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+//Product variants section
+
+export const createVariant = createAsyncThunk('createVariant', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createVariant(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createVariantLabel = createAsyncThunk('createVariantLabel', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createVariantLabel(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateVariantLabel = createAsyncThunk('updateVariantLabel', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await products.updateVariantLabel(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAllVariantsByProductId = createAsyncThunk('getAllVariantsByProductId', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getAllVariantsByProductId(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getVariantLabelsByVariantId = createAsyncThunk('getVariantLabelsByVariantId', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getVariantLabelsByVariantId(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteVariant = createAsyncThunk('deleteVariant', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.deleteVariant(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteVariantLabel = createAsyncThunk('deleteVariantLabel', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.deleteVariantLabel(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
 
 const productSlice = createSlice({
     name: "products",
@@ -362,6 +571,274 @@ const productSlice = createSlice({
                 state.isProductSeoUpdating = false;
                 state.isProductSeoUpdated = false;
                 state.isProductSeoUpdateError = true;
+            })
+
+
+
+
+            .addCase(createOption.pending, (state, action) => {
+                state.isOptionCreating = true;
+                state.isOptionCreated = false;
+                state.isOptionCreateError = false;
+            })
+
+            .addCase(createOption.fulfilled, (state, action) => {
+                state.isOptionCreating = false;
+                state.isOptionCreated = true;
+                state.isOptionCreateError = false;
+            })
+
+            .addCase(createOption.rejected, (state, action) => {
+                state.isOptionCreating = false;
+                state.isOptionCreated = false;
+                state.isOptionCreateError = true;
+            })
+
+            .addCase(createProductOption.pending, (state, action) => {
+                state.isProductOptionCreating = true;
+                state.isProductOptionCreated = false;
+                state.isProductOptionCreateError = false;
+            })
+
+            .addCase(createProductOption.fulfilled, (state, action) => {
+                state.isProductOptionCreating = false;
+                state.isProductOptionCreated = true;
+                state.isProductOptionCreateError = false;
+            })
+
+            .addCase(createProductOption.rejected, (state, action) => {
+                state.isProductOptionCreating = false;
+                state.isProductOptionCreated = false;
+                state.isProductOptionCreateError = true;
+            })
+
+            .addCase(getAllOptionsByProductId.pending, (state, action) => {
+                state.isAllOptionsByProductLoading = true;
+                state.isAllOptionsByProductLoaded = false;
+                state.isAllOptionsByProductLoadError = false;
+            })
+
+            .addCase(getAllOptionsByProductId.fulfilled, (state, action) => {
+                state.isAllOptionsByProductLoading = false;
+                state.isAllOptionsByProductLoaded = true;
+                state.isAllOptionsByProductLoadError = false;
+                state.allOptionsByProduct = action.payload;
+            })
+
+            .addCase(getAllOptionsByProductId.rejected, (state, action) => {
+                state.isAllOptionsByProductLoading = false;
+                state.isAllOptionsByProductLoaded = false;
+                state.isAllOptionsByProductLoadError = true;
+            })
+
+            .addCase(getOptionValues.pending, (state, action) => {
+                state.isOptionValuesLoading = true;
+                state.isOptionValuesLoaded = false;
+                state.isOptionValuesLoadError = false;
+            })
+
+            .addCase(getOptionValues.fulfilled, (state, action) => {
+                state.isOptionValuesLoading = false;
+                state.isOptionValuesLoaded = true;
+                state.isOptionValuesLoadError = false;
+                state.optionValues = action.payload;
+            })
+
+            .addCase(getOptionValues.rejected, (state, action) => {
+                state.isOptionValuesLoading = false;
+                state.isOptionValuesLoaded = false;
+                state.isOptionValuesLoadError = true;
+            })
+
+            .addCase(updateOptionValue.pending, (state, action) => {
+                state.isOptionValueUpdating = true;
+                state.isOptionValueUpdated = false;
+                state.isOptionValueUpdateError = false;
+            })
+
+            .addCase(updateOptionValue.fulfilled, (state, action) => {
+                state.isOptionValueUpdating = false;
+                state.isOptionValueUpdated = true;
+                state.isOptionValueUpdateError = false;
+            })
+
+            .addCase(updateOptionValue.rejected, (state, action) => {
+                state.isOptionValueUpdating = false;
+                state.isOptionValueUpdated = false;
+                state.isOptionValueUpdateError = true;
+            })
+
+            .addCase(deleteProductOption.pending, (state, action) => {
+                state.isProductOptionDeleting = true;
+                state.isProductOptionDeleted = false;
+                state.isProductOptionDeleteError = false;
+            })
+
+            .addCase(deleteProductOption.fulfilled, (state, action) => {
+                state.isProductOptionDeleting = false;
+                state.isProductOptionDeleted = true;
+                state.isProductOptionDeleteError = false;
+            })
+
+            .addCase(deleteProductOption.rejected, (state, action) => {
+                state.isProductOptionDeleting = false;
+                state.isProductOptionDeleted = false;
+                state.isProductOptionDeleteError = true;
+            })
+
+            .addCase(deleteProductOptionValue.pending, (state, action) => {
+                state.isProductOptionValueDeleting = true;
+                state.isProductOptionValueDeleted = false;
+                state.isProductOptionValueDeleteError = false;
+            })
+
+            .addCase(deleteProductOptionValue.fulfilled, (state, action) => {
+                state.isProductOptionValueDeleting = false;
+                state.isProductOptionValueDeleted = true;
+                state.isProductOptionValueDeleteError = false;
+            })
+
+            .addCase(deleteProductOptionValue.rejected, (state, action) => {
+                state.isProductOptionValueDeleting = false;
+                state.isProductOptionValueDeleted = false;
+                state.isProductOptionValueDeleteError = true;
+            })
+
+
+
+
+
+
+
+
+
+
+            .addCase(createVariant.pending, (state, action) => {
+                state.isVariantCreating = true;
+                state.isVariantCreated = false;
+                state.isVariantCreateError = false;
+            })
+
+            .addCase(createVariant.fulfilled, (state, action) => {
+                state.isVariantCreating = false;
+                state.isVariantCreated = true;
+                state.isVariantCreateError = false;
+            })
+
+            .addCase(createVariant.rejected, (state, action) => {
+                state.isVariantCreating = false;
+                state.isVariantCreated = false;
+                state.isVariantCreateError = true;
+            })
+
+            .addCase(createVariantLabel.pending, (state, action) => {
+                state.isProductVariantCreating = true;
+                state.isProductVariantCreated = false;
+                state.isProductVariantCreateError = false;
+            })
+
+            .addCase(createVariantLabel.fulfilled, (state, action) => {
+                state.isProductVariantCreating = false;
+                state.isProductVariantCreated = true;
+                state.isProductVariantCreateError = false;
+            })
+
+            .addCase(createVariantLabel.rejected, (state, action) => {
+                state.isProductVariantCreating = false;
+                state.isProductVariantCreated = false;
+                state.isProductVariantCreateError = true;
+            })
+
+            .addCase(getAllVariantsByProductId.pending, (state, action) => {
+                state.isAllVariantsByProductLoading = true;
+                state.isAllVariantsByProductLoaded = false;
+                state.isAllVariantsByProductLoadError = false;
+            })
+
+            .addCase(getAllVariantsByProductId.fulfilled, (state, action) => {
+                state.isAllVariantsByProductLoading = false;
+                state.isAllVariantsByProductLoaded = true;
+                state.isAllVariantsByProductLoadError = false;
+                state.allVariantsByProduct = action.payload;
+            })
+
+            .addCase(getAllVariantsByProductId.rejected, (state, action) => {
+                state.isAllVariantsByProductLoading = false;
+                state.isAllVariantsByProductLoaded = false;
+                state.isAllVariantsByProductLoadError = true;
+            })
+
+            .addCase(getVariantLabelsByVariantId.pending, (state, action) => {
+                state.isVariantValuesLoading = true;
+                state.isVariantValuesLoaded = false;
+                state.isVariantValuesLoadError = false;
+            })
+
+            .addCase(getVariantLabelsByVariantId.fulfilled, (state, action) => {
+                state.isVariantValuesLoading = false;
+                state.isVariantValuesLoaded = true;
+                state.isVariantValuesLoadError = false;
+                state.VariantValues = action.payload;
+            })
+
+            .addCase(getVariantLabelsByVariantId.rejected, (state, action) => {
+                state.isVariantValuesLoading = false;
+                state.isVariantValuesLoaded = false;
+                state.isVariantValuesLoadError = true;
+            })
+
+            .addCase(updateVariantLabel.pending, (state, action) => {
+                state.isVariantValueUpdating = true;
+                state.isVariantValueUpdated = false;
+                state.isVariantValueUpdateError = false;
+            })
+
+            .addCase(updateVariantLabel.fulfilled, (state, action) => {
+                state.isVariantValueUpdating = false;
+                state.isVariantValueUpdated = true;
+                state.isVariantValueUpdateError = false;
+            })
+
+            .addCase(updateVariantLabel.rejected, (state, action) => {
+                state.isVariantValueUpdating = false;
+                state.isVariantValueUpdated = false;
+                state.isVariantValueUpdateError = true;
+            })
+
+            .addCase(deleteVariant.pending, (state, action) => {
+                state.isProductVariantDeleting = true;
+                state.isProductVariantDeleted = false;
+                state.isProductVariantDeleteError = false;
+            })
+
+            .addCase(deleteVariant.fulfilled, (state, action) => {
+                state.isProductVariantDeleting = false;
+                state.isProductVariantDeleted = true;
+                state.isProductVariantDeleteError = false;
+            })
+
+            .addCase(deleteVariant.rejected, (state, action) => {
+                state.isProductVariantDeleting = false;
+                state.isProductVariantDeleted = false;
+                state.isProductVariantDeleteError = true;
+            })
+
+            .addCase(deleteVariantLabel.pending, (state, action) => {
+                state.isProductVariantValueDeleting = true;
+                state.isProductVariantValueDeleted = false;
+                state.isProductVariantValueDeleteError = false;
+            })
+
+            .addCase(deleteVariantLabel.fulfilled, (state, action) => {
+                state.isProductVariantValueDeleting = false;
+                state.isProductVariantValueDeleted = true;
+                state.isProductVariantValueDeleteError = false;
+            })
+
+            .addCase(deleteVariantLabel.rejected, (state, action) => {
+                state.isProductVariantValueDeleting = false;
+                state.isProductVariantValueDeleted = false;
+                state.isProductVariantValueDeleteError = true;
             })
 
     }

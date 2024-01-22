@@ -28,7 +28,6 @@ const GeneralTab = ({ id, data }) => {
 
     useEffect(() => {
         if (data?.result?.id) {
-            console.log(data)
             setFormData((prev) => ({
                 brd_name: data?.result?.brd_name,
                 brand_status: data?.result?.brand_status

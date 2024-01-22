@@ -59,13 +59,6 @@ const GeneralTab = ({ id, data }) => {
         }
     ]
 
-    const brands = [
-        {
-            label: 'Brand 1',
-            value: 1
-        }
-    ]
-
     const [formData, setFormData] = React.useState({
         prd_name: '',
         prd_description: '',
@@ -99,7 +92,7 @@ const GeneralTab = ({ id, data }) => {
                 prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
             }))
         }
-    }, [data])
+    }, [data, allBrands])
 
     useEffect(() => {
         dispatch(getAllBrands())
@@ -109,7 +102,6 @@ const GeneralTab = ({ id, data }) => {
 
 
     const handleInputChange = ({ e }) => {
-
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
         }))
@@ -125,7 +117,6 @@ const GeneralTab = ({ id, data }) => {
             dispatch(updateProduct({ data: data, id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
-
                 } else {
                     toast.error(res.payload.message)
                 }

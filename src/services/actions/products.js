@@ -108,4 +108,58 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+    //Create Option
+    createOption: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-option', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Create Product Option
+    createProductOption: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-product-option', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Update option value
+    updateOptionValue: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-product-option/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get all options by product id
+    getAllOptionsByProductId: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-options/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get option values by option id
+    getOptionValues: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-option-values/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    deleteProductOption: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete('/products/delete-option/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    deleteProductOptionValue: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete('/products/delete-option-value/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

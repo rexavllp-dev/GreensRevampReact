@@ -102,22 +102,22 @@ const catalogueDetails = () => {
         {
             id: 1,
             label: "Options",
-            component: <OptionsTab />
+            component: <OptionsTab id={id} data={singleProduct} />
         },
         {
             id: 2,
             label: "Related Products",
-            component: <RelatedProdTab />
+            component: <RelatedProdTab id={id} data={singleProduct} />
         },
         {
             id: 3,
             label: "Product Variants",
-            component: <VariantsTab />
+            component: <VariantsTab id={id} data={singleProduct} />
         },
         {
             id: 4,
             label: "Reviews",
-            component: <ReviewsTab />
+            component: <ReviewsTab id={id} data={singleProduct} />
         },
         // {
         //     id: 5,
@@ -127,12 +127,12 @@ const catalogueDetails = () => {
         {
             id: 6,
             label: "Searchable  Keywords",
-            component: <SearchableKeywords />
+            component: <SearchableKeywords id={id} data={singleProduct} />
         },
         {
             id: 7,
             label: "Stock History",
-            component: <StockHistoryTab />
+            component: <StockHistoryTab id={id} data={singleProduct} />
         }
     ]
 

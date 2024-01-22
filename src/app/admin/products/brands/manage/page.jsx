@@ -28,7 +28,7 @@ function CreateBrand() {
         brand_status: true,
     })
     const [loading, setLoading] = React.useState(false);
-    const { singleBrand, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded } = useSelector(state => state.brands)
+    const { singleBrand, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded, isBrandSeoCreated, isBrandSeoUpdated } = useSelector(state => state.brands)
     const searchParams = useSearchParams()
     let id = searchParams.get('id');
 
@@ -37,7 +37,7 @@ function CreateBrand() {
         if (id) {
             dispatch(getSingleBrand({ id }));
         }
-    }, [id, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded])
+    }, [id, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded, isBrandSeoCreated, isBrandSeoUpdated])
 
 
     const tabs = [

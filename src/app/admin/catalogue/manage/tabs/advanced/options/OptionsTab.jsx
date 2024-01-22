@@ -1,7 +1,7 @@
 import { CameraIcon } from '@/components/customicons/CameraIcon';
 import CustomTable from '@/components/customtable/CustomTable'
 import { Avatar, Card, CardBody, CardHeader, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./OptionsTab.scss"
 import CustomInput from '@/library/input/custominput/CustomInput';
 import CustomButton from '@/library/buttons/CustomButton';
@@ -9,14 +9,40 @@ import SearchInput from '@/library/input/searchinput/SearchInput';
 import { MdDelete, MdKeyboardArrowDown } from 'react-icons/md';
 import { FaSave } from 'react-icons/fa';
 import { IoAddCircleSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from 'react-redux';
+import { createOption, createProductOption, deleteProductOption, deleteProductOptionValue, getAllOptionsByProductId, getAllProducts, getOptionValues, updateOptionValue } from '@/services/features/productSlice';
+import { toast } from 'react-toastify';
 
-const OptionsTab = () => {
+const OptionsTab = ({ data, id }) => {
 
     const [formData, setFormData] = React.useState({
+        option_name: '',
         label: '',
     })
+    const dispatch = useDispatch()
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+
+
+    const { allProducts, allOptionsByProduct, optionValues, isProductOptionCreated, isOptionCreated } = useSelector(state => state.products)
+
+    useEffect(() => {
+        dispatch(getAllProducts())
+    }, [])
+
+    useEffect(() => {
+        dispatch(getAllOptionsByProductId({ id }))
+    }, [id, isProductOptionCreated, isOptionCreated])
+
+    useEffect(() => {
+        dispatch(getOptionValues({ id: expandedIndex }))
+    }, [expandedIndex, isProductOptionCreated])
+
+
+
+
 
     const handleItemClick = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -36,10 +62,10 @@ const OptionsTab = () => {
         //     }
         // },
         {
-            headerName: 'Name', field: 'prod_name'
+            headerName: 'Name', field: 'prd_name'
         },
         {
-            headerName: 'Price', field: 'price',
+            headerName: 'Price', field: 'product_price',
         },
         {
             headerName: 'SKU', field: 'sku',
@@ -62,6 +88,117 @@ const OptionsTab = () => {
         }
     ])
 
+    const [optionLabels, setOptionLabels] = React.useState([])
+
+
+    useEffect(() => {
+        if (optionValues) {
+            optionValues?.result?.map((item) => {
+                setOptionLabels((prev) => ({ ...prev, [item.product_option_id]: item.option_label }))
+            })
+        }
+    }, [optionValues])
+
+
+    const handleInputChange = ({ e }) => {
+
+        setFormData((prev) => ({
+            ...prev, [e.target.name]: e.target.value
+        }))
+
+    }
+
+    const handleCreateOption = () => {
+        dispatch(createOption({ data: { option_name: formData?.option_name, product_id: id } })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+        setFormData((prev) => ({ ...prev, option_name: '' }));
+    }
+
+    const handleCreateProductOption = (optionId, optionValues) => {
+        const productRows = optionValues.map((item) => {
+            return {
+                product_id: item.product_id
+            }
+        })
+        const newData = {
+            optionId: optionId,
+            optionValues: productRows
+        }
+        dispatch(createProductOption({ data: newData })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+        setSelectedRows([]);
+    }
+
+    useEffect(() => {
+        console.log(optionLabels)
+    }, [optionLabels])
+
+    const handleUpdateProductOption = (optionValueId) => {
+
+        let optionLabel = optionLabels[optionValueId];
+        if (optionLabel) {
+            dispatch(updateOptionValue({
+                data: {
+                    option_label: optionLabel,
+                }, id: optionValueId
+            })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+            setOptionLabels([]);
+        } else {
+            toast.error('Please select option first')
+        }
+
+    }
+
+    const handleDeleteProductOption = (optionId) => {
+        dispatch(deleteProductOption({ id: optionId })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+    const handleDeleteProductOptionValue = (optionValueId) => {
+        dispatch(deleteProductOptionValue({ id: optionValueId })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+
     return (
         <div className="optionstab">
             <div className="optionflex">
@@ -71,44 +208,50 @@ const OptionsTab = () => {
                         <CardHeader className="flex justify-between">
 
                             <div className="createoption">
-                                <CustomInput name='new_option' type='text'
+                                <CustomInput name='option_name' type='text'
                                     maxLength={100}
                                     height={40}
                                     placeholder='Create New Option' label={'Create New Option'}
                                     onChange={(e) => { handleInputChange({ e }) }}
-                                    value={formData.name}
+                                    value={formData.option_name}
                                 />
                                 <div className="createbtn cursor-pointer">
                                     {/* <CustomButton label="Add" variant="primary" /> */}
                                     <IoAddCircleSharp size={40} color='#555'
                                         className={`icon `}
-                                         />
+                                        onClick={() => {
+                                            handleCreateOption()
+                                        }}
+                                    />
                                 </div>
                             </div>
 
                         </CardHeader>
                         <Divider />
                         <CardBody>
-                            {options.map((item, index) => (
+                            {allOptionsByProduct?.result?.map((item, index) => (
                                 <div key={index} className="accordion-item">
                                     <div
-                                        className={`accordion-header ${expandedIndex === index ? 'expanded' : ''}`}
+                                        className={`accordion-header ${expandedIndex === item.id ? 'expanded' : ''}`}
 
                                     >
 
                                         <div className="flex justify-between items-center mb-3">
-                                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleItemClick(index)}>
+                                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleItemClick(item.id)}>
                                                 <MdKeyboardArrowDown size={20} className='mt-1' />
-                                                <p className="text-md">{item.name}</p>
+                                                <p className="text-md">{item.option_name}</p>
                                             </div>
                                             <div className="flex gap-3">
-                                                <CustomButton label="Manage" variant="teritary" onClick={() => handleItemClick(index)} />
-                                                <MdDelete size={24} className='mt-3 icon cursor-pointer' color='#555' onAn />
+                                                <CustomButton label="Manage" variant="teritary" onClick={() => handleItemClick(item.id)} />
+                                                <MdDelete size={24}
+                                                    onClick={() => handleDeleteProductOption(item.id)}
+                                                    className='mt-3 icon cursor-pointer'
+                                                    color='#555' onAn />
                                             </div>
                                         </div>
                                     </div>
 
-                                    {expandedIndex === index && (
+                                    {expandedIndex === item.id && (
                                         <div className="w-full mb-3">
                                             <div className="searchinput">
                                                 <div className="createbtn flex gap-3 items-center">
@@ -117,46 +260,22 @@ const OptionsTab = () => {
                                                 </div>
                                             </div>
                                             <div className="optiontable">
-                                                <CustomTable height={'300px'} columnDefs={columnDefs} rowData={[]} />
-                                                <CustomButton label="Add" variant="primary" />
+                                                <CustomTable height={'300px'}
+                                                    columnDefs={columnDefs}
+                                                    rowData={allProducts?.data?.products}
+                                                    selectedRows={selectedRows}
+                                                    setSelectedRows={setSelectedRows} />
+                                                <CustomButton label="Add" variant="primary"
+                                                    onClick={() => handleCreateProductOption(item.id, selectedRows)}
+                                                />
                                             </div>
                                         </div>
                                     )}
                                 </div>
                             ))}
-
-
-
-
-
-                            {/* <div className="flex justify-between">
-                                <p className="text-md">Color</p>
-                                <div className="flex gap-3">
-                                    <CustomButton label="Manage" variant="teritary" />
-                                    <MdDelete size={24} className='mt-3' />
-                                </div>
-                            </div> */}
                         </CardBody>
                     </Card>
-                    {/* <Card className="w-full mt-3">
-                        <CardHeader className="flex justify-between">
-                            <div className="flex flex-col">
-                                <p className="text-md">Size</p>
-                            </div>
-                        </CardHeader>
-                        <Divider />
-                        <CardBody>
-                            <div className="searchinput">
-                                <SearchInput />
-                            </div>
-                            <div className="optiontable">
-                                <CustomTable height={'300px'} columnDefs={columnDefs} rowData={[]} />
-                            </div>
-                            <div className="createbtn flex justify-end">
-                                <CustomButton label="Add" variant="primary" />
-                            </div>
-                        </CardBody>
-                    </Card> */}
+
                 </div>
 
                 <div className='rightsection'>
@@ -171,27 +290,27 @@ const OptionsTab = () => {
                         </CardHeader>
                         <Divider />
                         <CardBody className='flex flex-col gap-3'>
-                            {options.map((item, index) => (
+                            {optionValues?.result?.map((item, index) => (
                                 <>
                                     <div className="flex gap-3 items-center">
-                                        <CustomInput name='new_option' type='text'
+                                        <CustomInput name='option_label' type='text'
                                             maxLength={100}
                                             placeholder='Label' label={'Label'}
-                                            onChange={(e) => { handleInputChange({ e }) }}
-                                            value={formData.name}
+                                            onChange={(e) => { setOptionLabels({ ...optionLabels, [item.product_option_id]: e.target.value }) }}
+                                            value={optionLabels[item.product_option_id]}
                                         />
-                                        <CustomInput name='new_option' type='text'
+                                        <CustomInput name='sku' type='text'
                                             disabled={true}
                                             maxLength={100}
                                             placeholder='SKU' label={'SKU'}
                                             onChange={(e) => { handleInputChange({ e }) }}
-                                            value={formData.name}
+                                            value={item.sku}
                                         />
                                         <div className='flex gap-3'>
-                                            <div className="icon cursor-pointer">
+                                            <div className="icon cursor-pointer" onClick={() => handleUpdateProductOption(item.product_option_id)}>
                                                 <FaSave size={24} className='mt-3 icon' color='#555' />
                                             </div>
-                                            <div className="icon cursor-pointer">
+                                            <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
                                                 <MdDelete size={24} className='mt-3 icon' color='#555' />
                                             </div>
                                         </div>
