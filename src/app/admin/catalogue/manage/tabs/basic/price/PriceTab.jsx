@@ -117,7 +117,7 @@ const PriceTab = ({ id, data }) => {
                     // errMsg={errors.special_price.message}
                     />
 
-                    <CustomSelect label={'Special Price Type'} data={priceTypes} name={'special_price_type'}
+                    <CustomSelect label={'Special Price Type'} value={formData.special_price_type} data={priceTypes} name={'special_price_type'}
                         onChange={(e) => { handleInputChange({ e }) }} />
 
                 </div>

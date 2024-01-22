@@ -13,11 +13,7 @@ const AdminSidebar = () => {
     console.log(pathname);
 
     const sidebarItems = [
-        {
-            id: 1,
-            name: 'Dashboard',
-            url: '/admin',
-        },
+
         {
             id: 2,
             name: 'Products',
@@ -90,8 +86,14 @@ const AdminSidebar = () => {
                 </div>
 
                 <div className="sidebaritems">
+                    <Link href={'/admin'}>
+                        <div className={(pathname === '/admin' || pathname === '/admin/') ? "item active" : "item"} key={1}>
+                            <CustomTypography content={'Dashboard'} color={(pathname === '/admin' || pathname === '/admin/') ? 'WHITE' : 'BLACK'}
+                                size='MEDIUM-SMALL' weight='MEDIUM'
+                            />
+                        </div>
+                    </Link>
                     {sidebarItems.map((item) => {
-
                         return (
                             <Link href={item.url}>
                                 <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}>

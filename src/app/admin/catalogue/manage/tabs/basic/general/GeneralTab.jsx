@@ -14,15 +14,17 @@ import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import { Card, Tab, Tabs } from '@nextui-org/react';
 import CustomMultiSelect from '@/library/select/custom-multi-select/CustomMultiSelect';
 import { createProduct, getSingleProduct, updateProduct } from '@/services/features/productSlice';
+import { getAllBrands } from '@/services/features/brandSlice';
 
-const GeneralTab = ({id, data}) => {
+const GeneralTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
     const [selected, setSelected] = React.useState("English");
     const [loading, setLoading] = React.useState(false);
- 
+    const { allBrands } = useSelector(state => state.brands)
+
 
     const categories = [
         { label: 'category1', value: 1 },
@@ -99,7 +101,12 @@ const GeneralTab = ({id, data}) => {
         }
     }, [data])
 
- 
+    useEffect(() => {
+        dispatch(getAllBrands())
+    }, [])
+
+
+
 
     const handleInputChange = ({ e }) => {
 
@@ -205,7 +212,8 @@ const GeneralTab = ({id, data}) => {
 
                     <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomSelect label={'Brands'} value={formData.prd_brand_id} data={brands}
+                    <CustomSelect label={'Brands'} value={formData.prd_brand_id} data={allBrands?.data}
+                    optionValue={'id'} optionLabel={'brd_name'}
                         name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
 
                     <CustomSelect label={'Sales Unit'} value={formData.prd_sales_unit} data={saleUnits}

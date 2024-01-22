@@ -4,7 +4,7 @@ import "./CustomSelect.scss"
 import { Select, SelectItem } from '@nextui-org/select';
 
 
-const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChange, disabled, isBool}) => {
+const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChange, disabled, isBool, optionValue, optionLabel }) => {
     return (
         <div className="custom-select-container">
             <div className='label-container'>
@@ -31,9 +31,9 @@ const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChang
                     // listboxWrapper: "max-h-[400px]",
                 }}
             >
-                {data.map((obj) => (
-                    <SelectItem key={obj.value} value={obj.value}>
-                        {obj.label}
+                {data?.map((obj) => (
+                    <SelectItem key={optionValue ? obj[optionValue] : obj.value} value={optionValue ? obj[optionValue] : obj.value}>
+                        {optionLabel ? obj[optionLabel] : obj.label}
                     </SelectItem>
                 ))}
             </Select>

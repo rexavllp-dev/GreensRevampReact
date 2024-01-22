@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTable from "@/components/customtable/CustomTable";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/react";
 import { CameraIcon } from "@/components/customicons/CameraIcon";
 import { getAllBrands } from "@/services/features/brandSlice";
+import { IoMdMore } from "react-icons/io";
 
 
 export default function Brands() {
@@ -52,6 +53,35 @@ export default function Brands() {
         {
             headerName: 'Created', field: 'created_at'
         },
+        {
+            field: 'action',
+            minWidth: 150,
+            filter: false,
+            cellRenderer: (params) => {
+                return (
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <div style={{ display: 'flex', height: '100%', alignItems: 'center', paddingLeft: '10px', cursor: 'pointer' }}>
+                                <IoMdMore size={20} />
+                            </div>
+                        </DropdownTrigger>
+                        <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                            <DropdownSection title="Actions" showDivider={false}>
+                                <DropdownItem
+                                    key="edit"
+                                    description="Allows you to edit the file"
+                                    onClick={() => {
+                                        router.push(`/admin/products/brands/manage/?id=${params.data?.id}`)
+                                    }}
+                                >
+                                    Edit
+                                </DropdownItem>
+                            </DropdownSection>
+                        </DropdownMenu>
+                    </Dropdown>
+                )
+            }
+        }
     ]);
 
 

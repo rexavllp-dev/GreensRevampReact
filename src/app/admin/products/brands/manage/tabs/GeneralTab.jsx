@@ -1,13 +1,13 @@
 import CustomButton from '@/library/buttons/CustomButton'
 import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
 import CustomInput from '@/library/input/custominput/CustomInput'
-import { createBrand } from '@/services/features/brandSlice'
+import { createBrand, updateBrand } from '@/services/features/brandSlice'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
-const GeneralTab = ({id, data}) => {
+const GeneralTab = ({ id, data }) => {
 
 
     const [formData, setFormData] = React.useState({
@@ -25,9 +25,9 @@ const GeneralTab = ({id, data}) => {
         }))
     }
 
-    
+
     useEffect(() => {
-        if (id) {
+        if (data?.result?.id) {
             console.log(data)
             setFormData((prev) => ({
                 brd_name: data?.result?.brd_name,
@@ -41,19 +41,33 @@ const GeneralTab = ({id, data}) => {
             brd_name: formData.brd_name,
             brand_status: formData.brand_status
         }
-        dispatch(createBrand({ data: data })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-                let id = res.payload?.data[0]?.id;
-                router.push('/admin/products/brands/manage/?id=' + id, { scroll: true });
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((err) => {
-            console.log(err);
-        })
-
+        if (data?.result?.id) {
+            dispatch(updateBrand({ data: data, id: id })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                    let id = res.payload?.data[0]?.id;
+                    router.push('/admin/products/brands/manage/?id=' + id, { scroll: true });
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            dispatch(createBrand({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                    let id = res.payload?.data[0]?.id;
+                    router.push('/admin/products/brands/manage/?id=' + id, { scroll: true });
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
 
     return (

@@ -1,43 +1,69 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomButton from "@/library/buttons/CustomButton"
 import CustomInput from "@/library/input/custominput/CustomInput"
 import CustomTextarea from "@/library/textarea/CustomTextarea"
 import { useDispatch } from "react-redux"
+import { createBrandSeo, updateBrandSeo } from '@/services/features/brandSlice'
 
 
-const SeoTab = () => {
+const SeoTab = ({ id, data }) => {
 
 
     const [formData, setFormData] = React.useState({
-        brd_name: '',
-        brand_status: true,
+        meta_title: '',
+        meta_scripts: '',
+        meta_description: '',
     })
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(false);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleInputChange = ({ e }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
         }))
     }
+    useEffect(() => {
+        if (data?.result?.id) {
+            setFormData((prev) => ({
+                meta_title: data?.result?.meta_title,
+                meta_scripts: data?.result?.meta_scripts,
+                meta_description: data?.result?.brand_status
+            }))
+        }
+    }, [data])
 
     const handleSubmit = () => {
         const data = {
-            brd_name: formData.brd_name,
-            brand_status: formData.brand_status
+            meta_title: formData.meta_title,
+            meta_scripts: formData.meta_scripts,
+            meta_description: formData.meta_description,
         }
-        dispatch(createBrand({ data: data })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((err) => {
-            console.log(err);
-        })
+        if (data?.result?.id) {
+            dispatch(updateBrandSeo({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+    
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }else{
+            dispatch(createBrandSeo({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+    
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
 
     }
 

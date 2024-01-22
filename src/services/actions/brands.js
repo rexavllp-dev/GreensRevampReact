@@ -14,7 +14,7 @@ export const brands = {
     //Get single brand
     getSingleBrand: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/brands/get-brand/'+ id)
+            Axios.get('/brands/get-brand/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -30,9 +30,27 @@ export const brands = {
     },
 
     //Update brand
-    updateBrand: (id) => {
+    updateBrand: ({ data, id }) => {
         return new Promise((resolve, reject) => {
-            Axios.put('/brands/update-brand/'+ id)
+            Axios.put('/brands/update-brand/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Create Brand seo
+    createBrandSeo: ({ data }) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/brands/create-seo/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Update brand seo
+    updateBrandSeo: ({ data, id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/brands/update-seo/' + id, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -51,5 +69,5 @@ export const brands = {
                 .catch(error => reject(error))
         })
     },
-   
+
 }

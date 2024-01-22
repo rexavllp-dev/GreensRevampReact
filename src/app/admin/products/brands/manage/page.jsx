@@ -28,18 +28,18 @@ function CreateBrand() {
         brand_status: true,
     })
     const [loading, setLoading] = React.useState(false);
-    const { singleBrand } = useSelector(state => state.brands)
+    const { singleBrand, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded } = useSelector(state => state.brands)
     const searchParams = useSearchParams()
     let id = searchParams.get('id');
 
 
-  useEffect(() => {
+    useEffect(() => {
         if (id) {
             dispatch(getSingleBrand({ id }));
         }
-    }, [id])
+    }, [id, isCreateBrandLoaded, isUpdateBrandLoaded, isUploadImageLoaded])
 
-   
+
     const tabs = [
         {
             id: 1,

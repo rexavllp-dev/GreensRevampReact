@@ -7,9 +7,9 @@ const initialState = {
     isAllBrandsLoaded: false,
     isAllBrandsLoadError: false,
     allBrands: [],
-    isSingleBrandLoading:false,
-    isSingleBrandLoaded:false,
-    isSingleBrandLoadError:false,
+    isSingleBrandLoading: false,
+    isSingleBrandLoaded: false,
+    isSingleBrandLoadError: false,
     singleBrand: {},
     isCreateBrandLoading: false,
     isCreateBrandLoaded: false,
@@ -20,6 +20,14 @@ const initialState = {
     isUploadImageLoading: false,
     isUploadImageLoaded: false,
     isUploadImageError: false,
+
+    isBrandSeoCreating: false,
+    isBrandSeoCreated: false,
+    isBrandSeoCreateError: false,
+
+    isBrandSeoUpdating: false,
+    isBrandSeoUpdated: false,
+    isBrandSeoUpdateError: false
 }
 
 export const getAllBrands = createAsyncThunk('getAllBrands', async (data, thunkAPI) => {
@@ -52,9 +60,9 @@ export const createBrand = createAsyncThunk('createBrand', async ({ data }, thun
     }
 })
 
-export const updateBrand = createAsyncThunk('updateBrand', async (data, thunkAPI) => {
+export const updateBrand = createAsyncThunk('updateBrand', async ({ data, id }, thunkAPI) => {
     try {
-        const response = await brands.updateBrand();
+        const response = await brands.updateBrand({ data, id });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -65,6 +73,26 @@ export const updateBrand = createAsyncThunk('updateBrand', async (data, thunkAPI
 export const uploadBrandImage = createAsyncThunk('uploadBrandImage', async ({ data, id }, thunkAPI) => {
     try {
         const response = await brands.uploadBrandImage(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createBrandSeo = createAsyncThunk('createBrandSeo', async ({ data }, thunkAPI) => {
+    try {
+        const response = await brands.createBrandSeo(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateBrandSeo = createAsyncThunk('updateBrandSeo', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await brands.updateBrandSeo(data, id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -164,7 +192,39 @@ const brandSlice = createSlice({
                 state.isUploadImageLoading = false;
                 state.isUploadImageLoaded = false;
                 state.isUploadImageError = true;
-            });
+            })
+
+            .addCase(createBrandSeo.pending, (state, action) => {
+                state.isBrandSeoCreating = true;
+                state.isBrandSeoCreated = false;
+                state.isBrandSeoCreateError = false;
+            })
+            .addCase(createBrandSeo.fulfilled, (state, action) => {
+                state.isBrandSeoCreating = false;
+                state.isBrandSeoCreated = true;
+                state.isBrandSeoCreateError = false;
+            })
+            .addCase(createBrandSeo.rejected, (state, action) => {
+                state.isBrandSeoCreating = false;
+                state.isBrandSeoCreated = false;
+                state.isBrandSeoCreateError = true;
+            })
+
+            .addCase(updateBrandSeo.pending, (state, action) => {
+                state.isBrandSeoUpdating = true;
+                state.isBrandSeoUpdated = false;
+                state.isBrandSeoUpdateError = false;
+            })
+            .addCase(updateBrandSeo.fulfilled, (state, action) => {
+                state.isBrandSeoUpdating = false;
+                state.isBrandSeoUpdated = true;
+                state.isBrandSeoUpdateError = false;
+            })
+            .addCase(updateBrandSeo.rejected, (state, action) => {
+                state.isBrandSeoUpdating = false;
+                state.isBrandSeoUpdated = false;
+                state.isBrandSeoUpdateError = true;
+            })
     }
 })
 
