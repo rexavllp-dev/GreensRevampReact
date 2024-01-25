@@ -7,30 +7,34 @@ import CustomButton from "@/library/buttons/CustomButton";
 import { FaArrowLeft } from "react-icons/fa";
 import './Catalogue.scss'
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTable from "@/components/customtable/CustomTable";
 import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/react";
 import { CameraIcon } from "@/components/customicons/CameraIcon";
-import { getAllProducts } from "@/services/features/productSlice";
+import { deleteProduct, getAllProducts } from "@/services/features/productSlice";
 import { IoMdMore } from "react-icons/io";
+import { toast } from "react-toastify";
 
 
 export default function Catalogue() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const { allProducts } = useSelector(state => state.products)
+    const { allProducts, isProductDeleted } = useSelector(state => state.products)
+    const [searchQuery, setSearchQuery] = React.useState('')
+    const [selectedRows, setSelectedRows] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        dispatch(getAllProducts())
-    }, [])
+        dispatch(getAllProducts({ search_query: searchQuery }))
+    }, [searchQuery, isProductDeleted])
 
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         {
-            headerName: 'Thumbnail', field: 'prod_image',
+            headerName: 'Thumbnail', field: 'prod_image', minWidth: 150,
             cellRenderer: (params) => {
                 return (
                     <Avatar showFallback src={
@@ -42,7 +46,7 @@ export default function Catalogue() {
             }
         },
         {
-            headerName: 'Name', field: 'prd_name'
+            headerName: 'Name', field: 'prd_name', minWidth: 150
         },
         {
             headerName: 'Stock', field: 'stock',
@@ -57,7 +61,7 @@ export default function Catalogue() {
             headerName: 'Brad Code', field: 'brand_code',
         },
         {
-            headerName: 'Status', field: 'prd_status',
+            headerName: 'Status', field: 'prd_status', minWidth: 150,
             cellRenderer: (params) => {
                 const isActive = params.data?.prd_status;
                 return (
@@ -100,6 +104,26 @@ export default function Catalogue() {
         // dispatch(getAllUsers({ data: {} }))
     }, [])
 
+    const HandleDeleteProduct = () => {
+        if (selectedRows.length > 0) {
+            const data = selectedRows.map(row => row.id);
+            setLoading(true)
+            dispatch(deleteProduct({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+                setLoading(false);
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            setLoading(false)
+            toast.error('Please select atleast one product')
+        }
+    }
+
 
     return (
         <div className="cataloguepage">
@@ -115,15 +139,19 @@ export default function Catalogue() {
 
             <div className="header">
                 <div className="searchinput">
-                    <SearchInput />
+                    <SearchInput name={'search'} value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
                 <div className="right">
-                    <CustomButton label="Delete" variant="danger" height={'42px'} />
+                    <CustomButton label="Delete" variant="danger" height={'42px'} onClick={HandleDeleteProduct} />
                     <CustomButton label="Create Product" variant="primary" height={'42px'}
                         onClick={() => router.push('/admin/catalogue/manage')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products} />
+            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products}
+                selectedRows={selectedRows} setSelectedRows={setSelectedRows}
+            />
         </div>
     )
 }

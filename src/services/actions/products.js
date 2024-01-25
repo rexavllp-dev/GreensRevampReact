@@ -3,20 +3,20 @@ import Axios from '../axios/Axios.js';
 export const products = {
 
     //Get all Products
-    getAllProducts: () => {
+    getAllProducts: ({ search_query }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/products/get-products')
+            Axios.get(`/products/get-products?search_query=${search_query}`)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
     //Get all products by user
-    getAllProductsByUser: ({ page, per_page }) => {
+    getAllProductsByUser: ({ page, per_page, search_query }) => {
         return new Promise((resolve, reject) => {
             let query = `/products/get-products`
             if (page && per_page) {
-                query = query + `?page=${page}&per_page=${per_page}`
+                query = query + `?page=${page}&per_page=${per_page}&search_query=${search_query}`
             }
             Axios.get(query)
                 .then(response => resolve(response))
@@ -27,6 +27,14 @@ export const products = {
     getSingleProduct: (id) => {
         return new Promise((resolve, reject) => {
             Axios.get('/products/get-product/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Delete products
+    deleteProduct: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/products/delete-product/?data=${JSON.stringify(data)}`)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -108,6 +116,9 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+
+
+
     //Create Option
     createOption: (data) => {
         return new Promise((resolve, reject) => {
@@ -157,7 +168,100 @@ export const products = {
     },
     deleteProductOptionValue: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.delete('/products/delete-option-value/' + id)
+            Axios.delete('/products/delete-product-option/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+
+
+    //Create Variants
+    createVariant: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-variants', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Create Variant label
+    createVariantLabel: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-product-variant', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Update variant label
+    updateVariantLabel: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-product-variant/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get all variant by product id
+    getAllVariantsByProductId: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-variants-by-product/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get all variant labels by variant id
+    getVariantLabelsByVariantId: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-variant-values/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    deleteVariant: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete('/products/delete-variant/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    deleteVariantLabel: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete('/products/delete-product-variant/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    createRelatedProducts: ({ data, id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/create-related-product/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getAllRelatedProducts: ({ id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-related-products/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getProductOptions: ({ id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-options/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    modifyStock: ({ data, id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/modify-stock/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getStockHistoryByProduct: ({ id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/stock-history-by-product/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

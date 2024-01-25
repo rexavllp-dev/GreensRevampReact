@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './InventoryTab.scss'
 import { createInventory, updateInventory } from '@/services/features/inventorySlice';
+import CustomModal from '@/components/modal/custom-modal/CustomModal';
+import StockUpdateModal from './components/StockUpdateModal';
 
 const InventoryTab = ({ id, data }) => {
 
@@ -119,6 +121,9 @@ const InventoryTab = ({ id, data }) => {
         }
     }
 
+    const [open, setOpen] = React.useState(false)
+
+
     return (
         <div className='inventorytab'>
 
@@ -144,10 +149,11 @@ const InventoryTab = ({ id, data }) => {
                             <CustomInput name='product_quantity' type='text'
                                 maxLength={100}
                                 placeholder='Quantity' label={'Quantity'}
-
+                                disabled={true}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.product_quantity}
                             />
+                            <CustomButton label='Update Stock' onClick={() => setOpen(true)} />
                             <CustomInput name='minimum_quantity' type='text'
                                 maxLength={100}
                                 placeholder='Minimum Qty' label={'Minimum Qty'}
@@ -187,7 +193,7 @@ const InventoryTab = ({ id, data }) => {
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
             </div>
 
-
+            <StockUpdateModal open={open} handleClose={() => setOpen(false)} product_qty={formData.product_quantity} id={id} />
         </div>
     )
 }

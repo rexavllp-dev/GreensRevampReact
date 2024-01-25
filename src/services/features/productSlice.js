@@ -7,6 +7,7 @@ const initialState = {
     isAllProductsLoaded: false,
     isAllProductsLoadError: false,
     allProducts: [],
+    searchQuery: '',
 
     isAllProductsByUserLoading: false,
     isAllProductsByUserLoaded: false,
@@ -17,6 +18,10 @@ const initialState = {
     isSingleProductLoaded: false,
     isSingleProductLoadError: false,
     singleProduct: {},
+
+    isProductDeleting: false,
+    isProductDeleted: false,
+    isProductDeleteError: false,
 
     isProductCreating: false,
     isProductCreated: false,
@@ -58,8 +63,8 @@ const initialState = {
     isProductOptionCreated: false,
     isProductOptionCreateError: false,
 
-    isOptionValueUpdating:false,
-    isOptionValueUpdated:false,
+    isOptionValueUpdating: false,
+    isOptionValueUpdated: false,
     isOptionValueUpdateError: false,
 
     isAllOptionsByProductLoading: false,
@@ -72,12 +77,12 @@ const initialState = {
     isOptionValuesLoadError: false,
     optionValues: [],
 
-    isProductOptionDeleting:false,
-    isProductOptionDeleted:false,
+    isProductOptionDeleting: false,
+    isProductOptionDeleted: false,
     isProductOptionDeleteError: false,
 
-    isProductOptionValueDeleting:false,
-    isProductOptionValueDeleted:false,
+    isProductOptionValueDeleting: false,
+    isProductOptionValueDeleted: false,
     isProductOptionValueDeleteError: false,
 
 
@@ -91,8 +96,8 @@ const initialState = {
     isProductVariantCreated: false,
     isProductVariantCreateError: false,
 
-    isVariantValueUpdating:false,
-    isVariantValueUpdated:false,
+    isVariantValueUpdating: false,
+    isVariantValueUpdated: false,
     isVariantValueUpdateError: false,
 
     isAllVariantsByProductLoading: false,
@@ -105,18 +110,53 @@ const initialState = {
     isVariantValuesLoadError: false,
     VariantValues: [],
 
-    isProductVariantDeleting:false,
-    isProductVariantDeleted:false,
+    isProductVariantDeleting: false,
+    isProductVariantDeleted: false,
     isProductVariantDeleteError: false,
 
-    isProductVariantValueDeleting:false,
-    isProductVariantValueDeleted:false,
+    isProductVariantValueDeleting: false,
+    isProductVariantValueDeleted: false,
     isProductVariantValueDeleteError: false,
+
+
+    isRelatedProductsLoading: false,
+    isRelatedProductsLoaded: false,
+    isRelatedProductsLoadError: false,
+    relatedProducts: [],
+
+    isRelatedProductsCreating: false,
+    isRelatedProductsCreated: false,
+    isRelatedProductsCreateError: true,
+
+    isReviewCreatingByAdmin: false,
+    isReviewCreatedByAdmin: false,
+    isReviewCreateByAdminError: false,
+
+    isReviewIsLoading: false,
+    isReviewIsLoaded: false,
+    isReviewIsLoadError: false,
+    allReviews: [],
+
+
+
+    isProductOptionsLoading: false,
+    isProductOptionsLoaded: false,
+    isProductOptionsLoadError: false,
+    productOptions: [],
+
+    isStockModifying: false,
+    isStockModified: false,
+    isStockModifyError: false,
+
+    isStockHistoryByProductLoading: false,
+    isStockHistoryByProductLoaded: false,
+    isStockHistoryByProductLoadError: false,
+    stockHistoryByProduct: [],
 }
 
-export const getAllProducts = createAsyncThunk('getAllProducts', async (data, thunkAPI) => {
+export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
     try {
-        const response = await products.getAllProducts();
+        const response = await products.getAllProducts({ search_query });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -124,9 +164,9 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async (data, th
     }
 })
 
-export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({ page, per_page }, thunkAPI) => {
+export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({ page, per_page, search_query }, thunkAPI) => {
     try {
-        const response = await products.getAllProductsByUser({ page, per_page });
+        const response = await products.getAllProductsByUser({ page, per_page, search_query });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -137,6 +177,16 @@ export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', asy
 export const getSingleProduct = createAsyncThunk('getSingleProduct', async ({ id }, thunkAPI) => {
     try {
         const response = await products.getSingleProduct(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteProduct = createAsyncThunk('deleteProduct', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.deleteProduct(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -369,13 +419,90 @@ export const deleteVariantLabel = createAsyncThunk('deleteVariantLabel', async (
     }
 })
 
+export const createRelatedProducts = createAsyncThunk('createRelatedProducts', async ({ id, data }, thunkAPI) => {
+    try {
+        const response = await products.createRelatedProducts({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAllRelatedProducts = createAsyncThunk('getAllRelatedProducts', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getAllRelatedProducts({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createProductReviewByAdmin = createAsyncThunk('createProductReviewByAdmin', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.createProductReviewByAdmin({ id, data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getProductReview = createAsyncThunk('getProductReview', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getProductReview({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getProductOptions = createAsyncThunk('getProductOptions', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getProductOptions({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+export const modifyStock = createAsyncThunk('modifyStock', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await products.modifyStock({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+export const getStockHistoryByProduct = createAsyncThunk('getStockHistoryByProduct', async ({ id }, thunkAPI) => {
+    try {
+        const response = await products.getStockHistoryByProduct({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 
 
 
 const productSlice = createSlice({
     name: "products",
     initialState,
-    reducers: {},
+    reducers: {
+        setSearchQuery: function (state, action) {
+            state.searchQuery = action.payload ? action.payload : ''
+        }
+
+    },
     extraReducers: (builder) => {
 
         builder
@@ -438,6 +565,25 @@ const productSlice = createSlice({
                 state.isSingleProductLoading = false;
                 state.isSingleProductLoaded = false;
                 state.isSingleProductLoadError = true;
+            })
+
+            //Delete product
+            .addCase(deleteProduct.pending, (state, action) => {
+                state.isProductDeleting = true;
+                state.isProductDeleted = false;
+                state.isProductDeleteError = false;
+            })
+
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.isProductDeleting = false;
+                state.isProductDeleted = true;
+                state.isProductDeleteError = false;
+            })
+
+            .addCase(deleteProduct.rejected, (state, action) => {
+                state.isProductDeleting = false;
+                state.isProductDeleted = false;
+                state.isProductDeleteError = true;
             })
 
             //createProduct
@@ -709,10 +855,6 @@ const productSlice = createSlice({
 
 
 
-
-
-
-
             .addCase(createVariant.pending, (state, action) => {
                 state.isVariantCreating = true;
                 state.isVariantCreated = false;
@@ -841,7 +983,142 @@ const productSlice = createSlice({
                 state.isProductVariantValueDeleteError = true;
             })
 
+
+
+            .addCase(createRelatedProducts.pending, (state, action) => {
+                state.isRelatedProductsCreating = true;
+                state.isRelatedProductsCreated = false;
+                state.isRelatedProductsCreateError = false;
+            })
+
+            .addCase(createRelatedProducts.fulfilled, (state, action) => {
+                state.isRelatedProductsCreating = false;
+                state.isRelatedProductsCreated = true;
+                state.isRelatedProductsCreateError = false;
+            })
+
+            .addCase(createRelatedProducts.rejected, (state, action) => {
+                state.isRelatedProductsCreating = false;
+                state.isRelatedProductsCreated = false;
+                state.isRelatedProductsCreateError = true;
+            })
+
+            .addCase(getAllRelatedProducts.pending, (state, action) => {
+                state.isRelatedProductsLoading = true;
+                state.isRelatedProductsLoaded = false;
+                state.isRelatedProductsLoadError = false;
+            })
+
+            .addCase(getAllRelatedProducts.fulfilled, (state, action) => {
+                state.isRelatedProductsLoading = false;
+                state.isRelatedProductsLoaded = true;
+                state.isRelatedProductsLoadError = false;
+                state.relatedProducts = action.payload;
+            })
+
+            .addCase(getAllRelatedProducts.rejected, (state, action) => {
+                state.isRelatedProductsLoading = false;
+                state.isRelatedProductsLoaded = false;
+                state.isRelatedProductsLoadError = true;
+            })
+
+
+
+            .addCase(createProductReviewByAdmin.pending, (state, action) => {
+                state.isReviewCreatingByAdmin = true;
+                state.isReviewCreatedByAdmin = false;
+                state.isReviewCreateByAdminError = false;
+            })
+
+            .addCase(createProductReviewByAdmin.fulfilled, (state, action) => {
+                state.isReviewCreatingByAdmin = false;
+                state.isReviewCreatedByAdmin = true;
+                state.isReviewCreateByAdminError = false;
+            })
+
+            .addCase(createProductReviewByAdmin.rejected, (state, action) => {
+                state.isReviewCreatingByAdmin = false;
+                state.isReviewCreatedByAdmin = false;
+                state.isReviewCreateByAdminError = true;
+            })
+
+            .addCase(getProductReview.pending, (state, action) => {
+                state.isReviewIsLoading = true;
+                state.isReviewIsLoaded = false;
+                state.isReviewIsLoadError = false;
+            })
+
+            .addCase(getProductReview.fulfilled, (state, action) => {
+                state.isReviewIsLoading = false;
+                state.isReviewIsLoaded = true;
+                state.isReviewIsLoadError = false;
+                state.allReviews = action.payload;
+            })
+
+            .addCase(getProductReview.rejected, (state, action) => {
+                state.isReviewIsLoading = false;
+                state.isReviewIsLoaded = false;
+                state.isReviewIsLoadError = true;
+            })
+
+            .addCase(getProductOptions.pending, (state, action) => {
+                state.isProductOptionsLoading = true;
+                state.isProductOptionsLoaded = false;
+                state.isProductOptionsLoadError = false;
+            })
+
+            .addCase(getProductOptions.fulfilled, (state, action) => {
+                state.isProductOptionsLoading = false;
+                state.isProductOptionsLoaded = true;
+                state.isProductOptionsLoadError = false;
+                state.productOptions = action.payload;
+            })
+
+            .addCase(getProductOptions.rejected, (state, action) => {
+                state.isProductOptionsLoading = false;
+                state.isProductOptionsLoaded = false;
+                state.isProductOptionsLoadError = true;
+            })
+
+            .addCase(modifyStock.pending, (state, action) => {
+                state.isStockModifying = true;
+                state.isStockModified = false;
+                state.isStockModifyError = false;
+            })
+
+            .addCase(modifyStock.fulfilled, (state, action) => {
+                state.isStockModifying = false;
+                state.isStockModified = true;
+                state.isStockModifyError = false;
+            })
+
+            .addCase(modifyStock.rejected, (state, action) => {
+                state.isStockModifying = false;
+                state.isStockModified = false;
+                state.isStockModifyError = true;
+            })
+
+            .addCase(getStockHistoryByProduct.pending, (state, action) => {
+                state.isStockHistoryByProductLoading = true;
+                state.isStockHistoryByProductLoaded = false;
+                state.isStockHistoryByProductLoadError = false;
+            })
+
+            .addCase(getStockHistoryByProduct.fulfilled, (state, action) => {
+                state.isStockHistoryByProductLoading = false;
+                state.isStockHistoryByProductLoaded = true;
+                state.isStockHistoryByProductLoadError = false;
+                state.stockHistoryByProduct = action.payload;
+            })
+
+            .addCase(getStockHistoryByProduct.rejected, (state, action) => {
+                state.isStockHistoryByProductLoading = false;
+                state.isStockHistoryByProductLoaded = false;
+                state.isStockHistoryByProductLoadError = true;
+            })
+
     }
 })
 
+export const { setSearchQuery } = productSlice.actions;
 export default productSlice.reducer

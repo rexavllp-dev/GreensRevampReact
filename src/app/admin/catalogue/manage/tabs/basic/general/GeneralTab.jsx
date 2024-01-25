@@ -84,7 +84,7 @@ const GeneralTab = ({ id, data }) => {
                 prd_storage_type: data?.data?.product?.prd_storage_type,
                 prd_tags: data?.data?.product?.prd_tags,
                 prd_expiry_date: new Date(data?.data?.product?.prd_expiry_date),
-                prd_brand_id: data?.data?.product?.prd_brand_id,
+                prd_brand_id: JSON.stringify(data?.data?.product?.prd_brand_id),
                 prd_sales_unit: data?.data?.product?.prd_sales_unit,
                 prd_return_type: data?.data?.product?.prd_return_type,
                 categories: [],

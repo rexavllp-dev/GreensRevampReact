@@ -24,21 +24,24 @@ const OptionsTab = ({ data, id }) => {
     const [expandedIndex, setExpandedIndex] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [selectedRows, setSelectedRows] = React.useState([]);
+    const [searchQuery, setSearchQuery] = React.useState('')
 
 
-    const { allProducts, allOptionsByProduct, optionValues, isProductOptionCreated, isOptionCreated } = useSelector(state => state.products)
+    const { allProducts, allOptionsByProduct, optionValues,
+        isProductOptionDeleted, isProductOptionValueDeleted,
+        isProductOptionCreated, isOptionCreated } = useSelector(state => state.products)
 
     useEffect(() => {
-        dispatch(getAllProducts())
-    }, [])
+        dispatch(getAllProducts({ search_query: searchQuery }))
+    }, [searchQuery])
 
     useEffect(() => {
         dispatch(getAllOptionsByProductId({ id }))
-    }, [id, isProductOptionCreated, isOptionCreated])
+    }, [id, isProductOptionCreated, isProductOptionDeleted, isProductOptionValueDeleted, isOptionCreated])
 
     useEffect(() => {
         dispatch(getOptionValues({ id: expandedIndex }))
-    }, [expandedIndex, isProductOptionCreated])
+    }, [expandedIndex, isProductOptionDeleted, isProductOptionValueDeleted, isProductOptionCreated])
 
 
 
@@ -145,32 +148,29 @@ const OptionsTab = ({ data, id }) => {
         setSelectedRows([]);
     }
 
-    useEffect(() => {
-        console.log(optionLabels)
-    }, [optionLabels])
 
     const handleUpdateProductOption = (optionValueId) => {
 
         let optionLabel = optionLabels[optionValueId];
-        if (optionLabel) {
-            dispatch(updateOptionValue({
-                data: {
-                    option_label: optionLabel,
-                }, id: optionValueId
-            })).then((res) => {
-                if (res.payload?.success) {
-                    toast.success(res.payload.message);
-                } else {
-                    toast.error(res.payload.message)
-                }
-                setLoading(false)
-            }).catch((err) => {
-                console.log(err);
-            })
-            setOptionLabels([]);
-        } else {
-            toast.error('Please select option first')
-        }
+        // if (optionLabel) {
+        dispatch(updateOptionValue({
+            data: {
+                option_label: optionLabel,
+            }, id: optionValueId
+        })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+        //     setOptionLabels([]);
+        // } else {
+        //     toast.error('Please select option first')
+        // }
 
     }
 
@@ -255,7 +255,9 @@ const OptionsTab = ({ data, id }) => {
                                         <div className="w-full mb-3">
                                             <div className="searchinput">
                                                 <div className="createbtn flex gap-3 items-center">
-                                                    <SearchInput />
+                                                    <SearchInput name={'search'} value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                    />
 
                                                 </div>
                                             </div>

@@ -13,19 +13,22 @@ import CustomPagination from '@/components/pagination/CustomPagination';
 import NavCard from '@/components/cards/navcard/NavCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsByUser } from '@/services/features/productSlice';
+import { useSearchParams } from 'next/navigation';
 
 
 const Search = () => {
 
-    const recommendedProdRef = React.useRef()
+    const searchParams = useSearchParams();
+    const recommendedProdRef = React.useRef();
     const { width, height } = useWindowSize();
     const dispatch = useDispatch();
     const isMobileView = width < 767;
     const [showFilter, setShowFilter] = React.useState(false);
+    let keyword = searchParams.get('q');
 
     const [currentPage, setCurrentPage] = React.useState(1);
 
-    const { allProductsByUser } = useSelector((state) => state.products)
+    const { allProductsByUser, searchQuery } = useSelector((state) => state.products);
 
 
     const categories = [
@@ -147,8 +150,9 @@ const Search = () => {
     ]
 
     useEffect(() => {
-        dispatch(getAllProductsByUser({page: currentPage, per_page:8}))
-    }, [currentPage])
+        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: searchQuery }))
+    }, [currentPage, searchQuery]);
+
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
     const handleNav = (ref, direction) => {
@@ -263,7 +267,7 @@ const Search = () => {
                 <div className="items" ref={recommendedProdRef}>
                     {
                         products.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price}
+                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
                                 previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
                         ))
                     }

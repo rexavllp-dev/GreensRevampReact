@@ -8,6 +8,8 @@ import Image from "next/image";
 import { CloseIcon } from "../../../../public/icons";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/providers/LanguageProvider";
+import { getAllProducts, setSearchQuery } from "@/services/features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const suggestions = [
     {
@@ -57,28 +59,37 @@ const products = [
 ]
 export default function SearchDropdown() {
     const searchRef = useRef();
-    const router  = useRouter();
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     const { getTranslation } = useLanguage();
+    const { allProducts, searchQuery } = useSelector(state => state.products)
 
-    const [keyword, setKeyword] = React.useState('');
+    // const [searchQuery, dispatch(setSearchQuery] = React.useState('');
     const [visible, setVisible] = React.useState(false);
 
+    React.useEffect(() => {
+        dispatch(getAllProducts({ search_query: searchQuery }))
+    }, [searchQuery])
+
     const handleSearch = () => {
-        if (!keyword) {
+        if (!searchQuery) {
             return;
         }
-        router.push(`/products/search/?q=${keyword}`, { scroll: true });
+        router.push(`/products/search/?q=${searchQuery}`, { scroll: true });
     }
+
     const onKeyUp = (e) => {
-        if (!keyword) {
+        if (!searchQuery) {
             return;
         }
         if (e.key === 'Enter') {
-            router.push(`/products/search/?q=${keyword}`, { scroll: true });
+            router.push(`/products/search/?q=${searchQuery}`, { scroll: true });
             // this.search(); 
         }
     }
+
+
 
 
 
@@ -94,8 +105,8 @@ export default function SearchDropdown() {
                 searchRef?.current?.focus();
             }}>
                 <CustomSearch
-                    name={'product'} value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
+                    name={'product'} value={searchQuery}
+                    onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                     placeholder={getTranslation('home_search_placeholder')}
                 // disabled={true}
                 />
@@ -104,8 +115,8 @@ export default function SearchDropdown() {
                 visible &&
                 <div className="dropdown">
                     <div className="searchinput">
-                        <CustomSearch name={'product'} value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)}
+                        <CustomSearch name={'product'} value={searchQuery}
+                            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                             // placeholder={'Search for a product or Item code'}
                             onKeyUp={onKeyUp}
                             onSearchClick={handleSearch}
@@ -118,24 +129,31 @@ export default function SearchDropdown() {
                         </div>
                     </div>
                     {
-                        keyword?.length > 0 ?
+                        searchQuery?.length > 0 ?
                             <div className="results-wrapper">
                                 <CustomTypography content='Results' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
 
                                 <div className="products-container">
                                     {
-                                        products?.map((item, index) => (
-                                            <div className="product">
+                                        allProducts?.data?.products?.map((item, index) => (
+                                            <div className="product" onClick={() => {
+                                                router.push(`/products/${item.product_id}`, { scroll: true });
+                                            }}>
                                                 <div className="image">
-                                                    <Image
-                                                        src={item.img}
-                                                        alt={item.name}
-                                                        width={45}
-                                                        height={45}
-                                                    />
+                                                    {
+                                                        item?.product_img[0]?.url &&
+                                                        <Image
+                                                            src={item?.product_img[0]?.url}
+                                                            alt={item?.prd_name}
+                                                            width={45}
+                                                            height={45}
+                                                        />
+
+                                                    }
+
                                                 </div>
                                                 <div className="name">
-                                                    <CustomTypography content={item.name}
+                                                    <CustomTypography content={item.prd_name}
                                                         color='BLACK' style={{ borderBottom: '1px solid #111', display: 'inline' }}
                                                         size='MEDIUM' weight='MEDIUM' />
                                                 </div>
@@ -171,7 +189,7 @@ export default function SearchDropdown() {
                                 <div className="recentproducts">
                                     {
                                         products?.map((item, index) => (
-                                            <div className="product" key={item.id}>
+                                            <div className="product" key={item.id} >
                                                 <div className="image">
                                                     <Image
                                                         src={item.img}
@@ -191,7 +209,7 @@ export default function SearchDropdown() {
                                     }
                                 </div>
 
-                                <CustomTypography content='Related Searches for Starbucks' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                                {/* <CustomTypography content='Related Searches for Starbucks' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
 
                                 <div className="suggestions">
                                     {
@@ -202,7 +220,7 @@ export default function SearchDropdown() {
 
                                         ))
                                     }
-                                </div>
+                                </div> */}
 
                             </div>
 

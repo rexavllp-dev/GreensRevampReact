@@ -6,7 +6,7 @@ import { StarIcon, heartIconBlack } from '../../../../public/icons';
 import { useLanguage } from '@/providers/LanguageProvider';
 import { useRouter } from 'next/navigation';
 
-const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()

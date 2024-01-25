@@ -131,6 +131,11 @@
           padding: 10px;
           margin-right: 40px;
           cursor: pointer;
+
+          .image {
+            border-radius: 50%;
+            overflow: hidden;
+          }
         }
       }
     }

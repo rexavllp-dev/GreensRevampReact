@@ -1,36 +1,41 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./StockHistoryTab.scss"
 import CustomTable from '@/components/customtable/CustomTable'
 import { Chip } from '@nextui-org/react'
 import SearchInput from '@/library/input/searchinput/SearchInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { getStockHistoryByProduct } from '@/services/features/productSlice'
 
-function StockHistoryTab() {
+function StockHistoryTab({id, data}) {
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        // {
+        //     headerName: 'Product', field: 'prd_name',
+        // },
+        // {
+        //     headerName: 'SKU', field: 'sku',
+        // },
         {
-            headerName: 'Product', field: 'product',
+            headerName: 'Quantity', field: 'qty',
         },
         {
-            headerName: 'SKU', field: 'sku',
+           headerName: 'Previous Stock', field: 'previous_stock',
         },
         {
-            headerName: 'SKU', field: 'sku',
+           headerName: 'Remaining Stock', field: 'remaining_stock',
         },
         {
-            headerName: 'Rating', field: 'rating',
-        },
-        {
-            headerName: 'Status', field: 'status',
-            cellRenderer: (params) => {
-                const isActive = params.data?.is_status;
-                return (
-                    <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
-                )
-            }
+            headerName: 'Comment', field: 'comment',
         },
     ]);
+    const dispatch = useDispatch()
+    const {stockHistoryByProduct} = useSelector(state => state.products)
+
+    useEffect(() => {
+        dispatch(getStockHistoryByProduct({ id: id }))
+    }, [])
 
     return (
         <div className='reviewtab'>
@@ -41,7 +46,7 @@ function StockHistoryTab() {
                 <div className="right">
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={[]} />
+            <CustomTable columnDefs={columnDefs} rowData={stockHistoryByProduct?.result} />
         </div>
     )
 }

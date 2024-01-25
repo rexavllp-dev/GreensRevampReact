@@ -1,24 +1,52 @@
 import { CameraIcon } from '@/components/customicons/CameraIcon';
 import CustomTable from '@/components/customtable/CustomTable'
-import { Avatar, Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
-import React from 'react'
+import { Avatar, Card, CardBody, CardHeader, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
+import React, { useEffect } from 'react'
 import "./VariantsTab.scss"
 import CustomInput from '@/library/input/custominput/CustomInput';
 import CustomButton from '@/library/buttons/CustomButton';
 import SearchInput from '@/library/input/searchinput/SearchInput';
 import { MdDelete, MdKeyboardArrowDown } from 'react-icons/md';
+import { FaSave } from 'react-icons/fa';
+import { IoAddCircleSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    createVariant, createVariantLabel, deleteProductOptionValue,
+    getAllProducts, getAllVariantsByProductId, getVariantLabelsByVariantId,
+    deleteProductOption,
+    updateVariantLabel
+} from '@/services/features/productSlice';
+import { toast } from 'react-toastify';
+import CustomTypography from '@/library/typography/CustomTypography';
 
-const VariantsTab = () => {
+const VariantsTab = ({ data, id }) => {
 
     const [formData, setFormData] = React.useState({
+        variant_name: '',
         label: '',
     })
+    const dispatch = useDispatch()
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+    const [searchQuery, setSearchQuery] = React.useState('')
 
-    const handleItemClick = (index) => {
-        setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
-    };
+
+    const { allProducts, productVariants , allVariantsByProduct, isProductVariantCreated, isVariantCreated } = useSelector(state => state.products)
+
+    useEffect(() => {
+        dispatch(getAllProducts({ search_query: searchQuery }))
+    }, [searchQuery])
+
+    useEffect(() => {
+        dispatch(getAllVariantsByProductId({ id }))
+    }, [id, isProductVariantCreated, isVariantCreated])
+
+    useEffect(() => {
+        dispatch(getVariantLabelsByVariantId({ id: expandedIndex }))
+    }, [expandedIndex, isProductVariantCreated])
+
 
     const [columnDefs] = React.useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
@@ -34,13 +62,10 @@ const VariantsTab = () => {
         //     }
         // },
         {
-            headerName: 'Name', field: 'prod_name'
+            headerName: 'Name', field: 'prd_name'
         },
         {
-            headerName: 'Stock', field: 'stock',
-        },
-        {
-            headerName: 'Price', field: 'price',
+            headerName: 'Price', field: 'product_price',
         },
         {
             headerName: 'SKU', field: 'sku',
@@ -48,16 +73,39 @@ const VariantsTab = () => {
     ]);
 
 
-    const [options, setOptions] = React.useState([
-        {
-            id: 1,
-            name: 'Size'
-        },
-        {
-            id: 2,
-            name: 'Color'
-        }
-    ])
+    const handleCreateProductVariant = ( rows) => {
+        const productRows = rows.map((item) => {
+            return {
+                product_id: id,
+                variant_id: item.product_id
+            }
+        })
+        dispatch(createVariantLabel({ data: productRows })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+        setSelectedRows([]);
+    }
+
+    const handleDeleteProductVariant = (optionId) => {
+        dispatch(deleteProductOption({ id: optionId })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+
     return (
         <div className="optionstab">
             <div className="optionflex">
@@ -65,128 +113,65 @@ const VariantsTab = () => {
 
                     <Card className="w-full">
                         <CardHeader className="flex justify-between">
-
-                            <div className="createoption">
-                                <CustomInput name='new_option' type='text'
-                                    maxLength={100}
-                                    placeholder='Create New Variant' label={'Create New Variant'}
-                                    onChange={(e) => { handleInputChange({ e }) }}
-                                    value={formData.name}
-                                />
-                                <div className="createbtn">
-                                    <CustomButton label="Add" variant="primary" />
-                                </div>
+                            <div className="flex flex-col">
+                                <p className="text-md">Choose Variants</p>
                             </div>
-
                         </CardHeader>
                         <Divider />
                         <CardBody>
-                            {options.map((item, index) => (
-                                <div key={index} className="accordion-item">
-                                    <div
-                                        className={`accordion-header ${expandedIndex === index ? 'expanded' : ''}`}
 
-                                    >
-
-                                        <div className="flex justify-between items-center mb-3">
-                                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleItemClick(index)}>
-                                                <MdKeyboardArrowDown size={20} className='mt-1' />
-                                                <p className="text-md">{item.name}</p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <CustomButton label="Manage" variant="teritary" onClick={() => handleItemClick(index)} />
-                                                <MdDelete size={24} className='mt-3' />
-                                            </div>
-                                        </div>
+                            <div className="w-full mb-3">
+                                <div className="searchinput">
+                                    <div className="createbtn flex gap-3 items-center">
+                                        <SearchInput name={'search'} value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
                                     </div>
-
-                                    {expandedIndex === index && (
-                                        <div className="w-full mb-3">
-                                            <div className="searchinput">
-                                                <div className="createbtn flex gap-3 items-center">
-                                                    <SearchInput />
-                                                    <CustomButton label="Add" variant="primary" />
-                                                </div>
-                                            </div>
-                                            <div className="optiontable">
-                                                <CustomTable height={'300px'} columnDefs={columnDefs} rowData={[]} />
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
-                            ))}
+                                <div className="optiontable">
+                                    <CustomTable height={'300px'}
+                                        columnDefs={columnDefs}
+                                        rowData={allProducts?.data?.products}
+                                        selectedRows={selectedRows}
+                                        setSelectedRows={setSelectedRows} />
+                                    <CustomButton label="Add" variant="primary"
+                                        onClick={() => handleCreateProductVariant(selectedRows)}
+                                    />
+                                </div>
+                            </div>
+
                         </CardBody>
                     </Card>
+
                 </div>
 
                 <div className='rightsection'>
                     <Card className="w-full">
                         <CardHeader className="flex justify-between">
                             <div className="flex flex-col">
-                                <p className="text-md">Options Values</p>
+                                <p className="text-md">Product Variants</p>
                             </div>
                         </CardHeader>
                         <Divider />
                         <CardBody className='flex flex-col gap-3'>
-                            <>
-                                <div className="flex gap-3 items-center">
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='Label' label={'Label'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                    <MdDelete size={24} className='mt-3' />
-                                </div>
-                                <div className="flex gap-3">
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='SKU' label={'SKU'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='Price' label={'Price'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                </div>
+                            {allVariantsByProduct?.result?.map((item, index) => (
+                                <>
+                                    <div className="flex gap-3 items-center justify-between w-100">
+                                        <CustomTypography content={item.prd_name} weight='SEMI-BOLD' size='REGULAR' />
+                                        <div className='flex gap-3 items-center'>
+                                            <div className="icon cursor-pointer" onClick={() => handleDeleteProductVariant(item.variant_id)}>
+                                                <MdDelete size={24} className=' icon' color='#555' />
+                                            </div>
+                                        </div>
 
-                                <div className="createbtn flex justify-end">
-                                    <CustomButton label="Save" variant="primary" />
-                                </div>
-                            </>
-                            <Divider />
-                            <>
-                                <div className="flex gap-3 items-center">
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='Label' label={'Label'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                    <MdDelete size={24} className='mt-3' />
-                                </div>
-                                <div className="flex gap-3">
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='SKU' label={'SKU'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                    <CustomInput name='new_option' type='text'
-                                        maxLength={100}
-                                        placeholder='Price' label={'Price'}
-                                        onChange={(e) => { handleInputChange({ e }) }}
-                                        value={formData.name}
-                                    />
-                                </div>
+                                    </div>
 
-                                <div className="createbtn flex justify-end">
-                                    <CustomButton label="Save" variant="primary" />
-                                </div>
-                            </>
+                                    {/* <div className="createbtn flex justify-end">
+                                        <CustomButton label="Save" variant="primary" />
+                                    </div> */}
+                                    <Divider />
+                                </>
+                            ))}
                         </CardBody>
                     </Card>
                 </div>

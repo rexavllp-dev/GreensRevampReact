@@ -1,60 +1,76 @@
 import { CameraIcon } from '@/components/customicons/CameraIcon';
 import CustomTable from '@/components/customtable/CustomTable'
 import { Avatar, Card, CardBody, CardHeader, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./RelatedProdTab.scss"
 import CustomInput from '@/library/input/custominput/CustomInput';
 import CustomButton from '@/library/buttons/CustomButton';
 import SearchInput from '@/library/input/searchinput/SearchInput';
+import { createRelatedProducts, getAllProducts, getAllRelatedProducts } from '@/services/features/productSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
-const RelatedProdTab = () => {
+const RelatedProdTab = ({ id, data }) => {
+    const dispatch = useDispatch()
 
-    const [formData, setFormData] = React.useState({
-        label: '',
-    })
-
+    const [loading, setLoading] = React.useState(false);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+    const [searchQuery, setSearchQuery] = React.useState('')
     const [columnDefs] = React.useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        // {
+        //     headerName: 'Thumbnail', field: 'prod_image',
+        //     cellRenderer: (params) => {
+        //         return (
+        //             <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
+        //                 <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
+        //             }
+        //             />
+        //         )
+        //     }
+        // },
         {
-            headerName: 'Thumbnail', field: 'prod_image',
-            cellRenderer: (params) => {
-                return (
-                    <Avatar showFallback src='https://images.unsplash.com/broken' fallback={
-                        <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
-                    }
-                    />
-                )
-            }
+            headerName: 'Name', field: 'prd_name'
         },
         {
-            headerName: 'Name', field: 'prod_name'
-        },
-        {
-            headerName: 'Stock', field: 'stock',
-        },
-        {
-            headerName: 'Price', field: 'price',
+            headerName: 'Price', field: 'product_price',
         },
         {
             headerName: 'SKU', field: 'sku',
-        },
-        {
-            headerName: 'Brad Code', field: 'brand_code',
-        },
+        }
     ]);
 
-    const products = [
-        {
-            id: 1,
-            prod_name: 'Product 1',
-            price:24
-        },
-        {
-            id: 2,
-            prod_name: 'Product 2',
-            price:24
-        }
-    ]
+
+    const { allProducts, isRelatedProductsCreated, relatedProducts } = useSelector(state => state.products)
+
+    useEffect(() => {
+        dispatch(getAllProducts({ search_query: searchQuery }))
+    }, [ searchQuery])
+    
+    useEffect(() => {
+        dispatch(getAllRelatedProducts({ id }))
+    }, [isRelatedProductsCreated])
+
+    const handleCreateRelatedProducts = () => {
+        const relatedProductData = selectedRows.map((item) => {
+            return {
+                id: item.id
+            }
+        })
+        dispatch(createRelatedProducts({ data: { relatedProductData: relatedProductData }, id })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            } else {
+                toast.error(res.payload.message)
+            }
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        })
+        setSelectedRows([]);
+    }
+
+
     return (
         <div className="optionstab">
             <div className="optionflex">
@@ -68,13 +84,20 @@ const RelatedProdTab = () => {
                         <Divider />
                         <CardBody>
                             <div className="searchinput">
-                                <SearchInput />
+                                <SearchInput name={'search'} value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
                             <div className="optiontable">
-                                <CustomTable height={"280px"} columnDefs={columnDefs} rowData={[]} />
+                                <CustomTable height={'280px'}
+                                    columnDefs={columnDefs}
+                                    rowData={allProducts?.data?.products}
+                                    selectedRows={selectedRows}
+                                    setSelectedRows={setSelectedRows}
+                                />
                             </div>
                             <div className="createbtn flex justify-end">
-                                <CustomButton label="Add" variant="primary" />
+                                <CustomButton label="Add" variant="primary" onClick={() => handleCreateRelatedProducts()} />
                             </div>
                         </CardBody>
                     </Card>
@@ -82,7 +105,7 @@ const RelatedProdTab = () => {
 
                 <div className='rightsection'>
 
-                <Card className="w-full">
+                    <Card className="w-full">
                         <CardHeader className="flex justify-between">
                             <div className="flex flex-col">
                                 <p className="text-md">Related Products</p>
@@ -91,7 +114,12 @@ const RelatedProdTab = () => {
                         <Divider />
                         <CardBody>
                             <div className="optiontable">
-                                <CustomTable height={"400px"} columnDefs={columnDefs} rowData={products} />
+                                <CustomTable height={'400px'}
+                                    columnDefs={columnDefs}
+                                    rowData={relatedProducts?.result}
+                                    selectedRows={selectedRows}
+                                    setSelectedRows={setSelectedRows}
+                                />
                             </div>
                         </CardBody>
                     </Card>
