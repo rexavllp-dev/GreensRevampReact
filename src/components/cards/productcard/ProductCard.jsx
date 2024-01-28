@@ -24,7 +24,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
         <Image src={heartIconBlack} width={16} height={16} alt='icon' />
       </div>
       <div className="cardimg_wrapper" onClick={() => {
-        router.push('/products/' + id )
+        router.push('/products/' + id)
       }}>
         <div className="cardimage">
           {/* <Image src={productImage} /> */}
@@ -38,19 +38,19 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
       </div>
       <div className="productdetails">
         <div className="badgecontainer">
-          <Badge />
+          {/* <Badge /> */}
         </div>
         <div className="topsection">
           <div className="left">
             {
               specialPrice !== null ?
                 <>
-                  <CustomTypography content={specialPrice} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
-                  <CustomTypography content={normalPrice} style={{ textDecoration: 'line-through' }}
+                  <CustomTypography content={`AED ${specialPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
+                  <CustomTypography content={`AED ${normalPrice}`} style={{ textDecoration: 'line-through' }}
                     weight='SEMI-BOLD' color='GRAY-LIGHT' size='MEDIUM-SMALL' />
                 </>
                 :
-                <CustomTypography content={normalPrice} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
+                <CustomTypography content={`AED ${normalPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
             }
           </div>
           <div className="right">

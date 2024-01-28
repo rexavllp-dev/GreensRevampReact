@@ -29,7 +29,7 @@ const OptionsTab = ({ data, id }) => {
 
     const { allProducts, allOptionsByProduct, optionValues,
         isProductOptionDeleted, isProductOptionValueDeleted,
-        isProductOptionCreated, isOptionCreated } = useSelector(state => state.products)
+        isProductOptionCreated, isOptionCreated, isOptionValueUpdated } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -74,22 +74,6 @@ const OptionsTab = ({ data, id }) => {
             headerName: 'SKU', field: 'sku',
         }
     ]);
-
-
-    const [options, setOptions] = React.useState([
-        {
-            id: 1,
-            name: 'Size',
-            label: '',
-            sku: '',
-        },
-        {
-            id: 2,
-            name: 'Color',
-            label: '',
-            sku: '',
-        }
-    ])
 
     const [optionLabels, setOptionLabels] = React.useState([])
 
@@ -291,41 +275,45 @@ const OptionsTab = ({ data, id }) => {
                             </div>
                         </CardHeader>
                         <Divider />
-                        <CardBody className='flex flex-col gap-3'>
-                            {optionValues?.result?.map((item, index) => (
-                                <>
-                                    <div className="flex gap-3 items-center">
-                                        <CustomInput name='option_label' type='text'
-                                            maxLength={100}
-                                            placeholder='Label' label={'Label'}
-                                            onChange={(e) => { setOptionLabels({ ...optionLabels, [item.product_option_id]: e.target.value }) }}
-                                            value={optionLabels[item.product_option_id]}
-                                        />
-                                        <CustomInput name='sku' type='text'
-                                            disabled={true}
-                                            maxLength={100}
-                                            placeholder='SKU' label={'SKU'}
-                                            onChange={(e) => { handleInputChange({ e }) }}
-                                            value={item.sku}
-                                        />
-                                        <div className='flex gap-3'>
-                                            <div className="icon cursor-pointer" onClick={() => handleUpdateProductOption(item.product_option_id)}>
-                                                <FaSave size={24} className='mt-3 icon' color='#555' />
+                        {
+                            expandedIndex &&
+                            <CardBody className='flex flex-col gap-3'>
+                                {optionValues?.result?.map((item, index) => (
+                                    <>
+                                        <div className="flex gap-3 items-center">
+                                            <CustomInput name='option_label' type='text'
+                                                maxLength={100}
+                                                placeholder='Label' label={'Label'}
+                                                onChange={(e) => { setOptionLabels({ ...optionLabels, [item.product_option_id]: e.target.value }) }}
+                                                value={optionLabels[item.product_option_id]}
+                                            />
+                                            <CustomInput name='sku' type='text'
+                                                disabled={true}
+                                                maxLength={100}
+                                                placeholder='SKU' label={'SKU'}
+                                                onChange={(e) => { handleInputChange({ e }) }}
+                                                value={item.sku}
+                                            />
+                                            <div className='flex gap-3'>
+                                                <div className="icon cursor-pointer" onClick={() => handleUpdateProductOption(item.product_option_id)}>
+                                                    <FaSave size={24} className='mt-3 icon' color='#555' />
+                                                </div>
+                                                <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
+                                                    <MdDelete size={24} className='mt-3 icon' color='#555' />
+                                                </div>
                                             </div>
-                                            <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
-                                                <MdDelete size={24} className='mt-3 icon' color='#555' />
-                                            </div>
+
                                         </div>
 
-                                    </div>
-
-                                    {/* <div className="createbtn flex justify-end">
+                                        {/* <div className="createbtn flex justify-end">
                                         <CustomButton label="Save" variant="primary" />
                                     </div> */}
-                                    <Divider />
-                                </>
-                            ))}
-                        </CardBody>
+                                        <Divider />
+                                    </>
+                                ))}
+                            </CardBody>
+
+                        }
                     </Card>
                 </div>
             </div>

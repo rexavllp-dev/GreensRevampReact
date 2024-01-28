@@ -77,6 +77,7 @@ export default function SearchDropdown() {
             return;
         }
         router.push(`/products/search/?q=${searchQuery}`, { scroll: true });
+        setVisible(false);
     }
 
     const onKeyUp = (e) => {
@@ -86,6 +87,7 @@ export default function SearchDropdown() {
         if (e.key === 'Enter') {
             router.push(`/products/search/?q=${searchQuery}`, { scroll: true });
             // this.search(); 
+            setVisible(false);
         }
     }
 
@@ -171,7 +173,9 @@ export default function SearchDropdown() {
                                 <div className="suggestions">
                                     {
                                         suggestions?.map((item, index) => (
-                                            <div className="badge" key={item.id}>
+                                            <div className="badge" key={item.id} onClick={()=>{
+                                                dispatch(setSearchQuery(item.name))
+                                            }}>
                                                 <CustomTypography content={item.name} color='BLACK' size='REGULAR' weight='MEDIUM' />
                                             </div>
 

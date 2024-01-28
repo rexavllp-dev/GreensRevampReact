@@ -12,11 +12,11 @@ export const products = {
     },
 
     //Get all products by user
-    getAllProductsByUser: ({ page, per_page, search_query }) => {
+    getAllProductsByUser: ({ page, per_page, search_query, filters, sortBy }) => {
         return new Promise((resolve, reject) => {
-            let query = `/products/get-products`
+            let query = `/products/get-products?filters=${filters?.length ? JSON.stringify(filters) : '[]'}&sort=${sortBy}`
             if (page && per_page) {
-                query = query + `?page=${page}&per_page=${per_page}&search_query=${search_query}`
+                query = `/products/get-products?page=${page}&per_page=${per_page}&search_query=${search_query}&filters=${filters?.length ? JSON.stringify(filters) : '[]'}&sort=${sortBy}`
             }
             Axios.get(query)
                 .then(response => resolve(response))

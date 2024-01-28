@@ -27,6 +27,8 @@ const Search = () => {
     let keyword = searchParams.get('q');
 
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [filters, setFilters] = React.useState([]);
+    const [sortBy, setSortBy] = React.useState('');
 
     const { allProductsByUser, searchQuery } = useSelector((state) => state.products);
 
@@ -150,8 +152,8 @@ const Search = () => {
     ]
 
     useEffect(() => {
-        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: searchQuery }))
-    }, [currentPage, searchQuery]);
+        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: keyword, filters, sortBy }))
+    }, [currentPage, keyword, sortBy, filters]);
 
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
@@ -182,7 +184,13 @@ const Search = () => {
 
             <div className='searchproducts'>
                 <div className={showFilter ? "searchfilter" : "searchfilter searchFilter_close"}>
-                    <SearchFilter onClose={() => setShowFilter(false)} />
+                    <SearchFilter
+                        filters={filters}
+                        setFilters={setFilters}
+                        sortBy={sortBy}
+                        setSortBy={setSortBy}
+                        onClose={() => setShowFilter(false)}
+                    />
                 </div>
                 {/* <div className="searchproducts-container">
                     <div className="items">

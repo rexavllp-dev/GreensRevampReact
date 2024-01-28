@@ -3,8 +3,7 @@ import { Slider } from "@nextui-org/react";
 import CustomTypography from "@/library/typography/CustomTypography";
 import "./CustomSlider.scss";
 
-export default function CustomSlider() {
-    const [value, setValue] = React.useState([10, 300]);
+export default function CustomSlider({value, onChange}) {
 
     return (
         <div className="slider-wrapper">
@@ -28,7 +27,7 @@ export default function CustomSlider() {
                 maxValue={1000}
                 minValue={0}
                 value={value}
-                onChange={setValue}
+                onChange={onChange}
                 className="max-w-md"
                 renderThumb={(props) => (
                     <div

@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllOptionsByProductId, getAllVariantsByProductId, getOptionValues, getProductOptions, getSingleProduct } from '@/services/features/productSlice';
 import { useRouter } from 'next/navigation';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
+import CustomShare from '@/components/share/CustomShare';
 
 const cartItems = [
     {
@@ -101,8 +102,12 @@ const ProductDetails = ({ params }) => {
 
 
     return (
+        <div>
             <div className='product_details_wrapper'>
                 <div className="prd_images-wrapper">
+                    <div className='pl-3 pb-5'>
+                        <BreadCrumbs />
+                    </div>
                     <div className="prd_images">
                         <ImageGallery data={singleProduct} />
                     </div>
@@ -139,6 +144,10 @@ const ProductDetails = ({ params }) => {
                 </div>
 
                 <div className="prd_details">
+
+                    <div className="share">
+                        <CustomShare />
+                    </div>
 
                     <div className="prd_item">
                         <CustomTypography content={singleProduct?.data?.product?.prd_name} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
@@ -224,6 +233,7 @@ const ProductDetails = ({ params }) => {
 
                 </div>
             </div>
+        </div>
     )
 }
 
