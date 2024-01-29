@@ -9,7 +9,8 @@ const ImageGallery = ({ data }) => {
 
     return (
         <div className="image_gallery flex flex-col items-center">
-            <Image src={images?.find((img) => img.is_baseimage === true) ?
+
+            <Image src={images?.find((img) => img.is_baseimage === true)?.url ?
                 images?.find((img) => img.is_baseimage === true)?.url :
                 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
             }
@@ -41,13 +42,17 @@ const ImageGallery = ({ data }) => {
                 </div>
                 <div className="navlist flex gap-2">
                     {
-                        images?.map((img, imagesIndex) => (
-                            <Image src={img.url}
-                                width={100}
-                                height={100}
-                                alt="product"
-                            />
-                        ))
+                        images?.map((img, imagesIndex) => {
+                            if (img.url) {
+                                return (
+                                    <Image src={img.url}
+                                        width={100}
+                                        height={100}
+                                        alt="product"
+                                    />
+                                )
+                            }
+                        })
                     }
                 </div>
 

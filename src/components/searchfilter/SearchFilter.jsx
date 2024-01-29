@@ -6,6 +6,7 @@ import { Accordion, AccordionItem } from '@nextui-org/react'
 import CustomTypography from '@/library/typography/CustomTypography'
 import { GoArrowLeft } from "react-icons/go";
 import CustomRadioBox from '@/library/radiobox/CustomRadioBox'
+import { toast } from 'react-toastify'
 
 const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
 
@@ -16,7 +17,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
   })
 
   const [sort, setSort] = React.useState('')
-  const [priceRange, setPriceRange] = React.useState([10, 300]);
+  const [priceRange, setPriceRange] = React.useState([0, 10000]);
 
   const [filterTypes, setFilterTypes] = React.useState([
     // {
@@ -124,25 +125,31 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
     }
   ])
 
-  useEffect(() => {
-    console.log(sort)
-  }, [sort])
 
   const handleResetFilter = () => {
     setFilters([])
     setSortBy('')
+    setPriceRange([0, 10000]);
+    toast.success("Filters Cleared Successfully")
   }
 
   const handleApplyFilter = () => {
 
     setFilters([
       {
-
+        column: 'products_price.product_price',
+        operator: '<',
+        value: priceRange[1]
+      },
+      {
+        column: 'products_price.product_price',
+        operator: '>',
+        value: priceRange[0]
       }
     ])
 
     setSortBy(sort)
-
+    toast.success("Filters Applied Successfully")
   }
 
   return (

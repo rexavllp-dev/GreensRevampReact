@@ -5,14 +5,29 @@ import './CustomTabs.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleUser } from "@/services/features/userSlice";
 
-export default function CustomTabs({ tabs }) {
+export default function CustomTabs({ tabs, id, isAdvanced }) {
   const [selected, setSelected] = React.useState("photos");
+  const [disabledKeys, setDisabledKeys] = React.useState([]);
+
+  React.useEffect(() => {
+    if (!id) {
+      if (isAdvanced) {
+        setDisabledKeys(['1', '2', '3', '4', '5', '6', '7']);
+      } else {
+        setDisabledKeys(['2', '3', '4', '5', '6', '7']);
+      }
+    } else {
+      setDisabledKeys([]);
+    }
+  }, [id])
+
 
 
   return (
     <div className="customtabs">
       <Tabs
         aria-label="Options"
+        disabledKeys={disabledKeys}
         selectedKey={selected}
         onSelectionChange={setSelected}
         variant="underlined"

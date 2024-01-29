@@ -161,7 +161,7 @@ const catalogueDetails = () => {
             </div>
 
             {
-                active === 0 ? <CustomTabs tabs={basicTabs} /> : <CustomTabs tabs={advancedTabs} />
+                active === 0 ? <CustomTabs tabs={basicTabs} id={id} isAdvanced={false} /> : <CustomTabs tabs={advancedTabs} id={id} isAdvanced={true} />
             }
 
 
