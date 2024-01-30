@@ -1,31 +1,45 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import CustomTypography from '@/library/typography/CustomTypography';
 import CartItem from '@/components/cards/cartitem/CartItem';
 import './Cart.scss';
 import CustomButton from '@/library/buttons/CustomButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCartProducts } from '@/services/features/cartSlice';
 
-const cartItems = [
-    {
-        id: 1,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    },
-    {
-        id: 2,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    },
-    {
-        id: 3,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    }
-]
+// const cartItems = [
+//     {
+//         id: 1,
+//         title: 'CDA Wafer Graduation Cap 1x12 Pcs',
+//         price: 20,
+//         quantity: 1
+//     },
+//     {
+//         id: 2,
+//         title: 'CDA Wafer Graduation Cap 1x12 Pcs',
+//         price: 20,
+//         quantity: 1
+//     },
+//     {
+//         id: 3,
+//         title: 'CDA Wafer Graduation Cap 1x12 Pcs',
+//         price: 20,
+//         quantity: 1
+//     }
+// ]
 
 const Cart = () => {
+
+    const dispatch = useDispatch();
+    const { cartProducts } = useSelector((state) => state.cart)
+
+    // States
+    const [cartItems, setCartItems] = useState([]);
+
+    useEffect(() => {
+        dispatch(getCartProducts({}))
+    }, [])
+
     return (
         <div className='cart-wrapper'>
             <div className="cart">

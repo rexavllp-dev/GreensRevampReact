@@ -7,6 +7,8 @@ import productSlice from "./features/productSlice";
 import brandSlice from "./features/brandSlice";
 import categorySlice from "./features/categorySlice";
 import inventorySlice from "./features/inventorySlice";
+import cartSlice from "./features/cartSlice";
+
 // import thunk from 'redux-thunk';
 
 export const store = configureStore({
@@ -17,7 +19,8 @@ export const store = configureStore({
         products: productSlice,
         brands:  brandSlice,
         categories: categorySlice,
-        inventory: inventorySlice
+        inventory: inventorySlice,
+        cart: cartSlice
         // middleware: [thunk],
     }
 })

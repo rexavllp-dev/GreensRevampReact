@@ -15,6 +15,7 @@ import { getAllOptionsByProductId, getAllVariantsByProductId, getOptionValues, g
 import { useRouter } from 'next/navigation';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 import CustomShare from '@/components/share/CustomShare';
+import { addProductToCart } from '@/services/features/cartSlice';
 
 const cartItems = [
     {
@@ -99,6 +100,18 @@ const ProductDetails = ({ params }) => {
             setSelectedOption(JSON.stringify(productOptions?.result[0]?.innerItems.find((option) => option.product_id == params.id)?.product_id))
         }
     }, [productOptions, params.id])
+
+    // Add to cart
+    const handleAddToCart = (productId, price) => {
+
+        const productData = {
+            productId: productId,
+            quantity: 1,
+            price: price
+        }
+
+        dispatch(addProductToCart({ data: productData }))
+    }
 
 
     return (
@@ -227,7 +240,18 @@ const ProductDetails = ({ params }) => {
                         </div>
 
                         <CustomButton variant='transparent' label='Buy Now' />
-                        <CustomButton variant='primary' label='Add to Cart' />
+                        <CustomButton
+                            variant='primary'
+                            label='Add to Cart'
+                            onClick={() => {
+                                handleAddToCart(singleProduct?.data?.product?.id, singleProduct?.data?.product?.special_price)
+                                // dispatch(addProductToCart({
+                                //     productId: singleProduct?.data?.product?.id,
+                                //     quantity: 1,
+                                //     price: singleProduct?.data?.product?.special_price
+                                // }))
+                            }}
+                        />
 
                     </div>
 
