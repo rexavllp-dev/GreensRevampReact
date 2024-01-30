@@ -14,7 +14,8 @@ import {
     createVariant, createVariantLabel, deleteProductOptionValue,
     getAllProducts, getAllVariantsByProductId, getVariantLabelsByVariantId,
     deleteProductOption,
-    updateVariantLabel
+    updateVariantLabel,
+    deleteVariantLabel
 } from '@/services/features/productSlice';
 import { toast } from 'react-toastify';
 import CustomTypography from '@/library/typography/CustomTypography';
@@ -93,8 +94,8 @@ const VariantsTab = ({ data, id }) => {
         setSelectedRows([]);
     }
 
-    const handleDeleteProductVariant = (optionId) => {
-        dispatch(deleteProductOption({ id: optionId })).then((res) => {
+    const handleDeleteProductVariant = (variantId) => {
+        dispatch(deleteVariantLabel({ id: variantId })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload.message);
             } else {

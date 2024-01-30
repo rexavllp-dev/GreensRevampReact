@@ -10,6 +10,7 @@ const instance = axios.create({
   headers: {
     Authorization: `Bearer ${token}` || '',
   },
+  withCredentials: true,
 });
 
 

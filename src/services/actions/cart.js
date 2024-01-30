@@ -33,7 +33,7 @@ export const cart = {
     // Update product quantity
     updateProductQuantity: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/cart/update-cart-quantity', data)
+            Axios.put('/cart/update-cart-quantity', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

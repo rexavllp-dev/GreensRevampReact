@@ -86,7 +86,9 @@ export default function SearchDropdown() {
     }, [recentSearches]);
 
     React.useEffect(() => {
-        dispatch(getAllProducts({ search_query: searchQuery }))
+        if (searchQuery?.length > 2) {
+            dispatch(getAllProducts({ search_query: searchQuery }))
+        }
     }, [searchQuery])
 
     const handleSearch = () => {

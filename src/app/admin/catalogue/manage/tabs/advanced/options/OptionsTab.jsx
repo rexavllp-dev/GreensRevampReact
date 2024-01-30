@@ -196,7 +196,9 @@ const OptionsTab = ({ data, id }) => {
                                     maxLength={100}
                                     height={40}
                                     placeholder='Create New Option' label={'Create New Option'}
-                                    onChange={(e) => { handleInputChange({ e }) }}
+                                    onChange={(e) => {
+                                        handleInputChange({ e });
+                                    }}
                                     value={formData.option_name}
                                 />
                                 <div className="createbtn cursor-pointer">
@@ -204,7 +206,7 @@ const OptionsTab = ({ data, id }) => {
                                     <IoAddCircleSharp size={40} color='#555'
                                         className={`icon `}
                                         onClick={() => {
-                                            handleCreateOption()
+                                            handleCreateOption();
                                         }}
                                     />
                                 </div>

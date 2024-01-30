@@ -29,8 +29,8 @@ const PriceTab = ({ id, data }) => {
     ]
 
     const [formData, setFormData] = React.useState({
-        product_price: '',
-        special_price: '',
+        product_price: 0,
+        special_price: 0,
         special_price_type: '',
         special_price_start: '',
         special_price_end: '',

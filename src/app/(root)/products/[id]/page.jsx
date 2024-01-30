@@ -105,7 +105,7 @@ const ProductDetails = ({ params }) => {
     const handleAddToCart = (productId, price) => {
 
         const productData = {
-            productId: productId,
+            productId: params.id,
             quantity: 1,
             price: price
         }
@@ -244,7 +244,7 @@ const ProductDetails = ({ params }) => {
                             variant='primary'
                             label='Add to Cart'
                             onClick={() => {
-                                handleAddToCart(singleProduct?.data?.product?.id, singleProduct?.data?.product?.special_price)
+                                handleAddToCart( singleProduct?.data?.product?.special_price)
                                 // dispatch(addProductToCart({
                                 //     productId: singleProduct?.data?.product?.id,
                                 //     quantity: 1,
