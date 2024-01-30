@@ -104,11 +104,11 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
       id: 4,
       title: 'Rating',
       filter: [
-        { id: 5, title: '5★ & above', checked: false },
+        { id: 5, title: '5★', checked: false },
         { id: 4, title: '4★ & above', checked: false },
         { id: 3, title: '3★ & above', checked: false },
-        { id: 2, title: '2★ & above', checked: false },
-        { id: 1, title: '1★ & above', checked: false }
+        // { id: 2, title: '2★ & above', checked: false },
+        // { id: 1, title: '1★ & above', checked: false }
       ]
     },
     // {
@@ -147,6 +147,10 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
         value: priceRange[0]
       }
     ])
+    
+    // setFilters((prev)=>([...prev, {
+
+    // }]))
 
     setSortBy(sort)
     toast.success("Filters Applied Successfully")
@@ -191,7 +195,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
               },
               {
                 id: 5,
-                title: 'Featured',
+                title: 'Popularity',
                 value: 'featured'
               }
               ]
