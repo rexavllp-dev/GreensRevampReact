@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import CustomSearch from "@/library/input/searchinput/CustomSearch";
 import './SeachDropdown.scss';
 import CustomTypography from "@/library/typography/CustomTypography";
@@ -14,15 +14,15 @@ import { useDispatch, useSelector } from "react-redux";
 const suggestions = [
     {
         id: 1,
-        name: 'Kopykake Ink'
+        name: 'Cake'
     },
     {
         id: 2,
-        name: 'Colour Dust'
+        name: 'Chips'
     },
     {
         id: 3,
-        name: 'Edible Wafer'
+        name: 'Cookies'
     },
     {
         id: 4,
@@ -63,10 +63,27 @@ export default function SearchDropdown() {
     const dispatch = useDispatch();
 
     const { getTranslation } = useLanguage();
-    const { allProducts, searchQuery } = useSelector(state => state.products)
+    const { allProducts, searchQuery } = useSelector(state => state.products);
 
     // const [searchQuery, dispatch(setSearchQuery] = React.useState('');
     const [visible, setVisible] = React.useState(false);
+
+    const [recentSearches, setRecentSearches] = React.useState([]);
+
+    useEffect(() => {
+        // Load recent searches from localStorage on component mount
+        const storedSearches = typeof window !== "undefined" && window.localStorage.getItem('recentSearches');
+        if (storedSearches) {
+            setRecentSearches(JSON.parse(storedSearches));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (recentSearches.length > 0) {
+            // Save recent searches to localStorage whenever it changes
+            typeof window !== "undefined" && window.localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+        }
+    }, [recentSearches]);
 
     React.useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -91,6 +108,11 @@ export default function SearchDropdown() {
         }
     }
 
+
+    const handleClearSearches = () => {
+        window.localStorage.removeItem('recentSearches')
+        setRecentSearches([]);
+    }
 
 
 
@@ -139,7 +161,10 @@ export default function SearchDropdown() {
                                     {
                                         allProducts?.data?.products?.map((item, index) => (
                                             <div className="product" onClick={() => {
+                                                // Add new search term to recent searches list
+                                                setRecentSearches(prevSearches => ([...prevSearches, item]));
                                                 router.push(`/products/${item.product_id}`, { scroll: true });
+                                                setVisible(false)
                                             }}>
                                                 <div className="image">
                                                     {
@@ -150,7 +175,6 @@ export default function SearchDropdown() {
                                                             width={45}
                                                             height={45}
                                                         />
-
                                                     }
 
                                                 </div>
@@ -173,7 +197,7 @@ export default function SearchDropdown() {
                                 <div className="suggestions">
                                     {
                                         suggestions?.map((item, index) => (
-                                            <div className="badge" key={item.id} onClick={()=>{
+                                            <div className="badge" key={item.id} onClick={() => {
                                                 dispatch(setSearchQuery(item.name))
                                             }}>
                                                 <CustomTypography content={item.name} color='BLACK' size='REGULAR' weight='MEDIUM' />
@@ -183,35 +207,48 @@ export default function SearchDropdown() {
                                     }
                                 </div>
 
-                                <div className="recentsearch">
-                                    <CustomTypography content='Recent Searches' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
-                                    <div className="removebtn">
-                                        <CustomTypography content='Clear All' color='BLACK' size='REGULAR' weight='REGULAR' />
-                                    </div>
-                                </div>
-
-                                <div className="recentproducts">
-                                    {
-                                        products?.map((item, index) => (
-                                            <div className="product" key={item.id} >
-                                                <div className="image">
-                                                    <Image
-                                                        src={item.img}
-                                                        alt={'product1'}
-                                                        width={45}
-                                                        height={45}
-                                                    />
-                                                </div>
-                                                <div className="name">
-                                                    <CustomTypography content={item.name}
-                                                        color='BLACK' style={{ borderBottom: '1px solid #111', display: 'inline' }}
-                                                        size='MEDIUM' weight='MEDIUM' />
-                                                </div>
-
+                                {
+                                    recentSearches?.length > 0 &&
+                                    <>
+                                        <div className="recentsearch">
+                                            <CustomTypography content='Recent Searches' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                                            <div className="removebtn" onClick={() => handleClearSearches()}>
+                                                <CustomTypography content='Clear All' color='BLACK' size='REGULAR' weight='REGULAR' />
                                             </div>
-                                        ))
-                                    }
-                                </div>
+                                        </div>
+
+                                        <div className="recentproducts">
+                                            {
+                                                recentSearches?.map((item, index) => (
+                                                    <div className="product" onClick={() => {
+                                                        router.push(`/products/${item.product_id}`, { scroll: true });
+                                                        setVisible(false);
+                                                    }}>
+                                                        <div className="image">
+                                                            {
+                                                                item?.product_img[0]?.url &&
+                                                                <Image
+                                                                    src={item?.product_img[0]?.url}
+                                                                    alt={item?.prd_name}
+                                                                    width={45}
+                                                                    height={45}
+                                                                />
+
+                                                            }
+                                                        </div>
+                                                        <div className="name">
+                                                            <CustomTypography content={item.prd_name}
+                                                                color='BLACK' style={{ borderBottom: '1px solid #111', display: 'inline' }}
+                                                                size='MEDIUM' weight='MEDIUM' />
+                                                        </div>
+
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                    </>
+                                }
+
 
                                 {/* <CustomTypography content='Related Searches for Starbucks' color='BLACK' size='MEDIUM-LARGE' weight='SEMI-BOLD' />
 

@@ -34,7 +34,8 @@ const PriceTab = ({ id, data }) => {
         special_price_type: '',
         special_price_start: '',
         special_price_end: '',
-        product_id: id
+        product_id: id,
+        prd_status: false,
     })
 
     const [loading, setLoading] = React.useState(false);
@@ -47,6 +48,7 @@ const PriceTab = ({ id, data }) => {
                 special_price_type: data?.data?.product?.special_price_type,
                 special_price_start: new Date(data?.data?.product?.special_price_start),
                 special_price_end: new Date(data?.data?.product?.special_price_end),
+                prd_status: data?.data?.product?.prd_status,
                 product_id: id
             }))
 
@@ -146,6 +148,9 @@ const PriceTab = ({ id, data }) => {
                             // setErrors((prevErrors) => ({ ...prevErrors, special_price_end: { error: false, message: '' } }));
                         }}
                         isRequired={true}
+                    />
+                      <CustomToggleButton label='Product Status' value={formData.prd_status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
                     />
                 </div>
             </div>

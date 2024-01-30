@@ -158,7 +158,7 @@ const ProductDetails = ({ params }) => {
 
                 <div className="prd_details">
 
-                    <div className="share">
+                    <div className="share  pt-4">
                         <CustomShare />
                     </div>
 

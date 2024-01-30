@@ -70,7 +70,7 @@ const GeneralTab = ({ id, data }) => {
         prd_sales_unit: '',
         prd_return_type: '',
         categories: [],
-        prd_status: false,
+        // prd_status: false,
         prd_dashboard_status: false,
     })
 
@@ -88,7 +88,7 @@ const GeneralTab = ({ id, data }) => {
                 prd_sales_unit: data?.data?.product?.prd_sales_unit,
                 prd_return_type: data?.data?.product?.prd_return_type,
                 categories: [],
-                prd_status: data?.data?.product?.prd_status,
+                // prd_status: data?.data?.product?.prd_status,
                 prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
             }))
         }
@@ -214,9 +214,9 @@ const GeneralTab = ({ id, data }) => {
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
                     />
 
-                    <CustomToggleButton label='Product Status' value={formData.prd_status}
+                    {/* <CustomToggleButton label='Product Status' value={formData.prd_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
-                    />
+                    /> */}
                 </div>
             </div>
             <div className="savebtn">
