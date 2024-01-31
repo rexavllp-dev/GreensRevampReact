@@ -152,6 +152,10 @@ const initialState = {
     isStockHistoryByProductLoaded: false,
     isStockHistoryByProductLoadError: false,
     stockHistoryByProduct: [],
+
+    isProductImgDeleting:false,
+    isProductImgDeleted:false,
+    isProductImgDeleteError:false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
@@ -237,6 +241,16 @@ export const updatePrice = createAsyncThunk('updatePrice', async ({ data, id }, 
 export const uploadProductImage = createAsyncThunk('uploadProductImage', async ({ data, id }, thunkAPI) => {
     try {
         const response = await products.uploadProductImage(data, id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteProductImage = createAsyncThunk('deleteProductImage', async ({  id }, thunkAPI) => {
+    try {
+        const response = await products.deleteProductImage(id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1115,6 +1129,24 @@ const productSlice = createSlice({
                 state.isStockHistoryByProductLoading = false;
                 state.isStockHistoryByProductLoaded = false;
                 state.isStockHistoryByProductLoadError = true;
+            })
+
+            .addCase(deleteProductImage.pending, (state, action) => {
+                state.isProductImgDeleting = true;
+                state.isProductImgDeleted = false;
+                state.isProductImgDeleteError = false;
+            })
+
+            .addCase(deleteProductImage.fulfilled, (state, action) => {
+                state.isProductImgDeleting = false;
+                state.isProductImgDeleted = true;
+                state.isProductImgDeleteError = false;
+            })
+
+            .addCase(deleteProductImage.rejected, (state, action) => {
+                state.isProductImgDeleting = false;
+                state.isProductImgDeleted = false;
+                state.isProductImgDeleteError = true;
             })
 
     }

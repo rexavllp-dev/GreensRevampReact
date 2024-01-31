@@ -197,6 +197,11 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
                 id: 5,
                 title: 'Popularity',
                 value: 'featured'
+              },
+              {
+                id: 6,
+                title: 'Best Sellers',
+                value: 'bestsellers'
               }
               ]
             } />

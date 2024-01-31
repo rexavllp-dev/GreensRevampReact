@@ -7,20 +7,20 @@ import CustomButton from '@/library/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCartProducts } from '@/services/features/cartSlice';
 import { BsTruck } from "react-icons/bs";
-import { FaStore } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaStore } from 'react-icons/fa';
 
 const Cart = () => {
 
     const dispatch = useDispatch();
-    const { cartProducts, productQuantityUpdated } = useSelector((state) => state.cart)
+    const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
 
     // States
-    const [cartItems, setCartItems] = useState([]);
     const [selected, setSelected] = useState('shipping');
 
     useEffect(() => {
         dispatch(getCartProducts({}));
-    }, [productQuantityUpdated])
+    }, [productQuantityUpdated, productRemovedFromCart])
+
 
     return (
         <div className='cart-wrapper'>
@@ -77,8 +77,8 @@ const Cart = () => {
             <div className='carttotal-wrapper'>
                 <div className="carttotal">
                     <div className="item">
-                        <CustomTypography content="Subtotal (2 items)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content="AED 100" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={`Subtotal ${cartProducts?.result?.totalProductCount} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.subtotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
                     <div className="item">
@@ -86,7 +86,7 @@ const Cart = () => {
                         <CustomTypography content="FREE" color="BLACK" size="MEDIUM" weight="MEDIUM" />
                     </div>
 
-                    <div className="item">
+                    {/* <div className="item">
                         <CustomTypography content="Discount" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
@@ -97,15 +97,15 @@ const Cart = () => {
                     <div className="item">
                         <CustomTypography content="Reward Points 2000" color="BLACK" size="MEDIUM" weight="REGULAR" />
                         <CustomTypography content="-AED 20" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                    </div>
+                    </div> */}
 
                     <div className="item">
-                        <div></div>
-                        <CustomTypography content="AED 80" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content="VAT 5%" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        {/* <CustomTypography content="AED 80" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" /> */}
                     </div>
                     <div className="item">
                         <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content="AED 20" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.grandTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
                     <div className="btn">
@@ -117,38 +117,65 @@ const Cart = () => {
 
                 <div className="cartcoupon">
                     <div className="item">
-                     
+                        <div className="giftcard-input">
+                            <input type="text" placeholder='Gift Card Code' />
+                        </div>
+                        <button className="applybtn">
+                            <CustomTypography content="Apply" color="WHITE" size="MEDIUM" weight="MEDIUM" />
+                        </button>
                     </div>
 
                     <div className="item">
-                        <CustomTypography content="Coupons" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                        <CustomTypography content="FREE" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                        <CustomTypography content="Coupons" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
                     <div className="item">
-                        <CustomTypography content="Discount" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <div className='flex gap-4'>
+                            <CustomTypography content="#FIRSTHI15 " color="BLACK" size="MEDIUM" weight="REGULAR" />
+                            <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" />
+                        </div>
+                        <button className='txtbtn'>
+                            Remove
+                        </button>
+                    </div>
+                    <div className="item">
+                        <div className='flex gap-4'>
+                            <CustomTypography content="#GIFT20 " color="BLACK" size="MEDIUM" weight="REGULAR" />
+                            {/* <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" /> */}
+                        </div>
+                        <button className='txtbtn'>
+                            Apply
+                        </button>
+                    </div>
+                    <div className="item">
+                        <div className='flex gap-4'>
+                            <CustomTypography content="#REFUND20 " color="BLACK" size="MEDIUM" weight="REGULAR" />
+                            {/* <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" /> */}
+                        </div>
+                        <button className='txtbtn'>
+                            Apply
+                        </button>
                     </div>
 
-                    <div className="item">
-                        <CustomTypography content="Coupon  #FIRSTHI15 " color="BLACK" size="MEDIUM" weight="REGULAR" />
-                        <CustomTypography content="-AED 20" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                    </div>
-                    <div className="item">
-                        <CustomTypography content="Reward Points 2000" color="BLACK" size="MEDIUM" weight="REGULAR" />
-                        <CustomTypography content="-AED 20" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                    </div>
 
                     <div className="item">
-                        <div></div>
-                        <CustomTypography content="AED 80" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content="Reward Points (2057)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
                     <div className="item">
-                        <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content="AED 20" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                    </div>
+                        <div className='flex gap-1 items-center'>
+                            <div className='rwd-btn'>
+                                <FaMinus color='#32893b' stroke-width="0.5" />
+                            </div>
+                            <input className='rwd-input' value={0} type="text" />
+                            <div className='rwd-btn mr-3'>
+                                <FaPlus color='#32893b' />
+                            </div>
+                            <CustomTypography content="(-20AED)" color="gray-light" size="MEDIUM" weight="REGULAR" />
+                        </div>
 
-                    <div className="btn">
-                        <CustomButton fullWidth label='Proceed to Checkout' variant='primary' />
+                        <button className='txtbtn'>
+                            Apply
+                        </button>
                     </div>
 
                 </div>

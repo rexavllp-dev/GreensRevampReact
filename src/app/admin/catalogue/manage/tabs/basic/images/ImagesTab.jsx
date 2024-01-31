@@ -1,40 +1,19 @@
 
 'use client';
 import React, { useEffect } from 'react'
-import CustomInput from '@/library/input/custominput/CustomInput'
-import CustomSelect from '@/library/select/custom-select/CustomSelect'
-import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
-import CustomTextarea from '@/library/textarea/CustomTextarea'
 import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
-import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
-import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
-import { createUserByAdmin } from '@/services/features/userSlice';
-import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './ImagesTab.scss'
-import MediaUpload from '@/library/mediaupload/MediaUpload';
 import ImageUpload from '@/components/imageupload/ImageUpload';
-import { Divider } from '@nextui-org/react';
-import { uploadProductImage } from '@/services/features/productSlice';
+import { deleteProductImage, uploadProductImage } from '@/services/features/productSlice';
 
 const ImagesTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
-
-    const [formData, setFormData] = React.useState({
-        first_name: '',
-        last_name: '',
-        mobile: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-        status: true,
-        notes: ''
-    })
 
 
 
@@ -67,10 +46,18 @@ const ImagesTab = ({ id, data }) => {
         })
     }
 
-    const handleDeleteImage = (imgname) => {
-
+    const handleDeleteImage = (img) => {
+        dispatch(deleteProductImage({ id: img.id })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload.message);
+            }else{
+                toast.error(res.payload.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
-   
+
 
     return (
         <div className='imagestab'>

@@ -35,7 +35,8 @@ const ImagesTab = ({id, data}) => {
         })
     }
 
-    const handleDeleteImage = () => {
+    const handleDeleteImage = (img) => {
+        
 
     }
 

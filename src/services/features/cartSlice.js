@@ -1,6 +1,7 @@
 "use client"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { cart } from "../actions/cart";
+import Axios from '../axios/Axios.js';
 
 const initialState = {
 
@@ -35,9 +36,16 @@ export const getCartProducts = createAsyncThunk('getCartProducts', async ({ }, t
 
 // Add Product to cart
 export const addProductToCart = createAsyncThunk('addProductToCart', async ({ data }, thunkAPI) => {
-    console.log("data: ", data)
     try {
         const response = await cart.addProductToCart(data);
+        // Set the default headers for all Axios requests
+        // Axios.defaults.headers.common['connect.sid'] = response?.data?.connectSid;
+        // Axios.interceptors?.request.use((config) => {
+        //     config.headers['connect.sid'] =  response?.data?.connectSid;
+        //     return config;
+        // });
+
+        console.log(response)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

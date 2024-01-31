@@ -39,6 +39,14 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+    //Delete product image
+    deleteProductImage: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/products/delete-product-image/`+ id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
     //Create new product
     createProduct: (data) => {

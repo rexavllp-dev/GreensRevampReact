@@ -75,4 +75,34 @@
     padding-top: 24px;
     padding-bottom: 24px;
   }
+
+  .bulkprice-section {
+    .bulktable {
+      padding-top: 10px;
+      table {
+        border: 1px solid #c5c5c5;
+        border-radius: 4px;
+
+        th {
+          background-color: #f1f1f1;
+          padding: 10px;
+          text-align: left;
+          color: #6b6b6b;
+          font-size: 14px;
+          font-weight: 400;
+          border-bottom: 1px solid #c5c5c5;
+        }
+        td {
+          padding: 10px;
+          text-align: left;
+          font-size: 14px;
+          font-weight: 400;
+          border-bottom: 1px solid #c5c5c5;
+        }
+      }
+    }
+  }
+  .contactus{
+    max-width: 450px;
+  }
 }

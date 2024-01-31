@@ -13,7 +13,6 @@ export const cart = {
 
     // Add product to cart
     addProductToCart: (data) => {
-        console.log(data)
         return new Promise((resolve, reject) => {
             Axios.post('/cart/add-to-cart', data)
                 .then(response => resolve(response))

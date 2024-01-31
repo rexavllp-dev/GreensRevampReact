@@ -38,7 +38,9 @@ const catalogueDetails = () => {
         isProductImageUploaded,
         isProductSeoCreated,
         isProductSeoUpdated,
-        isStockModified
+        isStockModified,
+        isProductImgDeleted,
+        isProductVariantValueDeleted
     } = useSelector(state => state.products);
 
     const {
@@ -64,7 +66,9 @@ const catalogueDetails = () => {
         isInventoryCreated,
         isInventoryUpdated,
         isProductSeoUpdated,
-        isStockModified
+        isStockModified,
+        isProductImgDeleted,
+        isProductVariantValueDeleted
     ])
 
 

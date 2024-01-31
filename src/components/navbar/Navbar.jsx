@@ -18,6 +18,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-o
 import { logout } from '@/services/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import appConfig from '@/config/appConfig';
+import { getCartProducts } from '@/services/features/cartSlice';
 
 const cookies = new Cookies();
 
@@ -30,6 +31,7 @@ const Navbar = () => {
 
     const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
     const { isLoggedIn, authCount } = useSelector(state => state.auth)
+    const { cartProducts, productQuantityUpdated, productRemovedFromCart, productAddedToCart } = useSelector((state) => state.cart)
 
     const handleSwitchLanguage = () => {
         if (language === 'ar') {
@@ -38,6 +40,10 @@ const Navbar = () => {
             switchLanguage('ar');
         }
     }
+
+    useEffect(() => {
+        dispatch(getCartProducts({}));
+    }, [productQuantityUpdated, productRemovedFromCart, productAddedToCart])
 
     useEffect(() => {
         setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
@@ -117,8 +123,9 @@ const Navbar = () => {
 
                             <div className="item">
                                 <Link href="/cart" prefetch={false}>
-                                    <div className="icon">
+                                    <div className="cart-icon">
                                         <Image src={cartIcon} />
+                                        {cartProducts?.result?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totalProductCount}</div>}
                                     </div>
                                 </Link>
                                 {/* <p className='item-label'>Cart</p> */}

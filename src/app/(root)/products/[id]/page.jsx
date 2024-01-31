@@ -16,38 +16,9 @@ import { useRouter } from 'next/navigation';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 import CustomShare from '@/components/share/CustomShare';
 import { addProductToCart } from '@/services/features/cartSlice';
+import { toast } from 'react-toastify';
+import CustomInput from '@/library/input/custominput/CustomInput';
 
-const cartItems = [
-    {
-        id: 1,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    },
-    {
-        id: 2,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    },
-    {
-        id: 3,
-        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
-        price: 20,
-        quantity: 1
-    }
-]
-
-const variants = [
-    {
-        id: 1,
-        name: 'Size'
-    },
-    {
-        id: 2,
-        name: 'Size'
-    }
-]
 
 const additionalDetails = [
     {
@@ -78,7 +49,35 @@ const ProductDetails = ({ params }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions } = useSelector((state) => state.products)
-    const [selectedOption, setSelectedOption] = React.useState('')
+    const [selectedOption, setSelectedOption] = React.useState('');
+    const [count, setCount] = React.useState(1);
+    const [contactVisible, setContactVisible] = React.useState(false);
+    const [formData, setFormData] = React.useState({
+        contact_email: ''
+    })
+
+    const handleInputChange = ({ e }) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const updateCount = (operator) => {
+        if (operator === 'add') {
+            if(count === 50){
+                setContactVisible(true)
+            }else {
+                setCount((prevCount) => prevCount + 1);
+            }
+        } else {
+            setContactVisible(false)
+            if (count > 1) {
+                setCount((prevCount) => prevCount - 1);
+            }
+        }
+    }
+
 
     const handleItemClick = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -102,17 +101,23 @@ const ProductDetails = ({ params }) => {
     }, [productOptions, params.id])
 
     // Add to cart
-    const handleAddToCart = (productId, price) => {
+    const handleAddToCart = (price) => {
 
         const productData = {
             productId: params.id,
-            quantity: 1,
-            price: price
+            quantity: count,
         }
 
-        dispatch(addProductToCart({ data: productData }))
+        dispatch(addProductToCart({ data: productData })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message);
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
-
 
     return (
         <div>
@@ -227,6 +232,33 @@ const ProductDetails = ({ params }) => {
                         }
 
                     </div>
+
+                    <div className="bulkprice-section">
+                        <CustomTypography content="Bulk Price" color="BLACK" size="MEDIUM" weight="REGULAR" />
+
+                        <div className="bulktable">
+                            <table >
+                                <tr>
+                                    <th>Min Qty</th>
+                                    <th>Max Qty</th>
+                                    <th>Per piece</th>
+                                </tr>
+
+                                <tr>
+                                    <td>20</td>
+                                    <td>30</td>
+                                    <td>AED 100</td>
+                                </tr>
+                                <tr>
+                                    <td>31</td>
+                                    <td>40</td>
+                                    <td>AED 90</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
                     <div className="prd_item">
                         <CustomTypography content={`AED ${singleProduct?.data?.product?.special_price}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
                         <CustomTypography content={`AED ${singleProduct?.data?.product?.product_price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
@@ -234,7 +266,7 @@ const ProductDetails = ({ params }) => {
                     </div>
 
                     <div className="prd_item">
-                        <CountButton />
+                        <CountButton count={count} updateCount={updateCount} />
                         <div className='iconbtn'>
                             <CiHeart size={28} color='#E54333' />
                         </div>
@@ -244,7 +276,7 @@ const ProductDetails = ({ params }) => {
                             variant='primary'
                             label='Add to Cart'
                             onClick={() => {
-                                handleAddToCart( singleProduct?.data?.product?.special_price)
+                                handleAddToCart(singleProduct?.data?.product?.special_price)
                                 // dispatch(addProductToCart({
                                 //     productId: singleProduct?.data?.product?.id,
                                 //     quantity: 1,
@@ -254,6 +286,26 @@ const ProductDetails = ({ params }) => {
                         />
 
                     </div>
+
+                    {
+                        contactVisible &&
+                        <div className="contactus">
+                            <div className='flex flex-col gap-2 mb-2'>
+                                <CustomTypography content="50 Products limited to a customer" color="DANGER" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content="Contact us for a quote on quantity above 50" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                            </div>
+
+                            <div className="flex gap-3 items-center">
+                                <CustomInput type={'email'} label="" name="contact_email"
+                                    placeholder={"Enter Email"}
+                                    value={formData?.contact_email}
+                                    onChange={(e) => handleInputChange({ e })}
+                                />
+                                <CustomButton label='Submit' variant='transparent' />
+                            </div>
+                        </div>
+                    }
+
 
                 </div>
             </div>

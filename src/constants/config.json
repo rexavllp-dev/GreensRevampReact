@@ -81,6 +81,10 @@
     "RED": {
       "map": "red",
       "value": "#C92B2D"
+    },
+    "DANGER": {
+      "map": "danger",
+      "value": "#FF5959"
     }
   },
   "SIZE": {

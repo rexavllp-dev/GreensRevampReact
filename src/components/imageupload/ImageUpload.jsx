@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import './ImageUpload.scss'
 import CustomButton from '@/library/buttons/CustomButton';
 import CustomTypography from '@/library/typography/CustomTypography';
+import { IoIosClose, IoIosCloseCircleOutline } from 'react-icons/io';
 
 
 const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
@@ -42,17 +43,19 @@ const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage,
                 </div>
                 <div className="uploadeditems">
                     {images?.map((img, i) => {
-                        return (
-                            <div className="imgcard">
-                                <div className="closeicon" onClick={() => handleDeleteImage(img)}>
-                                    {/* <CloseIcon /> */}
+                        if (img?.url) {
+                            return (
+                                <div className="imgcard">
+                                    <div className="closeicon" onClick={() => handleDeleteImage(img)}>
+                                        <IoIosCloseCircleOutline size={20} />
+                                    </div>
+                                    <img
+                                        src={isProductImg ? img?.url : img}
+                                        alt={isProductImg ? img?.url : img}
+                                    />
                                 </div>
-                                <img
-                                    src={isProductImg ? img?.url : img}
-                                    alt={isProductImg ? img?.url : img}
-                                />
-                            </div>
-                        )
+                            )
+                        }
                     })}
 
                 </div>
