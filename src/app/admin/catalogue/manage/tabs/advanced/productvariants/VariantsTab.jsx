@@ -34,7 +34,9 @@ const VariantsTab = ({ data, id }) => {
     const [searchQuery, setSearchQuery] = React.useState('')
 
 
-    const { allProducts, productVariants , allVariantsByProduct, isProductVariantCreated, isVariantCreated } = useSelector(state => state.products)
+    const { allProducts, productVariants,
+        allVariantsByProduct, isProductVariantCreated,
+        isVariantCreated, isProductVariantValueDeleted } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -42,11 +44,11 @@ const VariantsTab = ({ data, id }) => {
 
     useEffect(() => {
         dispatch(getAllVariantsByProductId({ id }))
-    }, [id, isProductVariantCreated, isVariantCreated])
+    }, [id, isProductVariantCreated, isVariantCreated, isProductVariantValueDeleted])
 
     useEffect(() => {
         dispatch(getVariantLabelsByVariantId({ id: expandedIndex }))
-    }, [expandedIndex, isProductVariantCreated])
+    }, [expandedIndex, isProductVariantCreated, isProductVariantValueDeleted])
 
 
     const [columnDefs] = React.useState([
@@ -74,7 +76,7 @@ const VariantsTab = ({ data, id }) => {
     ]);
 
 
-    const handleCreateProductVariant = ( rows) => {
+    const handleCreateProductVariant = (rows) => {
         const productRows = rows.map((item) => {
             return {
                 product_id: id,
@@ -160,7 +162,7 @@ const VariantsTab = ({ data, id }) => {
                                     <div className="flex gap-3 items-center justify-between w-100">
                                         <CustomTypography content={item.prd_name} weight='SEMI-BOLD' size='REGULAR' />
                                         <div className='flex gap-3 items-center'>
-                                            <div className="icon cursor-pointer" onClick={() => handleDeleteProductVariant(item.variant_id)}>
+                                            <div className="icon cursor-pointer" onClick={() => handleDeleteProductVariant(item.product_variant_id)}>
                                                 <MdDelete size={24} className=' icon' color='#555' />
                                             </div>
                                         </div>

@@ -61,6 +61,13 @@ export default function Catalogue() {
             headerName: 'Brad Code', field: 'brand_code',
         },
         {
+            headerName: 'Created At', field: 'created_at',
+            cellRenderer: (params) => {
+                const date = params.data?.created_at;
+                return date;
+            }
+        },
+        {
             headerName: 'Status', field: 'prd_status', minWidth: 150,
             cellRenderer: (params) => {
                 const isActive = params.data?.prd_status;

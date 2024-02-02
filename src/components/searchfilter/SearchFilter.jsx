@@ -137,6 +137,9 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
 
     setFilters([
       {
+        
+      },
+      {
         column: 'products_price.product_price',
         operator: '<',
         value: priceRange[1]
@@ -206,6 +209,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
               ]
             } />
         </AccordionItem>
+
         {
           filterTypes.map((filterType) => (
             <AccordionItem key={filterType.id} aria-label={filterType.title} title={filterType.title}>

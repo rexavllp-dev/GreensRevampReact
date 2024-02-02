@@ -153,7 +153,20 @@ const InventoryTab = ({ id, data }) => {
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.product_quantity}
                             />
-                            <CustomButton label='Update Stock' onClick={() => setOpen(true)} />
+                            {
+                                data?.data?.product?.product_inventory_id == null ?
+                                    <div className="warningmsg">
+                                        <CustomTypography
+                                            content='Note:By default, product quantity is updated to zero on addition of a new product.Please update the product to increase quantity.'
+                                            size='SMALL'
+                                            weight='REGULAR'
+                                        />
+                                    </div>
+                                    :
+                                    <></>
+                            }
+                            <CustomButton label='Update Stock' disabled={data?.data?.product?.product_inventory_id == null} onClick={() => setOpen(true)} />
+
                             <CustomInput name='minimum_quantity' type='text'
                                 maxLength={100}
                                 placeholder='Minimum Qty' label={'Minimum Qty'}

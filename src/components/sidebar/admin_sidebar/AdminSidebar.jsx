@@ -75,7 +75,7 @@ const AdminSidebar = () => {
         <div className='adminsidebar'>
             <div className="sidebar">
                 <div className="header">
-                    <Link href="/admin/dashboard">
+                    <Link href="/admin">
                         <div className="logo">
                             <Image src={companyLogo} />
                         </div>

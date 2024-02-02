@@ -93,7 +93,7 @@ const ImagesTab = ({ id, data }) => {
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+                {/* <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} /> */}
             </div>
 
         </div>

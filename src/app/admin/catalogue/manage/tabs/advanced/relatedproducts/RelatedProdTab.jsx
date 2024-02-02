@@ -6,7 +6,7 @@ import "./RelatedProdTab.scss"
 import CustomInput from '@/library/input/custominput/CustomInput';
 import CustomButton from '@/library/buttons/CustomButton';
 import SearchInput from '@/library/input/searchinput/SearchInput';
-import { createRelatedProducts, getAllProducts, getAllRelatedProducts } from '@/services/features/productSlice';
+import { createRelatedProducts, deleteRelatedProducts, getAllProducts, getAllRelatedProducts } from '@/services/features/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -15,7 +15,9 @@ const RelatedProdTab = ({ id, data }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [selectedRows, setSelectedRows] = React.useState([]);
-    const [searchQuery, setSearchQuery] = React.useState('')
+    const [selectedRelatedRows, setSelectedRelatedRows] = React.useState([]);
+    const [searchQuery, setSearchQuery] = React.useState('');
+
     const [columnDefs] = React.useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         // {
@@ -41,15 +43,15 @@ const RelatedProdTab = ({ id, data }) => {
     ]);
 
 
-    const { allProducts, isRelatedProductsCreated, relatedProducts } = useSelector(state => state.products)
+    const { allProducts, isRelatedProductsCreated, relatedProducts,isRelatedProductsDeleted } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
-    }, [ searchQuery])
-    
+    }, [searchQuery])
+
     useEffect(() => {
         dispatch(getAllRelatedProducts({ id }))
-    }, [isRelatedProductsCreated])
+    }, [isRelatedProductsCreated, isRelatedProductsDeleted])
 
     const handleCreateRelatedProducts = () => {
         const relatedProductData = selectedRows.map((item) => {
@@ -60,6 +62,7 @@ const RelatedProdTab = ({ id, data }) => {
         dispatch(createRelatedProducts({ data: { relatedProductData: relatedProductData }, id })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload.message);
+                setSelectedRows([]);
             } else {
                 toast.error(res.payload.message)
             }
@@ -67,7 +70,25 @@ const RelatedProdTab = ({ id, data }) => {
         }).catch((err) => {
             console.log(err);
         })
-        setSelectedRows([]);
+    }
+
+
+    const handleDeleteRelatedProducts = () => {
+        if (selectedRelatedRows.length > 0) {
+            const data = selectedRelatedRows.map(row => row.id);
+            dispatch(deleteRelatedProducts({ data: data })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                    setSelectedRelatedRows([])
+                } else {
+                    toast.error(res.payload.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            toast.error('Please select atleast one product')
+        }
     }
 
 
@@ -117,9 +138,12 @@ const RelatedProdTab = ({ id, data }) => {
                                 <CustomTable height={'400px'}
                                     columnDefs={columnDefs}
                                     rowData={relatedProducts?.result}
-                                    selectedRows={selectedRows}
-                                    setSelectedRows={setSelectedRows}
+                                    selectedRows={selectedRelatedRows}
+                                    setSelectedRows={setSelectedRelatedRows}
                                 />
+                            </div>
+                            <div className="createbtn flex justify-end">
+                                <CustomButton label="Delete" variant="primary" onClick={() => handleDeleteRelatedProducts()} />
                             </div>
                         </CardBody>
                     </Card>

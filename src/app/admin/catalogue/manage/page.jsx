@@ -22,6 +22,7 @@ import ReviewsTab from './tabs/advanced/reviews/ReviewsTab';
 import StockHistoryTab from './tabs/advanced/stockhistory/StockHistoryTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '@/services/features/productSlice';
+import BulkDiscountTab from './tabs/basic/bulk-discount/BulkDiscountTab';
 
 const catalogueDetails = () => {
 
@@ -102,6 +103,11 @@ const catalogueDetails = () => {
             id: 6,
             label: "Badges",
             component: <BadgesTab id={id} data={singleProduct} />
+        },
+        {
+            id: 7,
+            label: "Bulk Discount",
+            component: <BulkDiscountTab id={id} data={singleProduct} />
         },
     ]
     const advancedTabs = [

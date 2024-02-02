@@ -18,6 +18,7 @@ import CustomShare from '@/components/share/CustomShare';
 import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import CustomInput from '@/library/input/custominput/CustomInput';
+import { getBulkDiscountByProduct } from '@/services/features/bulkSlice';
 
 
 const additionalDetails = [
@@ -49,6 +50,7 @@ const ProductDetails = ({ params }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions } = useSelector((state) => state.products)
+    const { bulkDiscountData } = useSelector((state) => state.bulk)
     const [selectedOption, setSelectedOption] = React.useState('');
     const [count, setCount] = React.useState(1);
     const [contactVisible, setContactVisible] = React.useState(false);
@@ -65,9 +67,9 @@ const ProductDetails = ({ params }) => {
 
     const updateCount = (operator) => {
         if (operator === 'add') {
-            if(count === 50){
+            if (count === 50) {
                 setContactVisible(true)
-            }else {
+            } else {
                 setCount((prevCount) => prevCount + 1);
             }
         } else {
@@ -88,6 +90,7 @@ const ProductDetails = ({ params }) => {
         dispatch(getAllOptionsByProductId({ id: params.id }))
         dispatch(getProductOptions({ id: params.id }))
         dispatch(getAllVariantsByProductId({ id: params.id }))
+        dispatch(getBulkDiscountByProduct({ id: params.id }))
     }, [params]);
 
     useEffect(() => {
@@ -101,7 +104,7 @@ const ProductDetails = ({ params }) => {
     }, [productOptions, params.id])
 
     // Add to cart
-    const handleAddToCart = (price) => {
+    const handleAddToCart = () => {
 
         const productData = {
             productId: params.id,
@@ -236,34 +239,49 @@ const ProductDetails = ({ params }) => {
                     <div className="bulkprice-section">
                         <CustomTypography content="Bulk Price" color="BLACK" size="MEDIUM" weight="REGULAR" />
 
-                        <div className="bulktable">
-                            <table >
-                                <tr>
-                                    <th>Min Qty</th>
-                                    <th>Max Qty</th>
-                                    <th>Per piece</th>
-                                </tr>
+                        {
+                            bulkDiscountData?.result?.length > 0 &&
+                            <div className="bulktable">
+                                <table >
+                                    <tr>
+                                        <th>Min Qty</th>
+                                        <th>Max Qty</th>
+                                        <th>Per piece</th>
+                                    </tr>
 
-                                <tr>
-                                    <td>20</td>
-                                    <td>30</td>
-                                    <td>AED 100</td>
-                                </tr>
-                                <tr>
-                                    <td>31</td>
-                                    <td>40</td>
-                                    <td>AED 90</td>
-                                </tr>
-                            </table>
-                        </div>
+                                    {
+                                        bulkDiscountData?.result?.map((item, index) => {
+                                            return (
+                                                <tr>
+                                                    <td>{item?.start_range}</td>
+                                                    <td>{item?.end_range}</td>
+                                                    <td>{'AED ' + item?.discounted_price}</td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+
+                                </table>
+                            </div>
+                        }
+
                     </div>
 
 
-                    <div className="prd_item">
-                        <CustomTypography content={`AED ${singleProduct?.data?.product?.special_price}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-                        <CustomTypography content={`AED ${singleProduct?.data?.product?.product_price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
-                        <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
-                    </div>
+                    {
+                        singleProduct?.data?.product?.special_price ?
+                            <div className="prd_item">
+                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.product_price) - parseFloat(singleProduct?.data?.product?.special_price)}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content={`AED ${singleProduct?.data?.product?.product_price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
+                                <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
+                            </div>
+                            :
+                            <div className="prd_item">
+                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.product_price)}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
+                            </div>
+                    }
+
 
                     <div className="prd_item">
                         <CountButton count={count} updateCount={updateCount} />
@@ -276,12 +294,7 @@ const ProductDetails = ({ params }) => {
                             variant='primary'
                             label='Add to Cart'
                             onClick={() => {
-                                handleAddToCart(singleProduct?.data?.product?.special_price)
-                                // dispatch(addProductToCart({
-                                //     productId: singleProduct?.data?.product?.id,
-                                //     quantity: 1,
-                                //     price: singleProduct?.data?.product?.special_price
-                                // }))
+                                handleAddToCart()
                             }}
                         />
 

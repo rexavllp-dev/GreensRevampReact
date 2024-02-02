@@ -128,6 +128,10 @@ const initialState = {
     isRelatedProductsCreated: false,
     isRelatedProductsCreateError: true,
 
+    isRelatedProductsDeleting: false,
+    isRelatedProductsDeleted: false,
+    isRelatedProductsDeleteError: true,
+
     isReviewCreatingByAdmin: false,
     isReviewCreatedByAdmin: false,
     isReviewCreateByAdminError: false,
@@ -153,9 +157,9 @@ const initialState = {
     isStockHistoryByProductLoadError: false,
     stockHistoryByProduct: [],
 
-    isProductImgDeleting:false,
-    isProductImgDeleted:false,
-    isProductImgDeleteError:false,
+    isProductImgDeleting: false,
+    isProductImgDeleted: false,
+    isProductImgDeleteError: false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
@@ -248,7 +252,7 @@ export const uploadProductImage = createAsyncThunk('uploadProductImage', async (
     }
 })
 
-export const deleteProductImage = createAsyncThunk('deleteProductImage', async ({  id }, thunkAPI) => {
+export const deleteProductImage = createAsyncThunk('deleteProductImage', async ({ id }, thunkAPI) => {
     try {
         const response = await products.deleteProductImage(id);
         return thunkAPI.fulfillWithValue(response.data);
@@ -308,9 +312,9 @@ export const createProductOption = createAsyncThunk('createProductOption', async
     }
 })
 
-export const updateOptionValue = createAsyncThunk('updateOptionValue', async ({ data, id }, thunkAPI) => {
+export const updateOptionValue = createAsyncThunk('updateOptionValue', async ({ data }, thunkAPI) => {
     try {
-        const response = await products.updateOptionValue(data, id);
+        const response = await products.updateOptionValue(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -446,6 +450,16 @@ export const createRelatedProducts = createAsyncThunk('createRelatedProducts', a
 export const getAllRelatedProducts = createAsyncThunk('getAllRelatedProducts', async ({ id }, thunkAPI) => {
     try {
         const response = await products.getAllRelatedProducts({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteRelatedProducts = createAsyncThunk('deleteRelatedProducts', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.deleteRelatedProducts({ data });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1036,7 +1050,23 @@ const productSlice = createSlice({
                 state.isRelatedProductsLoadError = true;
             })
 
+            .addCase(deleteRelatedProducts.pending, (state, action) => {
+                state.isRelatedProductsDeleting = true;
+                state.isRelatedProductsDeleted = false;
+                state.isRelatedProductsDeleteError = false;
+            })
 
+            .addCase(deleteRelatedProducts.fulfilled, (state, action) => {
+                state.isRelatedProductsDeleting = false;
+                state.isRelatedProductsDeleted = true;
+                state.isRelatedProductsDeleteError = false;
+            })
+
+            .addCase(deleteRelatedProducts.rejected, (state, action) => {
+                state.isRelatedProductsDeleting = false;
+                state.isRelatedProductsDeleted = false;
+                state.isRelatedProductsDeleteError = true;
+            })
 
             .addCase(createProductReviewByAdmin.pending, (state, action) => {
                 state.isReviewCreatingByAdmin = true;

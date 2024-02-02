@@ -65,7 +65,7 @@ const Cart = () => {
 
                 <div className="cartitems">
                     {
-                        cartProducts?.result?.cart?.map((item, index) => {
+                        cartProducts?.result?.products?.map((item, index) => {
                             return (
                                 <CartItem key={index} data={item} />
                             )
@@ -77,8 +77,8 @@ const Cart = () => {
             <div className='carttotal-wrapper'>
                 <div className="carttotal">
                     <div className="item">
-                        <CustomTypography content={`Subtotal ${cartProducts?.result?.totalProductCount} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content={"AED " + cartProducts?.result?.subtotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={`Subtotal ${cartProducts?.result?.totals?.totalProductCount} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
                     <div className="item">
@@ -105,7 +105,7 @@ const Cart = () => {
                     </div>
                     <div className="item">
                         <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content={"AED " + cartProducts?.result?.grandTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
                     <div className="btn">

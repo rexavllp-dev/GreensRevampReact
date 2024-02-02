@@ -5,11 +5,15 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import { StarIcon, heartIconBlack } from '../../../../public/icons';
 import { useLanguage } from '@/providers/LanguageProvider';
 import { useRouter } from 'next/navigation';
+import { addProductToCart } from '@/services/features/cartSlice';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()
+  const dispatch = useDispatch();
 
   const Badge = () => {
     return (
@@ -18,6 +22,25 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
       </div>
     )
   }
+
+   // Add to cart
+   const handleAddToCart = () => {
+
+    const productData = {
+        productId: id,
+        quantity: 1,
+    }
+
+    dispatch(addProductToCart({ data: productData })).then((res) => {
+        if (res.payload?.success) {
+            toast.success(res.payload?.message);
+        } else {
+            toast.error(res.payload?.message);
+        }
+    }).catch((err) => {
+        console.log(err)
+    })
+}
   return (
     <div className='productcard'>
       <div className="icon">
@@ -42,7 +65,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
         </div>
         <div className="topsection">
           <div className="left">
-            {
+            {/* {
               specialPrice !== null ?
                 <>
                   <CustomTypography content={`AED ${specialPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
@@ -51,6 +74,15 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
                 </>
                 :
                 <CustomTypography content={`AED ${normalPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
+            } */}
+            {
+              specialPrice ?
+                <>
+                  <CustomTypography content={`AED ${parseFloat(normalPrice) - parseFloat(specialPrice)}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                  <CustomTypography content={`AED ${normalPrice}`} color="GRAY-LIGHT" size="MEDIUM-SMALL" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
+                </>
+                :
+                <CustomTypography content={`AED ${normalPrice}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
             }
           </div>
           <div className="right">
@@ -65,7 +97,9 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
           <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
         <div className="bottomsection">
-          <button className={'productbtn'}>
+          <button className={'productbtn'} onClick={() => {
+            handleAddToCart()
+          }}>
             <div className='productbtn_text' >
               {getTranslation('add_to_cart')}
             </div >

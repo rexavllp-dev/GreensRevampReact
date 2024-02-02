@@ -135,27 +135,23 @@ const OptionsTab = ({ data, id }) => {
 
     const handleUpdateProductOption = (optionValueId) => {
 
-        let optionLabel = optionLabels[optionValueId];
-        // if (optionLabel) {
-        dispatch(updateOptionValue({
-            data: {
-                option_label: optionLabel,
-            }, id: optionValueId
-        })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((err) => {
-            console.log(err);
-        })
-        //     setOptionLabels([]);
-        // } else {
-        //     toast.error('Please select option first')
-        // }
-
+        // let optionLabel = optionLabels[optionValueId];
+        console.log(optionLabels)
+        if (optionLabels) {
+            dispatch(updateOptionValue({
+                data: { data: optionLabels }
+            })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+            setOptionLabels([]);
+        }
     }
 
     const handleDeleteProductOption = (optionId) => {
@@ -297,9 +293,7 @@ const OptionsTab = ({ data, id }) => {
                                                 value={item.sku}
                                             />
                                             <div className='flex gap-3'>
-                                                <div className="icon cursor-pointer" onClick={() => handleUpdateProductOption(item.product_option_id)}>
-                                                    <FaSave size={24} className='mt-3 icon' color='#555' />
-                                                </div>
+
                                                 <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
                                                     <MdDelete size={24} className='mt-3 icon' color='#555' />
                                                 </div>
@@ -310,9 +304,16 @@ const OptionsTab = ({ data, id }) => {
                                         {/* <div className="createbtn flex justify-end">
                                         <CustomButton label="Save" variant="primary" />
                                     </div> */}
+
                                         <Divider />
                                     </>
                                 ))}
+                                {/* <div className="icon cursor-pointer" onClick={() => handleUpdateProductOption(item.product_option_id)}>
+                                    <FaSave size={24} className='mt-3 icon' color='#555' />
+                                </div> */}
+                                <div className="createbtn flex justify-end" >
+                                    <CustomButton label="Save" variant="primary" onClick={() => handleUpdateProductOption()} />
+                                </div>
                             </CardBody>
 
                         }

@@ -125,7 +125,7 @@ const Navbar = () => {
                                 <Link href="/cart" prefetch={false}>
                                     <div className="cart-icon">
                                         <Image src={cartIcon} />
-                                        {cartProducts?.result?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totalProductCount}</div>}
+                                        {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
                                     </div>
                                 </Link>
                                 {/* <p className='item-label'>Cart</p> */}

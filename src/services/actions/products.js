@@ -144,9 +144,9 @@ export const products = {
         })
     },
     //Update option value
-    updateOptionValue: (data, id) => {
+    updateOptionValue: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.put('/products/update-product-option/' + id, data)
+            Axios.put('/products/update-product-option/', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -249,6 +249,13 @@ export const products = {
     getAllRelatedProducts: ({ id }) => {
         return new Promise((resolve, reject) => {
             Axios.get('/products/get-related-products/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    deleteRelatedProducts: ({ data }) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/products/delete-related-product/?data=${JSON.stringify(data)}`)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

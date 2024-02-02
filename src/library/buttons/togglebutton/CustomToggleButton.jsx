@@ -2,7 +2,7 @@ import React from 'react'
 import './CustomToggleButton.scss'
 import { Switch, cn, select } from '@nextui-org/react'
 
-const CustomToggleButton = ({ label, value, onChange, disabled }) => {
+const CustomToggleButton = ({ label, value, onChange, disabled, okText, cancelText }) => {
     // const [isSelected, setIsSelected] = React.useState(true);
 
     return (
@@ -24,7 +24,7 @@ const CustomToggleButton = ({ label, value, onChange, disabled }) => {
                     ),
                 }}
             >
-                <p className='togglebtn-label'> {value ? "Active" : "Inactive"}</p>
+                <p className='togglebtn-label'> {value ? (okText ? okText : "Active") : (cancelText ? cancelText : "Inactive")}</p>
             </Switch>
         </div>
     )
