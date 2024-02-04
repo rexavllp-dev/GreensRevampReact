@@ -202,16 +202,23 @@ const ProductDetails = ({ params }) => {
                             <CustomTypography content="Variants" color="BLACK" size="MEDIUM" weight="REGULAR" />
                             <div className="item">
                                 {
-                                    allVariantsByProduct?.result?.map((obj) => (
-                                        <div className="variantimg" key={obj.id} onClick={() => {
-                                            router.push('/products/' + obj.variant_id, { scroll: true })
-                                        }}>
-                                            <Image src={obj.product_img[0]?.url}
-                                                width={42} height={42} alt="product" />
-                                            {/* <Image src='https://s3-alpha-sig.figma.com/img/83f1/f1aa/47babafeb1fa2ad5a9e6d4ad6a1fa7c6?Expires=1706486400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=B7AQ6H~eFtpLSY5zTJnv9wu2ZfRGGISN0bl6z4TtqUXEYBlLml2fGrgDPsvqut8gVaoEa6nAqkUQe~xu6swKQO8ohOGquwuWsMLOiVgc0EvQOF6wCBHP~ZQ6WUGqNAbBI1gm9HJWRZAjsVoAerLxMS64n7PF7NQ4TKkgqEgwbyIX8UqeO7TE36XIgK6bb12rymXEPY7AFvpeZLQaEKmBKTVRb81v6ECeLhT1pApInPCVKcXDQlV3k-IsMuPM5zClYqBxCzJarcuJ2WYDbByPCrYhSH9pXCEhI2WMyl5xbj5ux9t0Zzh-POVu~sy6WdO4IOBwry9ZVtWKqtg8pCNhTQ__'
+                                    allVariantsByProduct?.result?.map((obj) => {
+                                        if (obj.product_img[0]?.url) {
+                                            return (
+                                                <div className="variantimg" key={obj.id} onClick={() => {
+                                                    router.push('/products/' + obj.variant_id, { scroll: true })
+                                                }}>
+
+                                                    <Image src={obj.product_img[0]?.url}
+                                                        width={42} height={42} alt="product" />
+                                                    {/* <Image src='https://s3-alpha-sig.figma.com/img/83f1/f1aa/47babafeb1fa2ad5a9e6d4ad6a1fa7c6?Expires=1706486400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=B7AQ6H~eFtpLSY5zTJnv9wu2ZfRGGISN0bl6z4TtqUXEYBlLml2fGrgDPsvqut8gVaoEa6nAqkUQe~xu6swKQO8ohOGquwuWsMLOiVgc0EvQOF6wCBHP~ZQ6WUGqNAbBI1gm9HJWRZAjsVoAerLxMS64n7PF7NQ4TKkgqEgwbyIX8UqeO7TE36XIgK6bb12rymXEPY7AFvpeZLQaEKmBKTVRb81v6ECeLhT1pApInPCVKcXDQlV3k-IsMuPM5zClYqBxCzJarcuJ2WYDbByPCrYhSH9pXCEhI2WMyl5xbj5ux9t0Zzh-POVu~sy6WdO4IOBwry9ZVtWKqtg8pCNhTQ__'
                                             width={42} height={42} alt="product" /> */}
-                                        </div>
-                                    ))
+                                                </div>
+                                            )
+                                        } else return null;
+                                    }
+
+                                    )
                                 }
                             </div>
                         </div>
@@ -269,15 +276,15 @@ const ProductDetails = ({ params }) => {
 
 
                     {
-                        singleProduct?.data?.product?.special_price ?
+                        singleProduct?.data?.product?.productPrice[0]?.specialPrice ?
                             <div className="prd_item">
-                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.product_price) - parseFloat(singleProduct?.data?.product?.special_price)}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-                                <CustomTypography content={`AED ${singleProduct?.data?.product?.product_price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
+                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.specialPrice}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                             :
                             <div className="prd_item">
-                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.product_price)}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.price}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                     }

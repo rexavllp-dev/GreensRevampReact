@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import "./ImageGallery.scss"
 import Image from 'next/image'
@@ -5,15 +6,19 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import ReactImageMagnify from 'react-image-magnify'
 
 const ImageGallery = ({ data }) => {
+
     const images = data?.data?.product?.product_img;
+    const [selectedProductImage, setSelectedProductImage] = React.useState(
+        images?.find((img) => img.is_baseimage === true)?.url);
+
+        React.useEffect(()=>{
+            setSelectedProductImage(images?.find((img) => img.is_baseimage === true)?.url)
+        }, [data])
 
     return (
         <div className="image_gallery flex flex-col items-center">
 
-            <Image src={images?.find((img) => img.is_baseimage === true)?.url ?
-                images?.find((img) => img.is_baseimage === true)?.url :
-                'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
-            }
+            <Image src={selectedProductImage || 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
                 width={400}
                 height={400}
                 alt="product"
@@ -40,7 +45,7 @@ const ImageGallery = ({ data }) => {
                 <div className="navbtn mr-2">
                     <MdKeyboardArrowLeft size={24} />
                 </div>
-                <div className="navlist flex gap-2">
+                <div className="navlist flex gap-2 " >
                     {
                         images?.map((img, imagesIndex) => {
                             if (img.url) {
@@ -49,6 +54,7 @@ const ImageGallery = ({ data }) => {
                                         width={100}
                                         height={100}
                                         alt="product"
+                                        onClick={(e) => setSelectedProductImage(img.url)}
                                     />
                                 )
                             }

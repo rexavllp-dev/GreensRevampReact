@@ -208,9 +208,11 @@ const Search = () => {
                 >
                     {
                         allProductsByUser?.data?.products?.map(product => (
-                            <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name} specialPrice={product.special_price}
-                                normalPrice={product.product_price}
+                            <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                specialPrice={product?.prdPrice[0]?.specialPrice}
+                                normalPrice={product?.prdPrice[0]?.price}
                                 rating={product.rating}
+                                data={product}
                                 img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
                                     (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
                                     'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'

@@ -163,11 +163,16 @@ export default function SearchDropdown() {
                                     {
                                         allProducts?.data?.products?.map((item, index) => (
                                             <div className="product" onClick={() => {
-                                                // Add new search term to recent searches list
-                                                setRecentSearches(prevSearches => ([...prevSearches, item]));
+                                                // Assuming the recentSearches is an array of objects with a product_id property
+                                                const isProductAlreadyIncluded = recentSearches.some(search => search.product_id === item.product_id);
+                                                if (!isProductAlreadyIncluded) {
+                                                    // Add new search term to recent searches list
+                                                    setRecentSearches(prevSearches => ([...prevSearches, item]));
+                                                }
                                                 router.push(`/products/${item.product_id}`, { scroll: true });
                                                 setVisible(false)
-                                            }}>
+                                            }
+                                            }>
                                                 <div className="image">
                                                     {
                                                         item?.product_img[0]?.url &&

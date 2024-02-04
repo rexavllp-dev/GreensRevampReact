@@ -78,7 +78,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
             {
               specialPrice ?
                 <>
-                  <CustomTypography content={`AED ${parseFloat(normalPrice) - parseFloat(specialPrice)}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                  <CustomTypography content={`AED ${specialPrice}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                   <CustomTypography content={`AED ${normalPrice}`} color="GRAY-LIGHT" size="MEDIUM-SMALL" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
                 </>
                 :

@@ -1,6 +1,7 @@
 "use client";
 import { Radio, RadioGroup } from '@nextui-org/react'
 import React from 'react'
+import './CustomRadioBox.scss'
 
 const CustomRadioBox = ({ items, value, onChange }) => {
     return (

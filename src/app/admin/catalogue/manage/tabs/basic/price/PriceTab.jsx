@@ -75,17 +75,19 @@ const PriceTab = ({ id, data }) => {
                 special_price_end: formData?.special_price_end,
                 product_id: id,
                 prd_status: formData?.prd_status,
-                is_discount: formData?.is_discount
+                is_discount: formData?.is_discount,
+                product_id: formData?.product_id
             }
         } else {
             data = {
                 product_price: formData?.product_price,
                 prd_status: formData?.prd_status,
-                is_discount: formData?.is_discount
+                is_discount: formData?.is_discount,
+                product_id: formData?.product_id
             }
         }
         if (data?.data?.product?.product_price) {
-            dispatch(updatePrice({ data: formData, id: id })).then((res) => {
+            dispatch(updatePrice({ data: data, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                 } else {
@@ -97,7 +99,7 @@ const PriceTab = ({ id, data }) => {
                 setLoading(false);
             })
         } else {
-            dispatch(createPrice({ data: formData })).then((res) => {
+            dispatch(createPrice({ data: data })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                 } else {

@@ -75,12 +75,16 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
       filter: [{
         id: 1,
         title: 'In Stock',
-        checked: false
+        checked: false,
+        value: 'In Stock',
+        column:'product_inventory.stock_availability'
       },
       {
         id: 2,
         title: 'Out of Stock',
-        checked: false
+        checked: false,
+        value: 'Out of Stock',
+        column:'product_inventory.stock_availability'
       }
       ]
     },
@@ -135,22 +139,31 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
 
   const handleApplyFilter = () => {
 
-    setFilters([
+    // filterTypes.forEach((type) => {
+    //   type?.filter?.forEach((filter) => {
+    //     if (filter.checked) {
+    //       setFilters((prev) => ([...prev, {
+    //         column: filter.column,
+    //         operator: '=',
+    //         value: filter.value
+    //       }]))
+    //     }
+    //   })
+    // })
+    setFilters((prev) => ([
+      ...prev,
       {
-        
-      },
-      {
-        column: 'products_price.product_price',
+        column: 'computed_price',
         operator: '<',
         value: priceRange[1]
       },
       {
-        column: 'products_price.product_price',
+        column: 'computed_price',
         operator: '>',
         value: priceRange[0]
       }
-    ])
-    
+    ]))
+
     // setFilters((prev)=>([...prev, {
 
     // }]))
