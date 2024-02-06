@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 
-export default function CountButton({ count, updateCount }) {
+export default function CountButton({ count, updateCount, setProductQuantity }) {
 
     const dispatch = useDispatch();
 
@@ -13,11 +13,16 @@ export default function CountButton({ count, updateCount }) {
     //     setCount(data?.quantity);
     // }, [data])
 
-   
+
     return (
         <div className='countbtn'>
             <button onClick={() => updateCount('reduce')}>-</button>
-            <input type="text" value={count} readOnly />
+            <input type="text" value={count} max={50} maxLength={2} onChange={(e) => {
+                const value = e.target.value;
+                if (!isNaN(value) && value >= 0 && value <= 50) {
+                    setProductQuantity(isNaN(parseInt(value)) ? '' : parseInt(value));
+                }
+            }} />
             <button onClick={() => updateCount('add')}>+</button>
         </div>
     )

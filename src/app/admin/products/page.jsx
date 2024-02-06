@@ -50,6 +50,11 @@ export default function ProductsTab() {
       id:9,
       name: 'Reviews',
       url: '/admin/reviews',
+    },
+    {
+      id:10,
+      name: 'Bulk',
+      url: '/admin/bulk',
     }
   ];
 

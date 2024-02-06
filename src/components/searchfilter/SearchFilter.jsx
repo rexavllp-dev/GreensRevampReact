@@ -20,36 +20,6 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
   const [priceRange, setPriceRange] = React.useState([0, 10000]);
 
   const [filterTypes, setFilterTypes] = React.useState([
-    // {
-    //   id: 0,
-    //   title: 'Sort By',
-    //   filter: [{
-    //     id: 1,
-    //     title: 'Price low to high',
-    //     checked: false
-    //   },
-    //   {
-    //     id: 2,
-    //     title: 'Price high to low',
-    //     checked: false
-    //   },
-    //   {
-    //     id: 3,
-    //     title: 'Newest',
-    //     checked: false
-    //   },
-    //   {
-    //     id: 4,
-    //     title: 'Oldest',
-    //     checked: false
-    //   },
-    //   {
-    //     id: 5,
-    //     title: 'Featured',
-    //     checked: false
-    //   }
-    //   ]
-    // },
     {
       id: 1,
       title: 'Brand',
@@ -134,6 +104,14 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
     setFilters([])
     setSortBy('')
     setPriceRange([0, 10000]);
+    const resetFilters = filterTypes.map(filterGroup => {
+      const resetFilter = filterGroup?.filter?.map(filterItem => ({
+        ...filterItem,
+        checked: false
+      }));
+      return { ...filterGroup, filter: resetFilter };
+    });
+    setFilterTypes(resetFilters);
     toast.success("Filters Cleared Successfully")
   }
 
@@ -151,7 +129,6 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
     //   })
     // })
     setFilters((prev) => ([
-      ...prev,
       {
         column: 'computed_price',
         operator: '<',

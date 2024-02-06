@@ -33,4 +33,31 @@ export const bulk = {
                 .catch(error => reject(error))
         })
     },
+
+    //Create bulk request for quantity increment
+    createBulkRequest: ({ data }) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/products/submit-bulk-request/', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Get all bulk requests
+    getAllBulkRequests: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-all-bulk-request/')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Get all bulk requests
+    updateBulkRequest: ({data, id}) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-bulk-request/'+ id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

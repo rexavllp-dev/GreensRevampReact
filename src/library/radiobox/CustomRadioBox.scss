@@ -1,4 +1,46 @@
 
+@import '../../app/styles/mediaquery';
+
+.customcheckbox-label {
+  font-family: Plus Jakarta Sans;
+  font-size: 16px;
+  font-weight: 400;
+  color: #4d4d4d;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 14px;
+  }
+}
+
+.customcheckbox-label-rounded {
+  font-family: Plus Jakarta Sans;
+  font-size: 14px;
+  font-weight: 400;
+  color: #111111;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    font-size: 12px;
+  }
+}
+
+// .customcheckbox-label::after {
+//   --tw-content: "*";
+//   content: var(--tw-content);
+//   color: red;
+// }
+
+.customcheckbox-wrapper {
+  border-color: #000000;
+}
+
+.customcheckbox-base {
+  border-color: #000000;
+}
+
+.after\:bg-primary::after {
+  background-color: #32893b !important;
+}
+
 
 input[type='radio']:focus {
     outline: none !important;

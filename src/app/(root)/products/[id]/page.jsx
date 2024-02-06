@@ -18,7 +18,7 @@ import CustomShare from '@/components/share/CustomShare';
 import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import CustomInput from '@/library/input/custominput/CustomInput';
-import { getBulkDiscountByProduct } from '@/services/features/bulkSlice';
+import { createBulkRequest, getBulkDiscountByProduct } from '@/services/features/bulkSlice';
 
 
 const additionalDetails = [
@@ -55,8 +55,12 @@ const ProductDetails = ({ params }) => {
     const [count, setCount] = React.useState(1);
     const [contactVisible, setContactVisible] = React.useState(false);
     const [formData, setFormData] = React.useState({
-        contact_email: ''
+        quantity: 51
     })
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
 
     const handleInputChange = ({ e }) => {
         setFormData({
@@ -108,7 +112,7 @@ const ProductDetails = ({ params }) => {
 
         const productData = {
             productId: params.id,
-            quantity: count,
+            quantity: formData?.quantity,
         }
 
         dispatch(addProductToCart({ data: productData })).then((res) => {
@@ -120,6 +124,23 @@ const ProductDetails = ({ params }) => {
         }).catch((err) => {
             console.log(err)
         })
+    }
+
+
+    const handleRequestBulk = () => {
+        if (isLoggedIn) {
+            dispatch(createBulkRequest({ data: { productId: params.id, quantity: 0 } })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
+            router.push('/auth/login')
+        }
     }
 
     return (
@@ -243,11 +264,11 @@ const ProductDetails = ({ params }) => {
 
                     </div>
 
-                    <div className="bulkprice-section">
-                        <CustomTypography content="Bulk Price" color="BLACK" size="MEDIUM" weight="REGULAR" />
+                    {
+                        bulkDiscountData?.result?.length > 0 &&
+                        <div className="bulkprice-section">
+                            <CustomTypography content="Bulk Price" color="BLACK" size="MEDIUM" weight="REGULAR" />
 
-                        {
-                            bulkDiscountData?.result?.length > 0 &&
                             <div className="bulktable">
                                 <table >
                                     <tr>
@@ -270,9 +291,9 @@ const ProductDetails = ({ params }) => {
 
                                 </table>
                             </div>
-                        }
 
-                    </div>
+                        </div>
+                    }
 
 
                     {
@@ -291,7 +312,7 @@ const ProductDetails = ({ params }) => {
 
 
                     <div className="prd_item">
-                        <CountButton count={count} updateCount={updateCount} />
+                        <CountButton count={count} updateCount={updateCount} setProductQuantity={setCount} />
                         <div className='iconbtn'>
                             <CiHeart size={28} color='#E54333' />
                         </div>
@@ -316,12 +337,15 @@ const ProductDetails = ({ params }) => {
                             </div>
 
                             <div className="flex gap-3 items-center">
-                                <CustomInput type={'email'} label="" name="contact_email"
-                                    placeholder={"Enter Email"}
-                                    value={formData?.contact_email}
-                                    onChange={(e) => handleInputChange({ e })}
-                                />
-                                <CustomButton label='Submit' variant='transparent' />
+                                {
+                                    isLoggedIn &&
+                                    <CustomInput type={'text'} label="" name="quantity"
+                                        placeholder={"Enter Quantity"}
+                                        value={formData?.quantity}
+                                        onChange={(e) => handleInputChange({ e })}
+                                    />
+                                }
+                                <CustomButton label={isLoggedIn ? 'Submit' : 'Login to Submit'} onClick={handleRequestBulk} variant='transparent' />
                             </div>
                         </div>
                     }

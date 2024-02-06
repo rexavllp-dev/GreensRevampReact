@@ -34,7 +34,7 @@
   .products-wrapper {
     display: grid;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: left;
     grid-template-columns: repeat(auto-fit, minmax(280px, auto));
 
     @include for_breakpoint("small-screen", "mobile") {

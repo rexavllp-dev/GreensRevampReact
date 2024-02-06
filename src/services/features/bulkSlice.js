@@ -3,26 +3,40 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { bulk } from "../actions/bulk";
 
 const initialState = {
-    isBulkDiscountCreating:false,
-    isBulkDiscountCreated:false,
-    isBulkDiscountCreateError:false,
+    isBulkDiscountCreating: false,
+    isBulkDiscountCreated: false,
+    isBulkDiscountCreateError: false,
 
-    isBulkDiscountUpdating:false,
-    isBulkDiscountUpdated:false,
-    isBulkDiscountUpdateError:false,
 
-    isBulkDiscountByProductLoading:false,
-    isBulkDiscountByProductLoaded:false,
-    isBulkDiscountByProductLoadError:false,
+    isBulkDiscountUpdating: false,
+    isBulkDiscountUpdated: false,
+    isBulkDiscountUpdateError: false,
+
+    isBulkDiscountByProductLoading: false,
+    isBulkDiscountByProductLoaded: false,
+    isBulkDiscountByProductLoadError: false,
     bulkDiscountData: [],
 
-    isBulkDiscountDeleting:false,
-    isBulkDiscountDeleted:false,
-    isBulkDiscountDeleteError:false
+    isBulkDiscountDeleting: false,
+    isBulkDiscountDeleted: false,
+    isBulkDiscountDeleteError: false,
+
+    isBulkRequestCreating: false,
+    isBulkRequestCreated: false,
+    isBulkRequestCreateError: false,
+
+    isAllBulkRequestsLoading: false,
+    isAllBulkRequestsLoaded: false,
+    isAllBulkRequestsLoadError: false,
+    allBulkRequests: [],
+
+    isBulkRequestUpdating: false,
+    isBulkRequestUpdated: false,
+    isBulkRequestUpdateError: false,
 }
 
 // Create bulk discount
-export const createBulkDiscount = createAsyncThunk('createBulkDiscount', async ({data }, thunkAPI) => {
+export const createBulkDiscount = createAsyncThunk('createBulkDiscount', async ({ data }, thunkAPI) => {
     try {
         const response = await bulk.createBulkDiscount(data);
         return thunkAPI.fulfillWithValue(response.data);
@@ -33,7 +47,7 @@ export const createBulkDiscount = createAsyncThunk('createBulkDiscount', async (
 })
 
 // Update bulk discount
-export const updateBulkDiscount = createAsyncThunk('updateBulkDiscount', async ({data, id }, thunkAPI) => {
+export const updateBulkDiscount = createAsyncThunk('updateBulkDiscount', async ({ data, id }, thunkAPI) => {
     try {
         const response = await bulk.updateBulkDiscount(data, id);
         return thunkAPI.fulfillWithValue(response.data);
@@ -44,7 +58,7 @@ export const updateBulkDiscount = createAsyncThunk('updateBulkDiscount', async (
 })
 
 // Get bulk discount by product id
-export const getBulkDiscountByProduct = createAsyncThunk('getBulkDiscountByProduct', async ({ id}, thunkAPI) => {
+export const getBulkDiscountByProduct = createAsyncThunk('getBulkDiscountByProduct', async ({ id }, thunkAPI) => {
     try {
         const response = await bulk.getBulkDiscountByProduct(id);
         return thunkAPI.fulfillWithValue(response.data);
@@ -55,9 +69,42 @@ export const getBulkDiscountByProduct = createAsyncThunk('getBulkDiscountByProdu
 })
 
 // Delete bulk discout
-export const deleteBulkDiscount = createAsyncThunk('deleteBulkDiscount', async ({ id}, thunkAPI) => {
+export const deleteBulkDiscount = createAsyncThunk('deleteBulkDiscount', async ({ id }, thunkAPI) => {
     try {
         const response = await bulk.deleteBulkDiscount(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+// Create bulk request
+export const createBulkRequest = createAsyncThunk('createBulkRequest', async ({ data }, thunkAPI) => {
+    try {
+        const response = await bulk.createBulkRequest({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+// Get all Bulk requests
+export const getAllBulkRequests = createAsyncThunk('getAllBulkRequests', async ({ }, thunkAPI) => {
+    try {
+        const response = await bulk.getAllBulkRequests();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+// Get all Bulk requests
+export const updateBulkRequest = createAsyncThunk('updateBulkRequest', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await bulk.updateBulkRequest({ data, id });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -89,6 +136,60 @@ const bulkSlice = createSlice({
                 state.isBulkDiscountCreated = false;
                 state.isBulkDiscountCreateError = true;
             })
+
+
+            // Create bulk request
+            .addCase(createBulkRequest.pending, (state) => {
+                state.isBulkRequestCreating = true;
+                state.isBulkRequestCreated = false;
+                state.isBulkRequestCreateError = false;
+            })
+            .addCase(createBulkRequest.fulfilled, (state, action) => {
+                state.isBulkRequestCreating = false;
+                state.isBulkRequestCreated = true;
+                state.isBulkRequestCreateError = false;
+            })
+            .addCase(createBulkRequest.rejected, (state, action) => {
+                state.isBulkRequestCreating = false;
+                state.isBulkRequestCreated = false;
+                state.isBulkRequestCreateError = true;
+            })
+
+            // Update bulk request
+            .addCase(updateBulkRequest.pending, (state) => {
+                state.isBulkRequestUpdating = true;
+                state.isBulkRequestUpdated = false;
+                state.isBulkRequestUpdateError = false;
+            })
+            .addCase(updateBulkRequest.fulfilled, (state, action) => {
+                state.isBulkRequestUpdating = false;
+                state.isBulkRequestUpdated = true;
+                state.isBulkRequestUpdateError = false;
+            })
+            .addCase(updateBulkRequest.rejected, (state, action) => {
+                state.isBulkRequestUpdating = false;
+                state.isBulkRequestUpdated = false;
+                state.isBulkRequestUpdateError = true;
+            })
+
+            // Get all bulk request for admin       
+            .addCase(getAllBulkRequests.pending, (state) => {
+                state.isAllBulkRequestsLoading = true;
+                state.isAllBulkRequestsLoaded = false;
+                state.isAllBulkRequestsLoadError = false;
+            })
+            .addCase(getAllBulkRequests.fulfilled, (state, action) => {
+                state.isAllBulkRequestsLoading = false;
+                state.isAllBulkRequestsLoaded = true;
+                state.isAllBulkRequestsLoadError = false;
+                state.allBulkRequests = action.payload;
+            })
+            .addCase(getAllBulkRequests.rejected, (state, action) => {
+                state.isAllBulkRequestsLoading = false;
+                state.isAllBulkRequestsLoaded = false;
+                state.isAllBulkRequestsLoadError = true;
+            })
+
             // Update bulk discount
             .addCase(updateBulkDiscount.pending, (state) => {
                 state.isBulkDiscountUpdating = true;
