@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './InventoryTab.scss'
 import { createInventory, updateInventory } from '@/services/features/inventorySlice';
-import CustomModal from '@/components/modal/custom-modal/CustomModal';
 import StockUpdateModal from './components/StockUpdateModal';
 
 const InventoryTab = ({ id, data }) => {
@@ -43,8 +42,8 @@ const InventoryTab = ({ id, data }) => {
         stock_availability: 'In stock',
         inventory_management: false,
         product_quantity: 0,
-        minimum_quantity: '',
-        max_order: '',
+        min_qty: 1,
+        max_qty: 50,
         show_out_of_stock_on_dashboard: false,
         back_in_stock: false,
         best_seller: false,
@@ -60,8 +59,8 @@ const InventoryTab = ({ id, data }) => {
                 stock_availability: data?.data?.product?.stock_availability,
                 inventory_management: JSON.stringify(data?.data?.product?.inventory_management),
                 product_quantity: data?.data?.product?.product_quantity || 0,
-                minimum_quantity: data?.data?.product?.minimum_quantity,
-                max_order: data?.data?.product?.max_order,
+                min_qty: data?.data?.product?.min_qty,
+                max_qty: data?.data?.product?.max_qty,
                 show_out_of_stock_on_dashboard: data?.data?.product?.show_out_of_stock_on_dashboard,
                 back_in_stock: data?.data?.product?.back_in_stock,
                 best_seller: data?.data?.product?.best_seller,
@@ -86,8 +85,8 @@ const InventoryTab = ({ id, data }) => {
             stock_availability: formData.stock_availability,
             inventory_management: JSON.parse(formData.inventory_management),
             product_quantity: formData.product_quantity,
-            minimum_quantity: formData.minimum_quantity,
-            max_order: formData.max_order,
+            min_qty: formData.min_qty,
+            max_qty: formData.max_qty,
             show_out_of_stock_on_dashboard: formData.show_out_of_stock_on_dashboard,
             back_in_stock: formData.back_in_stock,
             best_seller: formData.best_seller,
@@ -165,23 +164,23 @@ const InventoryTab = ({ id, data }) => {
                                     :
                                     <></>
                             }
-                            <CustomButton label='Update Stock' disabled={data?.data?.product?.product_inventory_id == null} onClick={() => setOpen(true)} />
-
-                            <CustomInput name='minimum_quantity' type='text'
-                                maxLength={100}
-                                placeholder='Minimum Qty' label={'Minimum Qty'}
-
-                                onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.minimum_quantity}
-                            />
+                            <CustomButton label='Update Stock'
+                                disabled={data?.data?.product?.product_inventory_id == null}
+                                onClick={() => setOpen(true)} />
                         </>
                     }
-                    <CustomInput name='max_order' type='text'
+                    <CustomInput name='min_qty' type='text'
                         maxLength={100}
-                        placeholder='Maximum Order' label={'Maximum Order'}
+                        placeholder='Minimum Qty' label={'Minimum Qty'}
 
                         onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.max_order}
+                        value={formData.min_qty}
+                    />
+                    <CustomInput name='max_qty' type='text'
+                        maxLength={100}
+                        placeholder='Maximum Qty' label={'Maximum Qty'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.max_qty}
                     />
                     <CustomSelect label={'Stock Availablility'}
                         value={formData.stock_availability} name={'stock_availability'}
@@ -191,7 +190,7 @@ const InventoryTab = ({ id, data }) => {
                 </div>
 
                 <div className="stack">
-                    <CustomToggleButton label='Show Out of stock on dashbord' value={formData.show_out_of_stock_on_dashboard}
+                    <CustomToggleButton label='Show out of stock on dashboard' value={formData.show_out_of_stock_on_dashboard}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, show_out_of_stock_on_dashboard: value })) }}
                     />
                     <CustomToggleButton label='Back in stock' value={formData.back_in_stock}

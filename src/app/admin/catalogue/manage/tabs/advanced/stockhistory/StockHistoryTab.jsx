@@ -7,7 +7,7 @@ import SearchInput from '@/library/input/searchinput/SearchInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { getStockHistoryByProduct } from '@/services/features/productSlice'
 
-function StockHistoryTab({id, data}) {
+function StockHistoryTab({ id, data }) {
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
@@ -21,17 +21,26 @@ function StockHistoryTab({id, data}) {
             headerName: 'Quantity', field: 'qty',
         },
         {
-           headerName: 'Previous Stock', field: 'previous_stock',
+            headerName: 'Action', field: 'action',
+            cellRenderer: (params) => {
+                return (
+                    <Chip color={params.data?.action === 'New Stock added to main' ? "success" : "danger"}
+                        variant="dot">{params.data?.action === 'New Stock added to main' ? "Added" : "Reduced"}</Chip>
+                )
+            }
         },
         {
-           headerName: 'Remaining Stock', field: 'remaining_stock',
+            headerName: 'Previous Stock', field: 'previous_stock',
+        },
+        {
+            headerName: 'Remaining Stock', field: 'remaining_stock',
         },
         {
             headerName: 'Comment', field: 'comment',
         },
     ]);
     const dispatch = useDispatch()
-    const {stockHistoryByProduct} = useSelector(state => state.products)
+    const { stockHistoryByProduct } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getStockHistoryByProduct({ id: id }))

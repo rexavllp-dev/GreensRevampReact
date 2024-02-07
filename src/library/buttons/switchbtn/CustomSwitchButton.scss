@@ -23,6 +23,11 @@
       height: 38px
     }
   }
+
+  .item.disabled {
+    cursor: not-allowed !important;
+  }
+
   .item.active {
     border-radius: 6px;
     background-color: #2b2b2b;

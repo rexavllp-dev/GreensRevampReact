@@ -53,7 +53,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
         id: 2,
         title: 'Out of Stock',
         checked: false,
-        value: 'Out of Stock',
+        value: 'Out of stock',
         column:'product_inventory.stock_availability'
       }
       ]

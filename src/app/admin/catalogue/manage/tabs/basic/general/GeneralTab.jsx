@@ -210,9 +210,9 @@ const GeneralTab = ({ id, data }) => {
                     <CustomSelect label={'Sales Unit'} value={formData.prd_sales_unit} data={saleUnits}
                         name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }} />
 
-                    <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
+                    {/* <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
-                    />
+                    /> */}
 
                     {/* <CustomToggleButton label='Product Status' value={formData.prd_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}

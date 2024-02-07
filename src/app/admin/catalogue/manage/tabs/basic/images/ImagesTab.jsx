@@ -28,8 +28,10 @@ const ImagesTab = ({ id, data }) => {
         let files = null;
         let isBaseImage;
         if (event.target.name === 'prd_additional_img') {
+            if (data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)) return toast.error('Base image is required');
             isBaseImage = false;
-        } else {
+        } else if (event.target.name === 'prd_base_img') {
+            if (data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)) return toast.error('Only one base image is allowed');
             isBaseImage = true;
         }
         files = event.target.files;
@@ -50,7 +52,7 @@ const ImagesTab = ({ id, data }) => {
         dispatch(deleteProductImage({ id: img.id })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload.message);
-            }else{
+            } else {
                 toast.error(res.payload.message)
             }
         }).catch((err) => {
@@ -71,7 +73,7 @@ const ImagesTab = ({ id, data }) => {
                         isProductImg={true}
                         name={'prd_base_img'}
                         handleFileUpload={handleFileUpload}
-                        images={[data?.data?.product?.product_img.find((img) => img.is_baseimage === true)]}
+                        images={[data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)]}
                         handleDeleteImage={handleDeleteImage}
                         haveUploadSize={true}
                         required={true}

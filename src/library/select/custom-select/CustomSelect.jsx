@@ -15,13 +15,18 @@ const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChang
             <Select
                 disabled={disabled}
                 label=""
+                disallowEmptySelection
                 radius='none'
                 name={name}
                 // value={value}
                 selectedKeys={[value]}
                 variant='bordered'
                 selectionMode="single"
-                onChange={(e) => {onChange(e)}}
+                onChange={(e) => {
+                    if (e.target.selectedItem?.value !== value) {
+                        onChange(e);
+                    }
+                }}
                 labelPlacement='outside'
                 classNames={{
                     label: "custominput-label",
@@ -37,7 +42,7 @@ const CustomSelect = ({ label, isRequired, isInvalid, data, name, value, onChang
                     </SelectItem>
                 ))}
             </Select>
-        </div>
+        </div >
     )
 }
 

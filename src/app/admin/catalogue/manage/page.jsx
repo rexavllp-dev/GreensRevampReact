@@ -167,7 +167,14 @@ const catalogueDetails = () => {
                 </div>
             </div>
             <div className='switchbtn'>
-                <CustomSwitchButton active={active} setActive={setActive} labelOne="Basic" labelTwo="Advanced" />
+                <CustomSwitchButton
+                    active={active}
+                    setActive={setActive}
+                    labelOne="Basic"
+                    labelTwo="Advanced"
+                    isAdvancedDisabled={!id}
+
+                />
             </div>
 
             {

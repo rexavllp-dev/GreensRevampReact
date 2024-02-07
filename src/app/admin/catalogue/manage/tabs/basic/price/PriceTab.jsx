@@ -36,6 +36,7 @@ const PriceTab = ({ id, data }) => {
         special_price_end: '',
         product_id: id,
         prd_status: false,
+        prd_dashboard_status: false,
         is_discount: false
     })
 
@@ -50,6 +51,7 @@ const PriceTab = ({ id, data }) => {
                 special_price_start: new Date(data?.data?.product?.special_price_start),
                 special_price_end: new Date(data?.data?.product?.special_price_end),
                 prd_status: data?.data?.product?.prd_status,
+                prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
                 is_discount: data?.data?.product?.is_discount,
                 product_id: id
             }))
@@ -75,6 +77,7 @@ const PriceTab = ({ id, data }) => {
                 special_price_end: formData?.special_price_end,
                 product_id: id,
                 prd_status: formData?.prd_status,
+                prd_dashboard_status: formData?.prd_dashboard_status,
                 is_discount: formData?.is_discount,
                 product_id: formData?.product_id
             }
@@ -82,6 +85,7 @@ const PriceTab = ({ id, data }) => {
             data = {
                 product_price: formData?.product_price,
                 prd_status: formData?.prd_status,
+                prd_dashboard_status: formData?.prd_dashboard_status,
                 is_discount: formData?.is_discount,
                 product_id: formData?.product_id
             }
@@ -191,6 +195,9 @@ const PriceTab = ({ id, data }) => {
                     }
                     <CustomToggleButton label='Product Status' value={formData.prd_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
+                    />
+                    <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
+                        onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
                     />
                 </div>
             </div>

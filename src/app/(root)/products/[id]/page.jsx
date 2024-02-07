@@ -11,7 +11,7 @@ import ImageGallery from '@/components/imagegallery/ImageGallery';
 import { CiHeart } from 'react-icons/ci';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOptionsByProductId, getAllVariantsByProductId, getOptionValues, getProductOptions, getSingleProduct } from '@/services/features/productSlice';
+import { getAllOptionsByProductId, getAllRelatedProducts, getAllVariantsByProductId, getOptionValues, getProductOptions, getSingleProduct } from '@/services/features/productSlice';
 import { useRouter } from 'next/navigation';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 import CustomShare from '@/components/share/CustomShare';
@@ -19,6 +19,9 @@ import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import CustomInput from '@/library/input/custominput/CustomInput';
 import { createBulkRequest, getBulkDiscountByProduct } from '@/services/features/bulkSlice';
+import CustomIconButton from '@/library/iconbutton/CustomIconButton';
+import ProductCard from '@/components/cards/productcard/ProductCard';
+import { ProductImg } from '../../../../../public/images';
 
 
 const additionalDetails = [
@@ -44,19 +47,81 @@ const additionalDetails = [
     },
 ]
 
+const products = [
+    {
+        id: 1,
+        title: 'CDA Wafer Happy New Year 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    {
+        id: 2,
+        title: 'CDA Wafer Graduation Cap 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    {
+        id: 3,
+        title: 'CDA Wafer Happy New Year 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    {
+        id: 4,
+        title: 'CDA Wafer Happy New Year 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    {
+        id: 5,
+        title: 'CDA Wafer Happy New Year 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    {
+        id: 6,
+        title: 'CDA Wafer Happy New Year 1x12 Pcs',
+        price: 'AED 20',
+        previous_price: 'AED 22',
+        rating: '4.5',
+    },
+    // {
+    //     id: 7,
+    //     title: 'CDA Wafer Happy New Year 1x12 Pcs',
+    //     price: 'AED 20',
+    //     previous_price: 'AED 22',
+    //     rating: '4.5',
+    // },
+    // {
+    //     id: 8,
+    //     title: 'CDA Wafer Happy New Year 1x12 Pcs',
+    //     price: 'AED 20',
+    //     previous_price: 'AED 22',
+    //     rating: '4.5',
+    // },
+
+]
+
 const ProductDetails = ({ params }) => {
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
     const dispatch = useDispatch()
     const router = useRouter()
-    const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions } = useSelector((state) => state.products)
+    const relatedProdRef = React.useRef();
     const { bulkDiscountData } = useSelector((state) => state.bulk)
     const [selectedOption, setSelectedOption] = React.useState('');
     const [count, setCount] = React.useState(1);
     const [contactVisible, setContactVisible] = React.useState(false);
     const [formData, setFormData] = React.useState({
-        quantity: 51
+        quantity: 0
     })
+    const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
+
     // const token = cookies.get('accessToken')
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
 
@@ -107,12 +172,17 @@ const ProductDetails = ({ params }) => {
         }
     }, [productOptions, params.id])
 
+
+    useEffect(() => {
+        dispatch(getAllRelatedProducts({ id: params.id }))
+    }, [])
+
     // Add to cart
     const handleAddToCart = () => {
 
         const productData = {
             productId: params.id,
-            quantity: formData?.quantity,
+            quantity: count,
         }
 
         dispatch(addProductToCart({ data: productData })).then((res) => {
@@ -129,7 +199,7 @@ const ProductDetails = ({ params }) => {
 
     const handleRequestBulk = () => {
         if (isLoggedIn) {
-            dispatch(createBulkRequest({ data: { productId: params.id, quantity: 0 } })).then((res) => {
+            dispatch(createBulkRequest({ data: { productId: params.id, quantity: formData?.quantity } })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                 } else {
@@ -143,9 +213,20 @@ const ProductDetails = ({ params }) => {
         }
     }
 
+    /** Decrements or increments scollLeft property to scroll left or right respectively */
+    const handleNav = (ref, direction) => {
+        if (ref === "relatedProdRef") {
+            if (direction === 'left') {
+                relatedProdRef ? relatedProdRef.current.scrollBy({ left: -600, behavior: 'smooth' }) : null;
+            } else {
+                relatedProdRef ? relatedProdRef.current.scrollBy({ left: 600, behavior: 'smooth' }) : null;
+            }
+        }
+    }
+
     return (
-        <div>
-            <div className='product_details_wrapper'>
+        <div className='product_details_wrapper'>
+            <div className='product_details'>
                 <div className="prd_images-wrapper">
                     <div className='pl-3 pb-5'>
                         <BreadCrumbs />
@@ -299,34 +380,42 @@ const ProductDetails = ({ params }) => {
                     {
                         singleProduct?.data?.product?.productPrice[0]?.specialPrice ?
                             <div className="prd_item">
-                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.specialPrice}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.price}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
+                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.productPrice[0]?.specialPrice?.toFixed(2))}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.productPrice[0]?.price?.toFixed(2))}`} color="GRAY" size="LARGE" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                             :
                             <div className="prd_item">
-                                <CustomTypography content={`AED ${singleProduct?.data?.product?.productPrice[0]?.price}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                <CustomTypography content={`AED ${parseFloat(singleProduct?.data?.product?.productPrice[0]?.price?.toFixed(2))}`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                     }
 
+                    {
+                        singleProduct?.data?.product?.stock_availability === 'Out of stock'
+                            ?
+                            <div className="outofstock pt-3">
+                                <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
+                            </div>
+                            :
+                            <div className="prd_item">
+                                <CountButton count={count} updateCount={updateCount} setProductQuantity={setCount} />
+                                <div className='iconbtn'>
+                                    <CiHeart size={28} color='#E54333' />
+                                </div>
 
-                    <div className="prd_item">
-                        <CountButton count={count} updateCount={updateCount} setProductQuantity={setCount} />
-                        <div className='iconbtn'>
-                            <CiHeart size={28} color='#E54333' />
-                        </div>
+                                <CustomButton variant='transparent' label='Buy Now' />
+                                <CustomButton
+                                    variant='primary'
+                                    label='Add to Cart'
+                                    onClick={() => {
+                                        handleAddToCart()
+                                    }}
+                                />
 
-                        <CustomButton variant='transparent' label='Buy Now' />
-                        <CustomButton
-                            variant='primary'
-                            label='Add to Cart'
-                            onClick={() => {
-                                handleAddToCart()
-                            }}
-                        />
+                            </div>
+                    }
 
-                    </div>
 
                     {
                         contactVisible &&
@@ -351,6 +440,59 @@ const ProductDetails = ({ params }) => {
                     }
 
 
+                </div>
+
+            </div>
+            <div className="itemcard-wrapper ">
+                <div className="header">
+                    <CustomTypography content="Related Products" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+
+                    <div className="scrollbuttons">
+                        <CustomIconButton variant={'secondary'}
+                            iconColor={'#32893B'} icon={"ArrowLeft"}
+                            onClick={() => handleNav('relatedProdRef', 'left')}
+                        />
+                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                            backgroundColor={'#32893B'} icon={"ArrowRight"}
+                            onClick={() => handleNav('relatedProdRef', 'right')}
+                        />
+                    </div>
+
+                </div>
+                <div className="items" ref={relatedProdRef}>
+                    {
+                        relatedProducts?.result?.map(product => (
+                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
+                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                        ))
+                    }
+                </div>
+            </div>
+
+
+            <div className="itemcard-wrapper ">
+                <div className="header">
+                    <CustomTypography content="Recommendations based on your interests" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+
+                    <div className="scrollbuttons">
+                        <CustomIconButton variant={'secondary'}
+                            iconColor={'#32893B'} icon={"ArrowLeft"}
+                            onClick={() => handleNav('relatedProdRef', 'left')}
+                        />
+                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                            backgroundColor={'#32893B'} icon={"ArrowRight"}
+                            onClick={() => handleNav('relatedProdRef', 'right')}
+                        />
+                    </div>
+
+                </div>
+                <div className="items" ref={relatedProdRef}>
+                    {
+                        products.map(product => (
+                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
+                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                        ))
+                    }
                 </div>
             </div>
         </div>

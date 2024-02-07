@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
+import Badge from '@/components/badges/Badge';
 
 const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }) => {
 
@@ -15,32 +16,24 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
   const router = useRouter()
   const dispatch = useDispatch();
 
-  const Badge = () => {
-    return (
-      <div className="productbadge">
-        <CustomTypography content='Sale' weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
-      </div>
-    )
-  }
-
-   // Add to cart
-   const handleAddToCart = () => {
+  // Add to cart
+  const handleAddToCart = () => {
 
     const productData = {
-        productId: id,
-        quantity: 1,
+      productId: id,
+      quantity: 1,
     }
 
     dispatch(addProductToCart({ data: productData })).then((res) => {
-        if (res.payload?.success) {
-            toast.success(res.payload?.message);
-        } else {
-            toast.error(res.payload?.message);
-        }
+      if (res.payload?.success) {
+        toast.success(res.payload?.message);
+      } else {
+        toast.error(res.payload?.message);
+      }
     }).catch((err) => {
-        console.log(err)
+      console.log(err)
     })
-}
+  }
   return (
     <div className='productcard'>
       <div className="icon">
@@ -61,7 +54,14 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
       </div>
       <div className="productdetails">
         <div className="badgecontainer">
-          {/* <Badge /> */}
+          {
+            (data?.stock_availability === 'Out of stock') &&
+            <Badge color={'out-of-stock'}
+              label={'Out of Stock'}
+            />
+          }
+
+          {/* <Badge color={'sale'} label={'Sale'} /> */}
         </div>
         <div className="topsection">
           <div className="left">
@@ -78,11 +78,11 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
             {
               specialPrice ?
                 <>
-                  <CustomTypography content={`AED ${specialPrice}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                  <CustomTypography content={`AED ${normalPrice}`} color="GRAY-LIGHT" size="MEDIUM-SMALL" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
+                  <CustomTypography content={`AED ${parseFloat(specialPrice?.toFixed(2))}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                  <CustomTypography content={`AED ${parseFloat(normalPrice?.toFixed(2))}`} color="GRAY-LIGHT" size="MEDIUM-SMALL" weight="SEMI-BOLD" style={{ textDecoration: 'line-through' }} />
                 </>
                 :
-                <CustomTypography content={`AED ${normalPrice}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                <CustomTypography content={`AED ${parseFloat(normalPrice?.toFixed(2))}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
             }
           </div>
           <div className="right">
