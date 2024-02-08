@@ -13,11 +13,18 @@ import { useRouter } from 'next/navigation';
 import './InventoryTab.scss'
 import { createInventory, updateInventory } from '@/services/features/inventorySlice';
 import StockUpdateModal from './components/StockUpdateModal';
+import { FaRegEdit } from 'react-icons/fa';
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
+import { useDisclosure } from '@nextui-org/react';
 
 const InventoryTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
 
     const trackInventory = [
         {
@@ -51,6 +58,8 @@ const InventoryTab = ({ id, data }) => {
     })
 
     const [loading, setLoading] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
+    const [isDisabled, setIsDisabled] = React.useState(true);
 
     useEffect(() => {
         if (data?.data?.product?.product_inventory_id) {
@@ -70,6 +79,14 @@ const InventoryTab = ({ id, data }) => {
         }
     }, [data])
 
+    useEffect(() => {
+        if (data?.data?.product?.product_inventory_id) {
+            setIsDisabled(true)
+        } else {
+            setIsDisabled(false)
+        }
+    }, [data?.data?.product?.product_inventory_id])
+
     const handleInputChange = ({ e, country }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
@@ -77,8 +94,9 @@ const InventoryTab = ({ id, data }) => {
     }
 
     const handleSubmit = () => {
+        setConfirmationOpen(false);
+        onClose();
         setLoading(true);
-        console.log('clikced')
 
         const newData = {
             sku: formData.sku,
@@ -120,11 +138,20 @@ const InventoryTab = ({ id, data }) => {
         }
     }
 
-    const [open, setOpen] = React.useState(false)
+
 
 
     return (
         <div className='inventorytab'>
+           {
+                data?.data?.product?.product_inventory_id ?
+                    <div className="editbtn ">
+                        <div className="btn" onClick={() => { setIsDisabled(!isDisabled) }}>
+                            <FaRegEdit size={20} />
+                        </div>
+                    </div>
+                    : <></>
+            }
 
             <div className="form">
 
@@ -133,14 +160,15 @@ const InventoryTab = ({ id, data }) => {
                     <CustomInput name='sku' type='text'
                         maxLength={100}
                         placeholder='SKU' label={'SKU'}
-
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.sku}
+                        disabled={isDisabled}
                     />
 
                     <CustomSelect label={'Inventory Management'}
                         value={formData.inventory_management} name={'inventory_management'}
                         data={trackInventory} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
                     />
                     {
                         formData?.inventory_management === 'true' &&
@@ -172,7 +200,7 @@ const InventoryTab = ({ id, data }) => {
                     <CustomInput name='min_qty' type='text'
                         maxLength={100}
                         placeholder='Minimum Qty' label={'Minimum Qty'}
-
+                        disabled={isDisabled}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.min_qty}
                     />
@@ -181,31 +209,44 @@ const InventoryTab = ({ id, data }) => {
                         placeholder='Maximum Qty' label={'Maximum Qty'}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.max_qty}
+                        disabled={isDisabled}
                     />
                     <CustomSelect label={'Stock Availablility'}
                         value={formData.stock_availability} name={'stock_availability'}
                         data={stockAvailibility}
                         onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
                     />
                 </div>
 
                 <div className="stack">
                     <CustomToggleButton label='Show out of stock on dashboard' value={formData.show_out_of_stock_on_dashboard}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, show_out_of_stock_on_dashboard: value })) }}
+                        disabled={isDisabled}
                     />
                     <CustomToggleButton label='Back in stock' value={formData.back_in_stock}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, back_in_stock: value })) }}
+                        disabled={isDisabled}
                     />
                     <CustomToggleButton label='Best Seller' value={formData.best_seller}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, best_seller: value })) }}
+                        disabled={isDisabled}
                     />
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
             </div>
 
             <StockUpdateModal open={open} handleClose={() => setOpen(false)} product_qty={formData.product_quantity} id={id} />
+
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => setConfirmationOpen(false)}
+                onConfirm={handleSubmit}
+                title="Confirmation"
+                message="Are you sure you want to save changes?"
+            />
         </div>
     )
 }

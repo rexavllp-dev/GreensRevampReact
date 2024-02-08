@@ -97,13 +97,24 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
           <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
         <div className="bottomsection">
-          <button className={'productbtn'} onClick={() => {
-            handleAddToCart()
-          }}>
-            <div className='productbtn_text' >
-              {getTranslation('add_to_cart')}
-            </div >
-          </button >
+          {
+            (data?.stock_availability === 'Out of stock') ?
+              <button className={'productbtn'} onClick={() => {
+                handleAddToCart()
+              }}>
+                <div className='productbtn_text' >
+                  Notify me
+                </div >
+              </button >
+              :
+              <button className={'productbtn'} onClick={() => {
+                handleAddToCart()
+              }}>
+                <div className='productbtn_text' >
+                  {getTranslation('add_to_cart')}
+                </div >
+              </button >
+          }
         </div>
       </div>
 

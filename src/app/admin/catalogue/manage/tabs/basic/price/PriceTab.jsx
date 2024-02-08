@@ -4,24 +4,26 @@ import React, { useEffect } from 'react'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomSelect from '@/library/select/custom-select/CustomSelect'
 import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
-import CustomTextarea from '@/library/textarea/CustomTextarea'
-import CustomTypography from '@/library/typography/CustomTypography'
 import CustomButton from '@/library/buttons/CustomButton'
-import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
-import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
-import { createUserByAdmin } from '@/services/features/userSlice';
-import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './PriceTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import { createPrice, updatePrice } from '@/services/features/productSlice';
+import { FaRegEdit } from 'react-icons/fa';
+import { useDisclosure } from '@nextui-org/react';
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
 
 const PriceTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+
+    const [isDisabled, setIsDisabled] = React.useState(true);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
 
     const priceTypes = [
         { label: 'Percentage', value: "percentage" },
@@ -41,6 +43,14 @@ const PriceTab = ({ id, data }) => {
     })
 
     const [loading, setLoading] = React.useState(false);
+
+    useEffect(() => {
+        if (data?.data?.product?.product_price) {
+            setIsDisabled(true)
+        } else {
+            setIsDisabled(false)
+        }
+    }, [data?.data?.product?.product_price])
 
     useEffect(() => {
         if (data?.data?.product?.product_price) {
@@ -66,6 +76,8 @@ const PriceTab = ({ id, data }) => {
     }
 
     const handleSubmit = () => {
+        setConfirmationOpen(false);
+        onClose();
         setLoading(true);
         let data = {}
         if (formData?.is_discount) {
@@ -119,6 +131,15 @@ const PriceTab = ({ id, data }) => {
 
     return (
         <div className='pricetab'>
+            {
+                data?.data?.product?.product_price ?
+                    <div className="editbtn ">
+                        <div className="btn" onClick={() => { setIsDisabled(!isDisabled) }}>
+                            <FaRegEdit size={20} />
+                        </div>
+                    </div>
+                    : <></>
+            }
 
             <div className="form">
                 <div className="stack">
@@ -129,11 +150,12 @@ const PriceTab = ({ id, data }) => {
                         // isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.product_price}
+                        disabled={isDisabled}
                     // isInvalid={errors.product_price.error}
                     // errMsg={errors.product_price.message}
                     />
                     <CustomToggleButton label='Discount?' value={formData.is_discount}
-                        okText={'Yes'} cancelText={'No'}
+                        okText={'Yes'} cancelText={'No'} disabled={isDisabled}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, is_discount: value })) }}
                     />
 
@@ -141,7 +163,9 @@ const PriceTab = ({ id, data }) => {
                         formData.is_discount &&
                         <>
                             <CustomSelect label={'Discount Type'} value={formData.special_price_type} data={priceTypes} name={'special_price_type'}
-                                onChange={(e) => { handleInputChange({ e }) }} />
+                                onChange={(e) => { handleInputChange({ e }) }}
+                                disabled={isDisabled}
+                            />
 
                             <CustomInput
                                 name='special_price'
@@ -150,6 +174,7 @@ const PriceTab = ({ id, data }) => {
                                 placeholder='Discount'
                                 label={'Discount'}
                                 // isRequired={true}
+                                disabled={isDisabled}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.special_price}
                             // isInvalid={errors.special_price.error}
@@ -173,6 +198,7 @@ const PriceTab = ({ id, data }) => {
                                 value={formData.special_price_start}
                                 // isInvalid={errors.special_price_start.error}
                                 // errMsg={errors.special_price_start.message}
+                                disabled={isDisabled}
                                 onChange={(date) => {
                                     setFormData((prevData) => ({ ...prevData, special_price_start: date }));
                                     // setErrors((prevErrors) => ({ ...prevErrors, special_price_start: { error: false, message: '' } }));
@@ -183,6 +209,7 @@ const PriceTab = ({ id, data }) => {
                                 name={'special_price_end'}
                                 label='Discount End Date'
                                 value={formData.special_price_end}
+                                disabled={isDisabled}
                                 // isInvalid={errors.special_price_end.error}
                                 // errMsg={errors.special_price_end.message}
                                 onChange={(date) => {
@@ -194,17 +221,25 @@ const PriceTab = ({ id, data }) => {
                         </>
                     }
                     <CustomToggleButton label='Product Status' value={formData.prd_status}
+                        disabled={isDisabled}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
                     />
                     <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
+                        disabled={isDisabled}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
                     />
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
             </div>
-
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => setConfirmationOpen(false)}
+                onConfirm={handleSubmit}
+                title="Confirmation"
+                message="Are you sure you want to save changes?"
+            />
         </div>
     )
 }

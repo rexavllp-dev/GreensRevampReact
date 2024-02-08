@@ -11,16 +11,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 import './GeneralTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
-import { Card, Tab, Tabs } from '@nextui-org/react';
+import { Card, Tab, Tabs, useDisclosure } from '@nextui-org/react';
 import CustomMultiSelect from '@/library/select/custom-multi-select/CustomMultiSelect';
 import { createProduct, getSingleProduct, updateProduct } from '@/services/features/productSlice';
 import { getAllBrands } from '@/services/features/brandSlice';
+import { FaRegEdit } from 'react-icons/fa';
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
 
 const GeneralTab = ({ id, data }) => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
+    const [languages, setLanguages] = React.useState([
+        {
+            name: 'English',
+        },
+        {
+            name: 'Arabic',
+        }
+    ])
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
+    const [isDisabled, setIsDisabled] = React.useState(true);
     const [selected, setSelected] = React.useState("English");
     const [loading, setLoading] = React.useState(false);
     const { allBrands } = useSelector(state => state.brands)
@@ -72,6 +87,9 @@ const GeneralTab = ({ id, data }) => {
         categories: [],
         // prd_status: false,
         prd_dashboard_status: false,
+        dimensions_and_more_info: '',
+        use_and_care: '',
+        shipping_and_returns: ''
     })
 
 
@@ -90,6 +108,9 @@ const GeneralTab = ({ id, data }) => {
                 categories: [],
                 // prd_status: data?.data?.product?.prd_status,
                 prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
+                dimensions_and_more_info: data?.data?.product?.dimensions_and_more_info,
+                use_and_care: data?.data?.product?.use_and_care,
+                shipping_and_returns: data?.data?.product?.shipping_and_returns
             }))
         }
     }, [data, allBrands])
@@ -97,6 +118,14 @@ const GeneralTab = ({ id, data }) => {
     useEffect(() => {
         dispatch(getAllBrands())
     }, [])
+
+    useEffect(() => {
+        if (id) {
+            setIsDisabled(true)
+        } else {
+            setIsDisabled(false)
+        }
+    }, [id])
 
 
 
@@ -111,6 +140,8 @@ const GeneralTab = ({ id, data }) => {
 
 
     const handleSubmit = () => {
+        setConfirmationOpen(false);
+        onClose(); // Close the main modal
         setLoading(true);
         let data = { ...formData, prd_expiry_date: new Date(formData.prd_expiry_date) }
         if (id) {
@@ -130,7 +161,6 @@ const GeneralTab = ({ id, data }) => {
                     toast.success(res.payload.message);
                     let id = res.payload?.data[0]?.id;
                     router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
-
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -141,20 +171,21 @@ const GeneralTab = ({ id, data }) => {
         }
     }
 
-    const [languages, setLanguages] = React.useState([
-        {
-            name: 'English',
-        },
-        {
-            name: 'Arabic',
-        }
-    ])
-
     return (
         <div className='generaltab'>
+            {
+                id ?
+                    <div className="editbtn ">
+                        <div className="btn" onClick={() => { setIsDisabled(!isDisabled) }}>
+                            <FaRegEdit size={20} />
+                        </div>
+                    </div>
+                    : <></>
+
+
+            }
 
             <div className="form">
-
                 <div className="stack">
                     <Card className='p-3'>
                         <Tabs aria-label="Options"
@@ -169,11 +200,14 @@ const GeneralTab = ({ id, data }) => {
                                             placeholder='Product Name' label={'Product Name'}
                                             onChange={(e) => { handleInputChange({ e }) }}
                                             value={formData.prd_name}
+                                            disabled={isDisabled}
                                         />
                                         <CustomTextarea label={'Description'}
                                             placeholder={'Description'}
                                             name={'prd_description'} value={formData.prd_description}
-                                            onChange={(e) => { handleInputChange({ e }) }} />
+                                            onChange={(e) => { handleInputChange({ e }) }}
+                                            disabled={isDisabled}
+                                        />
                                     </Tab>
                                 ))
                             }
@@ -181,9 +215,34 @@ const GeneralTab = ({ id, data }) => {
                         </Tabs>
                     </Card>
 
-                    <CustomSelect label={'Tax Class'} value={formData.prd_tax_class} data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }} />
-                    <CustomSelect label={'Storage Type'} value={formData.prd_storage_type} data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }} />
-                    <CustomMultiSelect label={'Tags'} value={formData.prd_tags} data={tags} name={'prd_tags'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomSelect label={'Tax Class'} value={formData.prd_tax_class}
+                        data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+                    <CustomSelect label={'Storage Type'} value={formData.prd_storage_type}
+                        data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+                    <CustomTextarea label={'Dimensions & More Info'}
+                        placeholder={'Dimensions & More Info'}
+                        name={'dimensions_and_more_info'} value={formData.dimensions_and_more_info}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+                     <CustomTextarea label={'Shipping & Returns'}
+                        placeholder={'Shipping & Returns'}
+                        name={'shipping_and_returns'} value={formData.shipping_and_returns}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+
+                </div>
+
+                <div className="stack">
+                    <CustomMultiSelect label={'Tags'} value={formData.prd_tags} data={tags}
+                        name={'prd_tags'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
                     <CustomCalendar
                         name={'expiry_date'}
                         label='Expiry Date'
@@ -194,21 +253,35 @@ const GeneralTab = ({ id, data }) => {
                             setFormData((prevData) => ({ ...prevData, prd_expiry_date: date }));
                             // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
                         }}
+                        disabled={isDisabled}
                     />
-                </div>
-
-                <div className="stack">
                     <CustomSelect label={'Product Return Type'} value={formData.prd_return_type} data={returnTypes}
-                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} />
+                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} disabled={isDisabled} />
 
-                    <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories} name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }} />
+                    <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories}
+                        name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
 
                     <CustomSelect label={'Brands'} value={formData.prd_brand_id} data={allBrands?.data}
-                    optionValue={'id'} optionLabel={'brd_name'}
-                        name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }} />
+                        optionValue={'id'} optionLabel={'brd_name'}
+                        name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
 
                     <CustomSelect label={'Sales Unit'} value={formData.prd_sales_unit} data={saleUnits}
-                        name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }} />
+                        name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+
+
+                    <CustomTextarea label={'Use & Care'}
+                        placeholder={'Use & Care'}
+                        name={'use_and_care'} value={formData.use_and_care}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        disabled={isDisabled}
+                    />
+                   
 
                     {/* <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
@@ -220,10 +293,16 @@ const GeneralTab = ({ id, data }) => {
                 </div>
             </div>
             <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
             </div>
 
-
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => setConfirmationOpen(false)}
+                onConfirm={handleSubmit}
+                title="Confirmation"
+                message="Are you sure you want to save changes?"
+            />
         </div>
     )
 }

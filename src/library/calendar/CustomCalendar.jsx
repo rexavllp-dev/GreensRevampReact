@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import './CustomCalendar.scss';
 import { ArrowDown } from '@/components/customicons';
 
-export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, value, onChange }) => {
+export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, value, onChange, disabled }) => {
     // const [date, setDate] = useState('');
     const [showCalendar, setShowCalendar] = useState(false);
 
@@ -35,12 +35,13 @@ export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, 
             <input className={isInvalid ? 'react_custom_time invalid-custom-time' : 'react_custom_time'} type='text' placeholder='Select Date'
                 value={value ? value?.toLocaleDateString('en-GB') : ''}
                 onClick={handleInputClick}
+                disabled={disabled}
                 readOnly
             />
             {showCalendar &&
                 <Calendar minDate={new Date()}
-                 onChange={handleCalendarChange} 
-                 maxDate={maxDate} value={value} />
+                    onChange={handleCalendarChange}
+                    maxDate={maxDate} value={value} />
             }
             <p className="errmsg">{isInvalid ? errMsg : ''}</p>
         </div>

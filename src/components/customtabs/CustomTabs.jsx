@@ -34,11 +34,11 @@ export default function CustomTabs({ tabs, id, isAdvanced, isProductTable }) {
         disabledKeys={disabledKeys}
         selectedKey={selected}
         onSelectionChange={setSelected}
-        variant="underlined"
+        // variant="underlined"
         classNames={{
-          tabList: "tablist",
-          cursor: "tabcursor",
-          tab: "tabchips",
+          // tabList: "tablist",
+          // cursor: "tabcursor",
+          // tab: "tabchips",
         }}
       >
         {

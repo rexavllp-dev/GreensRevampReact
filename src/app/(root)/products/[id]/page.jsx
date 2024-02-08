@@ -22,6 +22,7 @@ import { createBulkRequest, getBulkDiscountByProduct } from '@/services/features
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../../public/images';
+import MiniCart from '@/components/minicart/MiniCart';
 
 
 const additionalDetails = [
@@ -179,7 +180,12 @@ const ProductDetails = ({ params }) => {
 
     // Add to cart
     const handleAddToCart = () => {
-
+        if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
+            if (parseInt(count) < parseInt(singleProduct?.data?.product?.min_qty)) {
+                toast.error(`Minimum quantity should be ${singleProduct?.data?.product?.min_qty}`)
+                return
+            }
+        }
         const productData = {
             productId: params.id,
             quantity: count,
@@ -231,6 +237,7 @@ const ProductDetails = ({ params }) => {
                     <div className='pl-3 pb-5'>
                         <BreadCrumbs />
                     </div>
+                    <MiniCart/>
                     <div className="prd_images">
                         <ImageGallery data={singleProduct} />
                     </div>
@@ -390,6 +397,12 @@ const ProductDetails = ({ params }) => {
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                     }
+                    {
+                        parseInt(singleProduct?.data?.product?.min_qty) > 1 &&
+                        (
+                            <CustomTypography content={`Minimum Order Quantity: ${parseInt(singleProduct?.data?.product?.min_qty)}`} color="GREY" size="MEDIUM" weight="REGULAR" />
+                        )
+                    }
 
                     {
                         singleProduct?.data?.product?.stock_availability === 'Out of stock'
@@ -399,7 +412,7 @@ const ProductDetails = ({ params }) => {
                             </div>
                             :
                             <div className="prd_item">
-                                <CountButton count={count} updateCount={updateCount} setProductQuantity={setCount} />
+                                <CountButton count={count} minQty={singleProduct?.data?.product?.min_qty} updateCount={updateCount} setProductQuantity={setCount} />
                                 <div className='iconbtn'>
                                     <CiHeart size={28} color='#E54333' />
                                 </div>
@@ -443,31 +456,35 @@ const ProductDetails = ({ params }) => {
                 </div>
 
             </div>
-            <div className="itemcard-wrapper ">
-                <div className="header">
-                    <CustomTypography content="Related Products" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            {
+                relatedProducts?.result?.length > 0 &&
+                <div className="itemcard-wrapper ">
+                    <div className="header">
+                        <CustomTypography content="Related Products" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'}
-                            iconColor={'#32893B'} icon={"ArrowLeft"}
-                            onClick={() => handleNav('relatedProdRef', 'left')}
-                        />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                            backgroundColor={'#32893B'} icon={"ArrowRight"}
-                            onClick={() => handleNav('relatedProdRef', 'right')}
-                        />
+                        <div className="scrollbuttons">
+                            <CustomIconButton variant={'secondary'}
+                                iconColor={'#32893B'} icon={"ArrowLeft"}
+                                onClick={() => handleNav('relatedProdRef', 'left')}
+                            />
+                            <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                                backgroundColor={'#32893B'} icon={"ArrowRight"}
+                                onClick={() => handleNav('relatedProdRef', 'right')}
+                            />
+                        </div>
+
                     </div>
+                    <div className="items" ref={relatedProdRef}>
+                        {
+                            relatedProducts?.result?.map(product => (
+                                <ProductCard key={product.id} title={product.title} price={product.price} data={product}
+                                    previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                            ))
+                        }
+                    </div>
+                </div>
+            }
 
-                </div>
-                <div className="items" ref={relatedProdRef}>
-                    {
-                        relatedProducts?.result?.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
-                        ))
-                    }
-                </div>
-            </div>
 
 
             <div className="itemcard-wrapper ">

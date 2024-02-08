@@ -6,7 +6,7 @@
     border: 1px solid #000;
 
     &:disabled {
-        border: 1px solid #ccc;
+        border: 1px solid #ccc !important;
     }
   
     @include for_breakpoint("small-screen", "mobile") {
@@ -15,7 +15,8 @@
   }
 
   .custom-textarea{
-    min-height: 200px;
+    // min-height: 200px;
+   
   }
   
   .custominput-label {

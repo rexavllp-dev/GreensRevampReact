@@ -28,7 +28,7 @@ const ImagesTab = ({ id, data }) => {
         let files = null;
         let isBaseImage;
         if (event.target.name === 'prd_additional_img') {
-            if (data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)) return toast.error('Base image is required');
+            if (!data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)) return toast.error('Base image is required');
             isBaseImage = false;
         } else if (event.target.name === 'prd_base_img') {
             if (data?.data?.product?.product_img?.find((img) => img.is_baseimage === true)) return toast.error('Only one base image is allowed');

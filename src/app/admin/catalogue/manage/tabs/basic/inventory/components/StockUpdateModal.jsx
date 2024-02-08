@@ -8,10 +8,16 @@ import React from 'react';
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { modifyStock } from "@/services/features/productSlice";
+import ConfirmationModal from "@/components/modal/confirmation-modal/ConfirmationModal";
 
 
 const StockUpdateModal = ({ open, handleClose, id, product_qty }) => {
     const dispatch = useDispatch()
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [action, setAction] = React.useState('');
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const [formData, setFormData] = React.useState({
         quantity: 0,
@@ -25,7 +31,9 @@ const StockUpdateModal = ({ open, handleClose, id, product_qty }) => {
         }))
     }
 
-    const handleSubmit = (action) => {
+    const handleSubmit = () => {
+        setConfirmationOpen(false);
+        onClose(); // Close the main modal
         let data = {
             action: action,
             quantity: formData.quantity,
@@ -83,9 +91,20 @@ const StockUpdateModal = ({ open, handleClose, id, product_qty }) => {
                                     name={'comment'} value={formData.comment}
                                     onChange={(e) => { handleInputChange({ e }) }} />
                                 <div className='flex gap-3 justify-end'>
-                                    <CustomButton label='Add Stock' variant='primary' onClick={() => handleSubmit('add')} />
-                                    <CustomButton label='Reduce Stock' variant='transparent' onClick={() => handleSubmit('reduce')} />
+                                    <CustomButton label='Add Stock' variant='primary' onClick={() => {
+                                        setConfirmationOpen(true); setAction('add')
+                                    }} />
+                                    <CustomButton label='Reduce Stock' variant='transparent' onClick={() => {
+                                        setConfirmationOpen(true); setAction('reduce')
+                                    }} />
                                 </div>
+                                <ConfirmationModal
+                                    isOpen={isConfirmationOpen}
+                                    onClose={() => setConfirmationOpen(false)}
+                                    onConfirm={handleSubmit}
+                                    title="Confirmation"
+                                    message="Are you sure you want to update stock?"
+                                />
                             </div>
                         </ModalBody>
                     </>
