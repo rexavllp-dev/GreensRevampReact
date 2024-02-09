@@ -37,7 +37,7 @@ export default function CartItem({ data }) {
     return (
         <div className="cart-item">
             <div className="image-wrapper">
-                <div className="image">
+                <div className="image pb-1">
                     <Image width={100} height={100} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />
                 </div>
                 <CountButton count={data.quantity} updateCount={updateCount} />

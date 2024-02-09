@@ -19,6 +19,7 @@ import { logout } from '@/services/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import appConfig from '@/config/appConfig';
 import { getCartProducts } from '@/services/features/cartSlice';
+import MiniCart from '../minicart/MiniCart';
 
 const cookies = new Cookies();
 
@@ -28,6 +29,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+    const [isOpen, setIsOpen] = React.useState(false)
 
     const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
     const { isLoggedIn, authCount } = useSelector(state => state.auth)
@@ -51,6 +53,10 @@ const Navbar = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+    }
+
+    const toggleDrawer = () => {
+        setIsOpen((prevState) => !prevState)
     }
 
     return (
@@ -121,13 +127,13 @@ const Navbar = () => {
                             }
 
 
-                            <div className="item">
-                                <Link href="/cart" prefetch={false}>
-                                    <div className="cart-icon">
-                                        <Image src={cartIcon} />
-                                        {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
-                                    </div>
-                                </Link>
+                            <div className="item" onClick={() => toggleDrawer()}>
+                                {/* <Link href="/cart" prefetch={false}> */}
+                                <div className="cart-icon">
+                                    <Image src={cartIcon} />
+                                    {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
+                                </div>
+                                {/* </Link> */}
                                 {/* <p className='item-label'>Cart</p> */}
                             </div>
 
@@ -210,9 +216,12 @@ const Navbar = () => {
                                         </div>
                                 }
                                 {/* <p className='item-label'>Sign In</p> */}
-                                <div className="item">
+                                <div className="item" >
                                     <Link href="/cart" prefetch={false}>
-                                        <Image src={cartIcon} />
+                                        <div className="cart-icon">
+                                            <Image src={cartIcon} />
+                                            {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
+                                        </div>
                                     </Link>
                                     {/* <p className='item-label'>Cart</p> */}
                                 </div>
@@ -227,6 +236,7 @@ const Navbar = () => {
 
             </div>
             <Toolbar />
+            <MiniCart isOpen={isOpen} setIsOpen={setIsOpen} toggleDrawer={toggleDrawer} />
             <MainSidebar open={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}
             // routeModule={'categories'}
             />

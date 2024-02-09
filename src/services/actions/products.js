@@ -12,11 +12,11 @@ export const products = {
     },
 
     //Get all products by user
-    getAllProductsByUser: ({ page, per_page, search_query, filters, sortBy }) => {
+    getAllProductsByUser: ({ page, per_page, search_query, filters, sortBy, minPrice, maxPrice }) => {
         return new Promise((resolve, reject) => {
             let query = `/products/get-products?filters=${filters?.length ? JSON.stringify(filters) : '[]'}&sort=${sortBy}`
             if (page && per_page) {
-                query = `/products/get-products?page=${page}&per_page=${per_page}&search_query=${search_query}&filters=${filters?.length ? JSON.stringify(filters) : '[]'}&sort=${sortBy}`
+                query = `/products/get-products?page=${page}&per_page=${per_page}&search_query=${search_query}&filters=${filters?.length ? JSON.stringify(filters) : '[]'}&sort=${sortBy}&min_price=${minPrice}&max_price=${maxPrice}`
             }
             Axios.get(query)
                 .then(response => resolve(response))
@@ -42,7 +42,7 @@ export const products = {
     //Delete product image
     deleteProductImage: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.delete(`/products/delete-product-image/`+ id)
+            Axios.delete(`/products/delete-product-image/` + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

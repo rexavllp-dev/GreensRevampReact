@@ -172,9 +172,9 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search
     }
 })
 
-export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({ page, per_page, search_query, filters, sortBy }, thunkAPI) => {
+export const getAllProductsByUser = createAsyncThunk('getAllProductsByUser', async ({ page, per_page, search_query, filters, sortBy, minPrice, maxPrice }, thunkAPI) => {
     try {
-        const response = await products.getAllProductsByUser({ page, per_page, search_query, filters, sortBy });
+        const response = await products.getAllProductsByUser({ page, per_page, search_query, filters, sortBy, minPrice, maxPrice });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

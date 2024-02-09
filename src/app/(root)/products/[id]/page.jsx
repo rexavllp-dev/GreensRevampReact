@@ -237,7 +237,6 @@ const ProductDetails = ({ params }) => {
                     <div className='pl-3 pb-5'>
                         <BreadCrumbs />
                     </div>
-                    <MiniCart/>
                     <div className="prd_images">
                         <ImageGallery data={singleProduct} />
                     </div>

@@ -8,7 +8,7 @@ import { GoArrowLeft } from "react-icons/go";
 import CustomRadioBox from '@/library/radiobox/CustomRadioBox'
 import { toast } from 'react-toastify'
 
-const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
+const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinPrice, setMaxPrice }) => {
 
   const [formData, setFormData] = React.useState({
     chocolate: false,
@@ -46,15 +46,15 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
         id: 1,
         title: 'In Stock',
         checked: false,
-        value: 'In Stock',
-        column:'product_inventory.stock_availability'
+        value: 'In stock',
+        column: 'product_inventory.stock_availability'
       },
       {
         id: 2,
         title: 'Out of Stock',
         checked: false,
         value: 'Out of stock',
-        column:'product_inventory.stock_availability'
+        column: 'product_inventory.stock_availability'
       }
       ]
     },
@@ -104,6 +104,8 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
     setFilters([])
     setSortBy('')
     setPriceRange([0, 10000]);
+    setMinPrice(0);
+    setMaxPrice(10000);
     const resetFilters = filterTypes.map(filterGroup => {
       const resetFilter = filterGroup?.filter?.map(filterItem => ({
         ...filterItem,
@@ -128,18 +130,29 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy }) => {
     //     }
     //   })
     // })
-    setFilters((prev) => ([
-      {
-        column: 'computed_price',
-        operator: '<',
-        value: priceRange[1]
-      },
-      {
-        column: 'computed_price',
-        operator: '>',
-        value: priceRange[0]
-      }
-    ]))
+
+    const availbility = filterTypes[1].filter.find((filter) => filter.checked)?.value
+
+    if (availbility === 'In stock') {
+      setFilters([
+        {
+          column: 'product_inventory.stock_availability',
+          operator: '=',
+          value: 'In stock'
+        }
+      ])
+    } else if (availbility === 'Out of stock') {
+      setFilters([
+        {
+          column: 'product_inventory.stock_availability',
+          operator: '=',
+          value: 'Out of stock'
+        }
+      ])
+    }
+
+    setMaxPrice(priceRange[1])
+    setMinPrice(priceRange[0])
 
     // setFilters((prev)=>([...prev, {
 

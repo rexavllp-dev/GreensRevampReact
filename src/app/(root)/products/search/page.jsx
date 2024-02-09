@@ -29,6 +29,8 @@ const Search = () => {
     const [currentPage, setCurrentPage] = React.useState(1);
     const [filters, setFilters] = React.useState([]);
     const [sortBy, setSortBy] = React.useState('');
+    const [minPrice, setMinPrice] = React.useState(0);
+    const [maxPrice, setMaxPrice] = React.useState(10000);
 
     const { allProductsByUser, searchQuery } = useSelector((state) => state.products);
 
@@ -152,8 +154,8 @@ const Search = () => {
     ]
 
     useEffect(() => {
-        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: keyword, filters, sortBy }))
-    }, [currentPage, keyword, sortBy, filters]);
+        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: keyword, filters, sortBy, minPrice, maxPrice }));
+    }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice]);
 
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
@@ -190,6 +192,8 @@ const Search = () => {
                         sortBy={sortBy}
                         setSortBy={setSortBy}
                         onClose={() => setShowFilter(false)}
+                        setMaxPrice={setMaxPrice}
+                        setMinPrice={setMinPrice}
                     />
                 </div>
                 {/* <div className="searchproducts-container">

@@ -198,6 +198,26 @@
           align-items: center;
           gap: 23px;
         }
+
+        .cart-icon {
+          width: 24px;
+          height: 24px;
+          position: relative;
+          .cart-count {
+            position: absolute;
+            top: -4px;
+            right: -7px;
+            background-color: #CC670A;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
       }
     }
 
