@@ -35,11 +35,13 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                 onClose={toggleDrawer}
                 direction='right'
                 className='bla bla bla'
-                size={300}
-                enableOverlay={false}
+                size={330}
+                enableOverlay={true}
+                overlayOpacity={0}
+                zIndex={3000}
             >
                 <div className='minicart h-full'>
-                    <Card className="h-full">
+                    <Card className="h-full " radius='none'>
                         <CardHeader className="flex gap-3">
                             <div className="minicart-title">
                                 <CustomTypography content='Shopping Cart' color='BLACK' size='LARGE' weight='SEMI-BOLD' />
