@@ -46,6 +46,7 @@ const InventoryTab = ({ id, data }) => {
 
     const [formData, setFormData] = React.useState({
         sku: '',
+        ein_code:'',
         stock_availability: 'In stock',
         inventory_management: false,
         product_quantity: 0,
@@ -65,6 +66,7 @@ const InventoryTab = ({ id, data }) => {
         if (data?.data?.product?.product_inventory_id) {
             setFormData((prev) => ({
                 sku: data?.data?.product?.sku,
+                ein_code: data?.data?.product?.ein_code,
                 stock_availability: data?.data?.product?.stock_availability,
                 inventory_management: JSON.stringify(data?.data?.product?.inventory_management),
                 product_quantity: data?.data?.product?.product_quantity || 0,
@@ -100,6 +102,7 @@ const InventoryTab = ({ id, data }) => {
 
         const newData = {
             sku: formData.sku,
+            ein_code: formData.ein_code,
             stock_availability: formData.stock_availability,
             inventory_management: JSON.parse(formData.inventory_management),
             product_quantity: formData.product_quantity,
@@ -162,6 +165,13 @@ const InventoryTab = ({ id, data }) => {
                         placeholder='SKU' label={'SKU'}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.sku}
+                        disabled={isDisabled}
+                    />
+                    <CustomInput name='ein_code' type='text'
+                        maxLength={100}
+                        placeholder='EIN Code' label={'EIN Code'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.ein_code}
                         disabled={isDisabled}
                     />
 

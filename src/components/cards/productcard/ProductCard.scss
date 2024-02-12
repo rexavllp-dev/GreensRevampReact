@@ -34,6 +34,17 @@
     display: flex;
     justify-content: center;
     height: 193px;
+    position: relative;
+
+    .badgecontainer {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      z-index: 1;
+      position: absolute;
+      right: 0px;
+      bottom: 8px;
+    }
   }
 
   .cardimage {
@@ -42,7 +53,7 @@
     align-items: center;
     width: 173px;
     height: 173px;
-    position: relative;
+    position: absolute;
     margin-bottom: 14px;
   }
 
@@ -77,11 +88,7 @@
       }
     }
 
-    .badgecontainer {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-    }
+   
   }
 
   .bottomsection {

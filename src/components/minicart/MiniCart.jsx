@@ -59,14 +59,36 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                     })
                                 }
                             </div>
+                            <Divider />
+
+                            <div className='flex flex-col gap-3 mt-3'>
+                                <div className='flex justify-between w-full'>
+                                    <CustomTypography content="Subtotal" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                </div>
+                                <div className='flex justify-between w-full'>
+                                    <CustomTypography content="Shipping" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                </div>
+                                <div className='flex justify-between w-full'>
+                                    <CustomTypography content="VAT 5%" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductVAT} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                </div>
+                                <div className='flex justify-between w-full'>
+                                    <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="GREY" size="MEDIUM" weight="SEMI-BOLD" />
+                                </div>
+                            </div>
                         </CardBody>
                         <Divider />
-                        <CardFooter className="flex justify-between">
-                            <CustomButton label='View Cart' variant='primary' onClick={() => {
-                                router.push('/cart')
-                                toggleDrawer()
-                            }} />
-                            <CustomButton label='Checkout' onClick={toggleDrawer} variant='transparent' />
+                        <CardFooter className='flex flex-col gap-3 '>
+                            <div className="flex justify-between  w-full" style={{ marginBottom: "25px" }}>
+                                <CustomButton label='View Cart' variant='primary' onClick={() => {
+                                    router.push('/cart')
+                                    toggleDrawer()
+                                }} />
+                                <CustomButton label='Checkout' onClick={toggleDrawer} variant='transparent' />
+                            </div>
                         </CardFooter>
                     </Card>
 

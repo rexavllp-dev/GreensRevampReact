@@ -7,7 +7,7 @@ export default function MiniCartItem({ data }) {
 
 
     return (
-        <div className="cart-item">
+        <div className="mini-cart-item">
             <div className="image-wrapper">
                 <div className="image">
                     <Image width={40} height={40} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />

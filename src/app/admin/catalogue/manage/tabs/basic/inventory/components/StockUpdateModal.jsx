@@ -86,8 +86,8 @@ const StockUpdateModal = ({ open, handleClose, id, product_qty }) => {
                                     onChange={(e) => { handleInputChange({ e }) }}
                                     value={formData.quantity}
                                 />
-                                <CustomTextarea label={'Description'}
-                                    placeholder={'Description'}
+                                <CustomTextarea label={'Remarks'}
+                                    placeholder={'Remarks'}
                                     name={'comment'} value={formData.comment}
                                     onChange={(e) => { handleInputChange({ e }) }} />
                                 <div className='flex gap-3 justify-end'>

@@ -25,28 +25,6 @@ import { ProductImg } from '../../../../../public/images';
 import MiniCart from '@/components/minicart/MiniCart';
 
 
-const additionalDetails = [
-    {
-        id: 1,
-        label: 'Dimensions & More Info'
-    },
-    {
-        id: 2,
-        label: 'Use & Care'
-    },
-    {
-        id: 3,
-        label: 'Shipping & Returns'
-    },
-    {
-        id: 4,
-        label: 'Ask a Question (6)'
-    },
-    {
-        id: 5,
-        label: 'Reviews (4)'
-    },
-]
 
 const products = [
     {
@@ -121,6 +99,35 @@ const ProductDetails = ({ params }) => {
     const [formData, setFormData] = React.useState({
         quantity: 0
     })
+
+
+    const [additionalDetails, setAdditionalDetails] = React.useState([
+        {
+            id: 1,
+            label: 'Dimensions & More Info',
+            data: ''
+        },
+        {
+            id: 2,
+            label: 'Use & Care',
+            data: ''
+        },
+        {
+            id: 3,
+            label: 'Shipping & Returns',
+            data: ''
+        },
+        {
+            id: 4,
+            label: 'Ask a Question (6)',
+            data: ''
+        },
+        {
+            id: 5,
+            label: 'Reviews (4)',
+            data: ''
+        },
+    ]);
     const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
 
     // const token = cookies.get('accessToken')
@@ -178,6 +185,42 @@ const ProductDetails = ({ params }) => {
         dispatch(getAllRelatedProducts({ id: params.id }))
     }, [])
 
+    useEffect(() => {
+        setAdditionalDetails([
+            {
+                id: 1,
+                label: 'Dimensions & More Info',
+                data: singleProduct?.data?.product?.dimensions_and_more_info
+            },
+            {
+                id: 2,
+                label: 'Use & Care',
+                data: singleProduct?.data?.product?.use_and_care
+            },
+            {
+                id: 3,
+                label: 'Shipping & Returns',
+                data: singleProduct?.data?.product?.shipping_and_returns
+            },
+            {
+                id: 4,
+                label: 'Ask a Question (6)',
+                data: 'Ask question'
+            },
+            {
+                id: 5,
+                label: 'Reviews (4)',
+                data: 'Reviews'
+            },
+        ])
+
+
+        if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
+            setCount(singleProduct?.data?.product?.min_qty)
+        }
+
+    }, [singleProduct])
+
     // Add to cart
     const handleAddToCart = () => {
         if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
@@ -230,6 +273,34 @@ const ProductDetails = ({ params }) => {
         }
     }
 
+    const isOutStock = () => {
+        if (singleProduct?.data?.product?.stock_availability === 'Out of stock') {
+            return true
+        } else if (singleProduct?.data?.product?.inventory_management === 'true' || singleProduct?.data?.product?.inventory_management === true) {
+            if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
+                return true;
+            }
+            return false
+        } else {
+            return false
+        }
+    }
+
+    const convertTimestampToDate = (timestamp) => {
+        const date = new Date(timestamp);
+
+        const options = {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+        };
+
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        const year = date.getFullYear();
+
+        return `${formattedDate}`;
+    };
+
     return (
         <div className='product_details_wrapper'>
             <div className='product_details'>
@@ -245,11 +316,31 @@ const ProductDetails = ({ params }) => {
                         <CustomTypography content={singleProduct?.data?.product?.prd_description}
                             color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
                         />
+
+                        {
+                            singleProduct?.data?.product?.prd_expiry_date &&
+                            <>
+                                <CustomTypography content="Expiry Date" color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                <CustomTypography content={convertTimestampToDate(singleProduct?.data?.product?.prd_expiry_date)}
+                                    color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
+                                />
+                            </>
+                        }
+
+                        {
+                            singleProduct?.data?.product?.ein_code &&
+                            <>
+                                <CustomTypography content="EIN Code" color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                <CustomTypography content={singleProduct?.data?.product?.ein_code}
+                                    color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
+                                />
+                            </>
+                        }
                     </div>
 
                     <div className='addional_details mt-5'>
-                        {additionalDetails.map((item, index) => (
-                            <div key={index} className="accordion-item">
+                        {additionalDetails.map((item, index) => item.data && (
+                            <div key={index} className="accordion-item" >
                                 <div
                                     className={`accordion-header ${expandedIndex === index ? 'expanded' : ''}`}
                                 >
@@ -261,12 +352,16 @@ const ProductDetails = ({ params }) => {
                                     </div>
                                 </div>
 
-                                {expandedIndex === index && (
-                                    <div className="w-full mb-3">
-                                        <CustomTypography content="Lorem ipsum dolor sit amet consectetur. Vel dis fusce tristique donec. Curabitur nulla sit sit feugiat. Sit arcu volutpat augue eget donec non. Pellentesque scelerisque rutrum at mi consectetur gravida consectetur bibendum. Est nec malesuada morbi vulputate vulputate quisque. Ac non tellus lorem elementum lorem. Arcu ullamcorper tempus id gravida a scelerisque parturient mattis nulla. Nulla enim donec ut scelerisque et. Lectus leo elit mi laoreet lorem purus ac fermentum. Mi eget ut ut nunc nibh lacinia volutpat risus. Sed dui eget vitae morbi ornare lobortis. Et quisque viverra sagittis turpis in posuere. Aenean potenti varius lorem morbi tempus sit eget id. Velit sapien egestas urna tincidunt malesuada. Pulvinar et tortor tellus rhoncus suscipit nisl pretium amet ut."
-                                            color="GREY" size="MEDIUM-SMALL" weight="REGUALR" />
-                                    </div>
-                                )}
+                                {
+                                    expandedIndex === index &&
+                                    (
+                                        <div className="w-full mb-3">
+                                            <CustomTypography content={item?.data}
+                                                color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
+                                            />
+                                        </div>
+                                    )
+                                }
                             </div>
                         ))}
                     </div>
@@ -404,14 +499,43 @@ const ProductDetails = ({ params }) => {
                     }
 
                     {
-                        singleProduct?.data?.product?.stock_availability === 'Out of stock'
+                        isOutStock()
                             ?
                             <div className="outofstock pt-3">
                                 <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
                             </div>
                             :
                             <div className="prd_item">
-                                <CountButton count={count} minQty={singleProduct?.data?.product?.min_qty} updateCount={updateCount} setProductQuantity={setCount} />
+
+                                <div className='countbtn'>
+                                    <button onClick={() => updateCount('reduce')}>-</button>
+                                    {/* <input type="text" value={count} min={singleProduct?.data?.product?.min_qty}
+                                        max={50}
+                                        maxLength={2}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            if (!isNaN(value) && value >= parseInt(singleProduct?.data?.product?.min_qty) && value <= 50) {
+                                                setCount(isNaN(parseInt(value)) ? '' : parseInt(value));
+                                            }
+                                        }} /> */}
+                                    <input
+                                        type="text"
+                                        value={count}
+                                        min={singleProduct?.data?.product?.min_qty}
+                                        max={50}
+                                        maxLength={2}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            // Check if the value is a valid number, within the range, and not exceeding the maximum length
+                                            if (!isNaN(value) && value >= 0 && value <= 50 && value.length <= 2) {
+                                                setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
+                                            }
+                                        }}
+                                    />
+
+                                    <button onClick={() => updateCount('add')}>+</button>
+                                </div>
+
                                 <div className='iconbtn'>
                                     <CiHeart size={28} color='#E54333' />
                                 </div>
@@ -476,8 +600,16 @@ const ProductDetails = ({ params }) => {
                     <div className="items" ref={relatedProdRef}>
                         {
                             relatedProducts?.result?.map(product => (
-                                <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                    previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                                <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                    // specialPrice={product?.prdPrice[0]?.specialPrice}
+                                    // normalPrice={product?.prdPrice[0]?.price}
+                                    rating={product.rating}
+                                    data={product}
+                                    img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                        (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                        'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                                    }
+                                />
                             ))
                         }
                     </div>

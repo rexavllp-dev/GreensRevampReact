@@ -174,15 +174,17 @@ export default function SearchDropdown() {
                                             }
                                             }>
                                                 <div className="image">
-                                                    {
-                                                        item?.product_img[0]?.url &&
-                                                        <Image
-                                                            src={item?.product_img[0]?.url}
-                                                            alt={item?.prd_name}
-                                                            width={45}
-                                                            height={45}
-                                                        />
-                                                    }
+                                                    {/* {
+                                                        item?.product_img?.find((img) => img.is_baseimage === true) && */}
+                                                    <Image
+                                                        src={(item?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                                            (item?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                                            'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
+                                                        alt={item?.prd_name}
+                                                        width={37}
+                                                        height={37}
+                                                    />
+                                                    {/* } */}
 
                                                 </div>
                                                 <div className="name">
@@ -235,10 +237,12 @@ export default function SearchDropdown() {
                                                             {
                                                                 item?.product_img[0]?.url &&
                                                                 <Image
-                                                                    src={item?.product_img[0]?.url}
+                                                                    src={(item?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                                                        (item?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                                                        'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
                                                                     alt={item?.prd_name}
-                                                                    width={45}
-                                                                    height={45}
+                                                                    width={37}
+                                                                    height={37}
                                                                 />
 
                                                             }

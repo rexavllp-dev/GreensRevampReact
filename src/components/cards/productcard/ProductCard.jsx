@@ -34,6 +34,19 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
       console.log(err)
     })
   }
+
+  const isOutStock = () => {
+    if (data?.stock_availability === 'Out of stock') {
+      return true
+    } else if (data?.inventory_management === 'true' || data?.inventory_management === true) {
+      if (parseInt(data?.product_quantity) === 0) {
+        return true;
+      }
+      return false
+    } else {
+      return false
+    }
+  }
   return (
     <div className='productcard'>
       <div className="icon">
@@ -51,18 +64,27 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
           />
 
         </div>
-      </div>
-      <div className="productdetails">
         <div className="badgecontainer">
           {
-            (data?.stock_availability === 'Out of stock') &&
-            <Badge color={'out-of-stock'}
-              label={'Out of Stock'}
-            />
+            isOutStock() ?
+              <Badge color={'out-of-stock'}
+                label={'Out of Stock'}
+              />
+              :
+              (data?.best_seller ?
+                <Badge color={'best-seller'}
+                  label={'Best Seller'}
+                />
+                :
+                <></>
+              )
           }
 
           {/* <Badge color={'sale'} label={'Sale'} /> */}
         </div>
+      </div>
+      <div className="productdetails">
+
         <div className="topsection">
           <div className="left">
             {/* {
@@ -98,9 +120,9 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
         </div>
         <div className="bottomsection">
           {
-            (data?.stock_availability === 'Out of stock') ?
+            isOutStock() ?
               <button className={'productbtn'} onClick={() => {
-                handleAddToCart()
+                // handleAddToCart()
               }}>
                 <div className='productbtn_text' >
                   Notify me

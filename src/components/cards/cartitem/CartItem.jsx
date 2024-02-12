@@ -48,7 +48,7 @@ export default function CartItem({ data }) {
                 </div>
 
                 <div className="others">
-                    <CustomTypography content={"AED " + parseInt(data?.price) * parseInt(data?.quantity)} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                    <CustomTypography content={`AED ${parseFloat(data?.totalPrice?.toFixed(2))}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
                 </div>

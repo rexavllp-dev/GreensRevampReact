@@ -113,18 +113,19 @@ const catalogueDetails = () => {
     const advancedTabs = [
         {
             id: 1,
+            label: "Product Variants",
+            component: <VariantsTab id={id} data={singleProduct} />
+
+        },
+        {
+            id: 2,
             label: "Options",
             component: <OptionsTab id={id} data={singleProduct} />
         },
         {
-            id: 2,
+            id: 3,
             label: "Related Products",
             component: <RelatedProdTab id={id} data={singleProduct} />
-        },
-        {
-            id: 3,
-            label: "Product Variants",
-            component: <VariantsTab id={id} data={singleProduct} />
         },
         {
             id: 4,

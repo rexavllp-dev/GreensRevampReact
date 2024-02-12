@@ -134,7 +134,6 @@ const Cart = () => {
                                     <CustomTypography weight='REGULAR' content="Pickup charge of AED 5 on orders below AED50." color="BLACK" size="MEDIUM" />
                                 </div>
                         }
-
                     </div>
 
                     <div className="cartitems">
@@ -157,7 +156,7 @@ const Cart = () => {
 
                         <div className="item">
                             <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                            <CustomTypography content="FREE" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
                         </div>
 
                         {/* <div className="item">
@@ -175,7 +174,7 @@ const Cart = () => {
 
                         <div className="item">
                             <CustomTypography content="VAT 5%" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                            {/* <CustomTypography content="AED 80" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" /> */}
+                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductVAT} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                         </div>
                         <div className="item">
                             <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
