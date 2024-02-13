@@ -120,7 +120,6 @@ export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname,
         } else {
             reject('Invalid authorization')
         }
-
     })
 
 }
@@ -133,8 +132,6 @@ export const loginWithOtp = createAsyncThunk('loginWithOtp', async ({ data }, th
         // cookies.set('accessToken', response.data.result?.accessToken)
         // cookies.set('refreshToken', response.data.result?.refreshToken);
         // cookies.set('user', JSON.stringify(response.data.result?.user));
-
-
 
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {

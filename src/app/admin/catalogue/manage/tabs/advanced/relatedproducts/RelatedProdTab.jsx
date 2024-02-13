@@ -75,7 +75,7 @@ const RelatedProdTab = ({ id, data }) => {
 
     const handleDeleteRelatedProducts = () => {
         if (selectedRelatedRows.length > 0) {
-            const data = selectedRelatedRows.map(row => row.id);
+            const data = selectedRelatedRows.map(row => row.related_product_id);
             dispatch(deleteRelatedProducts({ data: data })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);

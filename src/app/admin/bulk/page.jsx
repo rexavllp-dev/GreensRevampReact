@@ -26,13 +26,11 @@ export default function Bulk() {
     const [open, setOpen] = React.useState(false)
     const [isUpdate, setIsUpdate] = React.useState(false)
     const [updateData, setUpdateData] = React.useState(false)
-    const { allBulkRequests } = useSelector(state => state.bulk)
+    const { allBulkRequests, isBulkRequestUpdated } = useSelector(state => state.bulk)
 
     useEffect(() => {
         dispatch(getAllBulkRequests({}))
-    }, [])
-
-    console.log(allBulkRequests)
+    }, [isBulkRequestUpdated])
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
@@ -48,10 +46,20 @@ export default function Bulk() {
         {
             headerName: 'Status', field: 'approved_status', minWidth: 150,
             cellRenderer: (params) => {
-                const isActive = params.data?.approved_status;
-                return (
-                    <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
-                )
+                const status = params.data?.approved_status;
+                if (status === "Accept") {
+                    return (
+                        <Chip color={"success"} variant="dot">{status}</Chip>
+                    )
+                } else if (status === "Pending") {
+                    return (
+                        <Chip color={"warning"} variant="dot">{status}</Chip>
+                    )
+                } else {
+                    return (
+                        <Chip color={"danger"} variant="dot">{status}</Chip>
+                    )
+                }
             }
         },
         {

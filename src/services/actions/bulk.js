@@ -55,7 +55,16 @@ export const bulk = {
     //Get all bulk requests
     updateBulkRequest: ({data, id}) => {
         return new Promise((resolve, reject) => {
-            Axios.put('/products/update-bulk-request/'+ id, data)
+            Axios.put('/admin/update-bulk-request/'+ id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Get bulk status
+    getBulkStatus: ({id}) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get-bulk-status/'+ id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

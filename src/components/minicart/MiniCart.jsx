@@ -14,6 +14,8 @@ import MiniCartItem from '../cards/minicartitem/MiniCartItem'
 import { Card, CardBody, CardFooter, CardHeader, Divider } from '@nextui-org/react'
 import CustomButton from '@/library/buttons/CustomButton'
 import { useRouter } from 'next/navigation'
+import { MdRemoveShoppingCart } from 'react-icons/md'
+import { IoMdClose } from 'react-icons/io'
 
 const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
     const dispatch = useDispatch();
@@ -42,54 +44,79 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
             >
                 <div className='minicart h-full'>
                     <Card className="h-full " radius='none'>
-                        <CardHeader className="flex gap-3">
+                        <CardHeader className="flex justify-between items-center" style={{background:'#32893b'}}>
                             <div className="minicart-title">
-                                <CustomTypography content='Shopping Cart' color='BLACK' size='LARGE' weight='SEMI-BOLD' />
+                                <CustomTypography content='Shopping Cart' color='WHITE' size='SUPER-LARGE' weight='SEMI-BOLD' />
+                            </div>
+                            <div className="minicart-close" onClick={() => setIsOpen(false)}>
+                                <IoMdClose size={24} color='#FFFFFF' />
                             </div>
                         </CardHeader>
                         <Divider />
                         <CardBody className="h-full">
+                            {
+                                cartProducts?.result?.products?.length > 0 ?
+                                    <div className="cartitems h-full">
+                                        {
+                                            cartProducts?.result?.products?.map((item, index) => {
+                                                return (
+                                                    <MiniCartItem key={index} data={item} />
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                    :
+                                    <div className='h-full flex flex-col items-center justify-center'>
+                                        <MdRemoveShoppingCart color='#279540' size={80} />
+                                        <CustomTypography content='Your cart is empty' color='BLACK' size='MEDIUM' weight='SEMI-BOLD' />
+                                    </div>
+                            }
 
-                            <div className="cartitems h-full">
-                                {
-                                    cartProducts?.result?.products?.map((item, index) => {
-                                        return (
-                                            <MiniCartItem key={index} data={item} />
-                                        )
-                                    })
-                                }
-                            </div>
-                            <Divider />
 
-                            <div className='flex flex-col gap-3 mt-3'>
-                                <div className='flex justify-between w-full'>
-                                    <CustomTypography content="Subtotal" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
-                                </div>
-                                <div className='flex justify-between w-full'>
-                                    <CustomTypography content="Shipping" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
-                                </div>
-                                <div className='flex justify-between w-full'>
-                                    <CustomTypography content="VAT 5%" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductVAT} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
-                                </div>
-                                <div className='flex justify-between w-full'>
-                                    <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="GREY" size="MEDIUM" weight="SEMI-BOLD" />
-                                </div>
-                            </div>
+                            {
+                                cartProducts?.result?.products?.length > 0 &&
+                                <>
+                                    <Divider />
+                                    <div className='flex flex-col gap-3 mt-3'>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="Subtotal" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="Shipping" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="Discount" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"- AED " + cartProducts?.result?.totals?.totalDiscount} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="VAT 5%" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductVAT} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="GREY" size="MEDIUM" weight="SEMI-BOLD" />
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
                         </CardBody>
                         <Divider />
-                        <CardFooter className='flex flex-col gap-3 '>
-                            <div className="flex justify-between  w-full" style={{ marginBottom: "25px" }}>
-                                <CustomButton label='View Cart' variant='primary' onClick={() => {
-                                    router.push('/cart')
-                                    toggleDrawer()
-                                }} />
-                                <CustomButton label='Checkout' onClick={toggleDrawer} variant='transparent' />
-                            </div>
-                        </CardFooter>
+                        {
+                            cartProducts?.result?.products?.length > 0 &&
+                            <CardFooter className='flex flex-col gap-3 '>
+                                <div className="flex justify-between  w-full" style={{ marginBottom: "25px" }}>
+                                    <CustomButton label='View Cart' variant='primary' onClick={() => {
+                                        router.push('/cart')
+                                        toggleDrawer()
+                                    }} />
+                                    <CustomButton label='Checkout' onClick={toggleDrawer} variant='transparent' />
+                                </div>
+                            </CardFooter>
+
+                        }
                     </Card>
 
                 </div>

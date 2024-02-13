@@ -18,7 +18,7 @@ import CustomShare from '@/components/share/CustomShare';
 import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import CustomInput from '@/library/input/custominput/CustomInput';
-import { createBulkRequest, getBulkDiscountByProduct } from '@/services/features/bulkSlice';
+import { createBulkRequest, getBulkDiscountByProduct, getBulkStatus } from '@/services/features/bulkSlice';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../../public/images';
@@ -129,6 +129,8 @@ const ProductDetails = ({ params }) => {
         },
     ]);
     const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
+    const { bulkStatusData } = useSelector((state) => state.bulk)
+
 
     // const token = cookies.get('accessToken')
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
@@ -140,21 +142,6 @@ const ProductDetails = ({ params }) => {
             ...formData,
             [e.target.name]: e.target.value
         })
-    }
-
-    const updateCount = (operator) => {
-        if (operator === 'add') {
-            if (count === 50) {
-                setContactVisible(true)
-            } else {
-                setCount((prevCount) => prevCount + 1);
-            }
-        } else {
-            setContactVisible(false)
-            if (count > 1) {
-                setCount((prevCount) => prevCount - 1);
-            }
-        }
     }
 
 
@@ -183,6 +170,7 @@ const ProductDetails = ({ params }) => {
 
     useEffect(() => {
         dispatch(getAllRelatedProducts({ id: params.id }))
+        dispatch(getBulkStatus({ id: params.id }))
     }, [])
 
     useEffect(() => {
@@ -300,6 +288,30 @@ const ProductDetails = ({ params }) => {
 
         return `${formattedDate}`;
     };
+
+
+    const isBulkApproved = bulkStatusData?.result?.approved_status === "Accept";
+    const maxQty =  isBulkApproved ? parseInt(bulkStatusData?.result?.quantity) : parseInt(singleProduct?.data?.product?.max_qty)
+
+    console.log(maxQty)
+    
+    const updateCount = (operator) => {
+       
+        if (operator === 'add') {
+            if (count === maxQty) {
+                if (!isBulkApproved) {
+                    setContactVisible(true)
+                }
+            } else {
+                setCount((prevCount) => prevCount + 1);
+            }
+        } else {
+            setContactVisible(false)
+            if (count > 1) {
+                setCount((prevCount) => prevCount - 1);
+            }
+        }
+    }
 
     return (
         <div className='product_details_wrapper'>
@@ -509,25 +521,15 @@ const ProductDetails = ({ params }) => {
 
                                 <div className='countbtn'>
                                     <button onClick={() => updateCount('reduce')}>-</button>
-                                    {/* <input type="text" value={count} min={singleProduct?.data?.product?.min_qty}
-                                        max={50}
-                                        maxLength={2}
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            if (!isNaN(value) && value >= parseInt(singleProduct?.data?.product?.min_qty) && value <= 50) {
-                                                setCount(isNaN(parseInt(value)) ? '' : parseInt(value));
-                                            }
-                                        }} /> */}
                                     <input
                                         type="text"
                                         value={count}
                                         min={singleProduct?.data?.product?.min_qty}
-                                        max={50}
-                                        maxLength={2}
+                                        maxLength={3}
                                         onChange={(e) => {
                                             const value = e.target.value;
                                             // Check if the value is a valid number, within the range, and not exceeding the maximum length
-                                            if (!isNaN(value) && value >= 0 && value <= 50 && value.length <= 2) {
+                                            if (!isNaN(value) && value >= 0 && value <= maxQty) {
                                                 setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
                                             }
                                         }}
@@ -557,8 +559,8 @@ const ProductDetails = ({ params }) => {
                         contactVisible &&
                         <div className="contactus">
                             <div className='flex flex-col gap-2 mb-2'>
-                                <CustomTypography content="50 Products limited to a customer" color="DANGER" size="MEDIUM" weight="SEMI-BOLD" />
-                                <CustomTypography content="Contact us for a quote on quantity above 50" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content={singleProduct?.data?.product?.max_qty + " Products limited to a customer"} color="DANGER" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content={"Contact us for a quote on quantity above " + singleProduct?.data?.product?.max_qty} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                             </div>
 
                             <div className="flex gap-3 items-center">
@@ -615,8 +617,6 @@ const ProductDetails = ({ params }) => {
                     </div>
                 </div>
             }
-
-
 
             <div className="itemcard-wrapper ">
                 <div className="header">

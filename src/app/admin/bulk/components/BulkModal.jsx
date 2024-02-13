@@ -6,7 +6,7 @@ import CustomTextarea from '@/library/textarea/CustomTextarea';
 import React from 'react';
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { createBulkDiscount, updateBulkDiscount } from "@/services/features/bulkSlice";
+import { createBulkDiscount, updateBulkDiscount, updateBulkRequest } from "@/services/features/bulkSlice";
 import CustomSelect from "@/library/select/custom-select/CustomSelect";
 
 
@@ -17,21 +17,22 @@ const BulkModal = ({ open, handleClose, id, isUpdate, updateData }) => {
         usr_firstname: '',
         usr_email: '',
         quantity: '',
+        approved_status: 'Pending'
 
     })
 
     const approvalStatuses = [
         {
             label: 'Approved',
-            value: 'approve'
+            value: 'Accept'
         },
         {
             label: 'Pending',
-            value: 'pending'
+            value: 'Pending'
         },
         {
             label: 'Rejected',
-            value: 'reject'
+            value: 'Reject'
         }
     ]
 
@@ -41,6 +42,7 @@ const BulkModal = ({ open, handleClose, id, isUpdate, updateData }) => {
                 usr_firstname: updateData?.usr_firstname,
                 usr_email: updateData?.usr_email,
                 quantity: updateData?.quantity,
+                approved_status: updateData?.approved_status
             })
         }
     }, [updateData])
@@ -56,10 +58,10 @@ const BulkModal = ({ open, handleClose, id, isUpdate, updateData }) => {
         let data = {
             bulk_id: id,
             newQuantity: formData.quantity,
-            newStatus: formData.status
+            newStatus: formData.approved_status
         }
 
-            dispatch(updateBulkRequest({ data, id: updateData?.id })).then((res) => {
+            dispatch(updateBulkRequest({ data, id: updateData?.bulkId })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
                     handleClose()

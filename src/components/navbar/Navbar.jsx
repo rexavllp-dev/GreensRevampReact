@@ -131,7 +131,11 @@ const Navbar = () => {
                                 {/* <Link href="/cart" prefetch={false}> */}
                                 <div className="cart-icon">
                                     <Image src={cartIcon} />
-                                    {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
+                                    {(parseInt(cartProducts?.result?.totals?.totalProductCount) > 0) ?
+                                        <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>
+                                        :
+                                        <></>
+                                    }
                                 </div>
                                 {/* </Link> */}
                                 {/* <p className='item-label'>Cart</p> */}
@@ -220,7 +224,11 @@ const Navbar = () => {
                                     <Link href="/cart" prefetch={false}>
                                         <div className="cart-icon">
                                             <Image src={cartIcon} />
-                                            {cartProducts?.result?.totals?.totalProductCount && <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>}
+                                            {(parseInt(cartProducts?.result?.totals?.totalProductCount) > 0) ?
+                                                <div className='cart-count'>{cartProducts?.result?.totals?.totalProductCount}</div>
+                                                :
+                                                <></>
+                                            }
                                         </div>
                                     </Link>
                                     {/* <p className='item-label'>Cart</p> */}

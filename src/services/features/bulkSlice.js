@@ -33,6 +33,11 @@ const initialState = {
     isBulkRequestUpdating: false,
     isBulkRequestUpdated: false,
     isBulkRequestUpdateError: false,
+
+    isBulkStatusLoading: false,
+    isBulkStatusLoaded: false,
+    isBulkStatusLoadError: false,
+    bulkStatusData: []
 }
 
 // Create bulk discount
@@ -105,6 +110,17 @@ export const getAllBulkRequests = createAsyncThunk('getAllBulkRequests', async (
 export const updateBulkRequest = createAsyncThunk('updateBulkRequest', async ({ data, id }, thunkAPI) => {
     try {
         const response = await bulk.updateBulkRequest({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+// Get bulk status
+export const getBulkStatus = createAsyncThunk('getBulkStatus', async ({ id }, thunkAPI) => {
+    try {
+        const response = await bulk.getBulkStatus({ id });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -239,6 +255,25 @@ const bulkSlice = createSlice({
                 state.isBulkDiscountDeleting = false;
                 state.isBulkDiscountDeleted = false;
                 state.isBulkDiscountDeleteError = true;
+            })
+
+            .addCase(getBulkStatus.pending, (state) => {
+                state.isBulkStatusLoading = true;
+                state.isBulkStatusLoaded = false;
+                state.isBulkStatusLoadError = false;
+            })
+
+            .addCase(getBulkStatus.fulfilled, (state, action) => {
+                state.isBulkStatusLoading = false;
+                state.isBulkStatusLoaded = true;
+                state.isBulkStatusLoadError = false;
+                state.bulkStatusData = action.payload;
+            })
+
+            .addCase(getBulkStatus.rejected, (state, action) => {
+                state.isBulkStatusLoading = false;
+                state.isBulkStatusLoaded = false;
+                state.isBulkStatusLoadError = true;
             })
     }
 })
