@@ -48,6 +48,12 @@ const Navbar = () => {
     }, [productQuantityUpdated, productRemovedFromCart, productAddedToCart])
 
     useEffect(() => {
+        if (productAddedToCart) {
+            toggleDrawer()
+        }
+    }, [productAddedToCart])
+
+    useEffect(() => {
         setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
     }, [isLoggedIn, authCount])
 

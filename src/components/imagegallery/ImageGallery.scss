@@ -1,6 +1,5 @@
 .image_gallery {
-
-  .bottomcontrollers{
+  .bottomcontrollers {
     display: flex;
     align-items: center;
     margin-top: 40px;
@@ -16,8 +15,12 @@
     cursor: pointer;
   }
 
-  .navlist{
+  .navlist {
     display: flex;
     align-items: center;
+  }
+
+  img {
+    max-width: unset !important;
   }
 }

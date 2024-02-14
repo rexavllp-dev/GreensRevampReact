@@ -169,14 +169,16 @@ const Cart = () => {
                                 </div>
 
                                 <div className="item">
+                                    <CustomTypography content="Discount" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                    <CustomTypography content={"-AED " + cartProducts?.result?.totals?.totalDiscount} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                </div>
+
+                                <div className="item">
                                     <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
                                     <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
                                 </div>
 
-                                <div className="item">
-                                    <CustomTypography content="Discount" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                    <CustomTypography content={"-AED " + cartProducts?.result?.totals?.totalDiscount} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                </div>
+                              
 
                                 {/* <div className="item">
                         <CustomTypography content="Coupon  #FIRSTHI15 " color="BLACK" size="MEDIUM" weight="REGULAR" />

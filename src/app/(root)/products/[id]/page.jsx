@@ -293,7 +293,6 @@ const ProductDetails = ({ params }) => {
     const isBulkApproved = bulkStatusData?.result?.approved_status === "Accept";
     const maxQty =  isBulkApproved ? parseInt(bulkStatusData?.result?.quantity) : parseInt(singleProduct?.data?.product?.max_qty)
 
-    console.log(maxQty)
     
     const updateCount = (operator) => {
        
@@ -474,7 +473,7 @@ const ProductDetails = ({ params }) => {
                                     {
                                         bulkDiscountData?.result?.map((item, index) => {
                                             return (
-                                                <tr>
+                                                <tr key={index} className='bulkrow' style={{ cursor: 'pointer' }} onClick={() => { setCount(parseInt(item?.start_range)) }}>
                                                     <td>{item?.start_range}</td>
                                                     <td>{item?.end_range}</td>
                                                     <td>{'AED ' + item?.discounted_price}</td>
@@ -582,7 +581,7 @@ const ProductDetails = ({ params }) => {
 
             </div>
             {
-                relatedProducts?.result?.length > 0 &&
+                relatedProducts?.result?.relatedProducts?.length > 0 &&
                 <div className="itemcard-wrapper ">
                     <div className="header">
                         <CustomTypography content="Related Products" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
@@ -601,10 +600,10 @@ const ProductDetails = ({ params }) => {
                     </div>
                     <div className="items" ref={relatedProdRef}>
                         {
-                            relatedProducts?.result?.map(product => (
+                            relatedProducts?.result?.relatedProducts?.map(product => (
                                 <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
-                                    // specialPrice={product?.prdPrice[0]?.specialPrice}
-                                    // normalPrice={product?.prdPrice[0]?.price}
+                                    specialPrice={product?.prdPrice[0]?.specialPrice}
+                                    normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
                                     data={product}
                                     img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?

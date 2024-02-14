@@ -163,6 +163,8 @@ const PriceTab = ({ id, data }) => {
                         formData.is_discount &&
                         <>
                             <CustomSelect label={'Discount Type'} value={formData.special_price_type} data={priceTypes} name={'special_price_type'}
+                                haveInfo={true}
+                                info={"Percentage: Reduces the price by a certain percentage. Fixed: Subtracts a specific amount directly from the original price."}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 disabled={isDisabled}
                             />
@@ -224,10 +226,10 @@ const PriceTab = ({ id, data }) => {
                         disabled={isDisabled}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_status: value })) }}
                     />
-                    <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
+                    {/* <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
                         disabled={isDisabled}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}
-                    />
+                    /> */}
                 </div>
             </div>
             <div className="savebtn">

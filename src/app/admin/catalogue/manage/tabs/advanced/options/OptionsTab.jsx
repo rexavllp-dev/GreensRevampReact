@@ -12,6 +12,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import { createOption, createProductOption, deleteProductOption, deleteProductOptionValue, getAllOptionsByProductId, getAllProducts, getOptionValues, updateOptionValue } from '@/services/features/productSlice';
 import { toast } from 'react-toastify';
+import CustomTypography from '@/library/typography/CustomTypography';
 
 const OptionsTab = ({ data, id }) => {
 
@@ -96,17 +97,19 @@ const OptionsTab = ({ data, id }) => {
     }
 
     const handleCreateOption = () => {
-        dispatch(createOption({ data: { option_name: formData?.option_name, product_id: id } })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload.message);
-            } else {
-                toast.error(res.payload.message)
-            }
-            setLoading(false)
-        }).catch((err) => {
-            console.log(err);
-        })
-        setFormData((prev) => ({ ...prev, option_name: '' }));
+        if (formData?.option_name) {
+            dispatch(createOption({ data: { option_name: formData?.option_name, product_id: id } })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message)
+                }
+                setLoading(false)
+            }).catch((err) => {
+                console.log(err);
+            })
+            setFormData((prev) => ({ ...prev, option_name: '' }));
+        }
     }
 
     const handleCreateProductOption = (optionId, optionValues) => {
@@ -187,26 +190,30 @@ const OptionsTab = ({ data, id }) => {
                     <Card className="w-full">
                         <CardHeader className="flex justify-between">
 
-                            <div className="createoption">
-                                <CustomInput name='option_name' type='text'
-                                    maxLength={100}
-                                    height={40}
-                                    placeholder='Create New Option' label={'Create New Option'}
-                                    onChange={(e) => {
-                                        handleInputChange({ e });
-                                    }}
-                                    value={formData.option_name}
-                                />
-                                <div className="createbtn cursor-pointer">
-                                    {/* <CustomButton label="Add" variant="primary" /> */}
-                                    <IoAddCircleSharp size={40} color='#555'
-                                        className={`icon `}
-                                        onClick={() => {
-                                            handleCreateOption();
+                            {
+                                !allOptionsByProduct?.result?.length &&
+                                <div className="createoption">
+                                    <CustomInput name='option_name' type='text'
+                                        maxLength={100}
+                                        height={40}
+                                        placeholder='Create New Option' label={'Create New Option'}
+                                        onChange={(e) => {
+                                            handleInputChange({ e });
                                         }}
+                                        value={formData.option_name}
                                     />
+                                    <div className="createbtn cursor-pointer">
+                                        {/* <CustomButton label="Add" variant="primary" /> */}
+                                        <IoAddCircleSharp size={40} color='#555'
+                                            className={`icon `}
+                                            onClick={() => {
+                                                handleCreateOption();
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
 
                         </CardHeader>
                         <Divider />
@@ -278,27 +285,31 @@ const OptionsTab = ({ data, id }) => {
                             <CardBody className='flex flex-col gap-3'>
                                 {optionValues?.result?.map((item, index) => (
                                     <>
-                                        <div className="flex gap-3 items-center">
-                                            <CustomInput name='option_label' type='text'
-                                                maxLength={100}
-                                                placeholder='Label' label={'Label'}
-                                                onChange={(e) => { setOptionLabels({ ...optionLabels, [item.product_option_id]: e.target.value }) }}
-                                                value={optionLabels[item.product_option_id]}
-                                            />
-                                            <CustomInput name='sku' type='text'
-                                                disabled={true}
-                                                maxLength={100}
-                                                placeholder='SKU' label={'SKU'}
-                                                onChange={(e) => { handleInputChange({ e }) }}
-                                                value={item.sku}
-                                            />
-                                            <div className='flex gap-3'>
+                                        <div>
+                                            <CustomTypography content={item.prd_name} weight='MEDIUM' size='MEDIUM' />
+                                            <Divider className='mt-1' />
+                                            <div className="flex gap-3 items-center mt-2">
+                                                <CustomInput name='option_label' type='text'
+                                                    maxLength={100}
+                                                    placeholder='Label' label={'Label'}
+                                                    onChange={(e) => { setOptionLabels({ ...optionLabels, [item.product_option_id]: e.target.value }) }}
+                                                    value={optionLabels[item.product_option_id]}
+                                                />
+                                                <CustomInput name='sku' type='text'
+                                                    disabled={true}
+                                                    maxLength={100}
+                                                    placeholder='SKU' label={'SKU'}
+                                                    onChange={(e) => { handleInputChange({ e }) }}
+                                                    value={item.sku}
+                                                />
+                                                <div className='flex gap-3'>
 
-                                                <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
-                                                    <MdDelete size={24} className='mt-3 icon' color='#555' />
+                                                    <div className="icon cursor-pointer" onClick={() => handleDeleteProductOptionValue(item.product_option_id)}>
+                                                        <MdDelete size={24} className='mt-3 icon' color='#555' />
+                                                    </div>
                                                 </div>
-                                            </div>
 
+                                            </div>
                                         </div>
 
                                         {/* <div className="createbtn flex justify-end">

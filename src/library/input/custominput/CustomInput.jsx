@@ -7,7 +7,7 @@ import { EyeSlashFilledIcon } from "./EyeSlashFilledIcon";
 import InfoIcon from '@/components/customicons/InfoIcon';
 import ValidationChecklist from '@/components/validationchecklist/ValidationChecklist';
 
-const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequired, haveInfo, info, isInvalid, errMsg, haveProgress, maxLength, disabled }) => {
+const CustomInput = ({ type, label, name, value, onChange, placeholder, isRequired, haveInfo, info, isInvalid, errMsg, haveProgress, maxLength, disabled, max }) => {
 
   const [isVisible, setIsVisible] = React.useState(false);
 

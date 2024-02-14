@@ -46,7 +46,7 @@ const InventoryTab = ({ id, data }) => {
 
     const [formData, setFormData] = React.useState({
         sku: '',
-        ein_code:'',
+        ein_code: '',
         stock_availability: 'In stock',
         inventory_management: false,
         product_quantity: 0,
@@ -70,8 +70,8 @@ const InventoryTab = ({ id, data }) => {
                 stock_availability: data?.data?.product?.stock_availability,
                 inventory_management: JSON.stringify(data?.data?.product?.inventory_management),
                 product_quantity: data?.data?.product?.product_quantity || 0,
-                min_qty: data?.data?.product?.min_qty,
-                max_qty: data?.data?.product?.max_qty,
+                min_qty: data?.data?.product?.min_qty || 1,
+                max_qty: data?.data?.product?.max_qty || 50,
                 show_out_of_stock_on_dashboard: data?.data?.product?.show_out_of_stock_on_dashboard,
                 back_in_stock: data?.data?.product?.back_in_stock,
                 best_seller: data?.data?.product?.best_seller,
@@ -90,9 +90,20 @@ const InventoryTab = ({ id, data }) => {
     }, [data?.data?.product?.product_inventory_id])
 
     const handleInputChange = ({ e, country }) => {
-        setFormData((prev) => ({
-            ...prev, [e.target.name]: e.target.value
-        }))
+        if (e.target.name === 'sku') {
+            //max 7 characters
+            if (e.target.value.length > 6) {
+                return
+            } else {
+                setFormData((prev) => ({
+                    ...prev, [e.target.name]: e.target.value
+                }))
+            }
+        } else {
+            setFormData((prev) => ({
+                ...prev, [e.target.name]: e.target.value
+            }))
+        }
     }
 
     const handleSubmit = () => {
@@ -146,7 +157,7 @@ const InventoryTab = ({ id, data }) => {
 
     return (
         <div className='inventorytab'>
-           {
+            {
                 data?.data?.product?.product_inventory_id ?
                     <div className="editbtn ">
                         <div className="btn" onClick={() => { setIsDisabled(!isDisabled) }}>

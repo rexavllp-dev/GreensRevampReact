@@ -169,3 +169,10 @@
     }
   }
 }
+
+.bulkrow {
+  &:hover {
+    cursor: pointer;
+    background-color: #ebeaea;
+  }
+}

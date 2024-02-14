@@ -154,7 +154,7 @@ const Search = () => {
     ]
 
     useEffect(() => {
-        dispatch(getAllProductsByUser({ page: currentPage, per_page: 8, search_query: keyword, filters, sortBy, minPrice, maxPrice }));
+        dispatch(getAllProductsByUser({ page: currentPage, per_page: 40, search_query: keyword, filters, sortBy, minPrice, maxPrice }));
     }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice]);
 
 
@@ -228,7 +228,7 @@ const Search = () => {
             </div>
 
             <div className='pagination-controls'>
-                <CustomPagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={5} />
+                <CustomPagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={allProductsByUser?.data?.totalPage} />
             </div>
 
             {/* <div className="itemcard-wrapper">

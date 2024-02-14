@@ -35,6 +35,9 @@ export default function Bulk() {
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         {
+            headerName: 'Product Name', field: 'prd_name', minWidth: 150
+        },
+        {
             headerName: 'Name', field: 'usr_firstname', minWidth: 150
         },
         {

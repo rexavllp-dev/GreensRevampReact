@@ -22,11 +22,9 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
     const router = useRouter();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
 
-
-
     useEffect(() => {
         dispatch(getCartProducts({}));
-    }, [productQuantityUpdated, productRemovedFromCart])
+    }, [productQuantityUpdated, productRemovedFromCart]);
 
 
 
@@ -83,12 +81,12 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                             <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
                                         </div>
                                         <div className='flex justify-between w-full'>
-                                            <CustomTypography content="Shipping" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
-                                        </div>
-                                        <div className='flex justify-between w-full'>
                                             <CustomTypography content="Discount" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
                                             <CustomTypography content={"- AED " + cartProducts?.result?.totals?.totalDiscount} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography content="Shipping" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
                                         </div>
                                         <div className='flex justify-between w-full'>
                                             <CustomTypography content="VAT 5%" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />

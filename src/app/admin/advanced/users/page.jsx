@@ -34,7 +34,7 @@ export default function Users() {
         },
         // { headerName: 'Role', field: 'role' },
         {
-            headerName: 'Status', field: 'status', minWidth: 160,
+            headerName: 'Status', field: 'status', minWidth: 180,
             cellRenderer: (params) => {
                 let isCompany = params.data?.usr_company;
                 let status = params.data?.status_name;
@@ -62,7 +62,7 @@ export default function Users() {
             }
         },
         {
-            field: 'attempt_blocked', headerName: 'Blocked', minWidth: 150,
+            field: 'attempt_blocked', headerName: 'Blocked', minWidth: 160,
             cellRenderer: (params) => {
                 let blocked = params.data?.attempt_blocked;
                 if (blocked) {
@@ -71,7 +71,7 @@ export default function Users() {
                     )
                 } else {
                     return (
-                        <Chip color={"success"} variant="dot">{"Active"}</Chip>
+                        <Chip color={"success"} variant="dot">{"Unblocked"}</Chip>
                     )
                 }
             }
