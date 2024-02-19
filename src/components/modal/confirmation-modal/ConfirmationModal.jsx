@@ -4,7 +4,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from
 
 export default function ConfirmationModal({ isOpen, onClose, onConfirm, title, message }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} style={{ zIndex: 2000 }}>
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
         <ModalBody>

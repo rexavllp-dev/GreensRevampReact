@@ -168,6 +168,7 @@ const initialState = {
     isSaveForLaterLoading: false,
     isSaveForLaterLoaded: false,
     isSaveForLaterLoadError: false,
+    saveForLater: [],
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
@@ -1238,6 +1239,7 @@ const productSlice = createSlice({
                 state.isSaveForLaterLoading = false;
                 state.isSaveForLaterLoaded = true;
                 state.isSaveForLaterLoadError = false;
+                state.saveForLater = action.payload;
             })
 
             .addCase(getSaveForLater.rejected, (state, action) => {

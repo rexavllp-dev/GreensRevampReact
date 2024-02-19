@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { deleteProductFromCart, updateProductQuantity } from '@/services/features/cartSlice'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import { createSaveForLater } from '@/services/features/productSlice'
 
 export default function CartItem({ data }) {
 
@@ -35,17 +36,33 @@ export default function CartItem({ data }) {
         })
     }
 
+    const handleSaveForLater = () => {
+        dispatch(createSaveForLater({
+            data: {
+                product_id: data?.productId
+            }
+        })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message);
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
 
     return (
         <div className="cart-item">
             <div className="image-wrapper">
-                <div className="image pb-1 cursor-pointer"  onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="image pb-1 cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <Image width={100} height={100} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />
                 </div>
                 <CountButton count={data.quantity} updateCount={updateCount} />
             </div>
             <div className="details">
-                <div className="title"  onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="title" onClick={() => router.push('/products/' + data?.productId)}>
                     <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                 </div>
 
@@ -57,7 +74,11 @@ export default function CartItem({ data }) {
 
                 <div className='btn'>
                     {/* <CustomButton variant='teritary' label='Save for Later'/> */}
-                    <button className='save_later_btn'>Save for Later</button>
+                    <button className='save_later_btn'
+                        onClick={() => {
+                            handleSaveForLater()
+                        }}
+                    >Save for Later</button>
                     <div className="removebtn" onClick={() => {
                         handleRemoveItemFromCart()
                     }}>

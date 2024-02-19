@@ -12,6 +12,7 @@ import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../public/images';
 import { MdRemoveShoppingCart } from 'react-icons/md';
+import { getSaveForLater } from '@/services/features/productSlice';
 
 const products = [
     {
@@ -77,6 +78,7 @@ const Cart = () => {
 
     const dispatch = useDispatch();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
+    const { saveForLater } = useSelector((state) => state.products)
 
     // States
     const [selected, setSelected] = useState('shipping');
@@ -85,6 +87,10 @@ const Cart = () => {
     useEffect(() => {
         dispatch(getCartProducts({}));
     }, [productQuantityUpdated, productRemovedFromCart])
+
+    useEffect(() => {
+        dispatch(getSaveForLater({}));
+    }, [])
 
     const handleNav = (ref, direction) => {
         if (ref === "recommendedProdRef") {
@@ -298,7 +304,7 @@ const Cart = () => {
                 </div>
                 <div className="items" ref={recommendedProdRef}>
                     {
-                        products.map(product => (
+                        saveForLater?.result?.map(product => (
                             <ProductCard key={product.id} title={product.title} price={product.price} data={product}
                                 previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
                         ))
