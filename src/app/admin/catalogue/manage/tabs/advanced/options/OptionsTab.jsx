@@ -132,7 +132,7 @@ const OptionsTab = ({ data, id }) => {
         }).catch((err) => {
             console.log(err);
         })
-        setSelectedRows([]);
+        // setSelectedRows([]);
     }
 
 

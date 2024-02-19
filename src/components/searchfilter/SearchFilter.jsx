@@ -17,6 +17,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
   })
 
   const [sort, setSort] = React.useState('')
+  const [availbility, setAvailibility] = React.useState('')
   const [priceRange, setPriceRange] = React.useState([0, 10000]);
 
   const [filterTypes, setFilterTypes] = React.useState([
@@ -39,25 +40,25 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         checked: false
       }]
     },
-    {
-      id: 2,
-      title: 'Availability',
-      filter: [{
-        id: 1,
-        title: 'In Stock',
-        checked: false,
-        value: 'In stock',
-        column: 'product_inventory.stock_availability'
-      },
-      {
-        id: 2,
-        title: 'Out of Stock',
-        checked: false,
-        value: 'Out of stock',
-        column: 'product_inventory.stock_availability'
-      }
-      ]
-    },
+    // {
+    //   id: 2,
+    //   title: 'Availability',
+    //   filter: [{
+    //     id: 1,
+    //     title: 'In Stock',
+    //     checked: false,
+    //     value: 'In stock',
+    //     column: 'product_inventory.stock_availability'
+    //   },
+    //   {
+    //     id: 2,
+    //     title: 'Out of Stock',
+    //     checked: false,
+    //     value: 'Out of stock',
+    //     column: 'product_inventory.stock_availability'
+    //   }
+    //   ]
+    // },
     {
       id: 3,
       title: 'Product Category',
@@ -99,10 +100,16 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
     }
   ])
 
+  useEffect(() => {
+    setMaxPrice(priceRange[1])
+    setMinPrice(priceRange[0])
+  }, [priceRange])
+
 
   const handleResetFilter = () => {
     setFilters([])
-    setSortBy('')
+    // setSortBy('')
+    setAvailibility('')
     setPriceRange([0, 10000]);
     setMinPrice(0);
     setMaxPrice(10000);
@@ -131,7 +138,6 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
     //   })
     // })
 
-    const availbility = filterTypes[1].filter.find((filter) => filter.checked)?.value
 
     if (availbility === 'In stock') {
       setFilters([
@@ -162,11 +168,36 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
     toast.success("Filters Applied Successfully")
   }
 
+  const handleSetAvailibility = (value) => {
+    setAvailibility(value)
+    if (value === 'In stock') {
+      setFilters([
+        {
+          column: 'product_inventory.stock_availability',
+          operator: '=',
+          value: 'In stock'
+        }
+      ])
+    } else if (value === 'Out of stock') {
+      setFilters([
+        {
+          column: 'product_inventory.stock_availability',
+          operator: '=',
+          value: 'Out of stock'
+        }
+      ])
+    }
+  }
+
   return (
     <div className='searchfilter-wrapper'>
       <div className="title" onClick={() => onClose()}>
-        <GoArrowLeft size={22} />
-        <CustomTypography content="Filters" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-SMALL" />
+        {/* <GoArrowLeft size={22} /> */}
+        {/* <CustomTypography content="Filters" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-SMALL" /> */}
+        <CustomTypography content="Filters" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-LARGE" />
+        <button className='txtbtn' onClick={handleResetFilter}>
+          Reset
+        </button>
       </div>
 
       <Accordion
@@ -174,7 +205,25 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         isCompact
         selectionMode='multiple'
         defaultExpandedKeys={['0', '1']}>
-        <AccordionItem key={0} aria-label={'Sort By'} title={'Sort By'}>
+        <AccordionItem key={0} aria-label={'Availibility'} title={'Availibility'}>
+          <CustomRadioBox
+            value={availbility}
+            onChange={(value) => handleSetAvailibility(value)}
+            items={
+              [{
+                id: 1,
+                title: 'In Stock',
+                value: 'In stock'
+              },
+              {
+                id: 2,
+                title: 'Out of Stock',
+                value: 'Out of stock'
+              }
+              ]
+            } />
+        </AccordionItem>
+        {/* <AccordionItem key={0} aria-label={'Sort By'} title={'Sort By'}>
           <CustomRadioBox
             value={sort}
             onChange={(value) => setSort(value)}
@@ -211,7 +260,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
               }
               ]
             } />
-        </AccordionItem>
+        </AccordionItem> */}
 
         {
           filterTypes.map((filterType) => (
@@ -240,7 +289,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         <CustomSlider value={priceRange} onChange={setPriceRange} />
       </div>
 
-      <div className="footer">
+      {/* <div className="footer">
         <button className='teritarybtn' onClick={() => {
           handleResetFilter()
         }}>
@@ -253,7 +302,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         }>
           Apply
         </button >
-      </div>
+      </div> */}
     </div>
   )
 }

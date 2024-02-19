@@ -281,4 +281,20 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+
+    createSaveForLater: ({ data }) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/saveforlater/create-save-for-later', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    }
+
+    getSaveForLater: () => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/saveforlater/get-all-save-for-later')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    }
 }

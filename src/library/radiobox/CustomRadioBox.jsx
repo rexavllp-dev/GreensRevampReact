@@ -14,11 +14,11 @@ const CustomRadioBox = ({ items, value, onChange }) => {
             }}
             value={value}
             onValueChange={onChange}
-            color='success'
+            color='default'
         >
             {
                 items.map((item, index) => (
-                    <Radio value={item.value} disableAnimation>{item.title}</Radio>
+                    <Radio color='default' classNames={{ label: "customcheckbox-label", base: "customcheckbox-base" }} value={item.value} >{item.title}</Radio>
                 ))
             }
         </RadioGroup>

@@ -203,20 +203,14 @@ const ProductDetails = ({ params }) => {
         ])
 
 
-        if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
-            setCount(singleProduct?.data?.product?.min_qty)
-        }
+        // if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
+        //     setCount(singleProduct?.data?.product?.min_qty)
+        // }
 
     }, [singleProduct])
 
     // Add to cart
     const handleAddToCart = () => {
-        if (!isNaN(parseInt(singleProduct?.data?.product?.min_qty))) {
-            if (parseInt(count) < parseInt(singleProduct?.data?.product?.min_qty)) {
-                toast.error(`Minimum quantity should be ${singleProduct?.data?.product?.min_qty}`)
-                return
-            }
-        }
         const productData = {
             productId: params.id,
             quantity: count,
@@ -291,11 +285,11 @@ const ProductDetails = ({ params }) => {
 
 
     const isBulkApproved = bulkStatusData?.result?.approved_status === "Accept";
-    const maxQty =  isBulkApproved ? parseInt(bulkStatusData?.result?.quantity) : parseInt(singleProduct?.data?.product?.max_qty)
+    const maxQty = isBulkApproved ? parseInt(bulkStatusData?.result?.quantity) : parseInt(singleProduct?.data?.product?.max_qty)
 
-    
+
     const updateCount = (operator) => {
-       
+
         if (operator === 'add') {
             if (count === maxQty) {
                 if (!isBulkApproved) {
@@ -440,19 +434,21 @@ const ProductDetails = ({ params }) => {
 
                     <div className="prd_option">
                         {
-                            productOptions?.result?.map((obj) => (
-                                <CustomSelect label={obj?.option_name}
-                                    value={selectedOption}
-                                    optionLabel={'option_label'}
-                                    optionValue={'product_id'}
-                                    data={obj.innerItems} name={'prd_options'}
-                                    onChange={(e) => {
-                                        // handleInputChange({ e })
-                                        setSelectedOption(JSON.stringify(e.target.value))
-                                        router.push('/products/' + e.target.value, { scroll: true });
-                                    }}
-                                />
-                            ))
+                            productOptions?.result?.map((obj) => {
+                                    return (
+                                        <CustomSelect label={obj?.option_name}
+                                            value={selectedOption}
+                                            optionLabel={'option_label'}
+                                            optionValue={'product_id'}
+                                            data={obj.innerItems} name={'prd_options'}
+                                            onChange={(e) => {
+                                                // handleInputChange({ e })
+                                                setSelectedOption(JSON.stringify(e.target.value))
+                                                router.push('/products/' + e.target.value, { scroll: true });
+                                            }}
+                                        />
+                                    )
+                            })
                         }
 
                     </div>
@@ -476,7 +472,7 @@ const ProductDetails = ({ params }) => {
                                                 <tr key={index} className='bulkrow' style={{ cursor: 'pointer' }} onClick={() => { setCount(parseInt(item?.start_range)) }}>
                                                     <td>{item?.start_range}</td>
                                                     <td>{item?.end_range}</td>
-                                                    <td>{'AED ' + item?.discounted_price}</td>
+                                                    <td>{'AED ' + item?.bulkpricewithvat?.toFixed(2)}</td>
                                                 </tr>
                                             )
                                         })
@@ -502,12 +498,12 @@ const ProductDetails = ({ params }) => {
                                 <CustomTypography content="(Inclusive of VAT)" color="GREY" size="MEDIUM" weight="REGULAR" />
                             </div>
                     }
-                    {
+                    {/* {
                         parseInt(singleProduct?.data?.product?.min_qty) > 1 &&
                         (
                             <CustomTypography content={`Minimum Order Quantity: ${parseInt(singleProduct?.data?.product?.min_qty)}`} color="GREY" size="MEDIUM" weight="REGULAR" />
                         )
-                    }
+                    } */}
 
                     {
                         isOutStock()
@@ -523,7 +519,7 @@ const ProductDetails = ({ params }) => {
                                     <input
                                         type="text"
                                         value={count}
-                                        min={singleProduct?.data?.product?.min_qty}
+                                        // min={singleProduct?.data?.product?.min_qty}
                                         maxLength={3}
                                         onChange={(e) => {
                                             const value = e.target.value;
@@ -637,7 +633,8 @@ const ProductDetails = ({ params }) => {
                     {
                         products.map(product => (
                             <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                                previous_price={product.previous_price} rating={product.rating} img={ProductImg}
+                            />
                         ))
                     }
                 </div>

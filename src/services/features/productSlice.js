@@ -160,6 +160,14 @@ const initialState = {
     isProductImgDeleting: false,
     isProductImgDeleted: false,
     isProductImgDeleteError: false,
+
+    isSaveForLaterCreating:false,
+    isSaveForLaterCreated:false,
+    isSaveForLaterCreateError:false,
+
+    isSaveForLaterLoading:false,
+    isSaveForLaterLoaded:false,
+    isSaveForLaterLoadError:false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
@@ -512,6 +520,29 @@ export const modifyStock = createAsyncThunk('modifyStock', async ({ data, id }, 
 export const getStockHistoryByProduct = createAsyncThunk('getStockHistoryByProduct', async ({ id }, thunkAPI) => {
     try {
         const response = await products.getStockHistoryByProduct({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+//save for later
+export const createSaveForLater = createAsyncThunk('createSaveForLater', async ({ data }, thunkAPI) => {
+    try {
+        const response = await products.createSaveForLater({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//save for later- get
+export const getSaveForLater = createAsyncThunk('getSaveForLater', async ({ }, thunkAPI) => {
+    try {
+        const response = await products.getSaveForLater();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

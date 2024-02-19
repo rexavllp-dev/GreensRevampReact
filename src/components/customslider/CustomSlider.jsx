@@ -3,7 +3,7 @@ import { Slider } from "@nextui-org/react";
 import CustomTypography from "@/library/typography/CustomTypography";
 import "./CustomSlider.scss";
 
-export default function CustomSlider({value, onChange}) {
+export default function CustomSlider({ value, onChange }) {
 
     return (
         <div className="slider-wrapper">
@@ -16,7 +16,7 @@ export default function CustomSlider({value, onChange}) {
                     <CustomTypography content={"AED " + value[1]} color="BLACK" size="SMALL" weight="MEDIUM" />
                 </div>
             </div>
-            <Slider
+            {/* <Slider
                 // label="Select a budget"
                 // formatOptions={{ style: "currency", currency: "USD" }}
                 classNames={{
@@ -37,6 +37,18 @@ export default function CustomSlider({value, onChange}) {
                         <span className="custom-thumb"></span>
                     </div>
                 )}
+            /> */}
+            <Slider
+                size="md"
+                step={10}
+                maxValue={1000}
+                minValue={0}
+                value={value}
+                onChangeEnd={onChange}
+                color="foreground"
+                showOutline={true}
+                aria-label="Temperature"
+                className="max-w-md"
             />
         </div>
     );

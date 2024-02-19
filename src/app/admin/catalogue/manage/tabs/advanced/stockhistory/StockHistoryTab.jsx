@@ -10,7 +10,7 @@ import { getStockHistoryByProduct } from '@/services/features/productSlice'
 function StockHistoryTab({ id, data }) {
 
     const [columnDefs] = useState([
-        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        { headerName: 'Order Id', field: 'order_id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
         // {
         //     headerName: 'Product', field: 'prd_name',
         // },
@@ -22,7 +22,7 @@ function StockHistoryTab({ id, data }) {
         },
         {
             headerName: 'Action', field: 'action',
-            cellRenderer: (params) => {
+            cellRenderer: (params) => {     
                 return (
                     <Chip color={params.data?.action === 'New Stock added to main' ? "success" : "danger"}
                         variant="dot">{params.data?.action === 'New Stock added to main' ? "Added" : "Reduced"}</Chip>

@@ -14,6 +14,8 @@ import NavCard from '@/components/cards/navcard/NavCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsByUser } from '@/services/features/productSlice';
 import { useSearchParams } from 'next/navigation';
+import CustomSelect from '@/library/select/custom-select/CustomSelect';
+import { Select, SelectItem } from '@nextui-org/react';
 
 
 const Search = () => {
@@ -28,7 +30,8 @@ const Search = () => {
 
     const [currentPage, setCurrentPage] = React.useState(1);
     const [filters, setFilters] = React.useState([]);
-    const [sortBy, setSortBy] = React.useState('');
+    const [sortBy, setSortBy] = React.useState('featured');
+    const [perPage, setPerPage] = React.useState('40');
     const [minPrice, setMinPrice] = React.useState(0);
     const [maxPrice, setMaxPrice] = React.useState(10000);
 
@@ -153,9 +156,55 @@ const Search = () => {
 
     ]
 
+    const perPageTypes = [
+        {
+            label: "10", value: "10",
+        },
+        {
+            label: "20", value: "20",
+        },
+        {
+            label: "30", value: "30",
+        },
+        {
+            label: "40", value: "40",
+        },
+        {
+            label: "50", value: "50",
+        }
+    ]
+
+    const sortOptions = [
+        {
+            label: 'Price low to high',
+            value: 'price_asc'
+        },
+        {
+            label: 'Price high to low',
+            value: 'price_desc'
+        },
+        {
+            label: 'Newest',
+            value: 'newest'
+        },
+        {
+            label: 'Oldest',
+            value: 'oldest'
+        },
+        {
+            label: 'Popularity',
+            value: 'featured'
+        },
+        {
+            label: 'Best Sellers',
+            value: 'bestsellers'
+        }
+    ];
+
+
     useEffect(() => {
-        dispatch(getAllProductsByUser({ page: currentPage, per_page: 40, search_query: keyword, filters, sortBy, minPrice, maxPrice }));
-    }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice]);
+        dispatch(getAllProductsByUser({ page: currentPage, search_query: keyword, filters, sortBy, minPrice, maxPrice, per_page: perPage }));
+    }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice, perPage]);
 
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
@@ -207,23 +256,77 @@ const Search = () => {
                     </div>
                 </div> */}
 
-                <div
-                    className='products-wrapper'
-                >
-                    {
-                        allProductsByUser?.data?.products?.map(product => (
-                            <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
-                                specialPrice={product?.prdPrice[0]?.specialPrice}
-                                normalPrice={product?.prdPrice[0]?.price}
-                                rating={product.rating}
-                                data={product}
-                                img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
-                                    (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
-                                    'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
-                                }
-                            />
-                        ))
-                    }
+
+                <div className="products-section ">
+                    <div className="selectsection">
+
+                        <div style={{ width: '200px' }} className='mr-3'>
+                            {/* <CustomSelect label={'Sort By'}
+                                value={sortBy} name={'sort_by'}
+                                data={sortOptions} onChange={(e) => { handleInputChange({ e }) }}
+                            /> */}
+                            <Select
+                                size={'md'}
+                                // label="Sort By"
+                                variant='bordered'
+                                labelPlacement='outside'
+                                className="max-w-xs"
+                                selectedKeys={[sortBy]}
+                                // onSelectionChange={setSortBy}
+                                onChange={(e) => {
+                                    if (e.target?.value !== sortBy) {
+                                        setSortBy(e.target.value)
+                                    }
+                                }}
+                            >
+                                {sortOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+                        </div>
+                        <div style={{ width: '100px' }}>
+                            <Select
+                                size={'md'}
+                                // label="Per Page"
+                                variant='bordered'
+                                labelPlacement='outside'
+                                className="max-w-xs"
+                                selectedKeys={[perPage]}
+                                onChange={(e) => {
+                                    if (e.target?.value !== perPage) {
+                                        setPerPage(e.target.value)
+                                    }
+                                }}
+                            >
+                                {perPageTypes.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div
+                        className='products-wrapper'
+                    >
+                        {
+                            allProductsByUser?.data?.products?.map(product => (
+                                <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                    specialPrice={product?.prdPrice[0]?.specialPrice}
+                                    normalPrice={product?.prdPrice[0]?.price}
+                                    rating={product.rating}
+                                    data={product}
+                                    img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                        (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                        'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                                    }
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
 
