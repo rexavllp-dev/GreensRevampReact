@@ -161,13 +161,13 @@ const initialState = {
     isProductImgDeleted: false,
     isProductImgDeleteError: false,
 
-    isSaveForLaterCreating:false,
-    isSaveForLaterCreated:false,
-    isSaveForLaterCreateError:false,
+    isSaveForLaterCreating: false,
+    isSaveForLaterCreated: false,
+    isSaveForLaterCreateError: false,
 
-    isSaveForLaterLoading:false,
-    isSaveForLaterLoaded:false,
-    isSaveForLaterLoadError:false,
+    isSaveForLaterLoading: false,
+    isSaveForLaterLoaded: false,
+    isSaveForLaterLoadError: false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
@@ -1210,6 +1210,41 @@ const productSlice = createSlice({
                 state.isProductImgDeleteError = true;
             })
 
+            .addCase(createSaveForLater.pending, (state, action) => {
+                state.isSaveForLaterCreating = true;
+                state.isSaveForLaterCreated = false;
+                state.isSaveForLaterCreateError = false;
+            })
+
+            .addCase(createSaveForLater.fulfilled, (state, action) => {
+                state.isSaveForLaterCreating = false;
+                state.isSaveForLaterCreated = true;
+                state.isSaveForLaterCreateError = false;
+            })
+
+            .addCase(createSaveForLater.rejected, (state, action) => {
+                state.isSaveForLaterCreating = false;
+                state.isSaveForLaterCreated = false;
+                state.isSaveForLaterCreateError = true;
+            })
+
+            .addCase(getSaveForLater.pending, (state, action) => {
+                state.isSaveForLaterLoading = true;
+                state.isSaveForLaterLoaded = false;
+                state.isSaveForLaterLoadError = false;
+            })
+
+            .addCase(getSaveForLater.fulfilled, (state, action) => {
+                state.isSaveForLaterLoading = false;
+                state.isSaveForLaterLoaded = true;
+                state.isSaveForLaterLoadError = false;
+            })
+
+            .addCase(getSaveForLater.rejected, (state, action) => {
+                state.isSaveForLaterLoading = false;
+                state.isSaveForLaterLoaded = false;
+                state.isSaveForLaterLoadError = true;
+            })
     }
 })
 

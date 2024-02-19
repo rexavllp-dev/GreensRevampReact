@@ -288,11 +288,11 @@ export const products = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
-    }
+    },
 
     getSaveForLater: () => {
         return new Promise((resolve, reject) => {
-            Axios.post('/saveforlater/get-all-save-for-later')
+            Axios.get('/saveforlater/get-all-save-for-later')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
