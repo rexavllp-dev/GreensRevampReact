@@ -286,31 +286,47 @@ const Cart = () => {
                         <></>
                 }
             </div>
-            <div className="itemcard-wrapper">
-                <div className="header">
-                    <CustomTypography content="Products Saved for later" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            {
+                (saveForLater?.result?.savedProducts?.length > 0) &&
+                <div className="itemcard-wrapper">
+                    <div className="header">
+                        <CustomTypography content="Products Saved for later" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'}
-                            iconColor={'#32893B'} icon={"ArrowLeft"}
-                            onClick={() => handleNav('recommendedProdRef', 'left')}
-                        />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                            backgroundColor={'#32893B'} icon={"ArrowRight"}
-                            onClick={() => handleNav('recommendedProdRef', 'right')}
-                        />
+                        <div className="scrollbuttons">
+                            <CustomIconButton variant={'secondary'}
+                                iconColor={'#32893B'} icon={"ArrowLeft"}
+                                onClick={() => handleNav('recommendedProdRef', 'left')}
+                            />
+                            <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                                backgroundColor={'#32893B'} icon={"ArrowRight"}
+                                onClick={() => handleNav('recommendedProdRef', 'right')}
+                            />
+                        </div>
+
                     </div>
 
+                    <div className="items" ref={recommendedProdRef}>
+                        {
+                            saveForLater?.result?.savedProducts?.map(product => (
+                                // <ProductCard key={product.id} title={product.title} price={product.price} data={product}
+                                //     previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+
+                                <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                    specialPrice={product?.prdPrice[0]?.specialPrice}
+                                    normalPrice={product?.prdPrice[0]?.price}
+                                    rating={product.rating}
+                                    data={product}
+                                    img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                        (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                        'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                                    }
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
-                <div className="items" ref={recommendedProdRef}>
-                    {
-                        saveForLater?.result?.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
-                        ))
-                    }
-                </div>
-            </div>
+            }
+
             <div className="itemcard-wrapper">
                 <div className="header">
                     <CustomTypography content="Add products from your wishlist" weight="SEMI-BOLD" color="BLACK" size="LARGE" />

@@ -223,10 +223,10 @@ const Search = () => {
 
             {/* <BreadCrumbs /> */}
             <div className="filterbtn">
-                <div className="sort" >
+                {/* <div className="sort" >
                     <GoSortDesc />
                     <CustomTypography content="Sort" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-SMALL" />
-                </div>
+                </div> */}
                 <div className="filter" onClick={() => setShowFilter(true)}>
                     <CiFilter />
                     <CustomTypography content="Filter" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-SMALL" />

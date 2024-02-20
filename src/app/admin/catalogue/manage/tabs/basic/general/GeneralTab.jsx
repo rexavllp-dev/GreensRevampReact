@@ -17,6 +17,7 @@ import { createProduct, getSingleProduct, updateProduct } from '@/services/featu
 import { getAllBrands } from '@/services/features/brandSlice';
 import { FaRegEdit } from 'react-icons/fa';
 import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
+import CustomCheckbox from '@/library/checkbox/CustomCheckbox';
 
 const GeneralTab = ({ id, data }) => {
 
@@ -87,6 +88,7 @@ const GeneralTab = ({ id, data }) => {
         categories: [],
         // prd_status: false,
         prd_dashboard_status: false,
+        show_expiry_on_dashboard: false,
         dimensions_and_more_info: '',
         use_and_care: '',
         shipping_and_returns: ''
@@ -108,6 +110,7 @@ const GeneralTab = ({ id, data }) => {
                 categories: [],
                 // prd_status: data?.data?.product?.prd_status,
                 prd_dashboard_status: data?.data?.product?.prd_dashboard_status,
+                show_expiry_on_dashboard: data?.data?.product?.show_expiry_on_dashboard,
                 dimensions_and_more_info: data?.data?.product?.dimensions_and_more_info,
                 use_and_care: data?.data?.product?.use_and_care,
                 shipping_and_returns: data?.data?.product?.shipping_and_returns
@@ -229,7 +232,7 @@ const GeneralTab = ({ id, data }) => {
                         onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
                     />
-                     <CustomTextarea label={'Shipping & Returns'}
+                    <CustomTextarea label={'Shipping & Returns'}
                         placeholder={'Shipping & Returns'}
                         name={'shipping_and_returns'} value={formData.shipping_and_returns}
                         onChange={(e) => { handleInputChange({ e }) }}
@@ -254,6 +257,13 @@ const GeneralTab = ({ id, data }) => {
                             // setErrors((prevErrors) => ({ ...prevErrors, trade_license_expiry: { error: false, message: '' } }));
                         }}
                         disabled={isDisabled}
+                    />
+                    <CustomCheckbox
+                        isRequired={false}
+                        label={<p>Show expiry on dashboard</p>}
+                        name='checkbox'
+                        value={formData.show_expiry_on_dashboard}
+                        onChange={(value) => { setFormData({ ...formData, show_expiry_on_dashboard: value }) }}
                     />
                     <CustomSelect label={'Product Return Type'} value={formData.prd_return_type} data={returnTypes}
                         name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} disabled={isDisabled} />
@@ -281,7 +291,7 @@ const GeneralTab = ({ id, data }) => {
                         onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
                     />
-                   
+
 
                     {/* <CustomToggleButton label='Dashboard Status' value={formData.prd_dashboard_status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, prd_dashboard_status: value })) }}

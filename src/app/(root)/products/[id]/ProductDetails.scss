@@ -52,8 +52,19 @@
 
       .prd_item {
         display: flex;
-        align-items: center;
-        gap: 20px;
+        gap: 10px;
+        .sku_code {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .item_code {
+          border-left: 2px solid #6b6b6b;
+          padding-left: 10px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
       }
 
       .prd_variant {
@@ -112,7 +123,7 @@
       max-width: 450px;
     }
   }
-  
+
   .itemcard-wrapper {
     display: flex;
     flex-direction: column;

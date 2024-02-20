@@ -34,16 +34,22 @@
   .products-section {
     width: 100%;
 
-    .selectsection{
+    .selectsection {
       width: 100%;
       display: flex;
       justify-content: flex-end;
+
+      @include for_breakpoint("small-screen", "mobile") {
+        margin-top: 20px;
+        justify-content: space-between;
+      }
     }
     .products-wrapper {
       display: grid;
       width: 100%;
       justify-content: left;
       grid-template-columns: repeat(auto-fit, minmax(280px, auto));
+      grid-gap: 4px;
 
       @include for_breakpoint("small-screen", "mobile") {
         grid-template-columns: repeat(auto-fit, minmax(164px, auto));
@@ -104,7 +110,8 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      width: 50%;
+      margin-left: 20px;
+      // width: 50%;
     }
   }
 

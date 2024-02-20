@@ -47,6 +47,7 @@ const InventoryTab = ({ id, data }) => {
     const [formData, setFormData] = React.useState({
         sku: '',
         ein_code: '',
+        item_code: '',
         stock_availability: 'In stock',
         inventory_management: false,
         product_quantity: 0,
@@ -67,6 +68,7 @@ const InventoryTab = ({ id, data }) => {
             setFormData((prev) => ({
                 sku: data?.data?.product?.sku,
                 ein_code: data?.data?.product?.ein_code,
+                item_code: data?.data?.product?.item_code,
                 stock_availability: data?.data?.product?.stock_availability,
                 inventory_management: JSON.stringify(data?.data?.product?.inventory_management),
                 product_quantity: data?.data?.product?.product_quantity || 0,
@@ -114,6 +116,7 @@ const InventoryTab = ({ id, data }) => {
         const newData = {
             sku: formData.sku,
             ein_code: formData.ein_code,
+            item_code: formData.item_code,
             stock_availability: formData.stock_availability,
             inventory_management: JSON.parse(formData.inventory_management),
             product_quantity: formData.product_quantity,
@@ -152,6 +155,10 @@ const InventoryTab = ({ id, data }) => {
         }
     }
 
+    const handleChangeBestSeller = (value) => {
+        setFormData((prev) => ({ ...prev, best_seller: value }))
+        
+    }
 
 
 
@@ -183,6 +190,13 @@ const InventoryTab = ({ id, data }) => {
                         placeholder='EIN Code' label={'EIN Code'}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.ein_code}
+                        disabled={isDisabled}
+                    />
+                    <CustomInput name='item_code' type='text'
+                        maxLength={100}
+                        placeholder='Item Code' label={'Item Code'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.item_code}
                         disabled={isDisabled}
                     />
 
@@ -250,7 +264,9 @@ const InventoryTab = ({ id, data }) => {
                         disabled={isDisabled}
                     />
                     <CustomToggleButton label='Best Seller' value={formData.best_seller}
-                        onChange={(value) => { setFormData((prev) => ({ ...prev, best_seller: value })) }}
+                        onChange={(value) => {
+                            handleChangeBestSeller(value)
+                        }}
                         disabled={isDisabled}
                     />
                 </div>

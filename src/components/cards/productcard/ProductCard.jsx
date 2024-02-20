@@ -64,20 +64,37 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
           />
 
         </div>
+        <div className="topbadgecontainer">
+          {
+            // isOutStock() ?
+            //   <Badge color={'out-of-stock'}
+            //     label={'Out of Stock'}
+            //   />
+            //   :
+            (data?.best_seller ?
+              <Badge color={'best-seller'}
+                label={'Best Seller'}
+              />
+              :
+              <></>
+            )
+          }
+
+          {/* <Badge color={'sale'} label={'Sale'} /> */}
+        </div>
         <div className="badgecontainer">
           {
             isOutStock() ?
               <Badge color={'out-of-stock'}
                 label={'Out of Stock'}
               />
+              // :
+              // (data?.best_seller ?
+              //   <Badge color={'best-seller'}
+              //     label={'Best Seller'}
+              //   />
               :
-              (data?.best_seller ?
-                <Badge color={'best-seller'}
-                  label={'Best Seller'}
-                />
-                :
-                <></>
-              )
+              <></>
           }
 
           {/* <Badge color={'sale'} label={'Sale'} /> */}

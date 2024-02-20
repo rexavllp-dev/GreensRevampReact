@@ -27,6 +27,7 @@ export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, 
         <input style={{ width: '100%' }} className={isInvalid ? 'react_custom_time invalid-custom-time' : 'react_custom_time'} type='text'
             placeholder='Select Date'
             value={value}
+            onChange={onChange}
             onClick={onClick} ref={ref}
             disabled={disabled}
         />

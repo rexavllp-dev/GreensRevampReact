@@ -19,7 +19,7 @@
   color: #111111;
 
   @include for_breakpoint("small-screen", "mobile") {
-    font-size: 12px;
+    // font-size: 12px;
   }
 }
 

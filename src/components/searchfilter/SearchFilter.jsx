@@ -7,6 +7,7 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import { GoArrowLeft } from "react-icons/go";
 import CustomRadioBox from '@/library/radiobox/CustomRadioBox'
 import { toast } from 'react-toastify'
+import { IoMdClose } from 'react-icons/io'
 
 const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinPrice, setMaxPrice }) => {
 
@@ -109,6 +110,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
   const handleResetFilter = () => {
     setFilters([])
     // setSortBy('')
+    onClose()
     setAvailibility('')
     setPriceRange([0, 10000]);
     setMinPrice(0);
@@ -139,32 +141,32 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
     // })
 
 
-    if (availbility === 'In stock') {
-      setFilters([
-        {
-          column: 'product_inventory.stock_availability',
-          operator: '=',
-          value: 'In stock'
-        }
-      ])
-    } else if (availbility === 'Out of stock') {
-      setFilters([
-        {
-          column: 'product_inventory.stock_availability',
-          operator: '=',
-          value: 'Out of stock'
-        }
-      ])
-    }
+    // if (availbility === 'In stock') {
+    //   setFilters([
+    //     {
+    //       column: 'product_inventory.stock_availability',
+    //       operator: '=',
+    //       value: 'In stock'
+    //     }
+    //   ])
+    // } else if (availbility === 'Out of stock') {
+    //   setFilters([
+    //     {
+    //       column: 'product_inventory.stock_availability',
+    //       operator: '=',
+    //       value: 'Out of stock'
+    //     }
+    //   ])
+    // }
 
-    setMaxPrice(priceRange[1])
-    setMinPrice(priceRange[0])
+    // setMaxPrice(priceRange[1])
+    // setMinPrice(priceRange[0])
 
     // setFilters((prev)=>([...prev, {
 
     // }]))
 
-    setSortBy(sort)
+    // setSortBy(sort)
     toast.success("Filters Applied Successfully")
   }
 
@@ -191,13 +193,22 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
 
   return (
     <div className='searchfilter-wrapper'>
-      <div className="title" onClick={() => onClose()}>
+      <div className="title"
+      // onClick={() => onClose()}
+      >
         {/* <GoArrowLeft size={22} /> */}
         {/* <CustomTypography content="Filters" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-SMALL" /> */}
         <CustomTypography content="Filters" weight="SEMI-BOLD" color="BLACK" size="MEDIUM-LARGE" />
         <button className='txtbtn' onClick={handleResetFilter}>
           Reset
         </button>
+        <div className="closebtn">
+          <IoMdClose size={24}
+            //  color='#FFFFFF' 
+            onClick={onClose}
+          />
+        </div>
+
       </div>
 
       <Accordion
@@ -289,7 +300,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         <CustomSlider value={priceRange} onChange={setPriceRange} />
       </div>
 
-      {/* <div className="footer">
+      <div className="footer">
         <button className='teritarybtn' onClick={() => {
           handleResetFilter()
         }}>
@@ -302,7 +313,7 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
         }>
           Apply
         </button >
-      </div> */}
+      </div>
     </div>
   )
 }

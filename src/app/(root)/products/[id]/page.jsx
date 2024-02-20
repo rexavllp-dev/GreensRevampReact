@@ -397,11 +397,21 @@ const ProductDetails = ({ params }) => {
                     </div>
 
                     <div className="prd_item">
-                        <CustomTypography content="SKU:" color="GRAY" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content={singleProduct?.data?.product?.sku} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        {
+                            singleProduct?.data?.product?.sku &&
+                            <div className='sku_code'>
+                                <CustomTypography content="SKU:" color="GRAY" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content={singleProduct?.data?.product?.sku} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                            </div>
+                        }
 
-                        {/* <CustomTypography content="Item Code:" color="GRAY" size="MEDIUM" weight="SEMI-BOLD" />
-                    <CustomTypography content="LCU2134" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" /> */}
+                        {
+                            singleProduct?.data?.product?.item_code &&
+                            <div className='item_code'>
+                                <CustomTypography content="Item Code:" color="GRAY" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content={singleProduct?.data?.product?.item_code} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                            </div>
+                        }
                     </div>
 
                     {
@@ -435,19 +445,19 @@ const ProductDetails = ({ params }) => {
                     <div className="prd_option">
                         {
                             productOptions?.result?.map((obj) => {
-                                    return (
-                                        <CustomSelect label={obj?.option_name}
-                                            value={selectedOption}
-                                            optionLabel={'option_label'}
-                                            optionValue={'product_id'}
-                                            data={obj.innerItems} name={'prd_options'}
-                                            onChange={(e) => {
-                                                // handleInputChange({ e })
-                                                setSelectedOption(JSON.stringify(e.target.value))
-                                                router.push('/products/' + e.target.value, { scroll: true });
-                                            }}
-                                        />
-                                    )
+                                return (
+                                    <CustomSelect label={obj?.option_name}
+                                        value={selectedOption}
+                                        optionLabel={'option_label'}
+                                        optionValue={'product_id'}
+                                        data={obj.innerItems} name={'prd_options'}
+                                        onChange={(e) => {
+                                            // handleInputChange({ e })
+                                            setSelectedOption(JSON.stringify(e.target.value))
+                                            router.push('/products/' + e.target.value, { scroll: true });
+                                        }}
+                                    />
+                                )
                             })
                         }
 
@@ -597,7 +607,7 @@ const ProductDetails = ({ params }) => {
                     <div className="items" ref={relatedProdRef}>
                         {
                             relatedProducts?.result?.relatedProducts?.map(product => (
-                                <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                <ProductCard id={product.productId} key={product.product_id} title={product.prd_name}
                                     specialPrice={product?.prdPrice[0]?.specialPrice}
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
