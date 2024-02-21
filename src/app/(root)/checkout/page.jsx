@@ -7,201 +7,163 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BsTruck } from "react-icons/bs";
 import { FaMinus, FaPlus, FaStore } from 'react-icons/fa';
 import './Checkout.scss';
-import CustomInput from '@/library/input/custominput/CustomInput';
-import CustomTextarea from '@/library/textarea/CustomTextarea';
-import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput';
-import CustomRadioBox from '@/library/radiobox/CustomRadioBox';
-import Image from 'next/image';
+import ShippingAddressStep from './steps/ShippingAddressStep';
+import OrderConfirmationStep from './steps/OrderConfirmationStep';
+import PaymentMethodStep from './steps/PaymentMethodStep';
+import { Divider, Tooltip } from '@nextui-org/react';
+import { getCartProducts } from '@/services/features/cartSlice';
+import InfoIcon from '@/components/customicons/InfoIcon';
 
 const Checkout = () => {
 
     const dispatch = useDispatch();
-    const [formData, setFormData] = React.useState({
 
+    const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
+
+    const [currentStep, setCurrentStep] = useState(1);
+
+    const [formData, setFormData] = React.useState({
+        customer_name: "",
+        customer_email: "",
+        customer_phone_country_code: "",
+        customer_phone: "",
+        address_line: "",
+        flat_villa: "",
+        zip_code: "",
+        note: "",
+        payment_method: "",
+        shipping_method: "Shipping",
+        contactless_delivery: ""
     })
-    const [addressType, setAddressType] = React.useState('home')
+
+    const steps = [
+        {
+            title: 'Shipping Info', component: <ShippingAddressStep formData={formData} setFormData={setFormData}
+                onSubmit={() => { setCurrentStep(2) }} />
+        },
+        {
+            title: 'Order Confirmation', component: <OrderConfirmationStep formData={formData} setFormData={setFormData}
+                cartProducts={cartProducts}
+                onSubmit={() => { setCurrentStep(3) }} />
+        },
+        {
+            title: 'Payment Method', component: <PaymentMethodStep formData={formData} setFormData={setFormData}
+                onSubmit={() => { setCurrentStep(4) }} />
+        }
+    ];
 
 
     useEffect(() => {
-    }, [])
+        dispatch(getCartProducts({}));
+    }, [productQuantityUpdated, productRemovedFromCart])
 
+    
 
-    const handlePhoneChange = (name, value, countryCode) => {
-        const re = /^[0-9\b]+$/;
-        // if value is not blank, then test the regex
-        if (value === '' || re.test(value)) {
-            setFormData((prev) => ({
-                ...prev, [name]: value, usr_mobile_country_code: countryCode
-            }))
-        }
-    }
-
-    const handleInputChange = ({ e, country }) => {
-
-        if (e.target.name === 'fullname') {
-            const re = /^[A-Za-z\s'.-]+$/;
-            // if value is not blank, then test the regex
-            if (e.target?.value === '' || re.test(e.target?.value)) {
-                setFormData((prev) => ({
-                    ...prev, [e.target.name]: e.target.value
-                }))
-            }
-            // }
-
-        } else {
-            setFormData((prev) => ({
-                ...prev, [e.target.name]: e.target.value
-            }))
-        }
-    }
 
     return (
         <div className='checkout-wrapper'>
             <div className="checkout">
                 <div className="checkoutsteps">
-                    <div className="step">
-                        <div className="title">
-                            <CustomTypography content="1. Shipping Address" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-                        </div>
 
-                        <div className="checkoutform">
-                            <CustomInput name='fullname' type='text'
-                                maxLength={100}
-                                placeholder='Full Name' label={'Full Name'}
-                                onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.fullname}
-                            />
-                            <GoogleMap formData={formData} setFormData={setFormData}
-                                handleInputChange={handleInputChange} />
-                            <CustomInput name='addressline_one' type='text'
-                                maxLength={100}
-                                placeholder='Full Name' label={'Full Name'}
-                                onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.addressline_one}
-                            />
-                            <CustomTextarea label={'Delivery Remarks'}
-                                placeholder={'Delivery Remarks'}
-                                name={'delivery_remarks'} value={formData.delivery_remarks}
-                                onChange={(e) => { handleInputChange({ e }) }}
-                            />
+                    {/* {renderStep()} */}
 
-                            <CustomPhoneInput
-                                isRequired={true}
-                                name={'mobile'}
-                                value={formData.mobile}
-                                country={formData.usr_mobile_country_code}
-                                placeholder='Mobile Number'
-                                label='Mobile Number'
-                                onChange={(value, country) => {
-                                    handlePhoneChange('mobile', value, country)
-                                }}
-                            />
-                        </div>
-                        <div className="flex justify-end">
-                            <CustomButton label='Use this address' variant='primary' onClick={() => { }} />
-                        </div>
-                    </div>
-
-
-
-
-
-
-                    <div className="step">
-                        <div className="productcard">
-                            <div className="title">
-                                <CustomTypography content="2. Order Confirmation" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                    {/* <div> */}
+                    {steps.map((step, index) => (
+                        <>
+                            <div className="title" key={index} onClick={() => setCurrentStep(index + 1)}>
+                                <CustomTypography content={index + 1 + '.' + step.title}
+                                    color={index === (currentStep - 1) ? "BLACK" : "GRAY-LIGHT"}
+                                    size="LARGE" weight="SEMI-BOLD"
+                                />
                             </div>
-                            <div className="content">
-                                <div className="left">
-                                    <div className="image-wrapper">
-                                        <div className="image">
-                                            <Image width={100} height={100}
-                                                alt="product"
-                                                src={'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="details">
-                                    <div className="title">
-                                        <CustomTypography content={"Product Title"}
-                                            color='BLACK' style={{ borderBottom: '1px solid #111', display: 'inline' }}
-                                            size='MEDIUM' weight='MEDIUM' />
-                                    </div>
-
-                                    <div className="flex flex-col gap-1">
-                                        <CustomTypography content={"AED 30"} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                        <CustomTypography content="Quantity - 1" color="BLACK" size="MEDIUM" weight="REGULAR" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end">
-                            <CustomButton label='Continue' variant='primary' onClick={() => { }} />
-                        </div>
-                    </div>
-
-
-
-
-
-
-
-
-
-
-                    <div className="step">
-                        <div className="title mb-3">
-                            <CustomTypography content="3. Payment Method" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-                        </div>
-
-                        <CustomRadioBox
-                            value={addressType}
-                            onChange={(value) => setAddressType(value)}
-                            items={
-                                [{
-                                    id: 1,
-                                    title: 'Credit Card/ Debit Card',
-                                    value: 'price_asc'
-                                },
-                                {
-                                    id: 2,
-                                    title: 'Cash on Delivery',
-                                    value: 'price_desc'
-                                },
-                                ]
-                            } />
-
-                        <div className="flex justify-end">
-                            <CustomButton label='Continue' variant='primary' onClick={() => { }} />
-                        </div>
-                    </div>
-
-
+                            {
+                                index !== (currentStep - 1) &&
+                                <Divider className='mt-4 mb-4' />
+                            }
+                            {index < steps.length - 1 && <div className="divider"></div>}
+                            {
+                                (index === (currentStep - 1)) && (
+                                    <>
+                                        {steps[index].component}
+                                    </>
+                                )
+                            }
+                        </>
+                    ))}
+                    {/* </div> */}
                 </div>
 
                 <div className="carttotal">
                     <div className="item">
-                        <CustomTypography content={`Subtotal ${'100'} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content={"AED 96"} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={`Subtotal ${cartProducts?.result?.totals?.totalProductCount} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
 
+                    {
+                        parseFloat(cartProducts?.result?.totals?.totalDiscount) > 0 &&
+                        <div className="item">
+                            <CustomTypography content="Discount" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                            <CustomTypography content={"-AED " + cartProducts?.result?.totals?.totalDiscount} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        </div>
+                    }
+
+
                     <div className="item">
-                        <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                        <CustomTypography content="FREE" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                        <div className="flex items-center gap-2">
+                            <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            <Tooltip
+                                content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
+                                // placement='right-end'
+
+                                // classNames={{
+                                //     base: [
+                                //         // arrow color
+                                //         "before:bg-neutral-400 dark:before:bg-white",
+                                //     ],
+                                //     content: [
+                                //         "py-2 px-4 shadow-xl",
+                                //         "text-black bg-gradient-to-br from-white to-neutral-400",
+                                //     ],
+                                // }}
+                            >
+                                <div className="infoicon">
+                                    <InfoIcon />
+                                </div>
+                            </Tooltip>
+                        </div>
+                        {
+                            parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
+                                <div className='flex items-center gap-2'>
+                                    <CustomTypography content="30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                    <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                </div>
+                                :
+                                <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                        }
                     </div>
+
+
+
+                    {/* <div className="item">
+                        <CustomTypography content="Coupon  #FIRSTHI15 " color="BLACK" size="MEDIUM" weight="REGULAR" />
+                        <CustomTypography content="-AED 20" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                    </div>
+                    <div className="item">
+                        <CustomTypography content="Reward Points 2000" color="BLACK" size="MEDIUM" weight="REGULAR" />
+                        <CustomTypography content="-AED 20" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                </div> */}
 
                     <div className="item">
                         <CustomTypography content="VAT 5%" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        {/* <CustomTypography content="AED 80" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" /> */}
+                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductVAT} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
                     <div className="item">
                         <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                        <CustomTypography content={"AED 105"} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
+
                 </div>
+
             </div>
         </div>
     )

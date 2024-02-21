@@ -24,7 +24,7 @@ const CompanyRegister = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const currentDate = new Date();
-    const maxDate = new Date(currentDate.getFullYear() + 2, currentDate.getMonth(), currentDate.getDate());
+    const maxDate = new Date(currentDate.getFullYear() + 10, currentDate.getMonth(), currentDate.getDate());
 
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;

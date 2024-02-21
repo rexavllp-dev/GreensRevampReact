@@ -84,7 +84,7 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                             <CustomTypography content="Subtotal" color="BLACK" size="SMALL" weight="SEMI-BOLD" />
                                             <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="SMALL" weight="SEMI-BOLD" />
                                         </div>
-                                        <div className='flex justify-between w-full'>
+                                        {/* <div className='flex justify-between w-full'>
                                             <CustomTypography content="Discount" color="BLACK" size="SMALL" weight="SEMI-BOLD" />
                                             <CustomTypography content={"- AED " + cartProducts?.result?.totals?.totalDiscount} color="GREY" size="SMALL" weight="SEMI-BOLD" />
                                         </div>
@@ -99,7 +99,7 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                         <div className='flex justify-between w-full'>
                                             <CustomTypography content="Grand Total (Including VAT)" color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
                                             <CustomTypography content={"AED " + cartProducts?.result?.totals?.grandTotal} color="GREY" size="REGULAR" weight="SEMI-BOLD" />
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </>
                             }
@@ -117,7 +117,6 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                     {/* <CustomButton label='Checkout' onClick={toggleDrawer} variant='transparent' /> */}
                                 </div>
                             </CardFooter>
-
                         }
                     </Card>
 

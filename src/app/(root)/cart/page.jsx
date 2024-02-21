@@ -13,6 +13,8 @@ import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../public/images';
 import { MdRemoveShoppingCart } from 'react-icons/md';
 import { getSaveForLater } from '@/services/features/productSlice';
+import { Tooltip } from '@nextui-org/react';
+import InfoIcon from '@/components/customicons/InfoIcon';
 
 const products = [
     {
@@ -141,7 +143,7 @@ const Cart = () => {
                                             :
                                             <div className="shipping-details">
                                                 <CustomTypography weight='SEMI-BOLD' content="Store pickup, Open 9:00AM - 6:00PM" color="BLACK" size="MEDIUM" />
-                                                <CustomTypography weight='REGULAR' content="Pickup charge of AED 5 on orders below AED50." color="BLACK" size="MEDIUM" />
+                                                <CustomTypography weight='REGULAR' content="Pickup charge of AED 10 on orders below AED 50." color="BLACK" size="MEDIUM" />
                                             </div>
                                     }
                                 </div>
@@ -184,8 +186,37 @@ const Cart = () => {
 
 
                                 <div className="item">
-                                    <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                    <div className="flex items-center gap-2">
+                                        <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                        <Tooltip
+                                            content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
+                                            placement='right-end'
+
+                                            classNames={{
+                                                base: [
+                                                    // arrow color
+                                                    "before:bg-neutral-400 dark:before:bg-white",
+                                                ],
+                                                content: [
+                                                    "py-2 px-4 shadow-xl",
+                                                    "text-black bg-gradient-to-br from-white to-neutral-400",
+                                                ],
+                                            }}
+                                        >
+                                            <div className="infoicon">
+                                                <InfoIcon />
+                                            </div>
+                                        </Tooltip>
+                                    </div>
+                                    {
+                                        parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
+                                            <div className='flex items-center gap-2'>
+                                                <CustomTypography content="30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                                <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                            </div>
+                                            :
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                    }
                                 </div>
 
 

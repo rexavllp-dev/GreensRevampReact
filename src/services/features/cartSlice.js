@@ -45,7 +45,6 @@ export const addProductToCart = createAsyncThunk('addProductToCart', async ({ da
         //     return config;
         // });
 
-        console.log(response)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

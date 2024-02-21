@@ -255,18 +255,34 @@ const ProductDetails = ({ params }) => {
         }
     }
 
+    // const isOutStock = () => {
+    //     if (singleProduct?.data?.product?.stock_availability === 'Out of stock') {
+    //         return true
+    //     } else if (singleProduct?.data?.product?.inventory_management === 'true' || singleProduct?.data?.product?.inventory_management === true) {
+    //         if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
+    //             return true;
+    //         }
+    //         return false
+    //     } else {
+    //         return false
+    //     }
+    // }
+
     const isOutStock = () => {
         if (singleProduct?.data?.product?.stock_availability === 'Out of stock') {
-            return true
+          return true
         } else if (singleProduct?.data?.product?.inventory_management === 'true' || singleProduct?.data?.product?.inventory_management === true) {
-            if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
-                return true;
-            }
-            return false
-        } else {
-            return false
+          if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
+            return true;
+          }
+          return false
         }
-    }
+        else if (singleProduct?.data?.product?.inventory_id === null || singleProduct?.data?.product?.inventory_id === undefined) {
+          return true;
+        } else {
+          return false
+        }
+      }
 
     const convertTimestampToDate = (timestamp) => {
         const date = new Date(timestamp);

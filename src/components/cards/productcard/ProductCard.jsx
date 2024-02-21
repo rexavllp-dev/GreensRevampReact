@@ -43,6 +43,9 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
         return true;
       }
       return false
+    }
+    else if (data?.inventory_id === null || data?.inventory_id === undefined) {
+      return true;
     } else {
       return false
     }

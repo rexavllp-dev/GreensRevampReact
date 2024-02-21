@@ -6,16 +6,37 @@ import { useDispatch } from 'react-redux'
 import { deleteProductFromCart, updateProductQuantity } from '@/services/features/cartSlice'
 import { toast } from 'react-toastify'
 import CountButton from '@/library/buttons/countbtn/CountButton'
+import React from 'react'
 
 export default function MiniCartItem({ data }) {
     const dispatch = useDispatch();
 
+    const [count, setCount] = React.useState(data?.quantity);
+
+
+    React.useEffect(()=>{
+        setCount(data?.quantity)
+    }, [data?.quantity])
+
     const updateCount = (operator) => {
-        const newData = {
+        let newData = {
             productId: data?.productId,
-            // newQuantity: parseInt(data?.quantity) + 1,
+            newQuantity: 1,
             operator: operator
         }
+        dispatch(updateProductQuantity({ data: newData }))
+    }
+
+    const handleUpdateQuantity = (quantity) => {
+        let updateQty = isNaN(quantity) ? 0 : quantity;
+        // newQuantity = updateQty > 0 ? updateQty : 0
+
+        let newData = {
+            productId: data?.productId,
+            newQuantity: quantity,
+            operator: 'add'
+        }
+
         dispatch(updateProductQuantity({ data: newData }))
     }
 
@@ -53,16 +74,25 @@ export default function MiniCartItem({ data }) {
                     <button onClick={() => updateCount('reduce')}>-</button>
                     <input
                         type="text"
-                        value={data.quantity}
+                        value={count}
+                        // onBlur
                         // min={singleProduct?.data?.product?.min_qty}
                         maxLength={3}
                         onChange={(e) => {
                             const value = e.target.value;
-                            // Check if the value is a valid number, within the range, and not exceeding the maximum length
-                            // if (!isNaN(value) && value >= 0 && value <= maxQty) {
-                            //     setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
-                            // }
+                            setCount(value)
                         }}
+                        onBlur={(e) => {
+                            const value = e.target.value;
+                            handleUpdateQuantity(value);
+                        }}
+                        // onChange={(e) => {
+                        //     const value = e.target.value;
+                        //     // Check if the value is a valid number, within the range, and not exceeding the maximum length
+                        //     if (!isNaN(value) && value >= 0) {
+                        //         setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
+                        //     }
+                        // }}
                     />
 
                     <button onClick={() => updateCount('add')}>+</button>
