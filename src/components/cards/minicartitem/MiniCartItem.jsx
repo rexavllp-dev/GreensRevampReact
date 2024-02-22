@@ -7,14 +7,16 @@ import { deleteProductFromCart, updateProductQuantity } from '@/services/feature
 import { toast } from 'react-toastify'
 import CountButton from '@/library/buttons/countbtn/CountButton'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function MiniCartItem({ data }) {
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const [count, setCount] = React.useState(data?.quantity);
 
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         setCount(data?.quantity)
     }, [data?.quantity])
 
@@ -26,18 +28,43 @@ export default function MiniCartItem({ data }) {
         }
         dispatch(updateProductQuantity({ data: newData }))
     }
+    const handleUpdateQuantity = (newQuantity) => {
+        if (isNaN(parseInt(newQuantity))) {
+            toast.error("Invalid new quantity. Please enter a valid number.");
+            setCount(data?.quantity);
+            return;
+        }
 
-    const handleUpdateQuantity = (quantity) => {
-        let updateQty = isNaN(quantity) ? 0 : quantity;
-        // newQuantity = updateQty > 0 ? updateQty : 0
+        let updatingQuantity = Math.abs(newQuantity - parseInt(data?.quantity));
+        let operator;
+
+        if (newQuantity === parseInt(data?.quantity)) {
+            console.log("New quantity is the same as the old quantity.");
+            return;
+        }
+
+        if (newQuantity > parseInt(data?.quantity)) {
+            operator = 'add';
+        } else {
+            operator = 'reduce';
+        }
 
         let newData = {
             productId: data?.productId,
-            newQuantity: quantity,
-            operator: 'add'
+            newQuantity: updatingQuantity,
+            operator: operator
         }
 
-        dispatch(updateProductQuantity({ data: newData }))
+        dispatch(updateProductQuantity({ data: newData })).then((res)=>{
+            if(res.payload?.success){
+                // toast.success(res.payload?.message);
+            }else {
+                toast.error(res.payload?.message);
+                setCount(data?.quantity);
+            }
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
 
     const handleRemoveItemFromCart = () => {
@@ -55,16 +82,22 @@ export default function MiniCartItem({ data }) {
     return (
         <div className="mini-cart-item">
             <div className="image-wrapper">
-                <div className="image">
+                <div className="image cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <Image width={120} height={120} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />
                 </div>
             </div>
             <div className="details">
-                <div className="title">
+                <div className="title" onClick={() => router.push('/products/' + data?.productId)}>
                     <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="MEDIUM" />
                 </div>
 
-                <div className="others">
+                <div className="others flex mb-1" onClick={() => router.push('/products/' + data?.productId)}>
+                    {/* <CustomTypography
+                    content={data?.quantity + " x " + "AED " + parseFloat(data?.priceVat?.toFixed(2))} 
+                    style={{
+                        textDecoration:'line-through'
+                    }}
+                    color="BLACK" size="SMALL" weight="MEDIUM" /> */}
                     <CustomTypography content={data?.quantity + " x " + "AED " + parseFloat(data?.priceVat?.toFixed(2))} color="BLACK" size="SMALL" weight="MEDIUM" />
                     {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
@@ -86,13 +119,13 @@ export default function MiniCartItem({ data }) {
                             const value = e.target.value;
                             handleUpdateQuantity(value);
                         }}
-                        // onChange={(e) => {
-                        //     const value = e.target.value;
-                        //     // Check if the value is a valid number, within the range, and not exceeding the maximum length
-                        //     if (!isNaN(value) && value >= 0) {
-                        //         setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
-                        //     }
-                        // }}
+                    // onChange={(e) => {
+                    //     const value = e.target.value;
+                    //     // Check if the value is a valid number, within the range, and not exceeding the maximum length
+                    //     if (!isNaN(value) && value >= 0) {
+                    //         setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
+                    //     }
+                    // }}
                     />
 
                     <button onClick={() => updateCount('add')}>+</button>

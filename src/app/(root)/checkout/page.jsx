@@ -13,6 +13,7 @@ import PaymentMethodStep from './steps/PaymentMethodStep';
 import { Divider, Tooltip } from '@nextui-org/react';
 import { getCartProducts } from '@/services/features/cartSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
+import DeliveryInstructions from './steps/DeliveryInstructions';
 
 const Checkout = () => {
 
@@ -49,8 +50,12 @@ const Checkout = () => {
         {
             title: 'Payment Method', component: <PaymentMethodStep formData={formData} setFormData={setFormData}
                 onSubmit={() => { setCurrentStep(4) }} />
+        },
+        {
+            title: 'Delivery Instructions', component: <DeliveryInstructions formData={formData} setFormData={setFormData}
+                onSubmit={() => { setCurrentStep(4) }} />
         }
-    ];
+    ];0
 
 
     useEffect(() => {
