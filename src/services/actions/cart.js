@@ -37,4 +37,13 @@ export const cart = {
                 .catch(error => reject(error))
         })
     },
+
+    // Update cart flags
+    updateCartFlags: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/cart/update-flags', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

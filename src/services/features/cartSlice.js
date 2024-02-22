@@ -20,7 +20,11 @@ const initialState = {
 
     productQuantityUpdating: false,
     productQuantityUpdated: false,
-    productQuantityUpdateError: false
+    productQuantityUpdateError: false,
+
+    isCartFlagsUpdating: false,
+    isCartFlagsUpdated: false,
+    isCartFlagsUpdateError: false,
 }
 
 // Get all products in cart
@@ -67,6 +71,17 @@ export const deleteProductFromCart = createAsyncThunk('deleteProductFromCart', a
 export const updateProductQuantity = createAsyncThunk('updateProductQuantity', async ({ data }, thunkAPI) => {
     try {
         const response = await cart.updateProductQuantity(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+// Update cart flag( storepickup, cash on delivery)
+export const updateCartFlags = createAsyncThunk('updateCartFlags', async ({ data }, thunkAPI) => {
+    try {
+        const response = await cart.updateCartFlags(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -153,6 +168,23 @@ const cartSlice = createSlice({
                 state.productQuantityUpdating = false;
                 state.productQuantityUpdated = false;
                 state.productQuantityUpdateError = true;
+            })
+
+            // Update cart flags
+            .addCase(updateCartFlags.pending, (state) => {
+                state.isCartFlagsUpdating = true;
+                state.isCartFlagsUpdated = false;
+                state.isCartFlagsUpdateError = false;
+            })
+            .addCase(updateCartFlags.fulfilled, (state, action) => {
+                state.isCartFlagsUpdating = false;
+                state.isCartFlagsUpdated = true;
+                state.isCartFlagsUpdateError = false;
+            })
+            .addCase(updateCartFlags.rejected, (state, action) => {
+                state.isCartFlagsUpdating = false;
+                state.isCartFlagsUpdated = false;
+                state.isCartFlagsUpdateError = true;
             })
 
     }

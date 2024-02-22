@@ -24,10 +24,10 @@ const DeliveryInstructions = ({ onSubmit, formData, setFormData }) => {
             </div> */}
 
             <CustomShippingMethodRadio orientation='horizontal' data={deliveryInstructions}
-                value={formData.payment_method}
+                value={formData.contactless_delivery}
                 width={'300px'}
                 onChange={(value) => {
-                    setFormData((prev) => ({ ...prev, payment_method: value }))
+                    setFormData((prev) => ({ ...prev, contactless_delivery: value }))
                 }}
             />
 

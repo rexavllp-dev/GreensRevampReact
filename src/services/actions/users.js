@@ -64,4 +64,13 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
+
+    //get Address by user
+    getAddressByUser: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/address/get-address`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    }
 }

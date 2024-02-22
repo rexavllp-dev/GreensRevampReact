@@ -11,20 +11,24 @@ import ShippingAddressStep from './steps/ShippingAddressStep';
 import OrderConfirmationStep from './steps/OrderConfirmationStep';
 import PaymentMethodStep from './steps/PaymentMethodStep';
 import { Divider, Tooltip } from '@nextui-org/react';
-import { getCartProducts } from '@/services/features/cartSlice';
+import { getCartProducts, updateCartFlags } from '@/services/features/cartSlice';
 import { getStripeUrl } from '@/services/features/paymentSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import { toast } from 'react-toastify';
 import DeliveryInstructions from './steps/DeliveryInstructions';
 import { createOrder } from '@/services/features/orderSlice';
-import { toast } from 'react-toastify';
+import { getAddressByUser } from '@/services/features/userSlice';
 
 const Checkout = () => {
 
     const dispatch = useDispatch();
 
-    const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
+    const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
+    // const [showNewAddressForm, setShowNewAddressForm] = React.useState(false)
+    const [orderItems, setOrderItems] = React.useState([]);
+
     const { stripeUrl } = useSelector((state) => state.payment)
+    const { userAddress } = useSelector((state) => state.users)
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -34,13 +38,20 @@ const Checkout = () => {
         customer_email: "",
         customer_phone_country_code: "",
         customer_phone: "",
-        address_line: "",
         flat_villa: "",
         zip_code: "",
         delivery_remark: "",
+        is_new_address: false,
         payment_method: "",
         shipping_method: "Shipping",
         contactless_delivery: "",
+
+        address_line_1: "",
+        address_line_2: "",
+        country_code: "",
+        place: "",
+        latitude: "",
+        longitude: "",
         orderItems: [
             {
                 product_id: 1,
@@ -51,16 +62,16 @@ const Checkout = () => {
         ]
     })
 
-    const makePayment = () => { 
+    const makePayment = () => {
 
-        const data = {order_id:'100'};
-        dispatch(getStripeUrl({data}));
+        const data = { order_id: '100' };
+        dispatch(getStripeUrl({ data }));
     }
 
 
     useEffect(() => {
 
-        if(stripeUrl){
+        if (stripeUrl) {
             window.open(stripeUrl.url, '_self');
         }
 
@@ -70,7 +81,8 @@ const Checkout = () => {
 
     const steps = [
         {
-            title: 'Shipping Info', component: <ShippingAddressStep formData={formData} setFormData={setFormData}
+            title: 'Shipping Info', component: <ShippingAddressStep userAddress={userAddress} formData={formData} setFormData={setFormData}
+                // showNewAddressForm={showNewAddressForm} setShowNewAddressForm={setShowNewAddressForm}
                 onSubmit={() => { setCurrentStep(2) }} />
         },
         {
@@ -79,37 +91,89 @@ const Checkout = () => {
                 onSubmit={() => { setCurrentStep(3) }} />
         },
         {
-            title: 'Payment Method', component: <PaymentMethodStep makePayment={makePayment} formData={formData} setFormData={setFormData}
+            title: 'Payment Method', component: <PaymentMethodStep formData={formData} setFormData={setFormData}
                 onSubmit={() => { setCurrentStep(4) }} />
         },
         {
             title: 'Delivery Instructions', component: <DeliveryInstructions formData={formData} setFormData={setFormData}
                 onSubmit={() => { handleCreateOrder() }} />
         }
-    ]; 
+    ];
 
 
     useEffect(() => {
         dispatch(getCartProducts({}));
-    }, [productQuantityUpdated, productRemovedFromCart])
+    }, [productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated])
+
+    useEffect(() => {
+        dispatch(getAddressByUser({}));
+    }, [])
+
+
+    useEffect(() => {
+        dispatch(updateCartFlags({
+            data: {
+                isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
+                isCod: (formData?.payment_method === "Cash on Delivery") ? true : false
+            }
+        })).then((res) => {
+            if (res.payload.success) {
+
+            } else {
+
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [formData?.shipping_method, formData?.payment_method])
+
+
 
     useEffect(() => {
         console.log(formData)
     }, [formData])
 
     const handleCreateOrder = () => {
-        dispatch(createOrder({ data: formData })).then((res) => {
+        let orderItems = cartProducts?.result?.products?.map((item) => {
+            return { product_id: item.productId }
+        })
+
+        const data = {
+            address_title: formData?.address_title,
+            customer_name: formData?.customer_name,
+            customer_email: formData?.customer_email,
+            customer_phone_country_code: formData?.customer_phone_country_code,
+            customer_phone: formData?.customer_phone,
+            flat_villa: formData?.flat_villa,
+            zip_code: formData?.zip_code,
+            delivery_remark: formData?.delivery_remark,
+            is_new_address: formData?.is_new_address,
+            payment_method: formData?.payment_method,
+            shipping_method: formData?.shipping_method,
+            contactless_delivery: formData?.contactless_delivery,
+
+            address_line_1: formData?.address_line_1,
+            address_line_2: formData?.address_line_2,
+            country_code: formData?.country_code,
+            place: formData?.place,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude,
+
+            orderItems: orderItems
+        }
+        dispatch(createOrder({ data: data })).then((res) => {
             if (res.payload.success) {
                 toast.success(res.payload.message)
+                let orderId = res.payload?.result[0]?.id;
+                const data = { order_id: orderId };
+                dispatch(getStripeUrl({ data }));
             } else {
                 toast.error(res.payload.message)
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
         })
     }
-
-
 
 
     return (

@@ -26,6 +26,11 @@ const initialState = {
     isCompanyStatusUpdating: false,
     isCompanyStatusUpdated: false,
     isCompanyStatusUpdateError: false,
+
+    isUserAddressLoading: false,
+    isUserAddressLoaded: false,
+    isUserAddressLoadError: false,
+    userAddress: []
 }
 
 
@@ -92,6 +97,16 @@ export const approveCompany = createAsyncThunk('approveCompany', async ({ id }, 
 export const rejectCompany = createAsyncThunk('rejectCompany', async ({ id }, thunkAPI) => {
     try {
         const response = await users.rejectCompany(id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAddressByUser = createAsyncThunk('getAddressByUser', async ({ }, thunkAPI) => {
+    try {
+        const response = await users.getAddressByUser()
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -204,6 +219,26 @@ const userSlice = createSlice({
                 state.isCompanyStatusUpdating = false;
                 state.isCompanyStatusUpdated = false;
                 state.isCompanyStatusUpdateError = true;
+            })
+
+            //Get address by user
+            .addCase(getAddressByUser.pending, (state, action) => {
+                state.isUserAddressLoading = true;
+                state.isUserAddressLoaded = false;
+                state.isUserAddressLoadError = false;
+            })
+
+            .addCase(getAddressByUser.fulfilled, (state, action) => {
+                state.isUserAddressLoading = false;
+                state.isUserAddressLoaded = true;
+                state.isUserAddressLoadError = false;
+                state.userAddress = action.payload;
+            })
+
+            .addCase(getAddressByUser.rejected, (state, action) => {
+                state.isUserAddressLoading = false;
+                state.isUserAddressLoaded = false;
+                state.isUserAddressLoadError = true;
             })
 
 

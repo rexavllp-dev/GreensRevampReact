@@ -13,10 +13,10 @@ import CustomAddressRadio from '../components/CustomAddressRadio';
 import { FaPlus } from 'react-icons/fa';
 import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 
-const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
+const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) => {
 
     const dispatch = useDispatch();
-    const [showNewAddressForm, setShowNewAddressForm] = React.useState(false)
+
 
     const [addressTypes, setAddressTypes] = React.useState([
         {
@@ -47,7 +47,7 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
         // if value is not blank, then test the regex
         if (value === '' || re.test(value)) {
             setFormData((prev) => ({
-                ...prev, [name]: value, usr_mobile_country_code: countryCode
+                ...prev, [name]: value, customer_phone_country_code: countryCode
             }))
         }
     }
@@ -79,7 +79,7 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
 
             <div className="checkoutform">
                 {
-                    !showNewAddressForm &&
+                    !formData?.is_new_address &&
                     <div className='flex gap-4 items-center'>
 
                         {/* <RadioGroup
@@ -95,15 +95,19 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
 
                         <CustomAddressRadio data={addressTypes} />
 
-                        <button className='plusicon' onClick={() => { setShowNewAddressForm(true) }}>
+                        <button className='plusicon'
+                            onClick={() => { setFormData((prev) => ({ ...prev, is_new_address: true })) }}>
                             <FaPlus />
                         </button>
                     </div>
                 }
-
+                <CustomShippingMethodRadio data={shippingMethods}
+                    value={formData.shipping_method}
+                    onChange={(value) => { setFormData((prev) => ({ ...prev, shipping_method: value })) }}
+                />
 
                 {
-                    showNewAddressForm &&
+                    formData?.is_new_address &&
                     <>
                         <CustomInput name='address_title' type='text'
                             maxLength={100}
@@ -135,20 +139,17 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
                                 handlePhoneChange('customer_phone', value, country)
                             }}
                         />
-                        <CustomShippingMethodRadio data={shippingMethods}
-                            value={formData.shipping_method}
-                            onChange={(value) => { setFormData((prev) => ({ ...prev, shipping_method: value })) }}
-                        />
+
                         {
                             formData.shipping_method === 'Shipping' &&
                             <>
                                 <GoogleMap formData={formData} setFormData={setFormData}
                                     handleInputChange={handleInputChange} />
-                                <CustomInput name='address_line' type='text'
+                                <CustomInput name='address_line_2' type='text'
                                     maxLength={100}
-                                    placeholder='Address Line' label={'Address Line'}
+                                    placeholder='Address Line 2' label={'Address Line 2'}
                                     onChange={(e) => { handleInputChange({ e }) }}
-                                    value={formData.address_line}
+                                    value={formData.address_line_2}
                                 />
                                 <CustomInput name='flat_villa' type='text'
                                     maxLength={100}

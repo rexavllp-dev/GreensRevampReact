@@ -10,6 +10,7 @@ import inventorySlice from "./features/inventorySlice";
 import cartSlice from "./features/cartSlice";
 import bulkSlice from "./features/bulkSlice";
 import paymentSlice from "./features/paymentSlice";
+import orderSlice from "./features/orderSlice";
 // import thunk from 'redux-thunk';
 
 export const store = configureStore({
@@ -23,7 +24,8 @@ export const store = configureStore({
         inventory: inventorySlice,
         cart: cartSlice,
         bulk: bulkSlice,
-        payment:paymentSlice
+        payment:paymentSlice,
+        order: orderSlice
         // middleware: [thunk],
     }
 })

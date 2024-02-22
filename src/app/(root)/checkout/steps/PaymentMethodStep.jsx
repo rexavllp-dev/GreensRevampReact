@@ -5,7 +5,7 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import React from 'react'
 import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 
-const PaymentMethodStep = ({ onSubmit, formData, setFormData, makePayment }) => {
+const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
 
     
     const [addressType, setAddressType] = React.useState('home')

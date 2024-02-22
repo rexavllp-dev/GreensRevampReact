@@ -88,7 +88,7 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
                 ...formData,
                 // event_venue_id: combinedLocation,
                 place: placeName,
-                location: combinedLocation,
+                address_line_1: combinedLocation,
                 location_long: place.geometry?.location.lng(),
                 location_lat: place.geometry?.location.lat(),
                 country_code: countryCode
@@ -115,15 +115,15 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
                     <div className="form_section">
                         <Autocomplete onLoad={onAutocompleteLoad} onPlaceChanged={handlePlaceSelect}>
                             {/* <CustomInputText placeholder='Enter Venue Name'
-                                name='place_name' label='Venue Name'
-                                value={formData.place_name} onChange={handleInputChange}
+                                name='address_line_1' label='Venue Name'
+                                value={formData.address_line_1} onChange={handleInputChange}
                                 required={true}
                             /> */}
-                             <CustomInput name='place_name' type='text'
+                             <CustomInput name='address_line_1' type='text'
                                 maxLength={100}
-                                placeholder='Enter Place Name' label={'Enter Place Name'}
+                                placeholder='Address Line 1' label={'Address Line 1'}
                                 onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.place_name}
+                                value={formData.address_line_1}
                             />
                         </Autocomplete>
                     </div>
