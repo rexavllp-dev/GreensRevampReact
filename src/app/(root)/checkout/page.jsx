@@ -12,7 +12,9 @@ import OrderConfirmationStep from './steps/OrderConfirmationStep';
 import PaymentMethodStep from './steps/PaymentMethodStep';
 import { Divider, Tooltip } from '@nextui-org/react';
 import { getCartProducts } from '@/services/features/cartSlice';
+import { getStripeUrl } from '@/services/features/paymentSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
+import { toast } from 'react-toastify';
 import DeliveryInstructions from './steps/DeliveryInstructions';
 import { createOrder } from '@/services/features/orderSlice';
 import { toast } from 'react-toastify';
@@ -22,6 +24,7 @@ const Checkout = () => {
     const dispatch = useDispatch();
 
     const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
+    const { stripeUrl } = useSelector((state) => state.payment)
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -48,6 +51,23 @@ const Checkout = () => {
         ]
     })
 
+    const makePayment = () => { 
+
+        const data = {order_id:'100'};
+        dispatch(getStripeUrl({data}));
+    }
+
+
+    useEffect(() => {
+
+        if(stripeUrl){
+            window.open(stripeUrl.url, '_self');
+        }
+
+    }, [stripeUrl])
+
+
+
     const steps = [
         {
             title: 'Shipping Info', component: <ShippingAddressStep formData={formData} setFormData={setFormData}
@@ -59,7 +79,7 @@ const Checkout = () => {
                 onSubmit={() => { setCurrentStep(3) }} />
         },
         {
-            title: 'Payment Method', component: <PaymentMethodStep formData={formData} setFormData={setFormData}
+            title: 'Payment Method', component: <PaymentMethodStep makePayment={makePayment} formData={formData} setFormData={setFormData}
                 onSubmit={() => { setCurrentStep(4) }} />
         },
         {
