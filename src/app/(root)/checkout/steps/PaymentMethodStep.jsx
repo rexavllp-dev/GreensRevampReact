@@ -5,7 +5,9 @@ import CustomTypography from '@/library/typography/CustomTypography'
 import React from 'react'
 import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 
-const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
+const PaymentMethodStep = ({ onSubmit, formData, setFormData, makePayment }) => {
+
+    
     const [addressType, setAddressType] = React.useState('home')
     const [paymentMethods, setPaymentMethods] = React.useState([
         {
@@ -34,7 +36,7 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
             />
 
             <div className="flex justify-end">
-                <CustomButton label='Proceed to pay' variant='primary' onClick={() => { onSubmit() }} />
+                <CustomButton label='Proceed to pay' variant='primary' onClick={() => { makePayment() }} />
             </div>
         </div>
     )
