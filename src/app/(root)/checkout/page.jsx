@@ -14,6 +14,8 @@ import { Divider, Tooltip } from '@nextui-org/react';
 import { getCartProducts } from '@/services/features/cartSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import DeliveryInstructions from './steps/DeliveryInstructions';
+import { createOrder } from '@/services/features/orderSlice';
+import { toast } from 'react-toastify';
 
 const Checkout = () => {
 
@@ -24,6 +26,7 @@ const Checkout = () => {
     const [currentStep, setCurrentStep] = useState(1);
 
     const [formData, setFormData] = React.useState({
+        address_title: "",
         customer_name: "",
         customer_email: "",
         customer_phone_country_code: "",
@@ -31,10 +34,18 @@ const Checkout = () => {
         address_line: "",
         flat_villa: "",
         zip_code: "",
-        note: "",
+        delivery_remark: "",
         payment_method: "",
         shipping_method: "Shipping",
-        contactless_delivery: ""
+        contactless_delivery: "",
+        orderItems: [
+            {
+                product_id: 1,
+                op_actual_price: '',
+                op_unit_price: '',
+                op_qty: '',
+            }
+        ]
     })
 
     const steps = [
@@ -53,16 +64,32 @@ const Checkout = () => {
         },
         {
             title: 'Delivery Instructions', component: <DeliveryInstructions formData={formData} setFormData={setFormData}
-                onSubmit={() => { setCurrentStep(4) }} />
+                onSubmit={() => { handleCreateOrder() }} />
         }
-    ];0
+    ]; 
 
 
     useEffect(() => {
         dispatch(getCartProducts({}));
     }, [productQuantityUpdated, productRemovedFromCart])
 
-    
+    useEffect(() => {
+        console.log(formData)
+    }, [formData])
+
+    const handleCreateOrder = () => {
+        dispatch(createOrder({ data: formData })).then((res) => {
+            if (res.payload.success) {
+                toast.success(res.payload.message)
+            } else {
+                toast.error(res.payload.message)
+            }
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+
+
 
 
     return (
@@ -118,18 +145,18 @@ const Checkout = () => {
                             <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
                             <Tooltip
                                 content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
-                                // placement='right-end'
+                            // placement='right-end'
 
-                                // classNames={{
-                                //     base: [
-                                //         // arrow color
-                                //         "before:bg-neutral-400 dark:before:bg-white",
-                                //     ],
-                                //     content: [
-                                //         "py-2 px-4 shadow-xl",
-                                //         "text-black bg-gradient-to-br from-white to-neutral-400",
-                                //     ],
-                                // }}
+                            // classNames={{
+                            //     base: [
+                            //         // arrow color
+                            //         "before:bg-neutral-400 dark:before:bg-white",
+                            //     ],
+                            //     content: [
+                            //         "py-2 px-4 shadow-xl",
+                            //         "text-black bg-gradient-to-br from-white to-neutral-400",
+                            //     ],
+                            // }}
                             >
                                 <div className="infoicon">
                                     <InfoIcon />

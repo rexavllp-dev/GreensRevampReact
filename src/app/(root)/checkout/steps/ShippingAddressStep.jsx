@@ -105,12 +105,12 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
                 {
                     showNewAddressForm &&
                     <>
-                        {/* <CustomInput name='address_title' type='text'
+                        <CustomInput name='address_title' type='text'
                             maxLength={100}
                             placeholder='Address Title' label={'Address Title'}
                             onChange={(e) => { handleInputChange({ e }) }}
                             value={formData.address_title}
-                        /> */}
+                        />
 
                         <CustomInput name='customer_name' type='text'
                             maxLength={100}
@@ -142,7 +142,6 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
                         {
                             formData.shipping_method === 'Shipping' &&
                             <>
-
                                 <GoogleMap formData={formData} setFormData={setFormData}
                                     handleInputChange={handleInputChange} />
                                 <CustomInput name='address_line' type='text'
@@ -165,7 +164,7 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData }) => {
                                 />
                                 <CustomTextarea label={'Delivery Remarks'}
                                     placeholder={'Delivery Remarks'}
-                                    name={'note'} value={formData.note}
+                                    name={'delivery_remark'} value={formData.delivery_remark}
                                     onChange={(e) => { handleInputChange({ e }) }}
                                 />
                             </>

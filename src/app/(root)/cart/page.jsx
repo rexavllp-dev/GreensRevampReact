@@ -15,6 +15,7 @@ import { MdRemoveShoppingCart } from 'react-icons/md';
 import { getSaveForLater } from '@/services/features/productSlice';
 import { Tooltip } from '@nextui-org/react';
 import InfoIcon from '@/components/customicons/InfoIcon';
+import { useRouter } from 'next/navigation';
 
 const products = [
     {
@@ -79,6 +80,7 @@ const products = [
 const Cart = () => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
     const { saveForLater } = useSelector((state) => state.products)
 
@@ -102,6 +104,10 @@ const Cart = () => {
                 recommendedProdRef ? recommendedProdRef.current.scrollBy({ left: 600, behavior: 'smooth' }) : null;
             }
         }
+    }
+
+    const handleCheckout = ()=>{
+        router.push('/checkout')
     }
 
     return (
@@ -240,7 +246,7 @@ const Cart = () => {
                                 </div>
 
                                 <div className="btn">
-                                    <CustomButton fullWidth label='Proceed to Checkout' variant='primary' />
+                                    <CustomButton fullWidth label='Proceed to Checkout' variant='primary' onClick={() => { handleCheckout() }} />
                                 </div>
 
                             </div>
