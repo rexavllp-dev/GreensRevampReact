@@ -35,7 +35,7 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                 onClose={toggleDrawer}
                 direction='right'
                 className='bla bla bla'
-                size={330}
+                size={360}
                 enableOverlay={true}
                 overlayOpacity={0}
                 zIndex={3000}
@@ -81,8 +81,11 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                                     <Divider />
                                     <div className='flex flex-col gap-3 mt-3'>
                                         <div className='flex justify-between w-full'>
-                                            <CustomTypography content="Subtotal" color="BLACK" size="SMALL" weight="SEMI-BOLD" />
-                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.subTotal} color="GREY" size="SMALL" weight="SEMI-BOLD" />
+                                            <CustomTypography content="Total"  color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.totalProductPriceWithVAT} color="GREY" size="SMALL" weight="SEMI-BOLD" />
+                                        </div>
+                                        <div className='flex justify-between w-full'>
+                                            <CustomTypography style={{textAlign:'center'}} content="Shipping charge, service charge and coupon codes calculated at cart page." color="GRAY" size="SMALL" weight="SEMI-BOLD" />
                                         </div>
                                         {/* <div className='flex justify-between w-full'>
                                             <CustomTypography content="Discount" color="BLACK" size="SMALL" weight="SEMI-BOLD" />

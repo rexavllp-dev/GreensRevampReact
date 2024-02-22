@@ -15,6 +15,7 @@ import { getCartProducts } from '@/services/features/cartSlice';
 import { getStripeUrl } from '@/services/features/paymentSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import { toast } from 'react-toastify';
+import DeliveryInstructions from './steps/DeliveryInstructions';
 
 const Checkout = () => {
 
@@ -70,8 +71,12 @@ const Checkout = () => {
         {
             title: 'Payment Method', component: <PaymentMethodStep makePayment={makePayment} formData={formData} setFormData={setFormData}
                 onSubmit={() => { setCurrentStep(4) }} />
+        },
+        {
+            title: 'Delivery Instructions', component: <DeliveryInstructions formData={formData} setFormData={setFormData}
+                onSubmit={() => { setCurrentStep(4) }} />
         }
-    ];
+    ];0
 
 
     useEffect(() => {

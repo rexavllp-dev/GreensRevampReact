@@ -273,7 +273,7 @@ const GeneralTab = ({ id, data }) => {
                         disabled={isDisabled}
                     />
 
-                    <CustomSelect label={'Brands'} value={formData.prd_brand_id} data={allBrands?.data}
+                    <CustomSelect label={'Brand'} value={formData.prd_brand_id} data={allBrands?.data}
                         optionValue={'id'} optionLabel={'brd_name'}
                         name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}

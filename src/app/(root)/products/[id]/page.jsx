@@ -563,7 +563,9 @@ const ProductDetails = ({ params }) => {
                                     <CiHeart size={28} color='#E54333' />
                                 </div>
 
-                                <CustomButton variant='transparent' label='Buy Now' />
+                                <CustomButton variant='transparent' label='Buy Now' onClick={()=>{
+                                    router.push('/cart')
+                                }} />
                                 <CustomButton
                                     variant='primary'
                                     label='Add to Cart'

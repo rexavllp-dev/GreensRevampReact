@@ -270,6 +270,7 @@ const Search = () => {
                                 // label="Sort By"
                                 variant='bordered'
                                 labelPlacement='outside'
+                                placeholder='Sort By'
                                 className="max-w-xs"
                                 selectedKeys={[sortBy]}
                                 // onSelectionChange={setSortBy}
@@ -279,11 +280,13 @@ const Search = () => {
                                     }
                                 }}
                             >
-                                {sortOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </SelectItem>
-                                ))}
+                                {
+                                    sortOptions.map((option) => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </SelectItem>
+                                    ))
+                                }
                             </Select>
                         </div>
                         <div style={{ width: '100px' }}>
@@ -292,6 +295,7 @@ const Search = () => {
                                 // label="Per Page"
                                 variant='bordered'
                                 labelPlacement='outside'
+                                placeholder='Per Page'
                                 className="max-w-xs"
                                 selectedKeys={[perPage]}
                                 onChange={(e) => {
