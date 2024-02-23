@@ -1,12 +1,49 @@
 "use client";
 import React from 'react';
-import "./OrderConfirmation.scss";
+import "./OrderSuccess.scss";
 import CustomTypography from '@/library/typography/CustomTypography';
 import CustomButton from '@/library/buttons/CustomButton';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getOrder } from '@/services/features/orderSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { payComplete } from '@/services/features/paymentSlice';
+import { toast } from 'react-toastify';
 
-const OrderConfirmation = () => {
+const OrderSuccess = () => {
+
+  const searchParams = useSearchParams()
+  const orderId = searchParams.get('od');
   const router = useRouter();
+  const dispatch = useDispatch()
+  const { singleOrder, } = useSelector((state) => state.order)
+  const { isPayCompleted } = useSelector((state) => state.payment)
+
+  React.useEffect(() => {
+    dispatch(getOrder({ id: orderId }))
+  }, []);
+
+  React.useEffect(() => {
+    if (singleOrder?.result) {
+
+      const sessionId = singleOrder?.result[0]?.session_id;
+      if (sessionId && !isPayCompleted) {
+        const data = {
+          stripe_session_id: sessionId,
+          order_id: orderId
+        }
+        dispatch(payComplete({ data })).then((res) => {
+          if (res.payload?.success) {
+            toast.success("Payment completed successfully", {
+              toastId: 'success1',
+            });
+          } else {
+            toast.error(res.payload?.message);
+          }
+        }).catch(err => console.log(err));
+      }
+    }
+  }, [singleOrder, isPayCompleted])
+
   return (
     <div className="order_confirmation">
       <div className="header">
@@ -31,4 +68,4 @@ const OrderConfirmation = () => {
   )
 }
 
-export default OrderConfirmation
+export default OrderSuccess

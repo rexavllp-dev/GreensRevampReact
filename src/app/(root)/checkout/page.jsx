@@ -18,14 +18,19 @@ import { toast } from 'react-toastify';
 import DeliveryInstructions from './steps/DeliveryInstructions';
 import { createOrder } from '@/services/features/orderSlice';
 import { getAddressByUser } from '@/services/features/userSlice';
+import { useRouter } from 'next/navigation';
 
 const Checkout = () => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
     // const [showNewAddressForm, setShowNewAddressForm] = React.useState(false)
-    const [orderItems, setOrderItems] = React.useState([]);
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
+    // const [orderItems, setOrderItems] = React.useState([]);
 
     const { stripeUrl } = useSelector((state) => state.payment)
     const { userAddress } = useSelector((state) => state.users)
@@ -33,6 +38,7 @@ const Checkout = () => {
     const [currentStep, setCurrentStep] = useState(1);
 
     const [formData, setFormData] = React.useState({
+        address_id: "",
         address_title: "",
         customer_name: "",
         customer_email: "",
@@ -42,7 +48,7 @@ const Checkout = () => {
         zip_code: "",
         delivery_remark: "",
         is_new_address: false,
-        payment_method: "",
+        payment_method: "Credit Card/ Debit Card",
         shipping_method: "Shipping",
         contactless_delivery: "",
 
@@ -52,32 +58,8 @@ const Checkout = () => {
         place: "",
         latitude: "",
         longitude: "",
-        orderItems: [
-            {
-                product_id: 1,
-                op_actual_price: '',
-                op_unit_price: '',
-                op_qty: '',
-            }
-        ]
+        orderItems: []
     })
-
-    const makePayment = () => {
-
-        const data = { order_id: '100' };
-        dispatch(getStripeUrl({ data }));
-    }
-
-
-    useEffect(() => {
-
-        if (stripeUrl) {
-            window.open(stripeUrl.url, '_self');
-        }
-
-    }, [stripeUrl])
-
-
 
     const steps = [
         {
@@ -102,12 +84,38 @@ const Checkout = () => {
 
 
     useEffect(() => {
-        dispatch(getCartProducts({}));
+        //If user is not logged in then redirect to login
+        if (!isLoggedIn) {
+            router.push('/auth/login');
+        }
+    }, [isLoggedIn])
+
+
+
+    useEffect(() => {
+        dispatch(getCartProducts({}))?.then((res) => {
+            if (res.payload.success) {
+                if (!res.payload?.result?.products?.length) {
+                    router.push('/cart')
+                }
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }, [productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated])
 
     useEffect(() => {
         dispatch(getAddressByUser({}));
     }, [])
+
+    useEffect(() => {
+        if (userAddress?.result) {
+            setFormData((prev) => ({
+                ...prev,
+                address_id: userAddress?.result[0]?.id
+            }))
+        }
+    }, [userAddress])
 
 
     useEffect(() => {
@@ -133,12 +141,22 @@ const Checkout = () => {
         console.log(formData)
     }, [formData])
 
+
+    useEffect(() => {
+
+        if (stripeUrl) {
+            window.open(stripeUrl.url, '_self');
+        }
+
+    }, [stripeUrl])
+
     const handleCreateOrder = () => {
         let orderItems = cartProducts?.result?.products?.map((item) => {
             return { product_id: item.productId }
         })
 
         const data = {
+            address_id: formData?.address_id,
             address_title: formData?.address_title,
             customer_name: formData?.customer_name,
             customer_email: formData?.customer_email,
@@ -168,7 +186,7 @@ const Checkout = () => {
                 const data = { order_id: orderId };
                 dispatch(getStripeUrl({ data }));
             } else {
-                toast.error(res.payload.message)
+                toast.error(res.payload.message);
             }
         }).catch((err) => {
             console.log(err)

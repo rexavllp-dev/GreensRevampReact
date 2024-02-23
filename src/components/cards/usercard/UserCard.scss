@@ -1,0 +1,47 @@
+.usercard {
+  border-radius: 4px;
+  // border: 1px solid #32893b;
+  // background-color: #f2fef4;
+  background-color: #ffffff;
+  width: 265px;
+  height: 145px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+  cursor: pointer;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  &:hover {
+    background-color: #f2f7f3;
+  }
+
+
+  .icon {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    // justify-content: space-between;
+
+    
+  .headericon {
+    width: 40px;
+    height: 40px;
+    background-color: #e8f9ea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  }
+}

@@ -7,7 +7,11 @@ const initialState = {
     isPaymentCreating: false,
     isPaymentCreated: false,
     isPaymentCreateError: false,
-    stripeUrl:{}
+    stripeUrl:{},
+
+    isPayCompleting:false,
+    isPayCompleted:false,
+    isPayCompleteError:false,
 }
 
 export const getStripeUrl = createAsyncThunk('getStripeUrl', async ({data}, thunkAPI) => {
@@ -15,6 +19,19 @@ export const getStripeUrl = createAsyncThunk('getStripeUrl', async ({data}, thun
     try {
 
         const response = await payment.getStripeUrl(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const payComplete = createAsyncThunk('payComplete', async ({data}, thunkAPI) => {
+    
+    try {
+
+        const response = await payment.payComplete(data);
         return thunkAPI.fulfillWithValue(response.data);
 
     } catch (error) {
@@ -47,6 +64,22 @@ const paymentSlice = createSlice({
                 state.isPaymentCreating = false;
                 state.isPaymentCreated = false;
                 state.isPaymentCreateError = true;
+            })
+            // Pay complete
+            .addCase(payComplete.pending, (state, action) => {
+                state.isPayCompleting = true;
+                state.isPayCompleted = false;
+                state.isPayCompleteError = false;
+            })
+            .addCase(payComplete.fulfilled, (state, action) => {
+                state.isPayCompleting = false;
+                state.isPayCompleted = true;
+                state.isPayCompleteError = false;
+            })
+            .addCase(payComplete.rejected, (state, action) => {
+                state.isPayCompleting = false;
+                state.isPayCompleted = false;
+                state.isPayCompleteError = true;
             })
     }
 })

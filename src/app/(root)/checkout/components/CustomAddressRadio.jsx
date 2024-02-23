@@ -21,7 +21,7 @@ export const CustomRadio = (props) => {
       {...getBaseProps()}
       className={cn(
         "group inline-flex items-center hover:opacity-70 active:opacity-50 justify-between flex-row-reverse tap-highlight-transparent",
-        "max-w-[300px] cursor-pointer border-2 border-default rounded-lg gap-4 p-4",
+        "w-100 cursor-pointer border-2 border-default rounded-lg gap-4 p-4",
         "data-[selected=true]:border-black",
       )}
     >
@@ -42,19 +42,21 @@ export const CustomRadio = (props) => {
   );
 };
 
-export default function CustomAddressRadio({ data }) {
+export default function CustomAddressRadio({ data, value, onChange }) {
   return (
-    <RadioGroup label="" orientation="horizontal">
+    <RadioGroup label="" orientation="horizontal"
+      value={value} onValueChange={onChange}
+    >
       {
         data?.map((item) => (
           <div key={item.id} style={{ position: "relative" }}>
-            <div style={{ position: 'absolute', right: '5px', top: '5px', cursor:'pointer', borderRadius:'50%', padding:'2px'}}>
-              <MdEdit size={20}  color='#555'/>
+            <div style={{ position: 'absolute', right: '5px', top: '5px', cursor: 'pointer', borderRadius: '50%', padding: '2px' }}>
+              <MdEdit size={20} color='#555' />
             </div>
             <CustomRadio style={{
               width: '200px'
-            }} description={item.address} value={item.title}>
-              {item.title}
+            }} description={item.address_line_1 + '...'} value={item.id}>
+              {item.address_title}
             </CustomRadio>
           </div>
         ))

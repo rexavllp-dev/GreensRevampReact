@@ -108,7 +108,7 @@ export const getAddressByUser = createAsyncThunk('getAddressByUser', async ({ },
     try {
         const response = await users.getAddressByUser()
         return thunkAPI.fulfillWithValue(response.data);
-    } catch (error) {
+    } catch (error) {                            
         // throw error
         return thunkAPI.rejectWithValue(error.response.data);
     }

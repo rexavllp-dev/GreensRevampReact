@@ -23,11 +23,13 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
             id: 1,
             title: 'Home',
             address: '123 Main St, Anytown USA 12345',
+            value: 1
         },
         {
             id: 2,
             title: 'Work',
             address: '123 Main St, Anytown USA 12345',
+            value: 2
         }
     ])
 
@@ -93,7 +95,10 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
                             }
                         </RadioGroup> */}
 
-                        <CustomAddressRadio data={addressTypes} />
+                        <CustomAddressRadio data={userAddress?.result}
+                            value={formData.address_id}
+                            onChange={(value) => { setFormData((prev) => ({ ...prev, address_id: value })) }}
+                        />
 
                         <button className='plusicon'
                             onClick={() => { setFormData((prev) => ({ ...prev, is_new_address: true })) }}>

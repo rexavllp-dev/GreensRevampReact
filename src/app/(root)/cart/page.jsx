@@ -81,12 +81,16 @@ const Cart = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+    const recommendedProdRef = React.useRef();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
     const { saveForLater } = useSelector((state) => state.products)
 
     // States
     const [selected, setSelected] = useState('shipping');
-    const recommendedProdRef = React.useRef();
+
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
 
     useEffect(() => {
         dispatch(getCartProducts({}));
@@ -106,8 +110,12 @@ const Cart = () => {
         }
     }
 
-    const handleCheckout = ()=>{
-        router.push('/checkout')
+    const handleCheckout = () => {
+        if (isLoggedIn){
+            router.push('/checkout')
+        }else {
+            router.push('/auth/login')
+        }
     }
 
     return (

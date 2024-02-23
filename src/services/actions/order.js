@@ -11,5 +11,12 @@ export const order = {
         })
     },
 
-    
+    //Get order
+    getOrder: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/get-order/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }
