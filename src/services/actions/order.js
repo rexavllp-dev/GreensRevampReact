@@ -19,4 +19,13 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
+
+    //Get user orders
+    getUserOrders: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/get-user-orders')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

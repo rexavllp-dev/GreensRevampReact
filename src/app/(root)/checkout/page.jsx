@@ -119,6 +119,13 @@ const Checkout = () => {
 
 
     useEffect(() => {
+        if (formData?.shipping_method === "Store Pickup") {
+            setFormData((prev) => ({
+                ...prev,
+                payment_method: "Credit Card/ Debit Card"
+            }))
+        }
+
         dispatch(updateCartFlags({
             data: {
                 isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
@@ -133,6 +140,7 @@ const Checkout = () => {
         }).catch((err) => {
             console.log(err)
         })
+
     }, [formData?.shipping_method, formData?.payment_method])
 
 
@@ -152,7 +160,13 @@ const Checkout = () => {
 
     const handleCreateOrder = () => {
         let orderItems = cartProducts?.result?.products?.map((item) => {
-            return { product_id: item.productId }
+            return {
+                product_id: item.productId,
+                op_actual_price: item.priceVat,
+                op_unit_price: item.priceVat,
+                op_qty: item.quantity,
+                op_line_total: item.totalPriceWithVat
+            }
         })
 
         const data = {
@@ -184,7 +198,11 @@ const Checkout = () => {
                 toast.success(res.payload.message)
                 let orderId = res.payload?.result[0]?.id;
                 const data = { order_id: orderId };
-                dispatch(getStripeUrl({ data }));
+                if (formData?.payment_method === "Cash on Delivery") {
+                    router.push("/checkout/success/?od=" + orderId);
+                } else {
+                    dispatch(getStripeUrl({ data }));
+                }
             } else {
                 toast.error(res.payload.message);
             }
@@ -227,6 +245,7 @@ const Checkout = () => {
                     {/* </div> */}
                 </div>
 
+
                 <div className="carttotal">
                     <div className="item">
                         <CustomTypography content={`Subtotal ${cartProducts?.result?.totals?.totalProductCount} items`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
@@ -241,41 +260,63 @@ const Checkout = () => {
                         </div>
                     }
 
-
-                    <div className="item">
-                        <div className="flex items-center gap-2">
-                            <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                            <Tooltip
-                                content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
-                            // placement='right-end'
-
-                            // classNames={{
-                            //     base: [
-                            //         // arrow color
-                            //         "before:bg-neutral-400 dark:before:bg-white",
-                            //     ],
-                            //     content: [
-                            //         "py-2 px-4 shadow-xl",
-                            //         "text-black bg-gradient-to-br from-white to-neutral-400",
-                            //     ],
-                            // }}
-                            >
-                                <div className="infoicon">
-                                    <InfoIcon />
+                    {
+                        formData?.shipping_method === "Store Pickup" ?
+                            <div className="item">
+                                <div className="flex items-center gap-2">
+                                    <CustomTypography content="Store Pickup" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                    <Tooltip
+                                        content={"If product price is less than AED 50, store pickup charge is AED 10. Otherwise store pickup is free(* T&C apply)."}
+                                    >
+                                        <div className="infoicon">
+                                            <InfoIcon />
+                                        </div>
+                                    </Tooltip>
                                 </div>
-                            </Tooltip>
+                                {
+                                    parseInt(cartProducts?.result?.totals?.storePickupCharge) == 0 ?
+                                        <div className='flex items-center gap-2'>
+                                            <CustomTypography content="AED 10" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                            <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                        </div>
+                                        :
+                                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.storePickupCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                }
+                            </div>
+                            :
+                            <div className="item">
+                                <div className="flex items-center gap-2">
+                                    <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                    <Tooltip
+                                        content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
+                                    >
+                                        <div className="infoicon">
+                                            <InfoIcon />
+                                        </div>
+                                    </Tooltip>
+                                </div>
+                                {
+                                    parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
+                                        <div className='flex items-center gap-2'>
+                                            <CustomTypography content="AED 30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                            <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                        </div>
+                                        :
+                                        <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                }
+                            </div>
+                    }
+
+
+                    {
+                        formData?.payment_method === "Cash on Delivery" &&
+                        <div className="item">
+                            <div className="flex items-center gap-2">
+                                <CustomTypography content="Cash on Delivery" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            </div>
+                            <CustomTypography content={"AED " + cartProducts?.result?.totals?.codCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
                         </div>
-                        {
-                            parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
-                                <div className='flex items-center gap-2'>
-                                    <CustomTypography content="30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
-                                    <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                                </div>
-                                :
-                                <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                        }
-                    </div>
-
+                    }
 
 
                     {/* <div className="item">

@@ -33,11 +33,12 @@ const OrderSuccess = () => {
         }
         dispatch(payComplete({ data })).then((res) => {
           if (res.payload?.success) {
-            toast.success("Payment completed successfully", {
-              toastId: 'success1',
-            });
+            // toast.success("Payment completed successfully", {
+            //   toastId: 'success1',
+            // });
+            console.log("Payment completed successfully")
           } else {
-            toast.error(res.payload?.message);
+            // toast.error(res.payload?.message);
           }
         }).catch(err => console.log(err));
       }
@@ -47,12 +48,12 @@ const OrderSuccess = () => {
   return (
     <div className="order_confirmation">
       <div className="header">
-        <CustomTypography content='Your order #384432 has been placed!' size='LARGE' color='PURE-BLACK' weight='SEMI-BOLD' />
+        <CustomTypography content={`Your order #${singleOrder?.result ? singleOrder?.result[0]?.id : ''} has been placed!`} size='LARGE' color='PURE-BLACK' weight='SEMI-BOLD' />
         <CustomTypography content='A confirmation email has been sent to your email' size='MEDIUM-LARGE' color='PURE-BLACK' weight='REGULAR' />
       </div>
       <div className="address">
         <CustomTypography content='Shipping Address' size='MEDIUM-LARGE' color='PURE-BLACK' weight='SEMI-BOLD' />
-        <CustomTypography content='Lorem ipsum dolor sit amet consectetur adipiscing elit' size='MEDIUM-LARGE' color='PURE-BLACK' weight='REGULAR' />
+        <CustomTypography content={singleOrder?.result ? singleOrder?.result[0]?.address_line_1 : ''} size='MEDIUM-LARGE' color='PURE-BLACK' weight='REGULAR' />
       </div>
       <div className="delivery">
         <CustomTypography content='Estimated Delivery' size='MEDIUM-LARGE' color='PURE-BLACK' weight='SEMI-BOLD' />

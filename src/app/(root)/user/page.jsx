@@ -9,53 +9,43 @@ export default function UserDashboard() {
   const dashboardItems = [
     {
       id: 1,
-      name: 'Catalog',
-      url: '/admin/catalogue',
+      name: 'Purchase History',
+      url: '/user/purchase-history',
     },
     {
       id: 2,
-      name: 'Stock',
-      url: '/admin/stock',
+      name: 'Wishlist',
+      url: '/wishlist',
     },
     {
       id: 3,
-      name: 'Categories',
-      url: '/admin/products/categories',
+      name: 'Account Information',
+      url: '/account-information',
     },
     {
       id: 4,
-      name: 'Attributes',
-      url: '/admin/attributes',
+      name: 'Your Addresses',
+      url: '/address',
     },
     {
       id: 5,
-      name: 'Attribute Sets',
-      url: '/admin/attribute-sets',
+      name: 'Greens Rewards',
+      url: '/greens-rewards',
     },
     {
       id: 6,
-      name: 'Brands',
-      url: '/admin/products/brands',
+      name: 'Gift Cards',
+      url: '/giftcards',
     },
     {
       id: 7,
-      name: 'Tags',
-      url: '/admin/products/tags',
+      name: 'My Reviews',
+      url: '/reviews',
     },
     {
       id: 8,
-      name: 'Options',
-      url: '/admin/options',
-    },
-    {
-      id:9,
-      name: 'Reviews',
-      url: '/admin/reviews',
-    },
-    {
-      id:10,
-      name: 'Bulk',
-      url: '/admin/bulk',
+      name: 'Notified Products',
+      url: '/notified-products',
     }
   ];
 

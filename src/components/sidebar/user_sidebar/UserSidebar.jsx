@@ -20,9 +20,13 @@ import { RiNotificationLine } from 'react-icons/ri';
 import { AiOutlineSafetyCertificate } from 'react-icons/ai';
 import { RiQuestionnaireLine } from 'react-icons/ri';
 import { RiFileTextLine } from 'react-icons/ri';
+import { PiSignOutBold } from "react-icons/pi";
+import { logout } from '@/services/features/authSlice'
+import { useDispatch } from 'react-redux'
 
 const UserSidebar = () => {
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const dispatch = useDispatch();
 
     const sidebarItems = [
         {
@@ -114,6 +118,13 @@ const UserSidebar = () => {
                             </div>
                         )
                     })}
+                    <div className={ "item mt-4 cursor-pointer"}>
+                        {<PiSignOutBold />}
+                        <div onClick={() => dispatch(logout())}>
+                            {/* <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}> */}
+                            <CustomTypography content={"Sign Out"} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                        </div>
+                    </div>
 
                     {/* {sidebarItems.map((item) => (
                         <Link href={item.url} key={item.id}>

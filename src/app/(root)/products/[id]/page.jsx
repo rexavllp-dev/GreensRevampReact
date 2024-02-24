@@ -277,7 +277,7 @@ const ProductDetails = ({ params }) => {
           }
           return false
         }
-        else if (singleProduct?.data?.product?.inventory_id === null || singleProduct?.data?.product?.inventory_id === undefined) {
+        else if (singleProduct?.data?.product?.product_inventory_id === null || singleProduct?.data?.product?.product_inventory_id === undefined) {
           return true;
         } else {
           return false

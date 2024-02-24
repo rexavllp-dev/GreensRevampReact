@@ -9,7 +9,12 @@ const initialState = {
     isOrderLoading: false,
     isOrderLoaded: false,
     isOrderLoadError: false,
-    singleOrder: {}
+    singleOrder: {},
+
+    isUserOrdersLoading: false,
+    isUserOrdersLoaded: false,
+    isUserOrdersLoadError: false,
+    userOrders: [],
 }
 
 export const createOrder = createAsyncThunk('createOrder', async ({ data }, thunkAPI) => {
@@ -25,6 +30,16 @@ export const createOrder = createAsyncThunk('createOrder', async ({ data }, thun
 export const getOrder = createAsyncThunk('getOrder', async ({ id }, thunkAPI) => {
     try {
         const response = await order.getOrder(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({  }, thunkAPI) => {
+    try {
+        const response = await order.getUserOrders();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -73,6 +88,23 @@ const orderSlice = createSlice({
                 state.isOrderLoading = false;
                 state.isOrderLoaded = false;
                 state.isOrderLoadError = true;
+            })
+            // Get user orders
+            .addCase(getUserOrders.pending, (state, action) => {
+                state.isUserOrdersLoading = true;
+                state.isUserOrdersLoaded = false;
+                state.isUserOrdersLoadError = false;
+            })
+            .addCase(getUserOrders.fulfilled, (state, action) => {
+                state.isUserOrdersLoading = false;
+                state.isUserOrdersLoaded = true;
+                state.isUserOrdersLoadError = false;
+                state.userOrders = action.payload;
+            })
+            .addCase(getUserOrders.rejected, (state, action) => {
+                state.isUserOrdersLoading = false;
+                state.isUserOrdersLoaded = false;
+                state.isUserOrdersLoadError = true;
             })
     }
 })

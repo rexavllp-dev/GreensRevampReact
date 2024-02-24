@@ -1,0 +1,57 @@
+// .custom_address_card {
+//   width: 100%;
+//   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+//   padding: 14px 10px;
+// }
+.custom_address_card_wrapper {
+  width: 100%;
+  .custom_address_card {
+    width: 100%;
+    position: relative;
+    label {
+      width: 100%;
+    }
+
+    .card-input-element {
+      // display: none;
+      position: absolute;
+      top: 15px;
+      left: 20px;
+    }
+
+    .card-input {
+      //   margin: 10px;
+      padding: 10px 50px;
+    }
+
+    .card-input:hover {
+      cursor: pointer;
+    }
+    .card-edit-icon {
+      // display: none;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+      color: #32893b;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .card-input-element:checked + .card-input {
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      background-color: #f5faff;
+    }
+
+    .address_form {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 500px;
+      padding-bottom: 20px;
+      margin-bottom: 10px;
+      // width: 100%;
+    }
+  }
+}
