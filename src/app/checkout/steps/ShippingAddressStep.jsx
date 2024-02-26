@@ -88,17 +88,12 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
 
             <div className="shipping_address w-100 mt-3">
                 {
-                    !formData?.is_new_address &&
+                    (!formData?.is_new_address && (userAddress?.result?.length > 0)) &&
                     <div className='flex gap-4 items-center w-100'>
                         <CustomAddressRadio data={userAddress?.result}
                             value={formData.address_id}
                             onChange={(value) => { setFormData((prev) => ({ ...prev, address_id: value })) }}
                         />
-
-                        {/* <button className='plusicon'
-                            onClick={() => { setFormData((prev) => ({ ...prev, is_new_address: true })) }}>
-                            <FaPlus />
-                        </button> */}
                     </div>
                 }
                 {/* <CustomButton label='Add a new address' variant='transparent' onClick={() => {

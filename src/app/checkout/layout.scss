@@ -1,0 +1,9 @@
+@import "../styles/mediaquery";
+
+.checkout-layout-wrapper {
+  margin-top: 100px;
+
+  @include for_breakpoint("tablet") {
+    margin-top: 100px
+  }
+}

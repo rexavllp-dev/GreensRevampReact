@@ -20,7 +20,7 @@ const OrderSuccess = () => {
 
   React.useEffect(() => {
     dispatch(getOrder({ id: orderId }))
-  }, []);
+  }, [orderId]);
 
   React.useEffect(() => {
     if (singleOrder?.result) {

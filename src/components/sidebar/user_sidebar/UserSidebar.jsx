@@ -4,8 +4,6 @@ import './UserSidebar.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Link from 'next/link'
 import Image from 'next/image'
-import { companyLogo } from '../../../../public/images'
-import { RxHamburgerMenu } from "react-icons/rx";
 import { usePathname } from 'next/navigation'
 
 //react icons
@@ -22,23 +20,26 @@ import { RiQuestionnaireLine } from 'react-icons/ri';
 import { RiFileTextLine } from 'react-icons/ri';
 import { PiSignOutBold } from "react-icons/pi";
 import { logout } from '@/services/features/authSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const UserSidebar = () => {
     const pathname = usePathname();
     const dispatch = useDispatch();
+    const { isLoggedIn, authCount } = useSelector(state => state.auth)
+    const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
+
 
     const sidebarItems = [
         {
             id: 1,
             name: 'Dashboard',
-            url: '/dashboard',
+            url: '/user',
             icon: <MdOutlineSpaceDashboard />
         },
         {
             id: 2,
             name: 'Purchase History',
-            url: '/sales',
+            url: '/user/purchase-history',
             icon: <RiHistoryLine />
         },
         {
@@ -97,12 +98,21 @@ const UserSidebar = () => {
         },
     ];
 
+    React.useEffect(() => {
+        setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
+    }, [isLoggedIn, authCount])
+
 
     return (
         <div className='adminsidebar'>
             <div className="sidebar">
                 <div className="header">
-                    <CustomTypography content={'Hi, Emil'} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                    {
+                        user ?
+                            <CustomTypography content={`Hi, ${user?.usr_firstname}`} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                            :
+                            <></>
+                    }
                 </div>
 
                 <div className="sidebaritems">
@@ -118,7 +128,7 @@ const UserSidebar = () => {
                             </div>
                         )
                     })}
-                    <div className={ "item mt-4 cursor-pointer"}>
+                    <div className={"item mt-4 cursor-pointer"}>
                         {<PiSignOutBold />}
                         <div onClick={() => dispatch(logout())}>
                             {/* <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}> */}

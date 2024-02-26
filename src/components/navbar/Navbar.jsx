@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import appConfig from '@/config/appConfig';
 import { getCartProducts } from '@/services/features/cartSlice';
 import MiniCart from '../minicart/MiniCart';
+import { useRouter } from 'next/navigation';
 
 const cookies = new Cookies();
 
@@ -27,6 +28,7 @@ const Navbar = () => {
     const imageUrl = appConfig.server.imageUrl;
 
     const dispatch = useDispatch();
+    const router = useRouter();
     const { language, switchLanguage, getTranslation } = useLanguage();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [isOpen, setIsOpen] = React.useState(false)
@@ -113,6 +115,12 @@ const Navbar = () => {
                                             aria-label="Single selection example"
                                             variant="faded"
                                         >
+                                            <DropdownItem
+                                                onClick={() => { router.push('/user') }}
+                                                key={1}
+                                            >
+                                                Account
+                                            </DropdownItem>
                                             <DropdownItem
                                                 onClick={() => handleLogout()}
                                                 key={1}
@@ -209,6 +217,12 @@ const Navbar = () => {
                                                 aria-label="Single selection example"
                                                 variant="faded"
                                             >
+                                                <DropdownItem
+                                                    onClick={() => { router.push('/user') }}
+                                                    key={1}
+                                                >
+                                                    Account
+                                                </DropdownItem>
                                                 <DropdownItem
                                                     onClick={() => handleLogout()}
                                                     key={1}

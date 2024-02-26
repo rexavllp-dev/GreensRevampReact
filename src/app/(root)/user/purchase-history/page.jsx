@@ -7,6 +7,7 @@ import { Select, SelectItem } from '@nextui-org/react'
 import { getUserOrders } from '@/services/features/orderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const sortOptions = [
     {
@@ -18,9 +19,49 @@ const sortOptions = [
         value: 'oldest'
     }
 ];
+
+const filterOptions = [
+    {
+        label: 'All',
+        value: 'All'
+    },
+    {
+        label: 'Completed',
+        value: 'Completed'
+    },
+    {
+        label: 'Pending',
+        value: 'Pending'
+    },
+    {
+        label: 'In Progress',
+        value: 'In Progress'
+    },
+    {
+        label: 'Cancel Request',
+        value: 'Cancel Request'
+    },
+    {
+        label: 'Cancelled',
+        value: 'Cancelled'
+    },
+    {
+        label: 'Return request',
+        value: 'Return request'
+    },
+    {
+        label: 'Returned',
+        value: 'Returned'
+    },
+    {
+        label: 'Failed',
+        value: 'Failed'
+    },
+];
 const PurchaseHistory = () => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
     const [sortBy, setSortBy] = React.useState('');
     const [filters, setFilters] = React.useState('');
 
@@ -33,17 +74,19 @@ const PurchaseHistory = () => {
     return (
         <div className='purchase-history'>
             <div className="header">
-                <MdKeyboardArrowLeft size={32} />
+                <div className="cursor-pointer" onClick={() => router.back()}>
+                    <MdKeyboardArrowLeft size={32} />
+                </div>
                 <CustomTypography content={'Purchase History'} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
             </div>
 
             <div style={{ width: '500px' }} className='flex gap-3 mt-5'>
                 <Select
                     size={'md'}
-                    // label="Sort By"
-                    variant='bordered'
-                    labelPlacement='outside'
-                    placeholder='Filters'
+                    label="Filters"
+                    variant='underlined'
+                    // labelPlacement='outside'
+                    // placeholder='Filters'
                     className="max-w-xs"
                     selectedKeys={[filters]}
                     // onSelectionChange={setSortBy}
@@ -54,7 +97,7 @@ const PurchaseHistory = () => {
                     }}
                 >
                     {
-                        sortOptions.map((option) => (
+                        filterOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                                 {option.label}
                             </SelectItem>
@@ -63,10 +106,10 @@ const PurchaseHistory = () => {
                 </Select>
                 <Select
                     size={'md'}
-                    // label="Sort By"
-                    variant='bordered'
-                    labelPlacement='outside'
-                    placeholder='Sort By'
+                    label="Sort By"
+                    variant='underlined'
+                    // labelPlacement='outside'
+                    // placeholder='Sort By'
                     className="max-w-xs"
                     selectedKeys={[sortBy]}
                     // onSelectionChange={setSortBy}
@@ -100,7 +143,7 @@ const PurchaseHistory = () => {
                                     <span> </span>
                                     <CustomTypography content={'Order is pending'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     <span> </span>
-                                    <CustomTypography content={'22 Items'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                                    <CustomTypography content={item?.productTotalQty + ' Items'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     <span> </span>
                                     <CustomTypography content={`Total AED ${item?.op_line_total}`} color={'BLACK'} size='MEDIUM' weight='MEDIUM' />
                                     <span> </span>
@@ -128,7 +171,7 @@ const PurchaseHistory = () => {
                                     }
                                 </div>
 
-                                <button className='detailsbtn mt-5' >
+                                <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/${item?.orderId}`)}>
                                     View Order details
                                 </button>
                             </div>

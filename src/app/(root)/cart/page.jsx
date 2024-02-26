@@ -5,7 +5,7 @@ import CartItem from '@/components/cards/cartitem/CartItem';
 import './Cart.scss';
 import CustomButton from '@/library/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCartProducts } from '@/services/features/cartSlice';
+import { getCartProducts, updateCartFlags } from '@/services/features/cartSlice';
 import { BsTruck } from "react-icons/bs";
 import { FaMinus, FaPlus, FaStore } from 'react-icons/fa';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
@@ -82,7 +82,7 @@ const Cart = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const recommendedProdRef = React.useRef();
-    const { cartProducts, productQuantityUpdated, productRemovedFromCart } = useSelector((state) => state.cart)
+    const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
     const { saveForLater } = useSelector((state) => state.products)
 
     // States
@@ -94,11 +94,56 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getCartProducts({}));
-    }, [productQuantityUpdated, productRemovedFromCart])
+    }, [productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated])
 
     useEffect(() => {
         dispatch(getSaveForLater({}));
     }, [])
+
+
+    // useEffect(() => {
+
+    //     dispatch(updateCartFlags({
+    //         data: {
+    //             isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
+    //         }
+    //     })).then((res) => {
+    //         if (res.payload.success) {
+
+    //         } else {
+
+    //         }
+    //     }).catch((err) => {
+    //         console.log(err)
+    //     })
+
+    // }, [formData?.shipping_method])
+    useEffect(() => {
+
+        if (cartProducts?.result?.products?.isStorePickup) {
+            setSelected('storePickup');
+        } else {
+            setSelected('shipping');
+        }
+
+    }, [cartProducts?.result?.products?.isStorePickup])
+
+    const handleChangeSelected = (value) => {
+        setSelected(value)
+        dispatch(updateCartFlags({
+            data: {
+                isStorePickup: (value === 'storePickup') ? true : false,
+            }
+        })).then((res) => {
+            if (res.payload.success) {
+
+            } else {
+
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     const handleNav = (ref, direction) => {
         if (ref === "recommendedProdRef") {
@@ -111,9 +156,9 @@ const Cart = () => {
     }
 
     const handleCheckout = () => {
-        if (isLoggedIn){
+        if (isLoggedIn) {
             router.push('/checkout')
-        }else {
+        } else {
             router.push('/auth/login')
         }
     }
@@ -132,14 +177,18 @@ const Cart = () => {
                                 <div className="shipping-tabs">
                                     <div className="tabs p-0" >
                                         <div
-                                            onClick={() => setSelected('shipping')}
+                                            onClick={() => {
+                                                handleChangeSelected('shipping');
+                                            }}
                                             className={selected === 'shipping' ? "cursor-pointer tab tab-active" : "cursor-pointer tab"}
                                         >
                                             <CustomTypography weight='MEDIUM' content="Shipping (Available) " color={selected === 'shipping' ? "BLACK" : "GRAY-LIGHT"} size="MEDIUM" />
                                             <BsTruck color={selected === 'shipping' ? "BLACK" : "#808080"} />
                                         </div>
                                         <div
-                                            onClick={() => setSelected('storePickup')}
+                                            onClick={() => {
+                                                handleChangeSelected('storePickup');
+                                            }}
                                             className={selected === 'storePickup' ? "cursor-pointer tab tab-active" : "cursor-pointer tab"}
                                         >
                                             <CustomTypography weight='MEDIUM' content="Store Pickup (Available) " color={selected === 'storePickup' ? "BLACK" : "GRAY-LIGHT"} size="MEDIUM" />

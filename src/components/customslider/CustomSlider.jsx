@@ -39,7 +39,7 @@ export default function CustomSlider({ value, onChange }) {
                 )}
             /> */}
             <Slider
-                size="md"
+                size="sm"
                 step={10}
                 maxValue={1000}
                 minValue={0}

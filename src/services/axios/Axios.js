@@ -8,7 +8,7 @@ const refreshToken =  typeof window !== "undefined" && window.localStorage.getIt
 const instance = axios.create({
   baseURL: appConfig.server?.baseUrl || '',
   headers: {
-    Authorization: `Bearer ${token}` || '',
+    Authorization: `Bearer ${token || ''}`,
   },
   withCredentials: true,
 });
