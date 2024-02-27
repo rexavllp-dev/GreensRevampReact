@@ -14,7 +14,8 @@ export default function Layout({ children }) {
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
 
     if (token && token !== "" && token !== "undefined") {
-        router.push('/')
+        typeof window !== "undefined" && router.push('/');
+        return null;
     } else {
     return (
         <div className="auth-layout">

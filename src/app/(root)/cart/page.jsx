@@ -247,9 +247,7 @@ const Cart = () => {
                                     </div>
                                 }
 
-
-                                <div className="item">
-                                    <div className="flex items-center gap-2">
+                                {/* <div className="flex items-center gap-2">
                                         <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
                                         <Tooltip
                                             content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
@@ -270,8 +268,8 @@ const Cart = () => {
                                                 <InfoIcon />
                                             </div>
                                         </Tooltip>
-                                    </div>
-                                    {
+                                    </div> */}
+                                {/* {
                                         parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
                                             <div className='flex items-center gap-2'>
                                                 <CustomTypography content="30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
@@ -279,8 +277,55 @@ const Cart = () => {
                                             </div>
                                             :
                                             <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
-                                    }
-                                </div>
+                                    } */}
+
+
+                                {
+                                    selected === "storePickup" ?
+                                        <div className="item">
+                                            <div className="flex items-center gap-2">
+                                                <CustomTypography content="Store Pickup" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                                <Tooltip
+                                                    content={"If product price is less than AED 50, store pickup charge is AED 10. Otherwise store pickup is free(* T&C apply)."}
+                                                >
+                                                    <div className="infoicon">
+                                                        <InfoIcon />
+                                                    </div>
+                                                </Tooltip>
+                                            </div>
+                                            {
+                                                parseInt(cartProducts?.result?.totals?.storePickupCharge) == 0 ?
+                                                    <div className='flex items-center gap-2'>
+                                                        <CustomTypography content="AED 10" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                                        <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                                    </div>
+                                                    :
+                                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.storePickupCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                            }
+                                        </div>
+                                        :
+                                        <div className="item">
+                                            <div className="flex items-center gap-2">
+                                                <CustomTypography content="Shipping" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                                <Tooltip
+                                                    content={"If product price is less than AED 100, shipping charge is AED 30. Otherwise shipping is free(* T&C apply)."}
+                                                >
+                                                    <div className="infoicon">
+                                                        <InfoIcon />
+                                                    </div>
+                                                </Tooltip>
+                                            </div>
+                                            {
+                                                parseInt(cartProducts?.result?.totals?.shippingCharge) == 0 ?
+                                                    <div className='flex items-center gap-2'>
+                                                        <CustomTypography content="AED 30" color="GRAY" size="MEDIUM" weight="MEDIUM" style={{ textDecoration: 'line-through' }} />
+                                                        <CustomTypography content="Free" color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                                    </div>
+                                                    :
+                                                    <CustomTypography content={"AED " + cartProducts?.result?.totals?.shippingCharge} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                                            }
+                                        </div>
+                                }
 
 
 

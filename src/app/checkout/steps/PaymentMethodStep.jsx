@@ -13,11 +13,13 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
         {
             id: 1,
             title: 'Credit Card/ Debit Card',
+            desc: '',
             disabled: false
         },
         {
             id: 2,
             title: 'Cash on Delivery',
+            desc: 'Cash on Delivery has a service charge of AED 15.',
             disabled: formData?.shipping_method === 'Shipping' ? false : true
         }
     ])
@@ -27,9 +29,9 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
                 <CustomTypography content="3. Payment Method" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
             </div> */}
 
-            <CustomShippingMethodRadio orientation='horizontal' data={paymentMethods}
+            <CustomShippingMethodRadio orientation='vertical' data={paymentMethods}
                 value={formData.payment_method}
-                width={'200px'}
+                width={'800px'}
                 onChange={(value) => {
                     setFormData((prev) => ({ ...prev, payment_method: value }))
                 }}

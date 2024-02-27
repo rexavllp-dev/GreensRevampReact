@@ -38,8 +38,16 @@
   .navbar {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 100%;
+
+    .left {
+      cursor: pointer;
+    }
+
+    .logosection {
+      justify-self: center;
+    }
   }
 }

@@ -10,22 +10,22 @@ const ScrollTop = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 100) {
+            if (typeof window !== "undefined" && window.scrollY > 100) {
                 setIsVisible(true);
             } else {
                 setIsVisible(false);
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        typeof window !== "undefined" && window.addEventListener('scroll', handleScroll);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            typeof window !== "undefined" && window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        typeof window !== "undefined" && window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (

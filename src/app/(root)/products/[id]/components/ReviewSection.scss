@@ -1,0 +1,61 @@
+.review_section {
+  .header_section {
+    display: flex;
+    gap: 35px;
+
+    .left {
+      .guidlines {
+        width: 240px;
+      }
+    }
+
+    .right {
+      .ratinglist {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        .item {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .progressbar {
+          width: 115px;
+          height: 13px;
+          border-radius: 50px;
+          background-color: #eeeeee;
+
+          .bar {
+            height: 100%;
+            overflow: hidden;
+            background-color: #CC670A;
+            border-radius: 50px;
+          }
+        }
+      }
+    }
+    .rating {
+      background-color: #f4f4f4;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      border-radius: 50px;
+      width: fit-content;
+      .star {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .reviews {
+    .star {
+      display: flex;
+      align-items: center;
+    }
+
+    .like_dislike {
+      display: flex;
+    }
+  }
+}

@@ -23,6 +23,7 @@ import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../../public/images';
 import MiniCart from '@/components/minicart/MiniCart';
+import ReviewSection from './components/ReviewSection';
 
 
 
@@ -270,19 +271,19 @@ const ProductDetails = ({ params }) => {
 
     const isOutStock = () => {
         if (singleProduct?.data?.product?.stock_availability === 'Out of stock') {
-          return true
+            return true
         } else if (singleProduct?.data?.product?.inventory_management === 'true' || singleProduct?.data?.product?.inventory_management === true) {
-          if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
-            return true;
-          }
-          return false
+            if (parseInt(singleProduct?.data?.product?.product_quantity) === 0) {
+                return true;
+            }
+            return false
         }
         else if (singleProduct?.data?.product?.product_inventory_id === null || singleProduct?.data?.product?.product_inventory_id === undefined) {
-          return true;
+            return true;
         } else {
-          return false
+            return false
         }
-      }
+    }
 
     const convertTimestampToDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -374,14 +375,22 @@ const ProductDetails = ({ params }) => {
                                 </div>
 
                                 {
-                                    expandedIndex === index &&
-                                    (
-                                        <div className="w-full mb-3">
-                                            <CustomTypography content={item?.data}
-                                                color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
-                                            />
-                                        </div>
-                                    )
+                                    ((expandedIndex === index) && (index === 4)) ?
+                                        (
+                                            <div className="w-full reviews_section">
+                                                <ReviewSection />
+
+                                            </div>
+                                        )
+                                        :
+                                        (expandedIndex === index) &&
+                                        (
+                                            <div className="w-full mb-3">
+                                                <CustomTypography content={item?.data}
+                                                    color="GREY" size="MEDIUM-SMALL" weight="REGUALR"
+                                                />
+                                            </div>
+                                        )
                                 }
                             </div>
                         ))}
@@ -399,7 +408,7 @@ const ProductDetails = ({ params }) => {
                         {/* <CustomTypography content="CDA Wafer Happy New Year 1x12 Pcs - LCU2134" color="BLACK" size="LARGE" weight="SEMI-BOLD" /> */}
                     </div>
 
-                    <div className="prd_item">
+                    <div className="prd_item items-center">
                         <ReactStars
                             classNames={'mb-1'}
                             count={5}
@@ -538,7 +547,7 @@ const ProductDetails = ({ params }) => {
                                 <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
                             </div>
                             :
-                            <div className="prd_item">
+                            <div className="prd_item items-center">
 
                                 <div className='countbtn'>
                                     <button onClick={() => updateCount('reduce')}>-</button>
@@ -563,7 +572,7 @@ const ProductDetails = ({ params }) => {
                                     <CiHeart size={28} color='#E54333' />
                                 </div>
 
-                                <CustomButton variant='transparent' label='Buy Now' onClick={()=>{
+                                <CustomButton variant='transparent' label='Buy Now' onClick={() => {
                                     router.push('/cart')
                                 }} />
                                 <CustomButton

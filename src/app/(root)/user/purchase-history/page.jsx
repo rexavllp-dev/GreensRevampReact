@@ -150,12 +150,22 @@ const PurchaseHistory = () => {
                                     <CustomTypography content={item?.ord_payment_method === 'Credit Card/ Debit Card' ? 'Prepaid' : 'COD'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                 </div>
 
-                                <div className="mt-5">
-                                    <CustomTypography content={'Status'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
-                                    <div className="flex items-center gap-4">
+                                <div className="mt-5 flex items-start gap-4">
+                                    <div>
+                                        <CustomTypography content={'Status'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                         <CustomTypography content={'Pending'} color={'BLACK'} size='MEDIUM' weight='SEMI-BOLD' />
-                                        <CustomTypography content={'Shipped to Home'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     </div>
+                                    {
+                                        item?.ord_shipping_method === 'Shipping' ?
+                                            <div className="">
+                                                <CustomTypography content={'Shipping to ' + item?.address_line_1} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                                            </div>
+                                            :
+                                            <div>
+                                                <CustomTypography content={'Self Collect'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                                            </div>
+
+                                    }
                                 </div>
 
                                 <div className='item-images flex items-center gap-5'>

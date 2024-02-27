@@ -137,8 +137,8 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
                         {selectedPlace &&
                             <Marker
                                 position={{
-                                    lat: selectedPlace.geometry.location.lat(),
-                                    lng: selectedPlace.geometry.location.lng(),
+                                    lat: selectedPlace?.geometry?.location?.lat(),
+                                    lng: selectedPlace?.geometry?.location?.lng(),
                                 }}
                             />
                         }

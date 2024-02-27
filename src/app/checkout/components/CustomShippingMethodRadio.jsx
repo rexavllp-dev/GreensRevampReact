@@ -44,20 +44,22 @@ export const CustomRadio = (props) => {
 
 export default function CustomShippingMethodRadio({ data, value, onChange, orientation, width }) {
   return (
-    <RadioGroup  style={{ width: width ? width : "auto" }} label=""
-     orientation={orientation ? orientation : "horizontal"} 
-     value={value} onValueChange={onChange}
-     >
-      {
-        data?.map((item) => (
-          <div key={item.id}>
-            <CustomRadio isDisabled={item.disabled} style={{
-            }} description={''} value={item.title}>
-              {item.title}
-            </CustomRadio>
-          </div>
-        ))
-      }
-    </RadioGroup>
+    <div className="shippingradio">
+      <RadioGroup style={{ width: width ? width : "auto" }} label=""
+        orientation={orientation ? orientation : "horizontal"}
+        value={value} onValueChange={onChange}
+      >
+        {
+          data?.map((item) => (
+            <div key={item.id}>
+              <CustomRadio isDisabled={item.disabled} style={{
+              }} description={item?.desc ? item?.desc : ''} value={item.title}>
+                {item.title}
+              </CustomRadio>
+            </div>
+          ))
+        }
+      </RadioGroup>
+    </div>
   );
 }

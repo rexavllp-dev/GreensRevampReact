@@ -30,12 +30,12 @@ const UserSidebar = () => {
 
 
     const sidebarItems = [
-        {
-            id: 1,
-            name: 'Dashboard',
-            url: '/user',
-            icon: <MdOutlineSpaceDashboard />
-        },
+        // {
+        //     id: 1,
+        //     name: 'Dashboard',
+        //     url: '/user',
+        //     icon: <MdOutlineSpaceDashboard />
+        // },
         {
             id: 2,
             name: 'Purchase History',
@@ -116,6 +116,14 @@ const UserSidebar = () => {
                 </div>
 
                 <div className="sidebaritems">
+                    <div className={(pathname === '/user' || pathname === '/user/') ? "item active" : "item"} key={1}>
+                        <MdOutlineSpaceDashboard />
+                        <Link href={"/user"}>
+                            {/* <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}> */}
+                            <CustomTypography content={"Dashboard"} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                            {/* </div> */}
+                        </Link>
+                    </div>
                     {sidebarItems.map((item) => {
                         return (
                             <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}>

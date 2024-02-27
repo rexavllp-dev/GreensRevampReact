@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import './AuthNavbar.scss';
 import Link from 'next/link';

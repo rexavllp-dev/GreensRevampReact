@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FiDownload } from 'react-icons/fi';
+import CustomStepper from '@/components/customstepper/CustomStepper';
 
 const OrderDetails = ({ params }) => {
 
@@ -31,9 +32,12 @@ const OrderDetails = ({ params }) => {
                     <CustomTypography content={'Order' + ' ' + params.id} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
                 </div>
                 <div className="flex items-center gap-5">
-                    <div className='statusbadge' >
+                    {/* <div className='statusbadge' >
                         <CustomTypography content={"Status"} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                    </div>
+                    </div> */}
+                    <button className='detailsbtn' >
+                        Cancel Order
+                    </button>
                     <div className='flex gap-2 cursor-pointer'>
                         <FiDownload size={20} />
                         <CustomTypography content={"Invoice"}
@@ -43,6 +47,8 @@ const OrderDetails = ({ params }) => {
                     </div>
                 </div>
             </div>
+
+            <CustomStepper />
 
 
             <div className="orderitems">
@@ -62,9 +68,9 @@ const OrderDetails = ({ params }) => {
                                             <CustomTypography content={item?.prd_name}
                                                 color='BLACK'
                                                 size='MEDIUM' weight='SEMI-BOLD' />
-                                            <div className='statusbadge' >
+                                            {/* <div className='statusbadge' >
                                                 <CustomTypography content={"Status"} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                         <div className="flex flex-col gap-1">
@@ -75,11 +81,11 @@ const OrderDetails = ({ params }) => {
                                 </div>
                                 <div className="flex gap-2">
                                     <button className='detailsbtn mt-5' >
-                                        Return
+                                        Cancel
                                     </button>
-                                    <button className='detailsbtn mt-5' >
+                                    {/* <button className='detailsbtn mt-5' >
                                         Replace
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         )
