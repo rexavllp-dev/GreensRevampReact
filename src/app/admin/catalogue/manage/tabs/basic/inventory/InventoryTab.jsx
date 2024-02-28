@@ -157,7 +157,7 @@ const InventoryTab = ({ id, data }) => {
 
     const handleChangeBestSeller = (value) => {
         setFormData((prev) => ({ ...prev, best_seller: value }))
-        
+
     }
 
 
@@ -171,7 +171,8 @@ const InventoryTab = ({ id, data }) => {
                             <FaRegEdit size={20} />
                         </div>
                     </div>
-                    : <></>
+                    :
+                    <></>
             }
 
             <div className="form">

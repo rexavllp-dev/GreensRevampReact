@@ -302,15 +302,14 @@ const SearchFilter = ({ onClose, filters, setFilters, sortBy, setSortBy, setMinP
 
       <div className="footer">
         <button className='teritarybtn' onClick={() => {
-          handleResetFilter()
+          handleResetFilter();
         }}>
           Reset
         </button >
         <button className='secondarybtn' onClick={() => {
-          handleApplyFilter()
-          onClose()
-        }
-        }>
+          handleApplyFilter();
+          onClose();
+        }}>
           Apply
         </button >
       </div>

@@ -1,0 +1,40 @@
+@import "../../../../app/styles/colors";
+@import "../../../../app/styles/mediaquery";
+
+.checkout_modal_button {
+  outline: none;
+  border-radius: 6px;
+  background: #E54333;
+  outline: none;
+  border: none;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // cursor: pointer;
+  transition: 0.2s all;
+
+  position: relative;
+
+  &:hover {
+    // background: #1fa72d;
+    transition: background 0.2s ease-in-out;
+  }
+
+  &:active {
+    border: 1px solid #dc473a;
+    box-shadow: 3px 2px 22px 1px rgba(24, 23, 23, 0.24);
+  }
+
+  .custombtn-label {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    color: #ffffff;
+
+    @include for_breakpoint("small-screen", "mobile") {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.shipping_address {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
+  .new_address_btn {
+    margin-top: 24px;
+    width: 100%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: pointer;
+    padding:10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .new_address_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 500px; 
+    padding-bottom: 24px;
+    padding-top: 24px;
+    padding-left: 20px;
+  }
+  

@@ -28,4 +28,13 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
+
+    //Cancel order
+    cancelOrder: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/cancelorders/cancel-order', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

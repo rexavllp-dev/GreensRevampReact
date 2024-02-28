@@ -10,7 +10,7 @@ import './Checkout.scss';
 import ShippingAddressStep from './steps/ShippingAddressStep';
 import OrderConfirmationStep from './steps/OrderConfirmationStep';
 import PaymentMethodStep from './steps/PaymentMethodStep';
-import { Divider, Tooltip } from '@nextui-org/react';
+import { Divider, Tooltip, useDisclosure } from '@nextui-org/react';
 import { getCartProducts, updateCartFlags } from '@/services/features/cartSlice';
 import { getStripeUrl } from '@/services/features/paymentSlice';
 import InfoIcon from '@/components/customicons/InfoIcon';
@@ -24,6 +24,7 @@ const Checkout = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+
 
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
     // const [showNewAddressForm, setShowNewAddressForm] = React.useState(false)
@@ -340,6 +341,7 @@ const Checkout = () => {
                 </div>
 
             </div>
+           
         </div>
     )
 }

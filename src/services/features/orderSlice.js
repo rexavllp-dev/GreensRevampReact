@@ -15,6 +15,10 @@ const initialState = {
     isUserOrdersLoaded: false,
     isUserOrdersLoadError: false,
     userOrders: [],
+
+    isOrderCanceling: false,
+    isOrderCanceled: false,
+    isOrderCancelError: false,
 }
 
 export const createOrder = createAsyncThunk('createOrder', async ({ data }, thunkAPI) => {
@@ -37,9 +41,19 @@ export const getOrder = createAsyncThunk('getOrder', async ({ id }, thunkAPI) =>
     }
 })
 
-export const getUserOrders = createAsyncThunk('getUserOrders', async ({  }, thunkAPI) => {
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({ }, thunkAPI) => {
     try {
         const response = await order.getUserOrders();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const cancelOrder = createAsyncThunk('cancelOrder', async ({ data }, thunkAPI) => {
+    try {
+        const response = await order.cancelOrder(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -105,6 +119,25 @@ const orderSlice = createSlice({
                 state.isUserOrdersLoading = false;
                 state.isUserOrdersLoaded = false;
                 state.isUserOrdersLoadError = true;
+            })
+
+            //cancel order
+            .addCase(cancelOrder.pending, (state, action) => {
+                state.isOrderCanceling = true;
+                state.isOrderCanceled = false;
+                state.isOrderCancelError = false;
+            })
+
+            .addCase(cancelOrder.fulfilled, (state, action) => {
+                state.isOrderCanceling = false;
+                state.isOrderCanceled = true;
+                state.isOrderCancelError = false;
+            })
+
+            .addCase(cancelOrder.rejected, (state, action) => {
+                state.isOrderCanceling = false;
+                state.isOrderCanceled = false;
+                state.isOrderCancelError = true;
             })
     }
 })

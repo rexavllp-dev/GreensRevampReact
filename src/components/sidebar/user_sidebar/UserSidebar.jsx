@@ -63,7 +63,7 @@ const UserSidebar = () => {
         {
             id: 6,
             name: 'Addresses',
-            url: '/addresses',
+            url: '/user/address',
             icon: <IoLocationOutline />
         },
         {

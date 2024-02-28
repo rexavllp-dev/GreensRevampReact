@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../actions/auth";
 import { Cookies } from "react-cookie";
-import { Axios } from "axios";
+import Axios from "../axios/Axios";
 
 // set up cookies
 const cookies = new Cookies()
