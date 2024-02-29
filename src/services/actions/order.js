@@ -37,4 +37,13 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
+
+    //Cancel individual order
+    cancelIndividualOrder: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/cancelorders/cancel-individual-order', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }

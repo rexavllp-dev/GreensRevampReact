@@ -89,8 +89,8 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
                 // event_venue_id: combinedLocation,
                 place: placeName,
                 address_line_1: combinedLocation,
-                location_long: place.geometry?.location.lng(),
-                location_lat: place.geometry?.location.lat(),
+                longitude: place.geometry?.location.lng(),
+                latitude: place.geometry?.location.lat(),
                 country_code: countryCode
             });
 

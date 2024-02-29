@@ -72,5 +72,23 @@ export const users = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
+    },
+
+    //Create address by user
+    createUserAddress: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/address/create-address`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Update address by user
+    updateUserAddress: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/address/update-address/${id}`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
     }
 }

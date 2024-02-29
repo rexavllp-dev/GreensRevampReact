@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { RadioGroup, Radio, useRadio, VisuallyHidden, cn, Card, CardBody } from "@nextui-org/react";
 import { MdEdit } from "react-icons/md";
@@ -8,6 +9,10 @@ import GoogleMap from '@/components/maps/GoogleMap';
 import CustomTextarea from "@/library/textarea/CustomTextarea";
 import CustomInput from "@/library/input/custominput/CustomInput";
 import CustomPhoneInput from "@/library/input/phoneinput/CustomPhoneInput";
+import { updateUserAddress } from "@/services/features/userSlice";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 export const CustomRadio = (props) => {
   const {
@@ -51,31 +56,53 @@ export const CustomRadio = (props) => {
 
 export default function CustomAddressRadio({ data, value, onChange }) {
 
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = React.useState({
-    address_id: "",
     address_title: "",
-    customer_name: "",
-    customer_email: "",
-    customer_phone_country_code: "",
-    customer_phone: "",
+    full_name: "",
+    address_email: "",
+    mobile_country_code: "",
+    mobile_number: "",
     flat_villa: "",
     zip_code: "",
     delivery_remark: "",
-    is_new_address: false,
-    payment_method: "Credit Card/ Debit Card",
-    shipping_method: "Shipping",
-    contactless_delivery: "",
-
+    is_default: false,
+    // is_new_address: false,
     address_line_1: "",
     address_line_2: "",
-    country_code: "",
-    place: "",
+    // country_code: "",
+    // place: "",
     latitude: "",
-    longitude: "",
-    orderItems: []
+    longitude: ""
   })
 
   const [editItem, setEditItem] = React.useState(null);
+  const [editItemData, setEditItemData] = React.useState({});
+
+  React.useEffect(() => {
+    if (editItem) {
+      setFormData((prev) => ({
+        address_title: editItemData?.address_title,
+        full_name: editItemData?.full_name,
+        address_email: editItemData?.address_email,
+        mobile_country_code: editItemData?.mobile_country_code,
+        mobile_number: editItemData?.mobile_number,
+        flat_villa: editItemData?.flat_villa,
+        zip_code: editItemData?.zip_code,
+        delivery_remark: editItemData?.delivery_remark,
+        is_default: editItemData?.is_default || false,
+        // is_new_address: false,
+        address_line_1: editItemData?.address_line_1,
+        address_line_2: editItemData?.address_line_2,
+        // country_code: editItemData?.country_code,
+        // place: editItemData?.place,
+        latitude: editItemData?.latitude,
+        longitude: editItemData?.longitude
+      }))
+    }
+  }, [editItem])
 
 
   const handlePhoneChange = (name, value, countryCode) => {
@@ -106,29 +133,43 @@ export default function CustomAddressRadio({ data, value, onChange }) {
       }))
     }
   }
+
+
+  const handleUpdateAddress = () => {
+      dispatch(updateUserAddress({ data: formData, id: editItem })).then((res) => {
+        if (res.payload?.success) {
+          setEditItem(null);
+          setEditItemData({});
+          toast.success('Address updated successfully');
+        } else {
+          toast.error(res.payload?.message);
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+
+
   return (
-    // <div className="custom_address_card">
-    //       <CustomTypography content="Address" color="BLACK" size="REGULAR" weight="MEDIUM" />
-    // </div>
     <div className="custom_address_card_wrapper">
       {
-        data?.map((item) => (
-          <div className="custom_address_card">
+        data?.map((item, i) => (
+          <div className="custom_address_card" key={i}>
             <label>
               <input type="radio"
                 checked={value == item?.id}
                 value={item?.id}
                 name="product"
                 onChange={(e) => {
-                   onChange(e.target.value)
-                   }}
+                  onChange(e.target.value)
+                }}
                 className="card-input-element" />
 
               <div className="panel panel-default card-input">
                 <CustomTypography content={item?.address_title} color="BLACK" size="REGULAR" weight="MEDIUM" />
                 <CustomTypography content={item.address_line_1 + '...'} color="BLACK" size="REGULAR" weight="MEDIUM" />
 
-                {/* {
+                {
                   editItem === item?.id ?
                     <div className="address_form">
                       <CustomInput name='address_title' type='text'
@@ -138,83 +179,79 @@ export default function CustomAddressRadio({ data, value, onChange }) {
                         value={formData.address_title}
                       />
 
-                      <CustomInput name='customer_name' type='text'
+                      <CustomInput name='full_name' type='text'
                         maxLength={100}
                         placeholder='Full Name' label={'Full Name'}
                         onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.customer_name}
+                        value={formData.full_name}
                       />
-                      <CustomInput name='customer_email' type='email'
+                      <CustomInput name='address_email' type='email'
                         maxLength={100}
                         placeholder='Email Address' label={'Email Address'}
                         onChange={(e) => { handleInputChange({ e }) }}
-                        value={formData.customer_email}
+                        value={formData.address_email}
                       />
                       <CustomPhoneInput
                         isRequired={true}
                         name={'mobile'}
-                        value={formData.customer_phone}
-                        country={formData.customer_phone_country_code}
+                        value={formData.mobile_number}
+                        country={formData.mobile_country_code}
                         placeholder='Mobile Number'
                         label='Mobile Number'
                         onChange={(value, country) => {
-                          handlePhoneChange('customer_phone', value, country)
+                          handlePhoneChange('mobile_number', value, country)
                         }}
                       />
 
-                      {
-                        formData.shipping_method === 'Shipping' &&
-                        <>
-                          <GoogleMap formData={formData} setFormData={setFormData}
-                            handleInputChange={handleInputChange} />
-                          <CustomInput name='address_line_2' type='text'
-                            maxLength={100}
-                            placeholder='Address Line 2' label={'Address Line 2'}
-                            onChange={(e) => { handleInputChange({ e }) }}
-                            value={formData.address_line_2}
-                          />
-                          <CustomInput name='flat_villa' type='text'
-                            maxLength={100}
-                            placeholder='Flat/ Villa Number' label={'Flat/ Villa Number'}
-                            onChange={(e) => { handleInputChange({ e }) }}
-                            value={formData.flat_villa}
-                          />
-                          <CustomInput name='zip_code' type='text'
-                            maxLength={100}
-                            placeholder='Zip Code' label={'Zip Code'}
-                            onChange={(e) => { handleInputChange({ e }) }}
-                            value={formData.zip_code}
-                          />
-                          <CustomTextarea label={'Delivery Remarks'}
-                            placeholder={'Delivery Remarks'}
-                            name={'delivery_remark'} value={formData.delivery_remark}
-                            onChange={(e) => { handleInputChange({ e }) }}
-                          />
-                        </>
-                      }
+                      <GoogleMap formData={formData} setFormData={setFormData}
+                        handleInputChange={handleInputChange} />
+                      <CustomInput name='address_line_2' type='text'
+                        maxLength={100}
+                        placeholder='Address Line 2' label={'Address Line 2'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.address_line_2}
+                      />
+                      <CustomInput name='flat_villa' type='text'
+                        maxLength={100}
+                        placeholder='Flat/ Villa Number' label={'Flat/ Villa Number'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.flat_villa}
+                      />
+                      <CustomInput name='zip_code' type='text'
+                        maxLength={100}
+                        placeholder='Zip Code' label={'Zip Code'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.zip_code}
+                      />
+                      <CustomTextarea label={'Delivery Remarks'}
+                        placeholder={'Delivery Remarks'}
+                        name={'delivery_remark'} value={formData.delivery_remark}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                      />
 
                       <CustomCheckbox
                         label={<p>Default Delivery Address</p>}
                         name='checkbox'
-                        value={formData.default_delivery_address} onChange={(value) => { setFormData({ ...formData, default_delivery_address: value }) }}
+                        value={formData.is_default} onChange={(value) => { setFormData({ ...formData, is_default: value }) }}
                       />
 
                       <div className="flex gap-3 items-center">
-                        <button className='savebtn' onClick={() => { setShowNewAddressForm(true) }}>
+                        <button className='savebtn' onClick={() => { handleUpdateAddress() }}>
                           Save
                         </button>
-                        <button className='cancelbtn' onClick={() => { setShowNewAddressForm(true) }}>
+                        <button className='cancelbtn' onClick={() => { setEditItem(null); setEditItemData(null); }}>
                           Cancel
                         </button>
                       </div>
                     </div>
                     : null
-                } */}
+                }
               </div>
             </label>
 
             <p className="card-edit-icon" onClick={() => {
-              // setEditItem(item?.id)
+              setEditItem(item?.id)
+              setEditItemData(item)
             }}>
               EDIT
             </p>

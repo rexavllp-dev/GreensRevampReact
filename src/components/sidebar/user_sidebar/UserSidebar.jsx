@@ -69,7 +69,7 @@ const UserSidebar = () => {
         {
             id: 7,
             name: 'Account Information',
-            url: '/account',
+            url: '/user/account',
             icon: <RiAccountCircleLine />
         },
         {

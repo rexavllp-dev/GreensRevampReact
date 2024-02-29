@@ -153,7 +153,12 @@ const PurchaseHistory = () => {
                                 <div className="mt-5 flex items-start gap-4">
                                     <div>
                                         <CustomTypography content={'Status'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
-                                        <CustomTypography content={'Pending'} color={'BLACK'} size='MEDIUM' weight='SEMI-BOLD' />
+                                        {
+                                            item?.op_is_cancel ?
+                                                <CustomTypography content={'Cancelled'} color={'BLACK'} size='MEDIUM' weight='SEMI-BOLD' />
+                                                :
+                                                <CustomTypography content={'Pending'} color={'BLACK'} size='MEDIUM' weight='SEMI-BOLD' />
+                                        }
                                     </div>
                                     {
                                         item?.ord_shipping_method === 'Shipping' ?
@@ -164,7 +169,6 @@ const PurchaseHistory = () => {
                                             <div>
                                                 <CustomTypography content={'Self Collect'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                             </div>
-
                                     }
                                 </div>
 

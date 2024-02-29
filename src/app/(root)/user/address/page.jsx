@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomButton from '@/library/buttons/CustomButton'
 import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
@@ -14,40 +14,37 @@ import "./UserAddress.scss";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import CustomShippingMethodRadio from '@/app/checkout/components/CustomShippingMethodRadio';
 import CustomAddressRadio from '@/app/checkout/components/CustomAddressRadio';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { createUserAddress, getAddressByUser, updateUserAddress } from '@/services/features/userSlice';
+import { toast } from 'react-toastify';
 
 const UserAddress = () => {
 
     const dispatch = useDispatch();
-    const { userAddress } = useSelector((state) => state.users)
+    const { userAddress, isUserAddressCreated, isUserAddressUpdated } = useSelector((state) => state.users)
 
-    const [formData, setFormData] = React.useState({})
+    const [formData, setFormData] = React.useState({
+        address_title: "",
+        full_name: "",
+        address_email: "",
+        mobile_country_code: "",
+        mobile_number: "",
+        flat_villa: "",
+        zip_code: "",
+        delivery_remark: "",
+        is_default: false,
+        is_new_address: false,
+        address_line_1: "",
+        address_line_2: "",
+        // country_code: "",
+        // place: "",
+        latitude: "",
+        longitude: ""
+    })
 
-
-    const [addressTypes, setAddressTypes] = React.useState([
-        {
-            id: 1,
-            title: 'Home',
-            address: '123 Main St, Anytown USA 12345',
-            value: 1
-        },
-        {
-            id: 2,
-            title: 'Work',
-            address: '123 Main St, Anytown USA 12345',
-            value: 2
-        }
-    ])
-
-    const [shippingMethods, setShippingMethods] = React.useState([
-        {
-            id: 1,
-            title: 'Shipping',
-        },
-        {
-            id: 2,
-            title: 'Store Pickup',
-        }
-    ])
+    useEffect(() => {
+        dispatch(getAddressByUser({}));
+    }, [isUserAddressCreated, isUserAddressUpdated])
 
     const handlePhoneChange = (name, value, countryCode) => {
         const re = /^[0-9\b]+$/;
@@ -78,20 +75,36 @@ const UserAddress = () => {
         }
     }
 
-    return (
-        <div className="step">
-            {/* <div className="title">
-                <CustomTypography content="1. Shipping Address" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
-            </div> */}
+    const handleCreateAddress = () => {
+        dispatch(createUserAddress({
+            data: {
+                ...formData
+            }
+        })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message)
+            } else {
+                toast.error(res.payload?.message)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
 
-            <CustomShippingMethodRadio data={shippingMethods}
-                value={formData.shipping_method}
-                onChange={(value) => { setFormData((prev) => ({ ...prev, shipping_method: value })) }}
-            />
+    return (
+        <div className="address_section">
+            <div className="header mb-3">
+                <div className="flex gap-3">
+                    <div className="cursor-pointer" onClick={() => router.back()}>
+                        <MdKeyboardArrowLeft size={32} />
+                    </div>
+                    <CustomTypography content={'Addresses'} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
+                </div>
+            </div>
 
             <div className="shipping_address w-100 mt-3">
                 {
-                    (!formData?.is_new_address && (userAddress?.result?.length > 0)) &&
+                    (userAddress?.result?.length > 0) &&
                     <div className='flex gap-4 items-center w-100'>
                         <CustomAddressRadio data={userAddress?.result}
                             value={formData.address_id}
@@ -126,27 +139,27 @@ const UserAddress = () => {
                                 value={formData.address_title}
                             />
 
-                            <CustomInput name='customer_name' type='text'
+                            <CustomInput name='full_name' type='text'
                                 maxLength={100}
                                 placeholder='Full Name' label={'Full Name'}
                                 onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.customer_name}
+                                value={formData.full_name}
                             />
-                            <CustomInput name='customer_email' type='email'
+                            <CustomInput name='address_email' type='email'
                                 maxLength={100}
                                 placeholder='Email Address' label={'Email Address'}
                                 onChange={(e) => { handleInputChange({ e }) }}
-                                value={formData.customer_email}
+                                value={formData.address_email}
                             />
                             <CustomPhoneInput
                                 isRequired={true}
                                 name={'mobile'}
-                                value={formData.customer_phone}
-                                country={formData.customer_phone_country_code}
+                                value={formData.mobile_number}
+                                country={formData.mobile_country_code}
                                 placeholder='Mobile Number'
                                 label='Mobile Number'
                                 onChange={(value, country) => {
-                                    handlePhoneChange('customer_phone', value, country)
+                                    handlePhoneChange('mobile_number', value, country)
                                 }}
                             />
 
@@ -176,28 +189,21 @@ const UserAddress = () => {
                                 onChange={(e) => { handleInputChange({ e }) }}
                             />
 
-                            {/* <CustomCheckbox
-                            label={<p>Default Delivery Address</p>}
-                            name='checkbox'
-                            value={formData.default_delivery_address} onChange={(value) => { setFormData({ ...formData, default_delivery_address: value }) }}
-                        />
+                            <CustomCheckbox
+                                label={<p>Default Delivery Address</p>}
+                                name='checkbox'
+                                value={formData.is_default} onChange={(value) => { setFormData({ ...formData, is_default: value }) }}
+                            />
 
-                        <div className="flex gap-3 items-center">
-                            <button className='savebtn' onClick={() => { setShowNewAddressForm(true) }}>
-                                Save
-                            </button>
-                            <button className='cancelbtn' onClick={() => { setShowNewAddressForm(true) }}>
-                                Cancel
-                            </button>
-                        </div> */}
-                        </div>
-                        {
-                            userAddress?.result?.length > 0 &&
-                            <div className='new_address_btn' onClick={() => { setFormData((prev) => ({ ...prev, is_new_address: false })) }}>
-                                <IoMdArrowRoundBack />
-                                <CustomTypography content='Use saved address?' color="BLACK" size="REGULAR" weight="MEDIUM" />
+                            <div className="flex gap-3 items-center">
+                                <button className='savebtn' onClick={() => { handleCreateAddress() }}>
+                                    Save
+                                </button>
+                                <button className='cancelbtn' onClick={() => { setFormData((prev) => ({ ...prev, is_new_address: false })) }}>
+                                    Cancel
+                                </button>
                             </div>
-                        }
+                        </div>
                     </>
                 }
 
@@ -208,7 +214,7 @@ const UserAddress = () => {
 
 
             </div>
-           
+
         </div >
     )
 }

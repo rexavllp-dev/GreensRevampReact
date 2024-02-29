@@ -38,15 +38,26 @@ const CancelOrder = ({ params }) => {
     }
 
     const handleCancelOrder = () => {
-        dispatch(cancelOrder({
-            data: {
+        let data = {}
+        if (formData?.cancel_reason_id === 3 && !formData?.cancel_note) {
+            toast.error('Please enter cancel note')
+            return
+        } else if (formData?.cancel_reason_id === 3) {
+            data = {
                 id: params.id,
                 order_id: params.id,
-                cancel_reason_id: 1,
-                cancel_note: '',
+                cancel_note: formData?.cancel_note,
                 cancel_type: 'full'
             }
-        })).then((res) => {
+        } else {
+            data = {
+                id: params.id,
+                order_id: params.id,
+                cancel_reason_id: formData?.cancel_reason_id,
+                cancel_type: 'full'
+            }
+        }
+        dispatch(cancelOrder({ data })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload?.message)
             } else {

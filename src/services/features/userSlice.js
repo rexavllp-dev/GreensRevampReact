@@ -30,7 +30,15 @@ const initialState = {
     isUserAddressLoading: false,
     isUserAddressLoaded: false,
     isUserAddressLoadError: false,
-    userAddress: []
+    userAddress: [],
+
+    isUserAddressCreating: false,
+    isUserAddressCreated: false,
+    isUserAddressCreateError: false,
+
+    isUserAddressUpdating: false,
+    isUserAddressUpdated: false,
+    isUserAddressUpdateError: false,
 }
 
 
@@ -108,7 +116,27 @@ export const getAddressByUser = createAsyncThunk('getAddressByUser', async ({ },
     try {
         const response = await users.getAddressByUser()
         return thunkAPI.fulfillWithValue(response.data);
-    } catch (error) {                            
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const createUserAddress = createAsyncThunk('createUserAddress', async ({ data }, thunkAPI) => {
+    try {
+        const response = await users.createUserAddress(data)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateUserAddress = createAsyncThunk('updateUserAddress', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await users.updateUserAddress(data, id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
         // throw error
         return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -239,6 +267,42 @@ const userSlice = createSlice({
                 state.isUserAddressLoading = false;
                 state.isUserAddressLoaded = false;
                 state.isUserAddressLoadError = true;
+            })
+
+            .addCase(createUserAddress.pending, (state, action) => {
+                state.isUserAddressCreating = true;
+                state.isUserAddressCreated = false;
+                state.isUserAddressCreateError = false;
+            })
+
+            .addCase(createUserAddress.fulfilled, (state, action) => {
+                state.isUserAddressCreating = false;
+                state.isUserAddressCreated = true;
+                state.isUserAddressCreateError = false;
+            })
+
+            .addCase(createUserAddress.rejected, (state, action) => {
+                state.isUserAddressCreating = false;
+                state.isUserAddressCreated = false;
+                state.isUserAddressCreateError = true;
+            })
+
+            .addCase(updateUserAddress.pending, (state, action) => {
+                state.isUserAddressUpdating = true;
+                state.isUserAddressUpdated = false;
+                state.isUserAddressCreateError = false;
+            })
+
+            .addCase(updateUserAddress.fulfilled, (state, action) => {
+                state.isUserAddressUpdating = false;
+                state.isUserAddressUpdated = true;
+                state.isUserAddressUpdateError = false;
+            })
+
+            .addCase(updateUserAddress.rejected, (state, action) => {
+                state.isUserAddressUpdating = false;
+                state.isUserAddressUpdated = false;
+                state.isUserAddressUpdateError = true;
             })
 
 

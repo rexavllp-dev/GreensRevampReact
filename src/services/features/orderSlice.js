@@ -19,6 +19,10 @@ const initialState = {
     isOrderCanceling: false,
     isOrderCanceled: false,
     isOrderCancelError: false,
+
+    isIndividualOrderCanceling: false,
+    isIndividualOrderCanceled: false,
+    isIndividualOrderCancelError: false
 }
 
 export const createOrder = createAsyncThunk('createOrder', async ({ data }, thunkAPI) => {
@@ -54,6 +58,16 @@ export const getUserOrders = createAsyncThunk('getUserOrders', async ({ }, thunk
 export const cancelOrder = createAsyncThunk('cancelOrder', async ({ data }, thunkAPI) => {
     try {
         const response = await order.cancelOrder(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const cancelIndividualOrder = createAsyncThunk('cancelIndividualOrder', async ({ data }, thunkAPI) => {
+    try {
+        const response = await order.cancelIndividualOrder(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -138,6 +152,25 @@ const orderSlice = createSlice({
                 state.isOrderCanceling = false;
                 state.isOrderCanceled = false;
                 state.isOrderCancelError = true;
+            })
+
+            //cancel individual Order
+            .addCase(cancelIndividualOrder.pending, (state, action) => {
+                state.isIndividualOrderCanceling = true;
+                state.isIndividualOrderCanceled = false;
+                state.isIndividualOrderCancelError = false;
+            })
+
+            .addCase(cancelIndividualOrder.fulfilled, (state, action) => {
+                state.isIndividualOrderCanceling = false;
+                state.isIndividualOrderCanceled = true;
+                state.isIndividualOrderCancelError = false;
+            })
+
+            .addCase(cancelIndividualOrder.rejected, (state, action) => {
+                state.isIndividualOrderCanceling = false;
+                state.isIndividualOrderCanceled = false;
+                state.isIndividualOrderCancelError = true;
             })
     }
 })

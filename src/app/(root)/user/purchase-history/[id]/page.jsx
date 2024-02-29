@@ -24,7 +24,11 @@ const OrderDetails = ({ params }) => {
     }, [params.id]);
 
     const handleCancelOrder = () => {
-      router.push(`/user/purchase-history/cancel/${params.id}`)
+        router.push(`/user/purchase-history/cancel/${params.id}`)
+    }
+
+    const handleCancelOrderItem = (itemId) => {
+        router.push(`/user/purchase-history/cancel-item/${itemId}`)
     }
 
     return (
@@ -37,12 +41,16 @@ const OrderDetails = ({ params }) => {
                     <CustomTypography content={'Order' + ' ' + params.id} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
                 </div>
                 <div className="flex items-center gap-5">
-                    {/* <div className='statusbadge' >
-                        <CustomTypography content={"Status"} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
-                    </div> */}
-                    <button className='detailsbtn' onClick={handleCancelOrder} >
-                        Cancel Order
-                    </button>
+                    {
+                       (singleOrder?.result && singleOrder?.result[0]?.op_is_cancel) ?
+                            <div className='statusbadge' >
+                                <CustomTypography content={'Cancelled'} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                            </div>
+                            :
+                            <button className='detailsbtn' onClick={handleCancelOrder} >
+                                Cancel Order
+                            </button>
+                    }
                     <div className='flex gap-2 cursor-pointer'>
                         <FiDownload size={20} />
                         <CustomTypography content={"Invoice"}
@@ -85,9 +93,16 @@ const OrderDetails = ({ params }) => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button className='detailsbtn mt-5' onClick={()=> router.push(`/user/purchase-history/cancel-item/${params.id}`)} >
-                                        Cancel
-                                    </button>
+                                    {
+                                        item?.op_is_cancel ?
+                                            <div className='statusbadge mt-5' >
+                                                <CustomTypography content={'Cancelled'} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                            </div>
+                                            :
+                                            <button className='detailsbtn mt-5' onClick={() => handleCancelOrderItem(item?.orderItemId)} >
+                                                Cancel
+                                            </button>
+                                    }
                                     {/* <button className='detailsbtn mt-5' >
                                         Replace
                                     </button> */}
