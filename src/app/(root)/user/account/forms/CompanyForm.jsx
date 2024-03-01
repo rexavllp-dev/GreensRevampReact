@@ -6,6 +6,8 @@ import CustomInput from '@/library/input/custominput/CustomInput'
 import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
 import MediaUpload from '@/library/mediaupload/MediaUpload'
 import { toast } from 'react-toastify';
+import CustomButton from '@/library/buttons/CustomButton';
+import CustomTypography from '@/library/typography/CustomTypography';
 
 const CompanyForm = () => {
 
@@ -349,7 +351,7 @@ const CompanyForm = () => {
                 }))
             }
         } else if (e.target.name === 'first_name' || e.target.name === 'last_name') {
-          
+
             const re = /^[A-Za-z\s'.-]+$/;
             // if value is not blank, then test the regex
             if (e.target?.value === '' || re.test(e.target?.value)) {
@@ -395,17 +397,16 @@ const CompanyForm = () => {
         }))
     }
 
-
-
     const handleSubmit = () => {
 
     }
 
-
-
-
     return (
         <div className="stack">
+            <div className="mb-3">
+                <CustomTypography content={"Update to Business Account"} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+            </div>
+
             <CustomInput name={'company_name'} value={formData.company_name} onChange={(e) => { handleInputChange({ e }) }}
                 type='text' placeholder='Company Name' label={'Company Name'} isRequired={true}
                 isInvalid={errors.company_name?.error} errMsg={errors.company_name?.message}
@@ -474,6 +475,11 @@ const CompanyForm = () => {
                 }}
                 isRequired={true}
             />
+
+            <div className="flex gap-3 items-center mt-3">
+                <CustomButton variant='transparent' label='Update' onClick={() => { }} />
+
+            </div>
         </div>
     )
 }

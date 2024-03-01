@@ -9,8 +9,9 @@ import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import Badge from '@/components/badges/Badge';
+import { addProductToWishlist } from '@/services/features/wishlistSlice';
 
-const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()
@@ -50,9 +51,21 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
       return false
     }
   }
+
+  const handleAddToWishlist = (id) => {
+    dispatch(addProductToWishlist({ data: { product_id: id } })).then((res) => {
+      if (res.payload?.success) {
+        toast.success(res.payload?.message)
+      } else {
+        toast.error(res.payload?.message)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
   return (
     <div className='productcard'>
-      <div className="icon">
+      <div className="icon" onClick={() => handleAddToWishlist(id)}>
         <Image src={heartIconBlack} width={16} height={16} alt='icon' />
       </div>
       <div className="cardimg_wrapper" onClick={() => {
@@ -138,26 +151,53 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data }
         <div >
           <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
-        <div className="bottomsection">
-          {
-            isOutStock() ?
-              <button className={'productbtn'} onClick={() => {
-                // handleAddToCart()
-              }}>
-                <div className='productbtn_text' >
-                  Notify me
-                </div >
-              </button >
-              :
-              <button className={'productbtn'} onClick={() => {
-                handleAddToCart()
-              }}>
-                <div className='productbtn_text' >
-                  {getTranslation('add_to_cart')}
-                </div >
-              </button >
-          }
-        </div>
+        {
+          haveRemoveBtn ?
+            <div className="flex justify-between items-center">
+              {
+                isOutStock() ?
+                  <button className={'productbtn'} onClick={() => {
+                    // handleAddToCart()
+                  }}>
+                    <div className='productbtn_text' >
+                      Notify me
+                    </div >
+                  </button >
+                  :
+                  <button className={'productbtn'} onClick={() => {
+                    handleAddToCart()
+                  }}>
+                    <div className='productbtn_text' >
+                      {getTranslation('add_to_cart')}
+                    </div >
+                  </button >
+              }
+              <div className='flex items-center cursor-pointer' onClick={() => handleRemove()}> 
+                <CustomTypography content={"Remove"} weight='BOLD' color='GRAY' size='REGULAR' />
+              </div>
+            </div>
+            :
+            <div className="flex justify-center">
+              {
+                isOutStock() ?
+                  <button className={'productbtn'} onClick={() => {
+                    // handleAddToCart()
+                  }}>
+                    <div className='productbtn_text' >
+                      Notify me
+                    </div >
+                  </button >
+                  :
+                  <button className={'productbtn'} onClick={() => {
+                    handleAddToCart()
+                  }}>
+                    <div className='productbtn_text' >
+                      {getTranslation('add_to_cart')}
+                    </div >
+                  </button >
+              }
+            </div>
+        }
       </div>
 
     </div>

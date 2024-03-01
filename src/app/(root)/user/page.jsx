@@ -53,7 +53,7 @@ export default function UserDashboard() {
     {
       id: 8,
       name: 'Notified Products',
-      url: '/notified-products',
+      url: '/user/notified-products',
       icon: <FaBell />,
     }
 ];

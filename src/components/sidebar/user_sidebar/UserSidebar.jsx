@@ -75,13 +75,13 @@ const UserSidebar = () => {
         {
             id: 8,
             name: 'Communication & Privacy',
-            url: '/privacy',
+            url: '/privacy-communication',
             icon: <RiNotificationLine />
         },
         {
             id: 9,
             name: 'Privacy Policy',
-            url: '/policy',
+            url: '/user/privacy-policy',
             icon: <AiOutlineSafetyCertificate />
         },
         {
@@ -93,7 +93,7 @@ const UserSidebar = () => {
         {
             id: 11,
             name: 'Terms of use',
-            url: '/terms',
+            url: '/user/terms',
             icon: <RiFileTextLine />
         },
     ];

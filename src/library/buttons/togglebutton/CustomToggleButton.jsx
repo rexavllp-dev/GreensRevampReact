@@ -2,12 +2,16 @@ import React from 'react'
 import './CustomToggleButton.scss'
 import { Switch, cn, select } from '@nextui-org/react'
 
-const CustomToggleButton = ({ label, value, onChange, disabled, okText, cancelText }) => {
+const CustomToggleButton = ({ label, value, onChange, disabled, okText, cancelText, hideLabel, hideMainLabel }) => {
     // const [isSelected, setIsSelected] = React.useState(true);
 
     return (
         <div className={disabled ? 'togglebtndisabled togglebtn-wrapper' : 'togglebtn-wrapper'} >
-            <p className='togglebtn-label'>{label}</p>
+            {
+                !hideMainLabel &&
+                <p className='togglebtn-label'>{label}</p>
+            }
+
             <Switch
                 disabled={disabled}
                 isSelected={value} onValueChange={onChange}
@@ -24,7 +28,10 @@ const CustomToggleButton = ({ label, value, onChange, disabled, okText, cancelTe
                     ),
                 }}
             >
-                <p className='togglebtn-label'> {value ? (okText ? okText : "Active") : (cancelText ? cancelText : "Inactive")}</p>
+                {
+                    !hideLabel &&
+                    <p className='togglebtn-label'> {value ? (okText ? okText : "Active") : (cancelText ? cancelText : "Inactive")}</p>
+                }
             </Switch>
         </div>
     )

@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import './CheckoutNavbar.scss';
+import './SettingsNavbar.scss';
 import Link from 'next/link';
 import { companyLogo, companyLogoMobile } from '../../../../public/images';
 import Image from 'next/image';
@@ -11,25 +11,25 @@ import LeaveCheckoutModal from '@/app/checkout/components/leave_checkout_modal/L
 import { useDisclosure } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
-const CheckoutNavbar = () => {
+const SettingsNavbar = () => {
 
     const router = useRouter();
     const imageUrl = appConfig.server.imageUrl;
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
+    // const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
 
-    const handleSubmit = () => {
-        setConfirmationOpen(false)
-        onClose()
-        router.back();
-    }
+    // const handleSubmit = () => {
+    //     setConfirmationOpen(false)
+    //     onClose()
+    //     router.back();
+    // }
 
 
     return (
-        <div className='checkoutnavbar-wrapper'>
+        <div className='settingsnavbar-wrapper'>
             <div className="navbar">
-                <div className="left flex items-center gap-3" onClick={() => setConfirmationOpen(true)}>
+                <div className="left flex items-center gap-3" onClick={() => router.back()}>
                     <div className="cursor-pointer">
                         <FaArrowLeft size={19} />
                     </div>
@@ -47,15 +47,8 @@ const CheckoutNavbar = () => {
                 </div>
                 <div className="right"></div>
             </div>
-            <LeaveCheckoutModal
-                isOpen={isConfirmationOpen}
-                onClose={() => setConfirmationOpen(false)}
-                onConfirm={handleSubmit}
-                title="You’re almost there!"
-                message="You’ll have to start over if you leave"
-            />
-        </div>
+        </div >
     )
 }
 
-export default CheckoutNavbar
+export default SettingsNavbar

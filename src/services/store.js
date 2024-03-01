@@ -11,6 +11,8 @@ import cartSlice from "./features/cartSlice";
 import bulkSlice from "./features/bulkSlice";
 import paymentSlice from "./features/paymentSlice";
 import orderSlice from "./features/orderSlice";
+import wishlistSlice from "./features/wishlistSlice";
+import notifyProductSlice from "./features/notifyProductSlice";
 // import thunk from 'redux-thunk';
 
 export const store = configureStore({
@@ -19,13 +21,15 @@ export const store = configureStore({
         countries: countrySlice,
         users: userSlice,
         products: productSlice,
-        brands:  brandSlice,
+        brands: brandSlice,
         categories: categorySlice,
         inventory: inventorySlice,
         cart: cartSlice,
         bulk: bulkSlice,
-        payment:paymentSlice,
-        order: orderSlice
-        // middleware: [thunk],
-    }
+        payment: paymentSlice,
+        order: orderSlice,
+        wishlist: wishlistSlice,
+        notifyProducts: notifyProductSlice
+    // middleware: [thunk],
+}
 })

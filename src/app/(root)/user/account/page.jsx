@@ -15,10 +15,12 @@ import CustomButton from '@/library/buttons/CustomButton';
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
 import MediaUpload from '@/library/mediaupload/MediaUpload';
 import CompanyForm from './forms/CompanyForm';
+import { useRouter } from 'next/navigation';
 
 const UserAccount = () => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const [isDisabled, setIsDisabled] = React.useState(true);
 
@@ -175,13 +177,29 @@ const UserAccount = () => {
                             disabled={isDisabled}
                         />
 
-                        <div className="flex gap-3 items-center justify-end">
+                        <div className="flex gap-3 items-center mt-3">
                             <CustomButton variant='transparent' label='Save' onClick={() => { }} />
 
                         </div>
+
+
+                        <div className='pt-5'>
+                            <div className="account_card mb-5">
+                                <CustomTypography content={"Change password"} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                                <div className='place-self-end'>
+                                    <CustomButton variant='primary' label='Continue' onClick={() => { router.push('/settings/change-password') }} />
+                                </div>
+                            </div>
+                            {/* <div className="account_card">
+                                <CustomTypography content={"Deactivate your account"} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
+                                <div className='place-self-end'>
+                                    <CustomButton variant='primary' label='Continue' />
+                                </div>
+                            </div> */}
+                        </div>
                     </div>
 
-                        <CompanyForm />
+                    <CompanyForm />
                 </div>
 
             </div>

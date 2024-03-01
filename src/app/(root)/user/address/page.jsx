@@ -44,6 +44,10 @@ const UserAddress = () => {
 
     useEffect(() => {
         dispatch(getAddressByUser({}));
+        setFormData((prev) => ({
+            ...prev,
+            is_new_address: false
+        }))
     }, [isUserAddressCreated, isUserAddressUpdated])
 
     const handlePhoneChange = (name, value, countryCode) => {
@@ -51,7 +55,7 @@ const UserAddress = () => {
         // if value is not blank, then test the regex
         if (value === '' || re.test(value)) {
             setFormData((prev) => ({
-                ...prev, [name]: value, customer_phone_country_code: countryCode
+                ...prev, [name]: value, mobile_country_code: countryCode
             }))
         }
     }
@@ -76,11 +80,23 @@ const UserAddress = () => {
     }
 
     const handleCreateAddress = () => {
-        dispatch(createUserAddress({
-            data: {
-                ...formData
-            }
-        })).then((res) => {
+        const data = {
+            address_title: formData?.address_title,
+            full_name: formData?.full_name,
+            address_email: formData?.address_email,
+            mobile_country_code: formData?.mobile_country_code,
+            mobile_number: formData?.mobile_number,
+            flat_villa: formData?.flat_villa,
+            zip_code: formData?.zip_code,
+            delivery_remark: formData?.delivery_remark,
+            is_default: formData?.is_default || false,
+            address_line_1: formData?.address_line_1,
+            address_line_2: formData?.address_line_2,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude
+        }
+
+        dispatch(createUserAddress({ data })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload?.message)
             } else {

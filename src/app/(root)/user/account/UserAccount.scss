@@ -1,7 +1,6 @@
 .user_account {
   padding: 24px 20px;
   width: 100%;
-  max-width: 900px;
 
   .account_form {
     display: flex;
@@ -19,6 +18,15 @@
       &:first-child {
         border-right: 1px solid #a4a4a4;
       }
+    }
+
+    .account_card {
+      height: 146px;
+      width: 100%;
+      padding: 20px;
+      background-color: #fafafa;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }
