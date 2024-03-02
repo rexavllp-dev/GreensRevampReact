@@ -17,6 +17,7 @@ import CustomAddressRadio from '@/app/checkout/components/CustomAddressRadio';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { createUserAddress, getAddressByUser, updateUserAddress } from '@/services/features/userSlice';
 import { toast } from 'react-toastify';
+import { handleScrollToTop } from '@/utils/helpers/handleScrollToTop';
 
 const UserAddress = () => {
 
@@ -48,6 +49,8 @@ const UserAddress = () => {
             ...prev,
             is_new_address: false
         }))
+        //scroll to top
+        handleScrollToTop();
     }, [isUserAddressCreated, isUserAddressUpdated])
 
     const handlePhoneChange = (name, value, countryCode) => {

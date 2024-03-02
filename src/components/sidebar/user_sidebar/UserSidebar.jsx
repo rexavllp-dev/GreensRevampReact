@@ -4,7 +4,7 @@ import './UserSidebar.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 //react icons
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const UserSidebar = () => {
     const pathname = usePathname();
     const dispatch = useDispatch();
+    const router = useRouter();
     const { isLoggedIn, authCount } = useSelector(state => state.auth)
     const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
 
@@ -51,13 +52,13 @@ const UserSidebar = () => {
         {
             id: 4,
             name: 'Gift Cards',
-            url: '/giftcards',
+            url: '/user/giftcards',
             icon: <MdCardGiftcard />
         },
         {
             id: 5,
             name: 'Greens Rewards',
-            url: '/rewards',
+            url: '/user/rewards',
             icon: <FaLeaf />
         },
         {
@@ -75,7 +76,7 @@ const UserSidebar = () => {
         {
             id: 8,
             name: 'Communication & Privacy',
-            url: '/privacy-communication',
+            url: '/user/privacy-communication',
             icon: <RiNotificationLine />
         },
         {
@@ -87,7 +88,7 @@ const UserSidebar = () => {
         {
             id: 10,
             name: 'Help Center',
-            url: '/help',
+            url: '/user/help',
             icon: <RiQuestionnaireLine />
         },
         {
@@ -101,6 +102,11 @@ const UserSidebar = () => {
     React.useEffect(() => {
         setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
     }, [isLoggedIn, authCount])
+
+    const handleLogout = () => {
+        dispatch(logout())
+        router.push('/')
+    }
 
 
     return (
@@ -138,7 +144,7 @@ const UserSidebar = () => {
                     })}
                     <div className={"item mt-4 cursor-pointer"}>
                         {<PiSignOutBold />}
-                        <div onClick={() => dispatch(logout())}>
+                        <div onClick={() => handleLogout()}>
                             {/* <div className={pathname.includes(item.url) ? "item active" : "item"} key={item.id}> */}
                             <CustomTypography content={"Sign Out"} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                         </div>

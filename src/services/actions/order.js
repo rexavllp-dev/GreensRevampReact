@@ -20,6 +20,15 @@ export const order = {
         })
     },
 
+    //Get order item
+    getOrderItem: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/get-order-item/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
     //Get user orders
     getUserOrders: () => {
         return new Promise((resolve, reject) => {
@@ -42,6 +51,24 @@ export const order = {
     cancelIndividualOrder: (data) => {
         return new Promise((resolve, reject) => {
             Axios.post('/cancelorders/cancel-individual-order', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Return product
+    returnProduct: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/return-product', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Replace product
+    replaceProduct: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/users/replace-product', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

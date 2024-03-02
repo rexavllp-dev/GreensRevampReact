@@ -23,13 +23,13 @@ export default function UserDashboard() {
     {
       id: 3,
       name: 'Account Information',
-      url: '/account-information',
+      url: '/user/account',
       icon: <FaUser />,
     },
     {
       id: 4,
       name: 'Your Addresses',
-      url: '/address',
+      url: '/user/address',
       icon: <FaMapMarker />,
     },
     {
