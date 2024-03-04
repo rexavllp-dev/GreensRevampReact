@@ -49,6 +49,7 @@ const CancelItem = ({ params }) => {
         })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload?.message)
+                router.back();
             } else {
                 toast.error(res.payload?.message)
             }

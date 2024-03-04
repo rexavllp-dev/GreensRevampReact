@@ -103,9 +103,12 @@ const OrderDetails = ({ params }) => {
                                                 Cancel
                                             </button>
                                     }
-                                    {/* <button className='detailsbtn mt-5' >
+                                    <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/return/${item?.orderItemId}`)}>
+                                        Return
+                                    </button>
+                                    <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/replace/${item?.orderItemId}`)}>
                                         Replace
-                                    </button> */}
+                                    </button>
                                 </div>
                             </div>
                         )

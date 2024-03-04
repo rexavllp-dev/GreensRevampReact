@@ -59,7 +59,8 @@ const CancelOrder = ({ params }) => {
         }
         dispatch(cancelOrder({ data })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message)
+                toast.success(res.payload?.message);
+                router.back();
             } else {
                 toast.error(res.payload?.message)
             }

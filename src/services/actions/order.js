@@ -23,7 +23,7 @@ export const order = {
     //Get order item
     getOrderItem: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/orders/get-order-item/' + id)
+            Axios.get('/cancelorders/all-order-items/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -59,7 +59,12 @@ export const order = {
     //Return product
     returnProduct: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/users/return-product', data)
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.post('/users/return-product', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -68,7 +73,12 @@ export const order = {
     //Replace product
     replaceProduct: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/users/replace-product', data)
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.post('/users/replace-product', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

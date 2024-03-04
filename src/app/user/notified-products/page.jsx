@@ -4,7 +4,7 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
-import { ProductImg } from '../../../../../public/images';
+import { ProductImg } from '../../../../public/images';
 import { useRouter } from 'next/navigation';
 import { getWishlist, removeWishlist } from '@/services/features/wishlistSlice';
 import { TbMoodEmpty } from "react-icons/tb";

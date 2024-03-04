@@ -613,6 +613,7 @@ const ProductDetails = ({ params }) => {
                 </div>
 
             </div>
+
             {
                 relatedProducts?.result?.relatedProducts?.length > 0 &&
                 <div className="itemcard-wrapper ">

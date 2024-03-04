@@ -47,7 +47,7 @@ export default function UserDashboard() {
     {
       id: 7,
       name: 'My Reviews',
-      url: '/reviews',
+      url: '/user/review',
       icon: <FaStar />,
     },
     {
