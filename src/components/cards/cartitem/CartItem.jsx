@@ -49,7 +49,7 @@ export default function CartItem({ data }) {
     React.useEffect(() => {
         setCount(data?.quantity)
     }, [data?.quantity])
-    
+
     const updateCount = (operator) => {
         let newData = {
             productId: data?.productId,
@@ -128,12 +128,20 @@ export default function CartItem({ data }) {
                 {/* <CountButton count={data.quantity} updateCount={updateCount} /> */}
             </div>
             <div className="details">
-                <div className="title" onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="title cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                 </div>
 
-                <div className="others" onClick={() => router.push('/products/' + data?.productId)}>
-                    <CustomTypography content={`AED ${parseFloat(data?.priceVat?.toFixed(2))}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                <div className="others cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
+                    <div className="flex gap-2">
+                        <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
+                            color="GRAY" size="MEDIUM"
+                            weight="MEDIUM" style={{ textDecoration: 'line-through' }}
+                        />
+                        <CustomTypography content={`AED ${parseFloat(data?.priceVat)?.toFixed(2)}`}
+                            color="BLACK" size="MEDIUM" weight="SEMI-BOLD"
+                        />
+                    </div>
                     {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
                 </div>

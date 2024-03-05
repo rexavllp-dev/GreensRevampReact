@@ -65,13 +65,13 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
   }
   return (
     <div className='productcard'>
-      <div className="icon" onClick={() => handleAddToWishlist(id)}>
+      <div className="icon cursor-pointer" onClick={() => handleAddToWishlist(id)}>
         <Image src={heartIconBlack} width={16} height={16} alt='icon' />
       </div>
-      <div className="cardimg_wrapper" onClick={() => {
+      <div className="cardimg_wrapper cursor-pointer" onClick={() => {
         router.push('/products/' + id)
       }}>
-        <div className="cardimage">
+        <div className="cardimage ">
           {/* <Image src={productImage} /> */}
           <Image src={img}
             fill objectFit='cover'
@@ -119,7 +119,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
       <div className="productdetails">
 
         <div className="topsection">
-          <div className="left">
+          <div className="left cursor-pointer" onClick={() => router.push('/products/' + id)}>
             {/* {
               specialPrice !== null ?
                 <>
@@ -148,7 +148,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
           </div>
 
         </div>
-        <div >
+        <div className='cursor-pointer' onClick={() => router.push('/products/' + id)}>
           <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
         {

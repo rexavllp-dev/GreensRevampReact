@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import DeliveryInstructions from './steps/DeliveryInstructions';
 import { createOrder } from '@/services/features/orderSlice';
 import { getAddressByUser } from '@/services/features/userSlice';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Checkout = () => {
 
@@ -32,6 +32,8 @@ const Checkout = () => {
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
     const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
     // const [orderItems, setOrderItems] = React.useState([]);
+    const searchParams = useSearchParams();
+    const shippingMethod = searchParams.get('m');
 
     const { stripeUrl } = useSelector((state) => state.payment)
     const { userAddress } = useSelector((state) => state.users)
@@ -120,35 +122,20 @@ const Checkout = () => {
 
 
     useEffect(() => {
-        if (formData?.shipping_method === "Store Pickup") {
+        if (shippingMethod === "storePickup") {
             setFormData((prev) => ({
                 ...prev,
+                shipping_method: "Store Pickup",
                 payment_method: "Credit Card/ Debit Card"
+            }))
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                shipping_method: "Shipping"
             }))
         }
 
-        dispatch(updateCartFlags({
-            data: {
-                isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
-                isCod: (formData?.payment_method === "Cash on Delivery") ? true : false
-            }
-        })).then((res) => {
-            if (res.payload.success) {
-
-            } else {
-
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
-
-    }, [formData?.shipping_method, formData?.payment_method])
-
-
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
+    }, [shippingMethod])
 
 
     useEffect(() => {
@@ -341,7 +328,7 @@ const Checkout = () => {
                 </div>
 
             </div>
-           
+
         </div>
     )
 }

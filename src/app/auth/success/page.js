@@ -7,7 +7,7 @@ import { Spinner } from '@nextui-org/react';
 import "./LoginSuccess.scss"
 import { toast } from 'react-toastify';
 import { Cookies } from 'react-cookie';
-import { Axios } from 'axios';
+import Axios from '../../../services/axios/Axios';
 
 const cookies = new Cookies();
 
@@ -39,7 +39,7 @@ const LoginSuccess = () => {
             typeof window !== "undefined" && window.localStorage.setItem('accessToken', access_token);
             typeof window !== "undefined" && window.localStorage.setItem('refreshToken', refresh_token);
 
-            
+
             Axios.interceptors?.request.use((config) => {
                 config.headers['Authorization'] = `Bearer ${access_token}`;
                 return config;

@@ -42,7 +42,7 @@ const OrderDetails = ({ params }) => {
                 </div>
                 <div className="flex items-center gap-5">
                     {
-                       (singleOrder?.result && singleOrder?.result[0]?.op_is_cancel) ?
+                        (singleOrder?.result && singleOrder?.result[0]?.op_is_cancel) ?
                             <div className='statusbadge' >
                                 <CustomTypography content={'Cancelled'} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
                             </div>
@@ -92,7 +92,7 @@ const OrderDetails = ({ params }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-3">
                                     {
                                         item?.op_is_cancel ?
                                             <div className='statusbadge mt-5' >

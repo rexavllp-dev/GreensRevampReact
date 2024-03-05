@@ -83,7 +83,7 @@ const Cart = () => {
     const router = useRouter();
     const recommendedProdRef = React.useRef();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
-    const { saveForLater } = useSelector((state) => state.products)
+    const { saveForLater, isSaveForLaterCreated } = useSelector((state) => state.products)
 
     // States
     const [selected, setSelected] = useState('shipping');
@@ -98,7 +98,7 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getSaveForLater({}));
-    }, [])
+    }, [isSaveForLaterCreated, ])
 
 
     // useEffect(() => {
@@ -157,7 +157,11 @@ const Cart = () => {
 
     const handleCheckout = () => {
         if (isLoggedIn) {
-            router.push('/checkout')
+            if (cartProducts?.result?.isStorePickup) {
+                router.push('/checkout?m=storePickup')
+            } else {
+                router.push('/checkout?m=shipping')
+            }
         } else {
             router.push('/auth/login')
         }
@@ -357,7 +361,7 @@ const Cart = () => {
                             <div className="cartcoupon">
                                 <div className="item">
                                     <div className="giftcard-input">
-                                        <input type="text" placeholder='Gift Card Code' />
+                                        <input type="text" placeholder='Gift Card Code/ Coupon Code' />
                                     </div>
                                     <button className="applybtn">
                                         <CustomTypography content="Apply" color="WHITE" size="MEDIUM" weight="MEDIUM" />

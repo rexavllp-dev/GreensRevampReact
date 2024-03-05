@@ -218,6 +218,9 @@ const Search = () => {
         }
     }
 
+    const totalCount = allProductsByUser?.data?.searchResultCount;
+    const totalPages = "" + (Math.max(1, Math.ceil(parseInt(totalCount) / parseInt(perPage))));
+
     return (
         <div className="searchproducts-wrapper">
 
@@ -335,7 +338,12 @@ const Search = () => {
             </div>
 
             <div className='pagination-controls'>
-                <CustomPagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={allProductsByUser?.data?.totalPage} />
+
+                <CustomPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages.toString()}
+                />
             </div>
 
             {/* <div className="itemcard-wrapper">

@@ -14,6 +14,7 @@ import { FaPlus } from 'react-icons/fa';
 import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 import "./ShippingAddressStep.scss";
 import { IoMdArrowRoundBack } from 'react-icons/io';
+import { updateCartFlags } from '@/services/features/cartSlice';
 
 const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) => {
 
@@ -75,6 +76,30 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
         }
     }
 
+
+
+    const handleUpdateShippingMethod = (value) => {
+        setFormData((prev) => ({ ...prev, shipping_method: value }))
+        if (value === "Store Pickup") {
+            setFormData((prev) => ({ ...prev, payment_method: "Credit Card/ Debit Card" }))
+        }
+
+        dispatch(updateCartFlags({
+            data: {
+                isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
+                isCod: (formData?.payment_method === "Cash on Delivery") ? true : false
+            }
+        })).then((res) => {
+            if (res.payload.success) {
+
+            } else {
+
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     return (
         <div className="step">
             {/* <div className="title">
@@ -83,7 +108,10 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
 
             <CustomShippingMethodRadio data={shippingMethods}
                 value={formData.shipping_method}
-                onChange={(value) => { setFormData((prev) => ({ ...prev, shipping_method: value })) }}
+                onChange={(value) => {
+                    handleUpdateShippingMethod(value);
+                    // setFormData((prev) => ({ ...prev, shipping_method: value })) 
+                }}
             />
 
             <div className="shipping_address w-100 mt-3">

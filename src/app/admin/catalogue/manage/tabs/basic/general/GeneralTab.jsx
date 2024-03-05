@@ -39,9 +39,8 @@ const GeneralTab = ({ id, data }) => {
     const [isDisabled, setIsDisabled] = React.useState(true);
     const [selected, setSelected] = React.useState("English");
     const [loading, setLoading] = React.useState(false);
-    const { allBrands } = useSelector(state => state.brands)
-
-
+    const { allBrands } = useSelector(state => state.brands);
+    
     const categories = [
         { label: 'category1', value: 1 },
         { label: 'category2', value: 2 },
@@ -302,6 +301,7 @@ const GeneralTab = ({ id, data }) => {
                     /> */}
                 </div>
             </div>
+
             <div className="savebtn">
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
             </div>
