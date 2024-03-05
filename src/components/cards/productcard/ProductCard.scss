@@ -29,6 +29,10 @@
     width: 100%;
     justify-content: flex-end;
   }
+  .divider-vertical {
+    height: 20px;
+    border-right: 2px solid gray;
+  }
   .cardimg_wrapper {
     width: 100%;
     display: flex;

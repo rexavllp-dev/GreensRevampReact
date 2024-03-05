@@ -139,6 +139,10 @@ export default function Catalogue() {
         }
     }
 
+    const handleRowClick = (data)=>{
+        router.push(`/admin/catalogue/manage/?id=${data?.id}`)
+    }
+
 
     return (
         <>
@@ -167,6 +171,7 @@ export default function Catalogue() {
                 </div>
                 <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products}
                     selectedRows={selectedRows} setSelectedRows={setSelectedRows}
+                    onRowClicked={handleRowClick}
                 />
             </div>
             <ConfirmationModal

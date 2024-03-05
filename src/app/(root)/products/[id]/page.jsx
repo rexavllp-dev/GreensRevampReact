@@ -28,8 +28,7 @@ import { addProductToWishlist } from '@/services/features/wishlistSlice';
 import { RiFridgeLine } from 'react-icons/ri';
 import { IoIosReturnLeft } from 'react-icons/io';
 import { BiCategoryAlt } from "react-icons/bi";
-import { Badge } from '@nextui-org/react';
-
+import Badge from '@/components/badges/Badge';
 
 
 const products = [
@@ -541,9 +540,11 @@ const ProductDetails = ({ params }) => {
                     }
 
                     {singleProduct?.data?.product?.best_seller ?
-                        <Badge color={'best-seller'}
-                            label={'Best Seller'}
-                        />
+                        <div className='flex'>
+                            <Badge color={'best-seller'}
+                                label={'Best Seller'}
+                            />
+                        </div>
                         :
                         <></>
                     }
@@ -573,6 +574,10 @@ const ProductDetails = ({ params }) => {
                             ?
                             <div className="outofstock pt-3">
                                 <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
+
+                                <div className="mt-3">
+                                    <CustomButton variant='primary' label='Add to Wishlist' onClick={() => handleWishlist()} />
+                                </div>
                             </div>
                             :
                             <div className="prd_item items-center">

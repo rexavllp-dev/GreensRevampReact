@@ -16,12 +16,19 @@ export default function CartItem({ data }) {
     const dispatch = useDispatch();
     const router = useRouter();
 
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
+
     const [count, setCount] = React.useState(data?.quantity);
 
-    const handleRemoveItemFromCart = () => {
-        dispatch(deleteProductFromCart({ id: data?.productId })).then((res) => {
+    const handleRemoveItemFromCart = (prdId) => {
+        dispatch(deleteProductFromCart({ id: prdId })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message);
+                toast.success(res.payload?.message, {
+                    toastId: 'success1',
+                });
             } else {
                 toast.error(res.payload?.message);
             }
@@ -31,19 +38,28 @@ export default function CartItem({ data }) {
     }
 
     const handleSaveForLater = () => {
-        dispatch(createSaveForLater({
-            data: {
-                product_id: data?.productId
-            }
-        })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload?.message);
-            } else {
-                toast.error(res.payload?.message);
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
+
+        if (isLoggedIn) {
+            dispatch(createSaveForLater({
+                data: {
+                    product_id: data?.productId
+                }
+            })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message, {
+                        toastId: 'success1',
+                    });
+                    handleRemoveItemFromCart(data?.productId);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
+            toast.error('Please login first');
+            router.push('/auth/login');
+        }
     }
 
     React.useEffect(() => {
@@ -154,7 +170,7 @@ export default function CartItem({ data }) {
                         }}
                     >Save for Later</button>
                     <div className="removebtn" onClick={() => {
-                        handleRemoveItemFromCart()
+                        handleRemoveItemFromCart(data?.productId)
                     }}>
                         <CustomTypography content="Remove"
                             style={{ cursor: 'pointer', borderBottom: '1px solid black' }}

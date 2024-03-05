@@ -9,10 +9,11 @@ import SearchInput from '@/library/input/searchinput/SearchInput';
 import { createRelatedProducts, deleteRelatedProducts, getAllProducts, getAllRelatedProducts } from '@/services/features/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const RelatedProdTab = ({ id, data }) => {
     const dispatch = useDispatch()
-
+    const router = useRouter();
     const [loading, setLoading] = React.useState(false);
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [selectedRelatedRows, setSelectedRelatedRows] = React.useState([]);
@@ -43,7 +44,7 @@ const RelatedProdTab = ({ id, data }) => {
     ]);
 
 
-    const { allProducts, isRelatedProductsCreated, relatedProducts,isRelatedProductsDeleted } = useSelector(state => state.products)
+    const { allProducts, isRelatedProductsCreated, relatedProducts, isRelatedProductsDeleted } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -92,6 +93,10 @@ const RelatedProdTab = ({ id, data }) => {
     }
 
 
+    const handleRowClick = (data) => {
+        router.push(`/admin/catalogue/manage/?id=${data?.id}`)
+    }
+
     return (
         <div className="optionstab">
             <div className="optionflex">
@@ -114,6 +119,7 @@ const RelatedProdTab = ({ id, data }) => {
                                     columnDefs={columnDefs}
                                     rowData={allProducts?.data?.products}
                                     selectedRows={selectedRows}
+                                    onRowClicked={handleRowClick}
                                     setSelectedRows={setSelectedRows}
                                 />
                             </div>
@@ -139,6 +145,7 @@ const RelatedProdTab = ({ id, data }) => {
                                     columnDefs={columnDefs}
                                     rowData={relatedProducts?.result?.relatedProducts}
                                     selectedRows={selectedRelatedRows}
+                                    onRowClicked={handleRowClick}
                                     setSelectedRows={setSelectedRelatedRows}
                                 />
                             </div>

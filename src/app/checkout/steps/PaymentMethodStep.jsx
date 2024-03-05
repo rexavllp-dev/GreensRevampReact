@@ -7,7 +7,7 @@ import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 
 const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
 
-    
+
     const [addressType, setAddressType] = React.useState('home')
     const [paymentMethods, setPaymentMethods] = React.useState([
         {
@@ -23,6 +23,13 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
             disabled: formData?.shipping_method === 'Shipping' ? false : true
         }
     ])
+
+    const handleUpdatePaymentMethod = (value) => {
+        if (value === "Cash on Delivery") {
+            setFormData((prev) => ({ ...prev, contactless_delivery: 'Do not ring the bell' }))
+        }
+        setFormData((prev) => ({ ...prev, payment_method: value }))
+    }
     return (
         <div className="step">
             {/* <div className="title mb-5">
@@ -33,7 +40,8 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
                 value={formData.payment_method}
                 width={'800px'}
                 onChange={(value) => {
-                    setFormData((prev) => ({ ...prev, payment_method: value }))
+                    handleUpdatePaymentMethod(value);
+
                 }}
             />
 

@@ -151,6 +151,11 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
         <div className='cursor-pointer' onClick={() => router.push('/products/' + id)}>
           <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
+        <div className='cursor-pointer flex justify-between items-center' onClick={() => router.push('/products/' + id)}>
+          <CustomTypography content={"SKU Code: 737432"} weight='REGULAR' color='GREY' size='SMALL' />
+          <span className='divider-vertical'></span>
+          <CustomTypography content={"Item Code: 227432"} weight='REGULAR' color='GREY' size='SMALL' />
+        </div>
         {
           haveRemoveBtn ?
             <div className="flex justify-between items-center">
