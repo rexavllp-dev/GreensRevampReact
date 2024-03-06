@@ -166,7 +166,11 @@ const GeneralTab = ({ id, data }) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
                     let id = res.payload?.data[0]?.id;
-                    router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    } else {
+                        router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
+                    }
                 } else {
                     toast.error(res.payload.message)
                 }

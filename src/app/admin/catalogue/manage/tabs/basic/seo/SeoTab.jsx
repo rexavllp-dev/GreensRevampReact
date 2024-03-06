@@ -16,7 +16,6 @@ const SeoTab = ({ data, id }) => {
     const router = useRouter();
 
 
-
     const [formData, setFormData] = React.useState({
         meta_title: '',
         meta_script: '',
@@ -46,12 +45,15 @@ const SeoTab = ({ data, id }) => {
     }
 
 
-    const handleSubmit = () => {
+    const handleSubmit = (isExit) => {
         setLoading(true)
         if (data?.data?.product?.product_seo_id) {
             dispatch(updateProductSeo({ data: formData, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -65,6 +67,9 @@ const SeoTab = ({ data, id }) => {
             dispatch(createProductSeo({ data: formData })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -102,8 +107,14 @@ const SeoTab = ({ data, id }) => {
                         onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>
-            <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+            <div className="savebtn gap-3">
+                <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
+                    handleSubmit(true);
+                }} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
+                    handleSubmit(false);
+                }}
+                />
             </div>
 
 

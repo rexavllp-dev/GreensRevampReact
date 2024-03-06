@@ -21,6 +21,7 @@ const PriceTab = ({ id, data }) => {
     const router = useRouter();
 
     const [isDisabled, setIsDisabled] = React.useState(true);
+    const [isExit, setIsExit] = React.useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
@@ -106,6 +107,9 @@ const PriceTab = ({ id, data }) => {
             dispatch(updatePrice({ data: data, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload?.message);
                 }
@@ -118,6 +122,9 @@ const PriceTab = ({ id, data }) => {
             dispatch(createPrice({ data: data })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload?.message);
                 }
@@ -232,8 +239,16 @@ const PriceTab = ({ id, data }) => {
                     /> */}
                 </div>
             </div>
-            <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
+            <div className="savebtn gap-3">
+                <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
+                    setIsExit(true);
+                    setConfirmationOpen(true)
+                }} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
+                    setIsExit(false);
+                    setConfirmationOpen(true)
+                }}
+                />
             </div>
             <ConfirmationModal
                 isOpen={isConfirmationOpen}

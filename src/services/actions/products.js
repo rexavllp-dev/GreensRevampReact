@@ -135,6 +135,14 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+    //Update Option
+    updateOption: (data, id) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/update-option/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
     //Create Product Option
     createProductOption: (data) => {
         return new Promise((resolve, reject) => {

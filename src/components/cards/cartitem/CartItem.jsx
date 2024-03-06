@@ -72,7 +72,17 @@ export default function CartItem({ data }) {
             newQuantity: 1,
             operator: operator
         }
-        dispatch(updateProductQuantity({ data: newData }))
+        dispatch(updateProductQuantity({ data: newData })).then((res) => {
+            if (res.payload?.success) {
+                // toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message, {
+                    toastId: 'error'
+                });
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     const handleUpdateQuantity = (newQuantity) => {
@@ -150,10 +160,15 @@ export default function CartItem({ data }) {
 
                 <div className="others cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <div className="flex gap-2">
-                        <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
-                            color="GRAY" size="MEDIUM"
-                            weight="MEDIUM" style={{ textDecoration: 'line-through' }}
-                        />
+                        {
+                            (parseFloat(data?.product_price) > parseFloat(data?.priceVat)) ?
+                                <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
+                                    color="GRAY" size="MEDIUM"
+                                    weight="MEDIUM" style={{ textDecoration: 'line-through' }}
+                                />
+                                :
+                                <></>
+                        }
                         <CustomTypography content={`AED ${parseFloat(data?.priceVat)?.toFixed(2)}`}
                             color="BLACK" size="MEDIUM" weight="SEMI-BOLD"
                         />

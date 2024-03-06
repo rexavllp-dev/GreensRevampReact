@@ -78,8 +78,10 @@ const GeneralTab = () => {
 
 
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (isExit) => {
+        if (isExit) {
+            router.push('/admin/catalogue')
+        }
     }
 
     return (
@@ -96,8 +98,14 @@ const GeneralTab = () => {
 
                 </div> */}
             </div>
-            <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={handleSubmit} />
+            <div className="savebtn gap-3">
+                <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
+                    handleSubmit(true);
+                }} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
+                    handleSubmit(false);
+                }}
+                />
             </div>
 
 

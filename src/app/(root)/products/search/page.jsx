@@ -36,45 +36,8 @@ const Search = () => {
     const [maxPrice, setMaxPrice] = React.useState(10000);
 
     const { allProductsByUser, searchQuery } = useSelector((state) => state.products);
+    const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist);
 
-
-    const categories = [
-        {
-            id: 1,
-            title: 'Food Colours',
-            img: categoryImg2
-        },
-        {
-            id: 2,
-            title: 'Ingredients',
-            img: categoryImg1
-        },
-        {
-            id: 3,
-            title: 'Baking Supplies',
-            img: categoryImg3
-        },
-        {
-            id: 4,
-            title: 'Cake Decorations',
-            img: categoryImg4
-        },
-        {
-            id: 5,
-            title: 'Chocolate',
-            img: categoryImg1
-        },
-        {
-            id: 6,
-            title: 'Chocolate',
-            img: categoryImg2
-        },
-        {
-            id: 7,
-            title: 'Chocolate',
-            img: categoryImg4
-        },
-    ]
 
     const products = [
         {
@@ -204,7 +167,7 @@ const Search = () => {
 
     useEffect(() => {
         dispatch(getAllProductsByUser({ page: currentPage, search_query: keyword, filters, sortBy, minPrice, maxPrice, per_page: perPage }));
-    }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice, perPage]);
+    }, [currentPage, keyword, sortBy, filters, minPrice, maxPrice, perPage, isProductAddedToWishlist, isWishlistRemoved]);
 
 
     /** Decrements or increments scollLeft property to scroll left or right respectively */
@@ -302,8 +265,9 @@ const Search = () => {
                                 className="max-w-xs"
                                 selectedKeys={[perPage]}
                                 onChange={(e) => {
-                                    if (e.target?.value !== perPage) {
-                                        setPerPage(e.target.value)
+                                    if (e.target?.value != perPage) {
+                                        setPerPage(e.target.value);
+                                        setCurrentPage(1);
                                     }
                                 }}
                             >

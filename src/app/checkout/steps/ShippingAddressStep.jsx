@@ -16,25 +16,9 @@ import "./ShippingAddressStep.scss";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { updateCartFlags } from '@/services/features/cartSlice';
 
-const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) => {
+const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress, errors, setErrors }) => {
 
     const dispatch = useDispatch();
-
-
-    const [addressTypes, setAddressTypes] = React.useState([
-        {
-            id: 1,
-            title: 'Home',
-            address: '123 Main St, Anytown USA 12345',
-            value: 1
-        },
-        {
-            id: 2,
-            title: 'Work',
-            address: '123 Main St, Anytown USA 12345',
-            value: 2
-        }
-    ])
 
     const [shippingMethods, setShippingMethods] = React.useState([
         {
@@ -149,6 +133,9 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
                                 placeholder='Address Title' label={'Address Title'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.address_title}
+                                isRequired={true}
+                                isInvalid={errors.address_title.error}
+                                errMsg={errors.address_title.message}
                             />
 
                             <CustomInput name='customer_name' type='text'
@@ -156,12 +143,18 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
                                 placeholder='Full Name' label={'Full Name'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.customer_name}
+                                isRequired={true}
+                                isInvalid={errors.customer_name.error}
+                                errMsg={errors.customer_name.message}
                             />
                             <CustomInput name='customer_email' type='email'
                                 maxLength={100}
                                 placeholder='Email Address' label={'Email Address'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.customer_email}
+                                isRequired={true}
+                                isInvalid={errors.customer_email.error}
+                                errMsg={errors.customer_email.message}
                             />
                             <CustomPhoneInput
                                 isRequired={true}
@@ -173,15 +166,24 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
                                 onChange={(value, country) => {
                                     handlePhoneChange('customer_phone', value, country)
                                 }}
+                                isInvalid={errors.customer_phone.error}
+                                errMsg={errors.customer_phone.message}
                             />
 
                             <GoogleMap formData={formData} setFormData={setFormData}
-                                handleInputChange={handleInputChange} />
+                                handleInputChange={handleInputChange}
+                                isRequired={true}
+                                isInvalid={errors.address_line_2.error}
+                                errMsg={errors.address_line_2.message}
+                            />
                             <CustomInput name='address_line_2' type='text'
                                 maxLength={100}
                                 placeholder='Address Line 2' label={'Address Line 2'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.address_line_2}
+                                isRequired={true}
+                                isInvalid={errors.address_line_2.error}
+                                errMsg={errors.address_line_2.message}
                             />
                             <CustomInput name='flat_villa' type='text'
                                 maxLength={100}
@@ -194,6 +196,9 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress }) =
                                 placeholder='Zip Code' label={'Zip Code'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.zip_code}
+                                isRequired={true}
+                                isInvalid={errors.zip_code.error}
+                                errMsg={errors.zip_code.message}
                             />
                             <CustomTextarea label={'Delivery Remarks'}
                                 placeholder={'Delivery Remarks'}
