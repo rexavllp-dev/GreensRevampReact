@@ -12,7 +12,8 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode, i
     const [mapCenter, setMapCenter] = useState({ lat: parseFloat(formData.location_lat), lng: parseFloat(formData.location_long) });
 
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCJc4SaSyYy4gApcLv0cQTWsasP5d2Kd5w",
+        googleMapsApiKey: "AIzaSyD_oUahMwsrsXAFmTiMSSNC-o7dpPcsJY0",
+        // googleMapsApiKey: "AIzaSyCJc4SaSyYy4gApcLv0cQTWsasP5d2Kd5w",
         libraries
     });
 

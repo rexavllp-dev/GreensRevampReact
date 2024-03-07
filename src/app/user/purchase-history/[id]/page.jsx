@@ -31,6 +31,32 @@ const OrderDetails = ({ params }) => {
         router.push(`/user/purchase-history/cancel-item/${itemId}`)
     }
 
+    const productStatus = (item) => {
+        if (item?.op_is_cancel) {
+            return "Cancelled"
+        } else if (item?.replaceProductId) {
+            if (item?.replace_status === null) {
+                return "Replace Request Pending"
+            } else if (item?.replace_status === true) {
+                return "Replaced"
+            } else if (item?.replace_status === false) {
+                return "Replace Request Pending"
+            }
+        } else if (item?.returnProductId) {
+            if (item?.return_status === null) {
+                return "Return Request Pending"
+            }
+            else if (item?.return_status === true) {
+                return "Returned"
+            }
+            else if (item?.return_status === false) {
+                return "Return Request Pending"
+            }
+        } else {
+            return false;
+        }
+    }
+
     return (
         <div className='orderdetails'>
             <div className="header mb-3">
@@ -92,24 +118,27 @@ const OrderDetails = ({ params }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
-                                    {
-                                        item?.op_is_cancel ?
+                                {
+                                    productStatus(item) ?
+                                        <div className="flex">
                                             <div className='statusbadge mt-5' >
-                                                <CustomTypography content={'Cancelled'} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                                <CustomTypography content={productStatus(item)} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
                                             </div>
-                                            :
+                                        </div>
+                                        :
+
+                                        <div className="flex gap-3">
                                             <button className='detailsbtn mt-5' onClick={() => handleCancelOrderItem(item?.orderItemId)} >
                                                 Cancel
                                             </button>
-                                    }
-                                    <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/return/${item?.orderItemId}`)}>
-                                        Return
-                                    </button>
-                                    <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/replace/${item?.orderItemId}`)}>
-                                        Replace
-                                    </button>
-                                </div>
+                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/return/${item?.orderItemId}`)}>
+                                                Return
+                                            </button>
+                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/replace/${item?.orderItemId}`)}>
+                                                Replace
+                                            </button>
+                                        </div>
+                                }
                             </div>
                         )
                     })

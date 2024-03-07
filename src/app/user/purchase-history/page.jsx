@@ -141,7 +141,7 @@ const PurchaseHistory = () => {
                                         <CustomTypography content={`Order #${item?.orderId}`} color={'BLACK'} size='MEDIUM' weight='SEMI-BOLD' />
                                     </div>
                                     <span> </span>
-                                    <CustomTypography content={'Order is pending'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                                    <CustomTypography content={item?.op_is_cancel ? 'Cancelled' : 'Order is pending'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     <span> </span>
                                     <CustomTypography content={item?.productTotalQty + ' Items'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     <span> </span>
@@ -177,7 +177,11 @@ const PurchaseHistory = () => {
                                         item?.products?.map((item, i) => {
                                             return (
                                                 <div className='item-image'>
-                                                    <Image width={48} height={48} alt="product" src={item?.image_url} />
+                                                    <Image width={48} height={48} alt="product"
+                                                        src={item?.image_url ?
+                                                            item?.image_url :
+                                                            'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
+                                                    />
                                                     <span>{item?.op_qty}</span>
                                                 </div>
                                             )
