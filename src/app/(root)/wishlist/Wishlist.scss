@@ -11,7 +11,10 @@
     grid-gap: 4px;
 
     @include for_breakpoint("small-screen", "mobile") {
-      grid-template-columns: repeat(auto-fit, minmax(164px, auto));
+      // grid-template-columns: repeat(auto-fit, minmax(164px, auto));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
     }
   }
   

@@ -132,7 +132,7 @@ const Wishlist = () => {
                                     rating={product.rating}
                                     data={product}
                                     haveRemoveBtn={true}
-                                    handleRemove={() => handleRemoveWishlist(product?.wishlistId)}
+                                    handleRemove={() => handleRemoveWishlist(product?.product_id)}
                                     img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
                                         (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
                                         'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'

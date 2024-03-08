@@ -31,7 +31,7 @@ export default function Catalogue() {
     const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
 
     useEffect(() => {
-        dispatch(getAllProducts({ search_query: searchQuery }))
+        dispatch(getAllProducts({ search_query: searchQuery, sort: 'newest' }))
     }, [searchQuery, isProductDeleted])
 
 

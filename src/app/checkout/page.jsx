@@ -37,7 +37,7 @@ const Checkout = () => {
     const shippingMethod = searchParams.get('m');
 
     const { stripeUrl } = useSelector((state) => state.payment)
-    const { userAddress } = useSelector((state) => state.users)
+    const { userAddress, isUserAddressCreated, isUserAddressUpdated } = useSelector((state) => state.users)
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -235,14 +235,16 @@ const Checkout = () => {
     }, [isLoggedIn])
 
     const handleCompleteShippingStep = () => {
-        if(!formData?.is_new_address){   
-            if(validateForm()){
+        if (formData?.is_new_address) {
+            if (validateForm()) {
                 setCurrentStep(2);
-            }
-        }else {
-            if(!formData?.address_id){
-                toast.error("Please select address")
             }else {
+                toast.error("Please fill all required fields");
+            }
+        } else {
+            if (!formData?.address_id) {
+                toast.error("Please select address");
+            } else {
                 setCurrentStep(2);
             }
         }
@@ -299,7 +301,7 @@ const Checkout = () => {
 
     useEffect(() => {
         dispatch(getAddressByUser({}));
-    }, [])
+    }, [isUserAddressCreated, isUserAddressUpdated])
 
     useEffect(() => {
         if (userAddress?.result) {

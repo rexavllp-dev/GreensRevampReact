@@ -118,15 +118,17 @@ const Cart = () => {
     //     })
 
     // }, [formData?.shipping_method])
+
+
     useEffect(() => {
 
-        if (cartProducts?.result?.products?.isStorePickup) {
+        if (cartProducts?.result?.isStorePickup) {
             setSelected('storePickup');
         } else {
             setSelected('shipping');
         }
 
-    }, [cartProducts?.result?.products?.isStorePickup])
+    }, [cartProducts?.result?.isStorePickup])
 
     const handleChangeSelected = (value) => {
         setSelected(value)
@@ -141,7 +143,7 @@ const Cart = () => {
 
             }
         }).catch((err) => {
-            console.log(err)
+            console.log(err);
         })
     }
 

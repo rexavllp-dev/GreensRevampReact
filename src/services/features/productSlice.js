@@ -175,9 +175,9 @@ const initialState = {
     saveForLater: [],
 }
 
-export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query }, thunkAPI) => {
+export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query, sort }, thunkAPI) => {
     try {
-        const response = await products.getAllProducts({ search_query });
+        const response = await products.getAllProducts({ search_query, sort });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

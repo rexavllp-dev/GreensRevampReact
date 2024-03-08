@@ -3,9 +3,9 @@ import Axios from '../axios/Axios.js';
 export const products = {
 
     //Get all Products
-    getAllProducts: ({ search_query }) => {
+    getAllProducts: ({ search_query, sort }) => {
         return new Promise((resolve, reject) => {
-            Axios.get(`/products/get-products?search_query=${search_query}`)
+            Axios.get(`/products/get-products?search_query=${search_query}&sort=${sort}`)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
