@@ -5,8 +5,16 @@ import "./ChangePassword.scss";
 import CustomInput from '@/library/input/custominput/CustomInput';
 import CustomButton from '@/library/buttons/CustomButton';
 import CustomTypography from '@/library/typography/CustomTypography';
+import { toast } from 'react-toastify';
+import { updatePassword } from '@/services/features/userSlice';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
 
 const ChangePassword = () => {
+
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -103,9 +111,10 @@ const ChangePassword = () => {
         else {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                password: { error: false, message: '' }
+                new_password: { error: false, message: '' }
             }));
         }
+
 
         // Validate confirm password
         if (!formData.confirm_password?.length) {
@@ -115,7 +124,7 @@ const ChangePassword = () => {
             }));
             isValid = false;
         }
-        else if ((formData.password !== formData.confirm_password) || (!formData.confirm_password?.length)) {
+        else if ((formData.new_password !== formData.confirm_password) || (!formData.confirm_password?.length)) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 confirm_password: { error: true, message: 'Passwords do not match' }
@@ -132,7 +141,27 @@ const ChangePassword = () => {
     };
 
     const handleSubmit = () => {
-
+        if(!validateForm()) {
+            toast.error('validate this')
+            return;
+        }
+        const data = {
+            oldPassword: formData?.old_password,
+            newPassword: formData?.new_password,
+            confirmPassword: formData?.confirm_password
+        }
+        dispatch(updatePassword({
+            data: data
+        })).then(res => {
+            if (res.payload.success) {
+                toast.success(res.payload.message);
+                router.push('/user/account')
+            } else {
+                toast.error(res.payload.message);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
 

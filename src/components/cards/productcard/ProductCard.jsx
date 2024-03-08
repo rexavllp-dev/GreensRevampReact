@@ -9,7 +9,9 @@ import { addProductToCart } from '@/services/features/cartSlice';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import Badge from '@/components/badges/Badge';
-import { addProductToWishlist } from '@/services/features/wishlistSlice';
+import { addProductToWishlist, removeWishlist } from '@/services/features/wishlistSlice';
+import { IoMdHeart } from "react-icons/io";
+import { CiHeart } from "react-icons/ci";
 
 const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove }) => {
 
@@ -63,15 +65,33 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
       console.log(err)
     })
   }
+  const handleRemoveFromWishlist = (id) => {
+    dispatch(removeWishlist({ id })).then((res) => {
+      if (res.payload?.success) {
+        toast.success(res.payload?.message)
+      } else {
+        toast.error(res.payload?.message)
+      }
+    }).catch(err => console.error(err))
+  }
   return (
     <div className='productcard'>
-      <div className="icon" onClick={() => handleAddToWishlist(id)}>
-        <Image src={heartIconBlack} width={16} height={16} alt='icon' />
-      </div>
-      <div className="cardimg_wrapper" onClick={() => {
+      {
+        data?.wishlist_id == null ?
+          <div className="icon cursor-pointer" onClick={() => handleAddToWishlist(id)}>
+            {/* <Image src={heartIconBlack} width={16} height={16} alt='icon' /> */}
+            <CiHeart size={16} />
+          </div>
+          :
+          <div className="icon cursor-pointer" onClick={() => handleRemoveFromWishlist(id)}>
+            {/* <Image src={heartIconBlack} width={16} height={16} alt='icon' /> */}
+            <IoMdHeart size={16} color={'red'} />
+          </div>
+      }
+      <div className="cardimg_wrapper cursor-pointer" onClick={() => {
         router.push('/products/' + id)
       }}>
-        <div className="cardimage">
+        <div className="cardimage ">
           {/* <Image src={productImage} /> */}
           <Image src={img}
             fill objectFit='cover'
@@ -119,7 +139,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
       <div className="productdetails">
 
         <div className="topsection">
-          <div className="left">
+          <div className="left cursor-pointer" onClick={() => router.push('/products/' + id)}>
             {/* {
               specialPrice !== null ?
                 <>
@@ -148,9 +168,57 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
           </div>
 
         </div>
-        <div >
-          <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
+        <div className='cursor-pointer' onClick={() => router.push('/products/' + id)}>
+          <CustomTypography content={title} weight='REGULAR' color='BLACK' size='MEDIUM' />
         </div>
+
+
+        <div className='cursor-pointer flex  items-center gap-3' onClick={() => router.push('/products/' + id)}>
+          {
+            data?.sku ?
+              <div>
+                <CustomTypography content={"SKU Code "} weight='REGULAR' color='BLACK' size='SMALLER' />
+                <CustomTypography content={data?.sku} weight='REGULAR' color='GRAY' size='SMALL' />
+              </div>
+              :
+              <></>
+          }
+          {
+            (data?.sku && data?.item_code) ?
+              <span className='divider-vertical'></span>
+              :
+              <></>
+          }
+          {
+            data?.item_code ?
+              <div>
+                <CustomTypography content={"Item Code "} weight='REGULAR' color='BLACK' size='SMALLER' />
+                <CustomTypography content={data?.item_code} weight='REGULAR' color='GRAY' size='SMALL' />
+              </div>
+              :
+              <></>
+          }
+        </div>
+        {/* <div className='cursor-pointer flex justify-between items-center' onClick={() => router.push('/products/' + id)}>
+          {
+            data?.sku ?
+              <CustomTypography content={"SKU Code: " + data?.sku} weight='REGULAR' color='GREY' size='SMALL' />
+              :
+              <></>
+          }
+          {
+            (data?.sku && data?.item_code) ?
+              <span className='divider-vertical'></span>
+              :
+              <></>
+          }
+          {
+            data?.item_code ?
+              <CustomTypography content={"Item Code: " + data?.item_code} weight='REGULAR' color='GREY' size='SMALL' />
+              :
+              <></>
+          }
+        </div> */}
         {
           haveRemoveBtn ?
             <div className="flex justify-between items-center">
@@ -172,7 +240,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
                     </div >
                   </button >
               }
-              <div className='flex items-center cursor-pointer' onClick={() => handleRemove()}> 
+              <div className='flex items-center cursor-pointer' onClick={() => handleRemove()}>
                 <CustomTypography content={"Remove"} weight='BOLD' color='GRAY' size='REGULAR' />
               </div>
             </div>

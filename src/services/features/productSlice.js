@@ -59,6 +59,10 @@ const initialState = {
     isOptionCreated: false,
     isOptionCreateError: false,
 
+    isOptionUpdating: false,
+    isOptionUpdated: false,
+    isOptionUpdateError: false,
+
     isProductOptionCreating: false,
     isProductOptionCreated: false,
     isProductOptionCreateError: false,
@@ -304,6 +308,16 @@ export const getProductSeo = createAsyncThunk('getProductSeo', async ({ data, id
 export const createOption = createAsyncThunk('createOption', async ({ data }, thunkAPI) => {
     try {
         const response = await products.createOption(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateOption = createAsyncThunk('updateOption', async ({ data, id}, thunkAPI) => {
+    try {
+        const response = await products.updateOption(data, id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -798,6 +812,24 @@ const productSlice = createSlice({
                 state.isOptionCreating = false;
                 state.isOptionCreated = false;
                 state.isOptionCreateError = true;
+            })
+
+            .addCase(updateOption.pending, (state, action) => {
+                state.isOptionUpdating = true;
+                state.isOptionUpdated = false;
+                state.isOptionUpdateError = false;
+            })
+
+            .addCase(updateOption.fulfilled, (state, action) => {
+                state.isOptionUpdating = false;
+                state.isOptionUpdated = true;
+                state.isOptionUpdateError = false;
+            })
+
+            .addCase(updateOption.rejected, (state, action) => {
+                state.isOptionUpdating = false;
+                state.isOptionUpdated = false;
+                state.isOptionUpdateError = true;
             })
 
             .addCase(createProductOption.pending, (state, action) => {

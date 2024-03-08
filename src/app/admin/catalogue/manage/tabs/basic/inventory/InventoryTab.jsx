@@ -25,6 +25,7 @@ const InventoryTab = ({ id, data }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
+    const [isExit, setIsExit] = React.useState(false);
 
     const trackInventory = [
         {
@@ -132,6 +133,9 @@ const InventoryTab = ({ id, data }) => {
             dispatch(updateInventory({ data: newData, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload?.message);
                 }
@@ -144,6 +148,9 @@ const InventoryTab = ({ id, data }) => {
             dispatch(createInventory({ data: newData })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload?.message);
                 }
@@ -157,9 +164,7 @@ const InventoryTab = ({ id, data }) => {
 
     const handleChangeBestSeller = (value) => {
         setFormData((prev) => ({ ...prev, best_seller: value }))
-
     }
-
 
 
     return (
@@ -272,8 +277,16 @@ const InventoryTab = ({ id, data }) => {
                     />
                 </div>
             </div>
-            <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
+            <div className="savebtn gap-3">
+                <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
+                    setIsExit(true);
+                    setConfirmationOpen(true)
+                }} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
+                    setIsExit(false);
+                    setConfirmationOpen(true)
+                }}
+                />
             </div>
 
             <StockUpdateModal open={open} handleClose={() => setOpen(false)} product_qty={formData.product_quantity} id={id} />

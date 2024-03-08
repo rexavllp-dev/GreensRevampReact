@@ -26,7 +26,17 @@ export default function MiniCartItem({ data }) {
             newQuantity: 1,
             operator: operator
         }
-        dispatch(updateProductQuantity({ data: newData }))
+        dispatch(updateProductQuantity({ data: newData })).then((res) => {
+            if (res.payload?.success) {
+                // toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message, {
+                    toastId: 'error'
+                });
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
     const handleUpdateQuantity = (newQuantity) => {
         if (isNaN(parseInt(newQuantity))) {
@@ -55,14 +65,14 @@ export default function MiniCartItem({ data }) {
             operator: operator
         }
 
-        dispatch(updateProductQuantity({ data: newData })).then((res)=>{
-            if(res.payload?.success){
+        dispatch(updateProductQuantity({ data: newData })).then((res) => {
+            if (res.payload?.success) {
                 // toast.success(res.payload?.message);
-            }else {
+            } else {
                 toast.error(res.payload?.message);
                 setCount(data?.quantity);
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
         })
     }
@@ -87,18 +97,29 @@ export default function MiniCartItem({ data }) {
                 </div>
             </div>
             <div className="details">
-                <div className="title" onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="title cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="MEDIUM" />
                 </div>
 
-                <div className="others flex mb-1" onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="others flex mb-1 cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     {/* <CustomTypography
                     content={data?.quantity + " x " + "AED " + parseFloat(data?.priceVat?.toFixed(2))} 
                     style={{
                         textDecoration:'line-through'
                     }}
                     color="BLACK" size="SMALL" weight="MEDIUM" /> */}
-                    <CustomTypography content={data?.quantity + " x " + "AED " + parseFloat(data?.priceVat?.toFixed(2))} color="BLACK" size="SMALL" weight="MEDIUM" />
+                    <CustomTypography content={data?.quantity + " x "} color="BLACK" size="SMALL" weight="MEDIUM" />
+                    {
+                        (parseFloat(data?.product_price) > parseFloat(data?.priceVat)) ?
+                            <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
+                                color="GRAY"
+                                size="SMALL" weight="MEDIUM"
+                                style={{ textDecoration: 'line-through' }}
+                            />
+                            :
+                            <></>
+                    }
+                    <CustomTypography content={"AED " + parseFloat(data?.priceVat?.toFixed(2))} color="BLACK" size="SMALL" weight="MEDIUM" />
                     {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
                 </div>

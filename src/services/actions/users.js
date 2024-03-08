@@ -11,10 +11,34 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
-    //Get all users by admin
+    //Get user details by admin
     getSingleUser: (id) => {
         return new Promise((resolve, reject) => {
             Axios.get(`/users/${id}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Get user details by user
+    getUserDetailsByUser: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/user-details`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Update user details by user
+    updateUserDetailsByUser: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update-user-account`, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    //Update company details
+    updateCompanyDetailsByUser: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.put(`/users/update-company`, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -96,6 +120,22 @@ export const users = {
 
         return new Promise((resolve, reject) => {
             Axios.get(`/users/pickers`)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+
+        })
+
+    },
+
+    //Update user account to company account
+    updateAccountToCompany: (data) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.put(`/users/update-user-account-to-company`, data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -105,6 +145,15 @@ export const users = {
 
         return new Promise((resolve, reject) => {
             Axios.get(`/users/drivers`)
+            .then(response => resolve(response))
+                .catch(error => reject(error))
+
+        })
+    },
+    //Update user password
+    updatePassword: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post(`/users/change-password`, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

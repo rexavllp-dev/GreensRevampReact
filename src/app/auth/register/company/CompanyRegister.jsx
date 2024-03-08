@@ -445,6 +445,7 @@ const CompanyRegister = () => {
 
             companyFormData.append('usr_firstname', formData.first_name);
             companyFormData.append('usr_lastname', formData.last_name);
+            companyFormData.append('usr_designation', formData.designation);
             companyFormData.append('usr_mobile_number', formData.mobile);
             companyFormData.append('usr_mobile_country_code', formData.usr_mobile_country_code);
             companyFormData.append('usr_password', formData.password);

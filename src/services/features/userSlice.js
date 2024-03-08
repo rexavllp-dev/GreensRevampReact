@@ -22,6 +22,19 @@ const initialState = {
     isSingleUserLoadError: false,
     singleUser: {},
 
+    isUserDetailsLoading: false,
+    isUserDetailsLoaded: false,
+    isUserDetailsLoadError: false,
+    userDetails: {},
+
+    isUserDetailsUpdating: false,
+    isUserDetailsUpdated: false,
+    isUserDetailsUpdateError: false,
+
+    isCompanyDetailsUpdating: false,
+    isCompanyDetailsUpdated: false,
+    isCompanyDetailsUpdateError: false,
+
     isUserCreating: false,
     isUserCreated: false,
     isUserCreateError: false,
@@ -51,6 +64,13 @@ const initialState = {
     isDriversLoaded: false,
     isDriversLoadError: false,
     alldrivers: [],
+    isAccountUpdatingToCompany: false,
+    isAccountUpdatedToCompany: false,
+    isAccountUpdateErrorToCompany: false,
+
+    isPasswordUpdating: false,
+    isPasswordUpdated: false,
+    isPasswordUpdateError: false
 }
 
 
@@ -67,6 +87,36 @@ export const getAllUsers = createAsyncThunk('getAllUsers', async ({ data }, thun
 export const getSingleUser = createAsyncThunk('getSingleUser', async (id, thunkAPI) => {
     try {
         const response = await users.getSingleUser(id)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getUserDetailsByUser = createAsyncThunk('getUserDetailsByUser', async ({ }, thunkAPI) => {
+    try {
+        const response = await users.getUserDetailsByUser()
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateUserDetailsByUser = createAsyncThunk('updateUserDetailsByUser', async ({ data }, thunkAPI) => {
+    try {
+        const response = await users.updateUserDetailsByUser(data)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateCompanyDetailsByUser = createAsyncThunk('updateCompanyDetailsByUser', async ({ data }, thunkAPI) => {
+    try {
+        const response = await users.updateCompanyDetailsByUser(data)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -170,6 +220,14 @@ export const getDrivers = createAsyncThunk('getDrivers', async ({ }, thunkAPI) =
 
     try {
         const response = await users.getDrivers()
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+export const updateAccountToCompany = createAsyncThunk('updateAccountToCompany', async ({ data }, thunkAPI) => {
+    try {
+        const response = await users.updateAccountToCompany(data)
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -178,6 +236,15 @@ export const getDrivers = createAsyncThunk('getDrivers', async ({ }, thunkAPI) =
 })
 
 
+export const updatePassword = createAsyncThunk('updatePassword', async ({ data }, thunkAPI) => {
+    try {
+        const response = await users.updatePassword(data)
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
 
 
@@ -244,6 +311,26 @@ const userSlice = createSlice({
                 state.isSingleUserLoading = false;
                 state.isSingleUserLoaded = false;
                 state.isSingleUserLoadError = true;
+            })
+
+            //get user details by user
+            .addCase(getUserDetailsByUser.pending, (state, action) => {
+                state.isUserDetailsLoading = true;
+                state.isUserDetailsLoaded = false;
+                state.isUserDetailsLoadError = false;
+            })
+
+            .addCase(getUserDetailsByUser.fulfilled, (state, action) => {
+                state.isUserDetailsLoading = false;
+                state.isUserDetailsLoaded = true;
+                state.isUserDetailsLoadError = false;
+                state.userDetails = action.payload;
+            })
+
+            .addCase(getUserDetailsByUser.rejected, (state, action) => {
+                state.isUserDetailsLoading = false;
+                state.isUserDetailsLoaded = false;
+                state.isUserDetailsLoadError = true;
             })
 
 
@@ -379,6 +466,80 @@ const userSlice = createSlice({
                 state.isDriversLoadError = true;
             })
 
+            .addCase(updateUserDetailsByUser.pending, (state, action) => {
+                state.isUserDetailsUpdating = true;
+                state.isUserDetailsUpdated = false;
+                state.isUserDetailsUpdateError = false;
+            })
+
+            .addCase(updateUserDetailsByUser.fulfilled, (state, action) => {
+                state.isUserDetailsUpdating = false;
+                state.isUserDetailsUpdated = true;
+                state.isUserDetailsUpdateError = false;
+            })
+
+            .addCase(updateUserDetailsByUser.rejected, (state, action) => {
+                state.isUserDetailsUpdating = false;
+                state.isUserDetailsUpdated = false;
+                state.isUserDetailsUpdateError = true;
+            })
+
+            //update company details
+            .addCase(updateCompanyDetailsByUser.pending, (state, action) => {
+                state.isCompanyDetailsUpdating = true;
+                state.isCompanyDetailsUpdated = false;
+                state.isCompanyDetailsUpdateError = false;
+            })
+
+            .addCase(updateCompanyDetailsByUser.fulfilled, (state, action) => {
+                state.isCompanyDetailsUpdating = false;
+                state.isCompanyDetailsUpdated = true;
+                state.isCompanyDetailsUpdateError = false;
+            })
+
+            .addCase(updateCompanyDetailsByUser.rejected, (state, action) => {
+                state.isCompanyDetailsUpdating = false;
+                state.isCompanyDetailsUpdated = false;
+                state.isCompanyDetailsUpdateError = true;
+            })
+
+            //update account to company account
+            .addCase(updateAccountToCompany.pending, (state, action) => {
+                state.isAccountToCompanyUpdating = true;
+                state.isAccountToCompanyUpdated = false;
+                state.isAccountToCompanyUpdateError = false;
+            })
+
+            .addCase(updateAccountToCompany.fulfilled, (state, action) => {
+                state.isAccountToCompanyUpdating = false;
+                state.isAccountToCompanyUpdated = true;
+                state.isAccountToCompanyUpdateError = false;
+            })
+
+            .addCase(updateAccountToCompany.rejected, (state, action) => {
+                state.isAccountToCompanyUpdating = false;
+                state.isAccountToCompanyUpdated = false;
+                state.isAccountToCompanyUpdateError = true;
+            })
+
+            //update password
+            .addCase(updatePassword.pending, (state, action) => {
+                state.isPasswordUpdating = true;
+                state.isPasswordUpdated = false;
+                state.isPasswordUpdateError = false;
+            })
+
+            .addCase(updatePassword.fulfilled, (state, action) => {
+                state.isPasswordUpdating = false;
+                state.isPasswordUpdated = true;
+                state.isPasswordUpdateError = false;
+            })
+
+            .addCase(updatePassword.rejected, (state, action) => {
+                state.isPasswordUpdating = false;
+                state.isPasswordUpdated = false;
+                state.isPasswordUpdateError = true;
+            })
 
     }
 })

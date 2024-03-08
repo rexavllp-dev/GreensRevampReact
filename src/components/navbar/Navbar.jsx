@@ -92,7 +92,7 @@ const Navbar = () => {
                                 <CountryDropdown />
                             </div>
 
-                            <div className="item">
+                            <div className="item" onClick={() => { router.push('/wishlist') }}>
                                 <div className="icon">
                                     <Image src={heartIcon} />
                                 </div>

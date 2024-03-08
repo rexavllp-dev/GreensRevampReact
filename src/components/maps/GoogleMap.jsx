@@ -8,11 +8,12 @@ import { Skeleton } from "@nextui-org/react";
 
 const libraries = ["places"]; // Load the 'places' library for the Places API
 const apiKey = "AIzaSyAW9GXjTPVClacipiHAb1moz-c9RaaoJIw";
-const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode }) => {
+const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode, isRequired, isInvalid, errMsg }) => {
     const [mapCenter, setMapCenter] = useState({ lat: parseFloat(formData.location_lat), lng: parseFloat(formData.location_long) });
 
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCJc4SaSyYy4gApcLv0cQTWsasP5d2Kd5w",
+        googleMapsApiKey: "AIzaSyD_oUahMwsrsXAFmTiMSSNC-o7dpPcsJY0",
+        // googleMapsApiKey: "AIzaSyCJc4SaSyYy4gApcLv0cQTWsasP5d2Kd5w",
         libraries
     });
 
@@ -73,7 +74,7 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
 
             let countryName = '';
             let countryCode = '';
-            
+
             // Find the country component in address_components
             const countryComponent = place.address_components.find(
                 (component) => component.types.includes("country")
@@ -108,8 +109,8 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
         <div className="googlemap" >
             {!isLoaded ? (
                 <Skeleton isLoaded={isLoaded} className="rounded-lg">
-                <div className="h-24 rounded-lg bg-secondary">Loading...</div>
-              </Skeleton>
+                    <div className="h-24 rounded-lg bg-secondary">Loading...</div>
+                </Skeleton>
             ) : (
                 <>
                     <div className="form_section">
@@ -119,11 +120,14 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode })
                                 value={formData.address_line_1} onChange={handleInputChange}
                                 required={true}
                             /> */}
-                             <CustomInput name='address_line_1' type='text'
+                            <CustomInput name='address_line_1' type='text'
                                 maxLength={100}
                                 placeholder='Address Line 1' label={'Address Line 1'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.address_line_1}
+                                isRequired={isRequired}
+                                isInvalid={isInvalid}
+                                errMsg={errMsg}
                             />
                         </Autocomplete>
                     </div>

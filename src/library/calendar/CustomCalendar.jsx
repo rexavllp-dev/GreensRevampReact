@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 // import 'react-calendar/dist/Calendar.css';
 import './CustomCalendar.scss';
 import { ArrowDown } from '@/components/customicons';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import dayjs from 'dayjs';
+// import DatePicker from "react-datepicker";
+import DatePicker, { DateObject } from "react-multi-date-picker"
 
 export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, value, onChange, disabled }) => {
     // const [date, setDate] = useState('');
@@ -49,7 +50,7 @@ export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, 
                 <ArrowDown size={22} />
             </div>
 
-            <DatePicker
+            {/* <DatePicker
                 selected={value}
                 onChange={(date) => {
                     onChange(dayjs(date).format());
@@ -64,6 +65,19 @@ export const CustomCalendar = ({ label, isRequired, maxDate, isInvalid, errMsg, 
                 customInput={<CustomDateInput />}
                 disabled={disabled}
                 maxDate={maxDate != null && new Date(maxDate)}
+            /> */}
+
+            <DatePicker
+                value={value}
+                disabled={disabled}
+                onChange={(date) => {
+                    onChange(date?.toDate());
+                }}
+                format='DD/MM/YYYY'
+                inputClass="custom-calender-input"
+                minDate={new DateObject()}
+                // maxDate={maxDate != null && new DateObject(maxDate)}
+                currentDate={new DateObject()}
             />
 
 

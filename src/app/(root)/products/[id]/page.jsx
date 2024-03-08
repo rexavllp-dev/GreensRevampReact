@@ -9,7 +9,7 @@ import './ProductDetails.scss';
 import Image from 'next/image';
 import ImageGallery from '@/components/imagegallery/ImageGallery';
 import { CiHeart } from 'react-icons/ci';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { MdKeyboardArrowDown, MdOutlineBrandingWatermark } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOptionsByProductId, getAllRelatedProducts, getAllVariantsByProductId, getOptionValues, getProductOptions, getSingleProduct } from '@/services/features/productSlice';
 import { useRouter } from 'next/navigation';
@@ -24,7 +24,11 @@ import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../../public/images';
 import MiniCart from '@/components/minicart/MiniCart';
 import ReviewSection from './components/ReviewSection';
-
+import { addProductToWishlist } from '@/services/features/wishlistSlice';
+import { RiFridgeLine } from 'react-icons/ri';
+import { IoIosReturnLeft } from 'react-icons/io';
+import { BiCategoryAlt } from "react-icons/bi";
+import Badge from '@/components/badges/Badge';
 
 
 const products = [
@@ -93,7 +97,7 @@ const ProductDetails = ({ params }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const relatedProdRef = React.useRef();
-    const { bulkDiscountData } = useSelector((state) => state.bulk)
+    const { bulkDiscountData } = useSelector((state) => state.bulk);
     const [selectedOption, setSelectedOption] = React.useState('');
     const [count, setCount] = React.useState(1);
     const [contactVisible, setContactVisible] = React.useState(false);
@@ -323,6 +327,22 @@ const ProductDetails = ({ params }) => {
         }
     }
 
+    const handleWishlist = () => {
+        if (isLoggedIn) {
+            dispatch(addProductToWishlist({ data: { product_id: params.id } })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message)
+                } else {
+                    toast.error(res.payload?.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
+            router.push('/auth/login')
+        }
+    }
+
     return (
         <div className='product_details_wrapper'>
             <div className='product_details'>
@@ -519,6 +539,15 @@ const ProductDetails = ({ params }) => {
                         </div>
                     }
 
+                    {singleProduct?.data?.product?.best_seller ?
+                        <div className='flex'>
+                            <Badge color={'best-seller'}
+                                label={'Best Seller'}
+                            />
+                        </div>
+                        :
+                        <></>
+                    }
 
                     {
                         singleProduct?.data?.product?.productPrice[0]?.specialPrice ?
@@ -545,6 +574,10 @@ const ProductDetails = ({ params }) => {
                             ?
                             <div className="outofstock pt-3">
                                 <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
+
+                                <div className="mt-3">
+                                    <CustomButton variant='primary' label='Add to Wishlist' onClick={() => handleWishlist()} />
+                                </div>
                             </div>
                             :
                             <div className="prd_item items-center">
@@ -568,7 +601,7 @@ const ProductDetails = ({ params }) => {
                                     <button onClick={() => updateCount('add')}>+</button>
                                 </div>
 
-                                <div className='iconbtn'>
+                                <div className='iconbtn' onClick={() => handleWishlist()}>
                                     <CiHeart size={28} color='#E54333' />
                                 </div>
 
@@ -609,10 +642,32 @@ const ProductDetails = ({ params }) => {
                         </div>
                     }
 
+                    <div className="additional-info-container">
+                        <div className="flex flex-col gap-2">
+                            <div className='flex gap-2 items-center'>
+                                <RiFridgeLine className='mt-1' />
+                                <CustomTypography content={<><span>Storage Type: </span>{singleProduct?.data?.product?.prd_storage_type}</>} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            </div>
+                            <div className='flex gap-2 items-center'>
+                                <IoIosReturnLeft className='mt-1' />
+                                <CustomTypography content={<><span>Return Type: </span> {singleProduct?.data?.product?.prd_return_type} </>} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            </div>
+                            <div className='flex gap-2 items-center'>
+                                <MdOutlineBrandingWatermark className='mt-1' />
+                                <CustomTypography content={<><span>Brand: </span> {singleProduct?.data?.product?.brd_name} </>} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            </div>
+                            <div className='flex gap-2 items-center'>
+                                <BiCategoryAlt className='mt-1' />
+                                <CustomTypography content={<><span>Category: </span> {singleProduct?.data?.product?.cat_name} </>} color="BLACK" size="MEDIUM" weight="MEDIUM" />
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
+
             </div>
+
             {
                 relatedProducts?.result?.relatedProducts?.length > 0 &&
                 <div className="itemcard-wrapper ">

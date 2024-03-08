@@ -133,6 +133,11 @@
       "value": "12px",
       "mobile": "10px"
     },
+    "SMALLER": {
+      "map": "smaller",
+      "value": "10px",
+      "mobile": "8px"
+    },
     "EXTRA-SMALL": {
       "map": "extra-small",
       "value": "8px",

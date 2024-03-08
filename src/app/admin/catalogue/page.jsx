@@ -10,21 +10,25 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTable from "@/components/customtable/CustomTable";
-import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/react";
+import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, useDisclosure } from "@nextui-org/react";
 import { CameraIcon } from "@/components/customicons/CameraIcon";
 import { deleteProduct, getAllProducts } from "@/services/features/productSlice";
 import { IoMdMore } from "react-icons/io";
 import { toast } from "react-toastify";
+import ConfirmationModal from "@/components/modal/confirmation-modal/ConfirmationModal";
 
 
 export default function Catalogue() {
     const router = useRouter();
     const dispatch = useDispatch();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { allProducts, isProductDeleted } = useSelector(state => state.products)
     const [searchQuery, setSearchQuery] = React.useState('')
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -114,6 +118,8 @@ export default function Catalogue() {
     }, [])
 
     const HandleDeleteProduct = () => {
+        setConfirmationOpen(false);
+        onClose(); // Close the main modal
         if (selectedRows.length > 0) {
             const data = selectedRows.map(row => row.id);
             setLoading(true)
@@ -133,34 +139,48 @@ export default function Catalogue() {
         }
     }
 
+    const handleRowClick = (data)=>{
+        router.push(`/admin/catalogue/manage/?id=${data?.id}`)
+    }
+
 
     return (
-        <div className="cataloguepage">
-            <div className="breadcrumb">
-                <BreadCrumbs />
-            </div>
-            <div className="title">
-                <div className="backbtn" onClick={() => router.back()}>
-                    <FaArrowLeft />
+        <>
+            <div className="cataloguepage">
+                <div className="breadcrumb">
+                    <BreadCrumbs />
                 </div>
-                <CustomTypography content={"Products"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
-            </div>
+                <div className="title">
+                    <div className="backbtn" onClick={() => router.back()}>
+                        <FaArrowLeft />
+                    </div>
+                    <CustomTypography content={"Products"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
+                </div>
 
-            <div className="header">
-                <div className="searchinput">
-                    <SearchInput name={'search'} value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                <div className="header">
+                    <div className="searchinput">
+                        <SearchInput name={'search'} value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    <div className="right">
+                        <CustomButton label="Delete" variant="danger" height={'42px'} onClick={() => setConfirmationOpen(true)} />
+                        <CustomButton label="Create Product" variant="primary" height={'42px'}
+                            onClick={() => router.push('/admin/catalogue/manage')} />
+                    </div>
                 </div>
-                <div className="right">
-                    <CustomButton label="Delete" variant="danger" height={'42px'} onClick={HandleDeleteProduct} />
-                    <CustomButton label="Create Product" variant="primary" height={'42px'}
-                        onClick={() => router.push('/admin/catalogue/manage')} />
-                </div>
+                <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products}
+                    selectedRows={selectedRows} setSelectedRows={setSelectedRows}
+                    onRowClicked={handleRowClick}
+                />
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allProducts?.data?.products}
-                selectedRows={selectedRows} setSelectedRows={setSelectedRows}
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => setConfirmationOpen(false)}
+                onConfirm={HandleDeleteProduct}
+                title="Confirmation"
+                message="Are you sure you want to delete this product?"
             />
-        </div>
+        </>
     )
 }

@@ -16,12 +16,19 @@ export default function CartItem({ data }) {
     const dispatch = useDispatch();
     const router = useRouter();
 
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
+
     const [count, setCount] = React.useState(data?.quantity);
 
-    const handleRemoveItemFromCart = () => {
-        dispatch(deleteProductFromCart({ id: data?.productId })).then((res) => {
+    const handleRemoveItemFromCart = (prdId) => {
+        dispatch(deleteProductFromCart({ id: prdId })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message);
+                toast.success(res.payload?.message, {
+                    toastId: 'success1',
+                });
             } else {
                 toast.error(res.payload?.message);
             }
@@ -31,32 +38,51 @@ export default function CartItem({ data }) {
     }
 
     const handleSaveForLater = () => {
-        dispatch(createSaveForLater({
-            data: {
-                product_id: data?.productId
-            }
-        })).then((res) => {
-            if (res.payload?.success) {
-                toast.success(res.payload?.message);
-            } else {
-                toast.error(res.payload?.message);
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
+
+        if (isLoggedIn) {
+            dispatch(createSaveForLater({
+                data: {
+                    product_id: data?.productId
+                }
+            })).then((res) => {
+                if (res.payload?.success) {
+                    toast.success(res.payload?.message, {
+                        toastId: 'success1',
+                    });
+                    handleRemoveItemFromCart(data?.productId);
+                } else {
+                    toast.error(res.payload?.message);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
+            toast.error('Please login first');
+            router.push('/auth/login');
+        }
     }
 
     React.useEffect(() => {
         setCount(data?.quantity)
     }, [data?.quantity])
-    
+
     const updateCount = (operator) => {
         let newData = {
             productId: data?.productId,
             newQuantity: 1,
             operator: operator
         }
-        dispatch(updateProductQuantity({ data: newData }))
+        dispatch(updateProductQuantity({ data: newData })).then((res) => {
+            if (res.payload?.success) {
+                // toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message, {
+                    toastId: 'error'
+                });
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     const handleUpdateQuantity = (newQuantity) => {
@@ -128,12 +154,25 @@ export default function CartItem({ data }) {
                 {/* <CountButton count={data.quantity} updateCount={updateCount} /> */}
             </div>
             <div className="details">
-                <div className="title" onClick={() => router.push('/products/' + data?.productId)}>
+                <div className="title cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
                     <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                 </div>
 
-                <div className="others" onClick={() => router.push('/products/' + data?.productId)}>
-                    <CustomTypography content={`AED ${parseFloat(data?.priceVat?.toFixed(2))}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                <div className="others cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
+                    <div className="flex gap-2">
+                        {
+                            (parseFloat(data?.product_price) > parseFloat(data?.priceVat)) ?
+                                <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
+                                    color="GRAY" size="MEDIUM"
+                                    weight="MEDIUM" style={{ textDecoration: 'line-through' }}
+                                />
+                                :
+                                <></>
+                        }
+                        <CustomTypography content={`AED ${parseFloat(data?.priceVat)?.toFixed(2)}`}
+                            color="BLACK" size="MEDIUM" weight="SEMI-BOLD"
+                        />
+                    </div>
                     {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
                 </div>
@@ -146,7 +185,7 @@ export default function CartItem({ data }) {
                         }}
                     >Save for Later</button>
                     <div className="removebtn" onClick={() => {
-                        handleRemoveItemFromCart()
+                        handleRemoveItemFromCart(data?.productId)
                     }}>
                         <CustomTypography content="Remove"
                             style={{ cursor: 'pointer', borderBottom: '1px solid black' }}

@@ -8,11 +8,14 @@ import CustomButton from '@/library/buttons/CustomButton';
 import SearchInput from '@/library/input/searchinput/SearchInput';
 import { MdDelete, MdKeyboardArrowDown } from 'react-icons/md';
 import { FaSave } from 'react-icons/fa';
+import { MdEdit } from "react-icons/md";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import { createOption, createProductOption, deleteProductOption, deleteProductOptionValue, getAllOptionsByProductId, getAllProducts, getOptionValues, updateOptionValue } from '@/services/features/productSlice';
 import { toast } from 'react-toastify';
 import CustomTypography from '@/library/typography/CustomTypography';
+import { useRouter } from 'next/navigation';
+import EditOptionModal from './components/EditOptionModal';
 
 const OptionsTab = ({ data, id }) => {
 
@@ -20,17 +23,23 @@ const OptionsTab = ({ data, id }) => {
         option_name: '',
         label: '',
     })
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [searchQuery, setSearchQuery] = React.useState('')
+    const [open, setOpen] = React.useState(false);
+    const [editData, setEditData] = React.useState({
+        id: '',
+        name: ''
+    });
 
 
     const { allProducts, allOptionsByProduct, optionValues,
         isProductOptionDeleted, isProductOptionValueDeleted,
-        isProductOptionCreated, isOptionCreated, isOptionValueUpdated } = useSelector(state => state.products)
+        isProductOptionCreated, isOptionCreated, isOptionValueUpdated,isOptionUpdated } = useSelector(state => state.products)
 
     useEffect(() => {
         dispatch(getAllProducts({ search_query: searchQuery }))
@@ -38,7 +47,7 @@ const OptionsTab = ({ data, id }) => {
 
     useEffect(() => {
         dispatch(getAllOptionsByProductId({ id }))
-    }, [id, isProductOptionCreated, isProductOptionDeleted, isProductOptionValueDeleted, isOptionCreated])
+    }, [id, isProductOptionCreated, isProductOptionDeleted, isProductOptionValueDeleted, isOptionCreated, isOptionUpdated])
 
     useEffect(() => {
         dispatch(getOptionValues({ id: expandedIndex }))
@@ -180,7 +189,18 @@ const OptionsTab = ({ data, id }) => {
             console.log(err);
         })
     }
+    const handleEditProductOption = (id, name) => {
+        setOpen(true);
+        setEditData({
+            id: id,
+            name: name
+        })
+    }
 
+
+    const handleRowClick = (data) => {
+        router.push(`/admin/catalogue/manage/?id=${data?.id}`)
+    }
 
     return (
         <div className="optionstab">
@@ -230,8 +250,12 @@ const OptionsTab = ({ data, id }) => {
                                                 <MdKeyboardArrowDown size={20} className='mt-1' />
                                                 <p className="text-md">{item.option_name}</p>
                                             </div>
-                                            <div className="flex gap-3">
+                                            <div className="flex gap-4">
                                                 <CustomButton label="Manage" variant="teritary" onClick={() => handleItemClick(item.id)} />
+                                                <MdEdit size={24}
+                                                    onClick={() => handleEditProductOption(item.id, item.option_name)}
+                                                    className='mt-3 icon cursor-pointer'
+                                                    color='#555' onAn />
                                                 <MdDelete size={24}
                                                     onClick={() => handleDeleteProductOption(item.id)}
                                                     className='mt-3 icon cursor-pointer'
@@ -255,6 +279,7 @@ const OptionsTab = ({ data, id }) => {
                                                     columnDefs={columnDefs}
                                                     rowData={allProducts?.data?.products}
                                                     selectedRows={selectedRows}
+                                                    onRowClicked={handleRowClick}
                                                     setSelectedRows={setSelectedRows} />
                                                 <CustomButton label="Add" variant="primary"
                                                     onClick={() => handleCreateProductOption(item.id, selectedRows)}
@@ -331,7 +356,7 @@ const OptionsTab = ({ data, id }) => {
                     </Card>
                 </div>
             </div>
-
+            <EditOptionModal open={open} handleClose={() => setOpen(false)} editData={editData} />
         </div>
     )
 }

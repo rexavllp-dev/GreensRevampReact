@@ -11,7 +11,7 @@ import './CustomTable.scss';
 import { useRouter } from 'next/navigation';
 
 
-export default function CustomTable({ rowData, columnDefs, height, setSelectedRows, selectedRows }) {
+export default function CustomTable({ rowData, columnDefs, height, setSelectedRows, selectedRows, onRowClicked }) {
     const router = useRouter();
     const gridRef = useRef();
 
@@ -60,6 +60,7 @@ export default function CustomTable({ rowData, columnDefs, height, setSelectedRo
                 suppressCellFocus={true}
                 rowSelection="multiple"
                 onSelectionChanged={onSelectionChanged}
+                onRowClicked={(value) => onRowClicked(value?.data)}
                 // onRowSelected={(value) => console.log(value)}
                 onCellClicked={(value) => console.log(value)}
             ></AgGridReact>

@@ -6,10 +6,16 @@ const initialState = {
     isOrderCreating: false,
     isOrderCreated: false,
     isOrderCreateError: false,
+
     isOrderLoading: false,
     isOrderLoaded: false,
     isOrderLoadError: false,
     singleOrder: {},
+
+    isOrderItemLoading: false,
+    isOrderItemLoaded: false,
+    isOrderItemLoadError: false,
+    orderItem: [],
 
     isUserOrdersLoading: false,
     isUserOrdersLoaded: false,
@@ -75,6 +81,16 @@ export const getOrder = createAsyncThunk('getOrder', async ({ id }, thunkAPI) =>
     }
 })
 
+export const getOrderItem = createAsyncThunk('getOrderItem', async ({ id }, thunkAPI) => {
+    try {
+        const response = await order.getOrderItem(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 export const getUserOrders = createAsyncThunk('getUserOrders', async ({ }, thunkAPI) => {
     try {
         const response = await order.getUserOrders();
@@ -123,7 +139,16 @@ export const handleAssignPicker = createAsyncThunk('handleAssignPicker', async (
 
         const response = await order.handleAssignPicker(data);
         return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
+export const returnProduct = createAsyncThunk('returnProduct', async ({ data }, thunkAPI) => {
+    try {
+        const response = await order.returnProduct(data);
+        return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
         return thunkAPI.rejectWithValue(error.response.data);
@@ -138,7 +163,16 @@ export const getAllAssigedOrders = createAsyncThunk('getAllAssigedOrders', async
 
         const response = await order.getAllAssigedOrders(data);
         return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
+export const replaceProduct = createAsyncThunk('replaceProduct', async ({ data }, thunkAPI) => {
+    try {
+        const response = await order.replaceProduct(data);
+        return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
         return thunkAPI.rejectWithValue(error.response.data);
@@ -230,6 +264,23 @@ const orderSlice = createSlice({
                 state.isOrderLoading = false;
                 state.isOrderLoaded = false;
                 state.isOrderLoadError = true;
+            })
+            // Get order item
+            .addCase(getOrderItem.pending, (state, action) => {
+                state.isOrderItemLoading = true;
+                state.isOrderItemLoaded = false;
+                state.isOrderItemLoadError = false;
+            })
+            .addCase(getOrderItem.fulfilled, (state, action) => {
+                state.isOrderItemLoading = false;
+                state.isOrderItemLoaded = true;
+                state.isOrderItemLoadError = false;
+                state.orderItem = action.payload;
+            })
+            .addCase(getOrderItem.rejected, (state, action) => {
+                state.isOrderItemLoading = false;
+                state.isOrderItemLoaded = false;
+                state.isOrderItemLoadError = true;
             })
             // Get user orders
             .addCase(getUserOrders.pending, (state, action) => {

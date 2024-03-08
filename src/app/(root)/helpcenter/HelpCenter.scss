@@ -1,0 +1,39 @@
+.helpcenter {
+  padding: 24px 20px 50px 20px;
+  width: 100%;
+
+  .header {
+    border-bottom: 1px solid #cbcbcb;
+    padding-bottom: 24px;
+  }
+
+  .helpsection {
+    display: flex;
+
+    .helptopics {
+      padding-top: 32px;
+      width: 350px;
+      .topics {
+        padding-top: 30px;
+        padding-bottom: 20px;
+
+        .topic {
+          height: 46px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          padding-left: 14px;
+        }
+
+        .topic-active {
+          border-left: 5px solid #32893b !important;
+        }
+      }
+    }
+
+    .content {
+      padding-left: 20px;
+      padding-top: 24px;
+    }
+  }
+}

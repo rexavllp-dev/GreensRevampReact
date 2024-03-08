@@ -18,7 +18,8 @@ import { toast } from 'react-toastify';
 import DeliveryInstructions from './steps/DeliveryInstructions';
 import { createOrder } from '@/services/features/orderSlice';
 import { getAddressByUser } from '@/services/features/userSlice';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 
 const Checkout = () => {
 
@@ -32,6 +33,8 @@ const Checkout = () => {
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
     const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
     // const [orderItems, setOrderItems] = React.useState([]);
+    const searchParams = useSearchParams();
+    const shippingMethod = searchParams.get('m');
 
     const { stripeUrl } = useSelector((state) => state.payment)
     const { userAddress } = useSelector((state) => state.users)
@@ -60,13 +63,153 @@ const Checkout = () => {
         latitude: "",
         longitude: "",
         orderItems: []
+    });
+
+    const [errors, setErrors] = React.useState({
+        address_title: {
+            error: false,
+            message: ''
+        },
+        customer_name: {
+            error: false,
+            message: ''
+        },
+        customer_email: {
+            error: false,
+            message: ''
+        },
+        customer_phone: {
+            error: false,
+            message: ''
+        },
+        address_line_1: {
+            error: false,
+            message: ''
+        },
+        address_line_2: {
+            error: false,
+            message: ''
+        },
+        zip_code: {
+            error: false,
+            message: ''
+        },
     })
+
+
+
+    const validateForm = () => {
+        let isValid = true;
+
+        // Validate first name
+        if (!formData.customer_name?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_name: { error: true, message: 'Customer name is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_name: { error: false, message: '' }
+            }));
+        }
+        // Validate address line 1
+        if (!formData.address_title?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_title: { error: true, message: 'Address Title is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_title: { error: false, message: '' }
+            }));
+        }
+        // Validate address line 1
+        if (!formData.address_line_1?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_line_1: { error: true, message: 'Address line 1 is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_line_1: { error: false, message: '' }
+            }));
+        }
+        // Validate address line 2
+        if (!formData.address_line_2?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_line_2: { error: true, message: 'Address line 2 is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                address_line_2: { error: false, message: '' }
+            }));
+        }
+
+        // Validate mobile
+        if (!formData.customer_phone?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_phone: { error: true, message: 'Mobile number is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_phone: { error: false, message: '' }
+            }));
+        }
+
+        // Validate zipcode
+        if (!formData.zip_code?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                zip_code: { error: true, message: 'Zip code is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                zip_code: { error: false, message: '' }
+            }));
+        }
+
+        // Validate email
+        if (!isEmailValid(formData.customer_email)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_email: { error: true, message: 'Enter a valid email address' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                customer_email: { error: false, message: '' }
+            }));
+        }
+
+        return isValid;
+    };
 
     const steps = [
         {
-            title: 'Shipping Info', component: <ShippingAddressStep userAddress={userAddress} formData={formData} setFormData={setFormData}
+            title: 'Shipping Info', component: <ShippingAddressStep
+                errors={errors} setErrors={setErrors}
+                userAddress={userAddress}
+                formData={formData} setFormData={setFormData}
                 // showNewAddressForm={showNewAddressForm} setShowNewAddressForm={setShowNewAddressForm}
-                onSubmit={() => { setCurrentStep(2) }} />
+                onSubmit={() => {
+                    handleCompleteShippingStep();
+                }}
+            />
         },
         {
             title: 'Order Confirmation', component: <OrderConfirmationStep formData={formData} setFormData={setFormData}
@@ -90,6 +233,55 @@ const Checkout = () => {
             router.push('/auth/login');
         }
     }, [isLoggedIn])
+
+    const handleCompleteShippingStep = () => {
+        if(!formData?.is_new_address){   
+            if(validateForm()){
+                setCurrentStep(2);
+            }
+        }else {
+            if(!formData?.address_id){
+                toast.error("Please select address")
+            }else {
+                setCurrentStep(2);
+            }
+        }
+        // if (formData?.is_new_address) {
+        //     if (!formData?.address_title) {
+        //         toast.error("Please enter address title")
+        //         return
+        //     }
+        //     if (!formData?.customer_name) {
+        //         toast.error("Please enter customer name")
+        //         return
+        //     }
+        //     if (!formData?.customer_email) {
+        //         toast.error("Please enter customer email")
+        //         return
+        //     }
+        //     if (!formData?.customer_phone) {
+        //         toast.error("Please enter customer phone")
+        //         return
+        //     }
+        //     if (!formData?.address_line_1) {
+        //         toast.error("Please enter address line 1")
+        //         return
+        //     }
+        //     if (!formData?.address_line_2) {
+        //         toast.error("Please enter address line 2")
+        //     }
+        //     if (!formData?.zip_code) {
+        //         toast.error("Please enter zip code")
+        //     }
+        //     setCurrentStep(2);
+        // } else {
+        //     if (!formData?.address_id) {
+        //         toast.error("Please select address")
+        //         return
+        //     }
+        //     setCurrentStep(2);
+        // }
+    }
 
 
 
@@ -120,35 +312,20 @@ const Checkout = () => {
 
 
     useEffect(() => {
-        if (formData?.shipping_method === "Store Pickup") {
+        if (shippingMethod === "storePickup") {
             setFormData((prev) => ({
                 ...prev,
+                shipping_method: "Store Pickup",
                 payment_method: "Credit Card/ Debit Card"
+            }))
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                shipping_method: "Shipping"
             }))
         }
 
-        dispatch(updateCartFlags({
-            data: {
-                isStorePickup: (formData?.shipping_method === "Store Pickup") ? true : false,
-                isCod: (formData?.payment_method === "Cash on Delivery") ? true : false
-            }
-        })).then((res) => {
-            if (res.payload.success) {
-
-            } else {
-
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
-
-    }, [formData?.shipping_method, formData?.payment_method])
-
-
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
+    }, [shippingMethod])
 
 
     useEffect(() => {
@@ -196,7 +373,7 @@ const Checkout = () => {
         }
         dispatch(createOrder({ data: data })).then((res) => {
             if (res.payload.success) {
-                toast.success(res.payload.message)
+                // toast.success(res.payload.message)
                 let orderId = res.payload?.result[0]?.id;
                 const data = { order_id: orderId };
                 if (formData?.payment_method === "Cash on Delivery") {
@@ -341,7 +518,7 @@ const Checkout = () => {
                 </div>
 
             </div>
-           
+
         </div>
     )
 }

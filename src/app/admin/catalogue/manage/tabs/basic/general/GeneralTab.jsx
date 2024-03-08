@@ -39,8 +39,8 @@ const GeneralTab = ({ id, data }) => {
     const [isDisabled, setIsDisabled] = React.useState(true);
     const [selected, setSelected] = React.useState("English");
     const [loading, setLoading] = React.useState(false);
-    const { allBrands } = useSelector(state => state.brands)
-
+    const [isExit, setIsExit] = React.useState(false);
+    const { allBrands } = useSelector(state => state.brands);
 
     const categories = [
         { label: 'category1', value: 1 },
@@ -151,6 +151,9 @@ const GeneralTab = ({ id, data }) => {
             dispatch(updateProduct({ data: data, id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    }
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -163,7 +166,11 @@ const GeneralTab = ({ id, data }) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
                     let id = res.payload?.data[0]?.id;
-                    router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
+                    if (isExit) {
+                        router.push('/admin/catalogue')
+                    } else {
+                        router.push('/admin/catalogue/manage/?id=' + id, { scroll: true });
+                    }
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -302,8 +309,17 @@ const GeneralTab = ({ id, data }) => {
                     /> */}
                 </div>
             </div>
-            <div className="savebtn">
-                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => setConfirmationOpen(true)} />
+
+            <div className="savebtn gap-3">
+                <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
+                    setIsExit(true);
+                    setConfirmationOpen(true)
+                }} />
+                <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
+                    setIsExit(false);
+                    setConfirmationOpen(true)
+                }}
+                />
             </div>
 
             <ConfirmationModal

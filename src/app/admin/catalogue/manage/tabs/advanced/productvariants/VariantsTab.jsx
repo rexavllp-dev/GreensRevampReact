@@ -19,6 +19,7 @@ import {
 } from '@/services/features/productSlice';
 import { toast } from 'react-toastify';
 import CustomTypography from '@/library/typography/CustomTypography';
+import { useRouter } from 'next/navigation';
 
 const VariantsTab = ({ data, id }) => {
 
@@ -26,7 +27,8 @@ const VariantsTab = ({ data, id }) => {
         variant_name: '',
         label: '',
     })
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const [expandedIndex, setExpandedIndex] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -108,6 +110,11 @@ const VariantsTab = ({ data, id }) => {
         })
     }
 
+    const handleRowClick = (data) => {
+        router.push(`/admin/catalogue/manage/?id=${data?.id}`)
+    }
+
+
 
     return (
         <div className="optionstab">
@@ -136,6 +143,7 @@ const VariantsTab = ({ data, id }) => {
                                         columnDefs={columnDefs}
                                         rowData={allProducts?.data?.products}
                                         selectedRows={selectedRows}
+                                        onRowClicked={handleRowClick}
                                         setSelectedRows={setSelectedRows} />
                                     <CustomButton label="Add" variant="primary"
                                         onClick={() => handleCreateProductVariant(selectedRows)}

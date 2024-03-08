@@ -9,9 +9,9 @@ export default function CustomPagination({ currentPage, setCurrentPage, totalPag
         cursor: "pagination-item",
       }}
       showControls
-      total={totalPages}
+      total={parseInt(totalPages) || 1}
       initialPage={1}
-      page={currentPage}
+      page={parseInt(currentPage) || 1}
       onChange={setCurrentPage}
     />
   );

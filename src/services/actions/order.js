@@ -20,6 +20,15 @@ export const order = {
         })
     },
 
+    //Get order item
+    getOrderItem: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/cancelorders/all-order-items/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
     //Get user orders
     getUserOrders: () => {
         return new Promise((resolve, reject) => {
@@ -60,6 +69,19 @@ export const order = {
 
         return new Promise((resolve, reject) => {
             Axios.post('/orders/assignpicker', data)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+        })
+    },
+    //Return product
+    returnProduct: (data) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.post('/users/return-product', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -69,6 +91,20 @@ export const order = {
 
         return new Promise((resolve, reject) => {
             Axios.post('/orders/get-assigned-orders', data)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+
+        })
+    },
+    //Replace product
+    replaceProduct: (data) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            Axios.post('/users/replace-product', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

@@ -15,6 +15,7 @@ const DeliveryInstructions = ({ onSubmit, formData, setFormData }) => {
         {
             id: 2,
             title: 'Leave it at my door',
+            disabled: formData?.payment_method === 'Cash on Delivery' ? true : false
         }
     ])
     return (

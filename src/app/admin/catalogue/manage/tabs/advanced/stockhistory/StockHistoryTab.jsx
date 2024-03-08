@@ -64,7 +64,7 @@ function StockHistoryTab({ id, data }) {
                 <div className="right">
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={stockHistoryByProduct?.result} />
+            <CustomTable columnDefs={columnDefs} rowData={stockHistoryByProduct?.result} onRowClicked={() => { }} />
         </div>
     )
 }
