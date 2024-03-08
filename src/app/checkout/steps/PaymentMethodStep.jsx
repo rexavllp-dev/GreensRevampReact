@@ -4,10 +4,13 @@ import CustomRadioBox from '@/library/radiobox/CustomRadioBox'
 import CustomTypography from '@/library/typography/CustomTypography'
 import React from 'react'
 import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
+import { updateCartFlags } from '@/services/features/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
 
 
+    const dispatch = useDispatch();
     const [addressType, setAddressType] = React.useState('home')
     const [paymentMethods, setPaymentMethods] = React.useState([
         {
@@ -29,6 +32,20 @@ const PaymentMethodStep = ({ onSubmit, formData, setFormData }) => {
             setFormData((prev) => ({ ...prev, contactless_delivery: 'Do not ring the bell' }))
         }
         setFormData((prev) => ({ ...prev, payment_method: value }))
+
+        dispatch(updateCartFlags({
+            data: {
+                isCod: (value === "Cash on Delivery") ? true : false
+            }
+        })).then((res) => {
+            if (res.payload.success) {
+
+            } else {
+
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
     return (
         <div className="step">

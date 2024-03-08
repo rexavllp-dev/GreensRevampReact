@@ -91,9 +91,9 @@ export const getOrderItem = createAsyncThunk('getOrderItem', async ({ id }, thun
     }
 })
 
-export const getUserOrders = createAsyncThunk('getUserOrders', async ({ }, thunkAPI) => {
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({sort }, thunkAPI) => {
     try {
-        const response = await order.getUserOrders();
+        const response = await order.getUserOrders({sort});
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

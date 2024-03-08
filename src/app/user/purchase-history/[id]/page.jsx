@@ -120,10 +120,17 @@ const OrderDetails = ({ params }) => {
                                 </div>
                                 {
                                     productStatus(item) ?
-                                        <div className="flex">
-                                            <div className='statusbadge mt-5' >
+                                        <div className="flex gap-3  mt-5 ">
+                                            <div className='statusbadge' >
                                                 <CustomTypography content={productStatus(item)} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
                                             </div>
+                                            {
+                                                item?.replaceProductId ?
+                                                    <div className='pt-1'>
+                                                        <CustomTypography content={item?.replace_qty + " " + "Quantity Requested For Replace"} color="BLACK" size="REGULAR" weight="SEMI-BOLD" />
+                                                    </div>
+                                                    : <></>
+                                            }
                                         </div>
                                         :
 

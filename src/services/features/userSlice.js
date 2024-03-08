@@ -219,7 +219,8 @@ export const updateUserAddress = createAsyncThunk('updateUserAddress', async ({ 
 export const getDrivers = createAsyncThunk('getDrivers', async ({ }, thunkAPI) => {
 
     try {
-        const response = await users.getDrivers()
+        const response = await users.getDrivers();
+        return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
         return thunkAPI.rejectWithValue(error.response.data);

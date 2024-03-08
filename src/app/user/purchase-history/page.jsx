@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 const sortOptions = [
     {
         label: 'Latest',
-        value: 'latest'
+        value: 'newest'
     },
     {
         label: 'Oldest',
@@ -68,8 +68,8 @@ const PurchaseHistory = () => {
     const { userOrders } = useSelector((state) => state.order);
 
     React.useEffect(() => {
-        dispatch(getUserOrders({}))
-    }, [])
+        dispatch(getUserOrders({ sort: sortBy }))
+    }, [sortBy]);
 
     return (
         <div className='purchase-history'>

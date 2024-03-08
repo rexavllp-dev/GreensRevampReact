@@ -3,7 +3,7 @@ import React from 'react'
 import CustomTypography from '@/library/typography/CustomTypography'
 import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { Select, SelectItem } from '@nextui-org/react'
-import { cancelOrder, getOrder, getUserOrders } from '@/services/features/orderSlice';
+import { cancelIndividualOrder, cancelOrder, getOrder, getOrderItem, getUserOrders } from '@/services/features/orderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -20,15 +20,19 @@ const CancelItem = ({ params }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { singleOrder } = useSelector((state) => state.order);
+    const { orderItem } = useSelector((state) => state.order);
 
     const [formData, setFormData] = React.useState({
         cancel_note: '',
         cancel_reason_id: 1
     })
 
+    // React.useEffect(() => {
+    //     dispatch(getOrder({ id: params.id }));
+    // }, [params.id]);
+
     React.useEffect(() => {
-        dispatch(getOrder({ id: params.id }));
+        dispatch(getOrderItem({ id: params.id }));
     }, [params.id]);
 
     const handleInputChange = ({ e }) => {
@@ -38,17 +42,15 @@ const CancelItem = ({ params }) => {
     }
 
     const handleCancelOrder = () => {
-        dispatch(cancelOrder({
+        dispatch(cancelIndividualOrder({
             data: {
-                id: params.id,
                 order_id: params.id,
                 cancel_reason_id: 1,
                 cancel_note: '',
-                cancel_type: 'full'
             }
         })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message)
+                toast.success(res.payload?.message);
                 router.back();
             } else {
                 toast.error(res.payload?.message)
@@ -76,12 +78,12 @@ const CancelItem = ({ params }) => {
                         <div className="image">
                             <Image width={100} height={100}
                                 alt="product"
-                                src={singleOrder?.result[0]?.image_url ? singleOrder?.result[0]?.image_url : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
+                                src={orderItem?.result?.image_url ? orderItem?.result?.image_url : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
                             />
                         </div>
                         <div className="details">
                             <div className="title mb-2 flex gap-4 items-center">
-                                <CustomTypography content={singleOrder?.result[0]?.prd_name}
+                                <CustomTypography content={orderItem?.result?.prd_name}
                                     color='BLACK'
                                     size='MEDIUM' weight='SEMI-BOLD' />
                                 {/* <div className='statusbadge' >
@@ -90,8 +92,8 @@ const CancelItem = ({ params }) => {
                             </div>
 
                             <div className="flex flex-col gap-1">
-                                <CustomTypography content={`AED ${parseFloat(singleOrder?.result[0]?.op_line_total)?.toFixed(2)}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                <CustomTypography content={"Quantity - " + singleOrder?.result[0]?.op_qty} color="BLACK" size="MEDIUM" weight="REGULAR" />
+                                <CustomTypography content={`AED ${parseFloat(orderItem?.result?.op_line_total)?.toFixed(2)}`} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
+                                <CustomTypography content={"Quantity - " + orderItem?.result?.op_qty} color="BLACK" size="MEDIUM" weight="REGULAR" />
                             </div>
                         </div>
                     </div>

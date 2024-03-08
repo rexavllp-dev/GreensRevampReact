@@ -30,9 +30,9 @@ export const order = {
     },
 
     //Get user orders
-    getUserOrders: () => {
+    getUserOrders: ({ sort }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/orders/get-user-orders')
+            Axios.get('/orders/get-user-orders?sort=' + sort)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -69,8 +69,8 @@ export const order = {
 
         return new Promise((resolve, reject) => {
             Axios.post('/orders/assignpicker', data)
-            .then(response => resolve(response))
-            .catch(error => reject(error))
+                .then(response => resolve(response))
+                .catch(error => reject(error))
         })
     },
     //Return product
@@ -91,8 +91,8 @@ export const order = {
 
         return new Promise((resolve, reject) => {
             Axios.post('/orders/get-assigned-orders', data)
-            .then(response => resolve(response))
-            .catch(error => reject(error))
+                .then(response => resolve(response))
+                .catch(error => reject(error))
 
         })
     },
@@ -139,5 +139,5 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
-    
+
 }

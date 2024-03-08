@@ -291,11 +291,11 @@ const Checkout = () => {
         dispatch(getCartProducts({}))?.then((res) => {
             if (res.payload.success) {
                 if (!res.payload?.result?.products?.length) {
-                    router.push('/cart')
+                    router.push('/cart');
                 }
             }
         }).catch((err) => {
-            console.log(err)
+            console.log(err);
         })
     }, [productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated])
 
