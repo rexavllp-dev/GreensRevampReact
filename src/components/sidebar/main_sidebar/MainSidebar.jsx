@@ -595,6 +595,9 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
       setMenuTitles((prev => ([...prev, item.title])))
       setNavItems(item.children);
       setIsMainMenu(false)
+    }else {
+      router.push(item.link);
+      onClose();
     }
   };
 
@@ -695,7 +698,9 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
             navItems?.map((item, index) => {
               if (isMainMenu) {
                 return (
-                  <div className="item" key={index} onClick={() => handleItemClick(item, navItems)}>
+                  <div className="item" key={index} onClick={() => {
+                    handleItemClick(item, navItems);
+                  }}>
                     <div className="title">
 
                       {item.isIcon ?
