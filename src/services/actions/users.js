@@ -115,6 +115,17 @@ export const users = {
                 .catch(error => reject(error))
         })
     },
+    
+    getPickers: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/pickers`)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+
+        })
+
+    },
 
     //Update user account to company account
     updateAccountToCompany: (data) => {
@@ -130,6 +141,15 @@ export const users = {
         })
     },
 
+    getDrivers: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/drivers`)
+            .then(response => resolve(response))
+                .catch(error => reject(error))
+
+        })
+    },
     //Update user password
     updatePassword: (data) => {
         return new Promise((resolve, reject) => {
@@ -138,4 +158,8 @@ export const users = {
                 .catch(error => reject(error))
         })
     }
+
+    
+
+    
 }

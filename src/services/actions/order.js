@@ -38,6 +38,15 @@ export const order = {
         })
     },
 
+    getAllDashbordOrders: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/get-dashboard-orders', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
     //Cancel order
     cancelOrder: (data) => {
         return new Promise((resolve, reject) => {
@@ -56,6 +65,14 @@ export const order = {
         })
     },
 
+    handleAssignPicker: (data) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/assignpicker', data)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+        })
+    },
     //Return product
     returnProduct: (data) => {
         return new Promise((resolve, reject) => {
@@ -70,6 +87,15 @@ export const order = {
         })
     },
 
+    getAllAssigedOrders: (data) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/get-assigned-orders', data)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+
+        })
+    },
     //Replace product
     replaceProduct: (data) => {
         return new Promise((resolve, reject) => {
@@ -83,4 +109,35 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
+
+
+    handleVerifyItem: (data) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/verify-item', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    handleAssignDriver: (data) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/assigndriver', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    handleDownloadTripSheet: (data) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/download_tripsheet', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    
 }

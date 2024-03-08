@@ -1,0 +1,57 @@
+.ordercard {
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #f8f8f8;
+  width: 300px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f7f3;
+  }
+
+  .icon{
+    display:flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+
+  .header,
+  .footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    
+  }
+  
+  .break {
+    flex-basis: 100%;
+    height: 0;
+    border-top: 1px solid #dfdcdc;
+    width: 100%;
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+
+  .btn {
+    cursor: pointer;
+    &:hover {
+      transform: scale(0.98);
+    }
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+
+
+}

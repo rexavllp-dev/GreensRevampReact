@@ -5,10 +5,17 @@ import { users } from "../actions/users";
 // set up cookies
 
 const initialState = {
+
+
     isAllUsersLoading: false,
     isAllUsersLoaded: false,
     isAllUsersLoadError: false,
     allUsers: [],
+
+    isPickersLoading: false,
+    isPickersLoaded: false,
+    isPickersLoadError: false,
+    allpickers: [],
 
     isSingleUserLoading: false,
     isSingleUserLoaded: false,
@@ -53,6 +60,10 @@ const initialState = {
     isUserAddressUpdated: false,
     isUserAddressUpdateError: false,
 
+    isDriversLoading: false,
+    isDriversLoaded: false,
+    isDriversLoadError: false,
+    alldrivers: [],
     isAccountUpdatingToCompany: false,
     isAccountUpdatedToCompany: false,
     isAccountUpdateErrorToCompany: false,
@@ -173,6 +184,18 @@ export const getAddressByUser = createAsyncThunk('getAddressByUser', async ({ },
     }
 })
 
+export const getPickers = createAsyncThunk('getPickers', async ({ }, thunkAPI) => {
+
+    try {
+        const response = await users.getPickers()
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
 export const createUserAddress = createAsyncThunk('createUserAddress', async ({ data }, thunkAPI) => {
     try {
         const response = await users.createUserAddress(data)
@@ -193,6 +216,15 @@ export const updateUserAddress = createAsyncThunk('updateUserAddress', async ({ 
     }
 })
 
+export const getDrivers = createAsyncThunk('getDrivers', async ({ }, thunkAPI) => {
+
+    try {
+        const response = await users.getDrivers()
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 export const updateAccountToCompany = createAsyncThunk('updateAccountToCompany', async ({ data }, thunkAPI) => {
     try {
         const response = await users.updateAccountToCompany(data)
@@ -202,6 +234,7 @@ export const updateAccountToCompany = createAsyncThunk('updateAccountToCompany',
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
 
 export const updatePassword = createAsyncThunk('updatePassword', async ({ data }, thunkAPI) => {
     try {
@@ -242,6 +275,24 @@ const userSlice = createSlice({
                 state.isAllUsersLoadError = true;
             })
 
+            .addCase(getPickers.pending, (state, action) => {
+                state.isPickersLoading = true;
+                state.isPickersLoaded = false;
+                state.isPickersLoadError = false;
+            })
+
+            .addCase(getPickers.fulfilled, (state, action) => {
+                state.isPickersLoading = false;
+                state.isPickersLoaded = true;
+                state.isPickersLoadError = false;
+                state.allPickers = action.payload;
+            })
+
+            .addCase(getPickers.rejected, (state, action) => {
+                state.isPickersLoading = false;
+                state.isPickersLoaded = false;
+                state.isPickersLoadError = true;
+            })
 
             .addCase(getSingleUser.pending, (state, action) => {
                 state.isSingleUserLoading = true;
@@ -394,6 +445,25 @@ const userSlice = createSlice({
                 state.isUserAddressUpdating = false;
                 state.isUserAddressUpdated = false;
                 state.isUserAddressUpdateError = true;
+            })
+
+            .addCase(getDrivers.pending, (state, action) => {
+                state.isDriversLoading = true;
+                state.isDriversLoaded = false;
+                state.isDriversLoadError = false;
+            })
+
+            .addCase(getDrivers.fulfilled, (state, action) => {
+                state.isDriversLoading = false;
+                state.isDriversLoaded = true;
+                state.isDriversLoadError = false;
+                state.allDrivers = action.payload;
+            })
+
+            .addCase(getDrivers.rejected, (state, action) => {
+                state.isDriversLoading = false;
+                state.isDriversLoaded = false;
+                state.isDriversLoadError = true;
             })
 
             .addCase(updateUserDetailsByUser.pending, (state, action) => {
