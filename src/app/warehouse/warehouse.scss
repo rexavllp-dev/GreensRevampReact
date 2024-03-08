@@ -1,0 +1,30 @@
+.warehouse-tab-wrapper {
+    padding: 20px 20px 70px 20px;
+  
+    .title {
+      padding-bottom: 20px;
+    }
+    
+    .warehouse-tab {
+        display: grid;
+        width: 100%;
+        justify-content: space-evenly;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(265px, auto));
+        
+        // @include for_breakpoint("small-screen", "mobile") {
+            //   grid-template-columns: repeat(auto-fit, minmax(164px, auto));
+            // }
+          }
+
+          .dash_menu{
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            border-bottom: 1px solid #bebebe;
+            margin-bottom: 20px;
+            
+          }
+          
+      }

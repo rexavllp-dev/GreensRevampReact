@@ -16,13 +16,43 @@ const initialState = {
     isUserOrdersLoadError: false,
     userOrders: [],
 
+    isDashboardOrdersLoading: false,
+    isDashboardOrdersLoaded: false,
+    isDashboardOrdersLoadError: false,
+    dashboardOrders: [],
+
     isOrderCanceling: false,
     isOrderCanceled: false,
     isOrderCancelError: false,
 
     isIndividualOrderCanceling: false,
     isIndividualOrderCanceled: false,
-    isIndividualOrderCancelError: false
+    isIndividualOrderCancelError: false,
+
+    isPickerAssigning: false,
+    isPickerAssigned: false,
+    isPickerAssigningError: false,
+
+
+    isAssignedOrdersLoading: false,
+    isAssignedOrdersLoaded: false,
+    isAssignedOrdersLoadError: false,
+    assignedOrders: [],
+
+    isVeryfing: false,
+    isVeryfed: false,
+    isVeryfingError: false,
+
+
+    isDriverAssigning: false,
+    isDriverAssigned: false,
+    isDriverAssigningError: false,
+
+    isTripSheetLoading: false,
+    isTripSheetLoaded: false,
+    isTripSheetLoadError: false,
+    tripSheet: [],
+
 }
 
 export const createOrder = createAsyncThunk('createOrder', async ({ data }, thunkAPI) => {
@@ -55,6 +85,18 @@ export const getUserOrders = createAsyncThunk('getUserOrders', async ({ }, thunk
     }
 })
 
+
+export const getAllDashbordOrders = createAsyncThunk('getAllDashbordOrders', async ({ data }, thunkAPI) => {
+    try {
+        const response = await order.getAllDashbordOrders(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
 export const cancelOrder = createAsyncThunk('cancelOrder', async ({ data }, thunkAPI) => {
     try {
         const response = await order.cancelOrder(data);
@@ -74,6 +116,78 @@ export const cancelIndividualOrder = createAsyncThunk('cancelIndividualOrder', a
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+
+export const handleAssignPicker = createAsyncThunk('handleAssignPicker', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.handleAssignPicker(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+export const getAllAssigedOrders = createAsyncThunk('getAllAssigedOrders', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.getAllAssigedOrders(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const handleVerifyItem = createAsyncThunk('handleVerifyItem', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.handleVerifyItem(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const handleAssignDriver = createAsyncThunk('handleAssignDriver', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.handleAssignDriver(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const handleDownloadTripSheet = createAsyncThunk('handleDownloadTripSheet', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.handleDownloadTripSheet(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
 
 
 
@@ -135,6 +249,26 @@ const orderSlice = createSlice({
                 state.isUserOrdersLoadError = true;
             })
 
+
+            // Get All Dashboard orders
+            .addCase(getAllDashbordOrders.pending, (state, action) => {
+                state.isDashboardOrdersLoading = true;
+                state.isDashboardOrdersLoaded = false;
+                state.isDashboardOrdersLoadError = false;
+            })
+            .addCase(getAllDashbordOrders.fulfilled, (state, action) => {
+                state.isDashboardOrdersLoading = false;
+                state.isDashboardOrdersLoaded = true;
+                state.isDashboardOrdersLoadError = false;
+                state.dashboardOrders = action.payload;
+            })
+            .addCase(getAllDashbordOrders.rejected, (state, action) => {
+                state.isDashboardOrdersLoading = false;
+                state.isDashboardOrdersLoaded = false;
+                state.isDashboardOrdersLoadError = true;
+            })
+
+
             //cancel order
             .addCase(cancelOrder.pending, (state, action) => {
                 state.isOrderCanceling = true;
@@ -172,6 +306,91 @@ const orderSlice = createSlice({
                 state.isIndividualOrderCanceled = false;
                 state.isIndividualOrderCancelError = true;
             })
+
+
+
+            .addCase(handleAssignPicker.pending, (state, action) => {
+                state.isPickerAssigning = true;
+                state.isPickerAssigned = false;
+                state.isPickerAssigningError = false;
+            })
+
+            .addCase(handleAssignPicker.fulfilled, (state, action) => {
+                state.isPickerAssigning = false;
+                state.isPickerAssigned = true;
+                state.isPickerAssigningError = false;
+            })
+
+            .addCase(handleAssignPicker.rejected, (state, action) => {
+                state.isPickerAssigning = false;
+                state.isPickerAssigned = false;
+                state.isPickerAssigningError = true;
+            })
+
+
+             // Get All Assigned orders
+             .addCase(getAllAssigedOrders.pending, (state, action) => {
+                state.isAssignedOrdersLoading = true;
+                state.isAssignedOrdersLoaded = false;
+                state.isAssignedOrdersLoadError = false;
+            })
+            .addCase(getAllAssigedOrders.fulfilled, (state, action) => {
+                state.isAssignedOrdersLoading = false;
+                state.isAssignedOrdersLoaded = true;
+                state.isAssignedOrdersLoadError = false;
+                state.dashboardOrders = action.payload;
+            })
+            .addCase(getAllAssigedOrders.rejected, (state, action) => {
+                state.isAssignedOrdersLoading = false;
+                state.isAssignedOrdersLoaded = false;
+                state.isAssignedOrdersLoadError = true;
+            })
+
+
+            .addCase(handleVerifyItem.pending, (state, action) => {
+                state.isVeryfing = true;
+                state.isVeryfed = false;
+                state.isVeryfingError = false;
+            })
+
+            .addCase(handleVerifyItem.fulfilled, (state, action) => {
+                state.isVeryfing = false;
+                state.isVeryfed = true;
+                state.isVeryfingError = false;
+            })
+
+            .addCase(handleVerifyItem.rejected, (state, action) => {
+                state.isVeryfing = false;
+                state.isVeryfed = false;
+                state.isVeryfingError = true;
+            })
+
+
+            .addCase(handleAssignDriver.pending, (state, action) => {
+                state.isDriverAssigning = true;
+                state.isDriverAssigned = false;
+                state.isDriverAssigningError = false;
+            })
+
+            .addCase(handleAssignDriver.fulfilled, (state, action) => {
+                state.isDriverAssigning = false;
+                state.isDriverAssigned = true;
+                state.isDriverAssigningError = false;
+            })
+
+            .addCase(handleAssignDriver.rejected, (state, action) => {
+                state.isDriverAssigning = false;
+                state.isDriverAssigned = false;
+                state.isDriverAssigningError = true;
+            })
+
+            .addCase(handleDownloadTripSheet.rejected, (state, action) => {
+                state.isTripSheetLoading = false;
+                state.isTripSheetLoaded = false;
+                state.isTripSheetLoadError = true;
+            })
+
+            
     }
 })
 

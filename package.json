@@ -24,6 +24,7 @@
     "next-auth": "^4.24.5",
     "next-cookies": "^2.0.3",
     "next-i18next": "^15.1.1",
+    "papaparse": "^5.4.1",
     "react": "^18",
     "react-calendar": "^4.6.1",
     "react-cookie": "^6.1.1",

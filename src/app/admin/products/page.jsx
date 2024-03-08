@@ -6,6 +6,7 @@ import './ProductsTab.scss'
 export default function ProductsTab() {
 
   const productsTabRoutes = [
+    
     {
       id: 1,
       name: 'Catalog',
@@ -56,6 +57,7 @@ export default function ProductsTab() {
       name: 'Bulk',
       url: '/admin/bulk',
     }
+
   ];
 
   return (

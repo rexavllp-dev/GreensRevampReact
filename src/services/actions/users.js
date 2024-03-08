@@ -90,5 +90,27 @@ export const users = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
+    },
+    
+    getPickers: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/pickers`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getDrivers: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/drivers`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
     }
+
+    
+
+    
 }
