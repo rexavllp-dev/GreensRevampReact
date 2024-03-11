@@ -173,6 +173,10 @@ const initialState = {
     isSaveForLaterLoaded: false,
     isSaveForLaterLoadError: false,
     saveForLater: [],
+
+    isSaveForLaterRemoving:false,
+    isSaveForLaterRemoved:false,
+    isSaveForLaterRemoveError:false,
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query, sort }, thunkAPI) => {
@@ -558,6 +562,17 @@ export const createSaveForLater = createAsyncThunk('createSaveForLater', async (
 export const getSaveForLater = createAsyncThunk('getSaveForLater', async ({ }, thunkAPI) => {
     try {
         const response = await products.getSaveForLater();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//remove for later- get
+export const removeSaveForLaterProduct = createAsyncThunk('removeSaveForLaterProduct', async ({id }, thunkAPI) => {
+    try {
+        const response = await products.removeSaveForLaterProduct(id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1278,6 +1293,25 @@ const productSlice = createSlice({
                 state.isSaveForLaterLoading = false;
                 state.isSaveForLaterLoaded = false;
                 state.isSaveForLaterLoadError = true;
+            })
+
+            .addCase(removeSaveForLaterProduct.pending, (state, action) => {
+                state.isSaveForLaterRemoving = true;
+                state.isSaveForLaterRemoved = false;
+                state.isSaveForLaterRemoveError = false;
+            })
+
+            .addCase(removeSaveForLaterProduct.fulfilled, (state, action) => {
+                state.isSaveForLaterRemoving = false;
+                state.isSaveForLaterRemoved = true;
+                state.isSaveForLaterRemoveError = false;
+                state.saveForLater = action.payload;
+            })
+
+            .addCase(removeSaveForLaterProduct.rejected, (state, action) => {
+                state.isSaveForLaterRemoving = false;
+                state.isSaveForLaterRemoved = false;
+                state.isSaveForLaterRemoveError = true;
             })
     }
 })

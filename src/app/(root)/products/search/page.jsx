@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from 'react'
-import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../../public/images';
+import {ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../../public/images';
 import useWindowSize from '@/hooks/useWindowSize';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import CustomTypography from '@/library/typography/CustomTypography';
@@ -16,6 +16,7 @@ import { getAllProductsByUser } from '@/services/features/productSlice';
 import { useSearchParams } from 'next/navigation';
 import CustomSelect from '@/library/select/custom-select/CustomSelect';
 import { Select, SelectItem } from '@nextui-org/react';
+import NewProductCard from '@/components/cards/productcard/NewProductCard';
 
 
 const Search = () => {
@@ -361,7 +362,7 @@ const Search = () => {
                     {
                         products.map(product => (
                             <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                                previous_price={product.previous_price} rating={product.rating} img={"https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg"} />
                         ))
                     }
                 </div>

@@ -569,14 +569,14 @@ const HomePage = () => {
                 backgroundColor={'#32893B'} icon={"ArrowRight"}
                 onClick={() => handleNav('recentProductsRef', 'right')}
               />
-            </div>
+            </div>   
 
-          </div>
+          </div> 
           <div className="categories" ref={recentProductsRef}>
             {
               products.map(product => (
                 <ProductCard key={product.id} title={product.title} price={product.price}
-                  previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                  previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
               ))
             }
           </div>
@@ -606,7 +606,7 @@ const HomePage = () => {
             {
               products.map(product => (
                 <ProductCard key={product.id} title={product.title} price={product.price}
-                  previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                  previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
               ))
             }
           </div>
@@ -636,7 +636,7 @@ const HomePage = () => {
             {
               products.map(product => (
                 <ProductCard key={product.id} title={product.title} price={product.price}
-                  previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                  previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
               ))
             }
           </div>

@@ -7,17 +7,25 @@ import CustomShippingMethodRadio from '../components/CustomShippingMethodRadio';
 
 const DeliveryInstructions = ({ onSubmit, formData, setFormData }) => {
     const [addressType, setAddressType] = React.useState('home')
-    const [deliveryInstructions, setDeliveryInstructions] = React.useState([
-        {
-            id: 1,
-            title: 'Do not ring the bell',
-        },
-        {
-            id: 2,
-            title: 'Leave it at my door',
-            disabled: formData?.payment_method === 'Cash on Delivery' ? true : false
-        }
-    ])
+    const [deliveryInstructions, setDeliveryInstructions] = React.useState(formData?.payment_method === 'Cash on Delivery' ?
+        [
+            {
+                id: 1,
+                title: 'Do not ring the bell',
+            }
+        ] :
+        [
+            {
+                id: 1,
+                title: 'Do not ring the bell',
+            },
+            {
+                id: 2,
+                title: 'Leave it at my door',
+                // disabled: formData?.payment_method === 'Cash on Delivery' ? true : false,
+            }
+        ])
+
     return (
         <div className="step">
             {/* <div className="title mb-5">

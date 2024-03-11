@@ -91,7 +91,7 @@ export const login = createAsyncThunk('login', async ({ data }, thunkAPI) => {
     }
 })
 
-export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email }) => {
+export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname, usr_lastname, usr_email, is_role }) => {
 
 
     return new Promise((resolve, reject) => {
@@ -100,7 +100,8 @@ export const oAuthSuccess = async ({ access_token, refresh_token, usr_firstname,
             let user = {
                 usr_firstname: usr_firstname,
                 usr_lastname: usr_lastname,
-                usr_email: usr_email
+                usr_email: usr_email,
+                is_role: is_role
             }
 
             // Token set in Cookies

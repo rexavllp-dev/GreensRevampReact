@@ -24,11 +24,12 @@ import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../../public/images';
 import MiniCart from '@/components/minicart/MiniCart';
 import ReviewSection from './components/ReviewSection';
-import { addProductToWishlist } from '@/services/features/wishlistSlice';
+import { addProductToWishlist, removeWishlist } from '@/services/features/wishlistSlice';
 import { RiFridgeLine } from 'react-icons/ri';
 import { IoIosReturnLeft } from 'react-icons/io';
 import { BiCategoryAlt } from "react-icons/bi";
 import Badge from '@/components/badges/Badge';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 
 const products = [
@@ -135,6 +136,7 @@ const ProductDetails = ({ params }) => {
     ]);
     const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
     const { bulkStatusData } = useSelector((state) => state.bulk)
+    const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
 
 
     // const token = cookies.get('accessToken')
@@ -149,13 +151,15 @@ const ProductDetails = ({ params }) => {
         })
     }
 
-
     const handleItemClick = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
 
     useEffect(() => {
         dispatch(getSingleProduct({ id: params.id }))
+    }, [params, isWishlistRemoved, isProductAddedToWishlist]);
+
+    useEffect(() => {
         dispatch(getAllOptionsByProductId({ id: params.id }))
         dispatch(getProductOptions({ id: params.id }))
         dispatch(getAllVariantsByProductId({ id: params.id }))
@@ -329,15 +333,27 @@ const ProductDetails = ({ params }) => {
 
     const handleWishlist = () => {
         if (isLoggedIn) {
-            dispatch(addProductToWishlist({ data: { product_id: params.id } })).then((res) => {
-                if (res.payload?.success) {
-                    toast.success(res.payload?.message)
-                } else {
-                    toast.error(res.payload?.message)
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+            if (singleProduct?.data?.product?.wishlist_id) {
+                dispatch(removeWishlist({ id: params.id })).then((res) => {
+                    if (res.payload?.success) {
+                        toast.success(res.payload?.message)
+                    } else {
+                        toast.error(res.payload?.message)
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            } else {
+                dispatch(addProductToWishlist({ data: { product_id: params.id } })).then((res) => {
+                    if (res.payload?.success) {
+                        toast.success(res.payload?.message)
+                    } else {
+                        toast.error(res.payload?.message)
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         } else {
             router.push('/auth/login')
         }
@@ -602,7 +618,10 @@ const ProductDetails = ({ params }) => {
                                 </div>
 
                                 <div className='iconbtn' onClick={() => handleWishlist()}>
-                                    <CiHeart size={28} color='#E54333' />
+                                    {
+                                        singleProduct?.data?.product?.wishlist_id ? <AiFillHeart size={28} color='#E54333' /> : <AiOutlineHeart size={28} color='#E54333' />
+                                    }
+                                    {/* <CiHeart size={28} color='#E54333' /> */}
                                 </div>
 
                                 <CustomButton variant='transparent' label='Buy Now' onClick={() => {

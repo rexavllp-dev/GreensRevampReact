@@ -30,6 +30,11 @@ export default function AdvancedSettings() {
             url: '/admin/advanced/users',
         },
         {
+            id: 14,
+            name: 'Activity Log',
+            url: '/admin/activity',
+        },
+        {
             id: 3,
             name: 'Menu',
             url: '/admin/menu',

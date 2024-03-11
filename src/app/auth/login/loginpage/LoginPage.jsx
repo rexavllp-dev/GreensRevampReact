@@ -69,13 +69,12 @@ const LoginPage = () => {
             if (e.target?.value === '' || re.test(e.target?.value)) {
                 setFormData((prev) => ({
                     ...prev, mobile: e.target.value
-                }))
+                }));
             }
         } else {
             setFormData((prev) => ({
                 ...prev, [e.target.name]: e.target.value
-            }))
-
+            }));
         }
 
         setErrors((prevErrors) => ({
@@ -173,6 +172,9 @@ const LoginPage = () => {
                 dispatch(login({ data })).then((res) => {
                     if (res.payload?.status == 200) {
                         toast.success(res.payload?.message);
+                        if (res.payload?.data?.user?.is_role == 7) {
+                            router.push('/admin', { scroll: true });
+                        }
                         router.push('/', { scroll: true });
                     } else {
                         if (res.payload?.response?.data?.status == 422) {

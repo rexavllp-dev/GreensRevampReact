@@ -20,6 +20,7 @@ const LoginSuccess = () => {
     let usr_firstname = searchParams.get('usr_firstname');
     let usr_lastname = searchParams.get('usr_lastname');
     let usr_email = searchParams.get('usr_email');
+    let is_role = searchParams.get('is_role');
 
     useEffect(() => {
         if (access_token && refresh_token && usr_firstname) {
@@ -27,7 +28,8 @@ const LoginSuccess = () => {
             let user = {
                 usr_firstname: usr_firstname,
                 usr_lastname: usr_lastname,
-                usr_email: usr_email
+                usr_email: usr_email,
+                is_role: is_role
             }
 
             // Token set in Cookies

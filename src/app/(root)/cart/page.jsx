@@ -12,7 +12,7 @@ import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import { ProductImg } from '../../../../public/images';
 import { MdRemoveShoppingCart } from 'react-icons/md';
-import { getSaveForLater } from '@/services/features/productSlice';
+import { getSaveForLater, removeSaveForLaterProduct } from '@/services/features/productSlice';
 import { Tooltip } from '@nextui-org/react';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import { useRouter } from 'next/navigation';
@@ -83,7 +83,7 @@ const Cart = () => {
     const router = useRouter();
     const recommendedProdRef = React.useRef();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
-    const { saveForLater, isSaveForLaterCreated } = useSelector((state) => state.products)
+    const { saveForLater, isSaveForLaterCreated, isSaveForLaterRemoved } = useSelector((state) => state.products)
 
     // States
     const [selected, setSelected] = useState('shipping');
@@ -98,7 +98,7 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getSaveForLater({}));
-    }, [isSaveForLaterCreated, ])
+    }, [isSaveForLaterCreated, isSaveForLaterRemoved])
 
 
     // useEffect(() => {
@@ -167,6 +167,16 @@ const Cart = () => {
         } else {
             router.push('/auth/login')
         }
+    }
+
+    const handleRemoveSaveForLater = (id) => {
+        dispatch(removeSaveForLaterProduct({ id })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message)
+            } else {
+                toast.error(res.payload?.message)
+            }
+        }).catch(err => console.log(err));
     }
 
     return (
@@ -461,6 +471,8 @@ const Cart = () => {
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
                                     data={product}
+                                    haveRemoveBtn={true}
+                                    handleRemove={() => handleRemoveSaveForLater(product?.save_for_later_id)}
                                     img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
                                         (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
                                         'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'

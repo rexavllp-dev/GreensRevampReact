@@ -5,7 +5,7 @@ export const notifyProduct = {
     // Get notified Products
     getNotifiedProducts: () => {
         return new Promise((resolve, reject) => {
-            Axios.get('/wishlist/get-all-wishlist')
+            Axios.get('/users/get-notify-product')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -14,7 +14,7 @@ export const notifyProduct = {
     // Add notified products
     addNotifyProducts: (data) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/wishlist/create-wishlist', data)
+            Axios.post('/users/notify-product', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

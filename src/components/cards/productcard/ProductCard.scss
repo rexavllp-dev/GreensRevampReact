@@ -2,28 +2,30 @@
 @import "../../../app/styles/mediaquery";
 
 .productcard {
-  width: 280px;
-  min-width: 280px;
-  padding: 20px;
-  position: relative;
+  // width: 280px;
+  // min-width: 170px;
+  max-width: 280px;
+  min-width: 200px;
+  padding: 14px;
+  // position: relative;
 
   @include for_breakpoint("mobile", "small-screen") {
-    width: 164px;
+    // width: 164px;
     min-width: 164px;
     padding: 10px;
   }
-  &:hover {
-    // box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    // width: 300px;
-    // min-width: 300px;
-    // transition: all 0.3s ease-in-out;
+  // &:hover {
+  //   // box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  //   // width: 300px;
+  //   // min-width: 300px;
+  //   // transition: all 0.3s ease-in-out;
 
-    .cardimage {
-      width: 180px;
-      height: 180px;
-      transition: all 0.3s ease-in-out;
-    }
-  }
+  //   .cardimage {
+  //     // width: 180px;
+  //     // height: 180px;
+  //     transition: all 0.3s ease-in-out;
+  //   }
+  // }
   .icon {
     display: flex;
     width: 100%;
@@ -37,14 +39,16 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    height: 193px;
+    // height: 193px;
+    // position: relative;
     position: relative;
+
 
     .badgecontainer {
       width: 100%;
       display: flex;
       justify-content: flex-end;
-      z-index: 1;
+      z-index: 10;
       position: absolute;
       right: 0px;
       bottom: 8px;
@@ -54,7 +58,7 @@
       width: 100%;
       display: flex;
       justify-content: flex-end;
-      z-index: 1;
+      z-index: 10;
       position: absolute;
       right: 0px;
       top: 8px;
@@ -62,13 +66,24 @@
   }
 
   .cardimage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 173px;
-    height: 173px;
-    position: absolute;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // width: 173px;
+    // height: 173px;
+    // position: absolute;
+    // min-height: 173px;
+    // min-width:173px;
+    // width: 100%;
+    // padding-top: 100%;
+    // position: relative;
+    min-height: 194px;
     margin-bottom: 14px;
+    
+  @include for_breakpoint("mobile", "small-screen") {
+    min-height: 143px;
+    // min-width: 143px;
+  }
   }
 
   .productdetails {

@@ -1,4 +1,6 @@
-import Image from 'next/image';
+// import Image from 'next/image';
+"use client";
+import { Image } from '@nextui-org/react';
 import React from 'react';
 import './ProductCard.scss';
 import CustomTypography from '@/library/typography/CustomTypography';
@@ -10,14 +12,20 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import Badge from '@/components/badges/Badge';
 import { addProductToWishlist, removeWishlist } from '@/services/features/wishlistSlice';
-import { IoMdHeart } from "react-icons/io";
+import { IoMdHeart, IoMdStar } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
+import { FaStar } from 'react-icons/fa';
+import { addNotifyProducts } from '@/services/features/notifyProductSlice';
 
 const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()
   const dispatch = useDispatch();
+
+  // const token = cookies.get('accessToken')
+  const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+  const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
 
   // Add to cart
   const handleAddToCart = () => {
@@ -38,32 +46,53 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
     })
   }
 
+  // Add notify product
+  const handleAddNotify = () => {
+    const productData = {
+      product_id: id
+    }
+    dispatch(addNotifyProducts({ data: productData })).then((res) => {
+      if (res.payload?.success) {
+        toast.success(res.payload?.message);
+      } else {
+        toast.error(res.payload?.message);
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   const isOutStock = () => {
     if (data?.stock_availability === 'Out of stock') {
-      return true
+      return true;
     } else if (data?.inventory_management === 'true' || data?.inventory_management === true) {
       if (parseInt(data?.product_quantity) === 0) {
         return true;
       }
-      return false
+      return false;
     }
     else if (data?.product_inventory_id === null || data?.product_inventory_id === undefined) {
       return true;
     } else {
-      return false
+      return false;
     }
   }
 
   const handleAddToWishlist = (id) => {
-    dispatch(addProductToWishlist({ data: { product_id: id } })).then((res) => {
-      if (res.payload?.success) {
-        toast.success(res.payload?.message)
-      } else {
-        toast.error(res.payload?.message)
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+    if (isLoggedIn) {
+
+      dispatch(addProductToWishlist({ data: { product_id: id } })).then((res) => {
+        if (res.payload?.success) {
+          toast.success(res.payload?.message)
+        } else {
+          toast.error(res.payload?.message)
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    } else {
+      router.push('/auth/login')
+    }
   }
   const handleRemoveFromWishlist = (id) => {
     dispatch(removeWishlist({ id })).then((res) => {
@@ -91,12 +120,19 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
       <div className="cardimg_wrapper cursor-pointer" onClick={() => {
         router.push('/products/' + id)
       }}>
-        <div className="cardimage ">
+        <div className="cardimage">
           {/* <Image src={productImage} /> */}
-          <Image src={img}
+          {/* <Image src={img}
             fill objectFit='cover'
             alt='img'
           //  width={173} height={173} 
+          /> */}
+
+          <Image
+            isZoomed
+            // width={240}
+            alt="img"
+            src={img}
           />
 
         </div>
@@ -140,16 +176,6 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
 
         <div className="topsection">
           <div className="left cursor-pointer" onClick={() => router.push('/products/' + id)}>
-            {/* {
-              specialPrice !== null ?
-                <>
-                  <CustomTypography content={`AED ${specialPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
-                  <CustomTypography content={`AED ${normalPrice}`} style={{ textDecoration: 'line-through' }}
-                    weight='SEMI-BOLD' color='GRAY-LIGHT' size='MEDIUM-SMALL' />
-                </>
-                :
-                <CustomTypography content={`AED ${normalPrice}`} weight='SEMI-BOLD' color='BLACK' size='MEDIUM' />
-            } */}
             {
               specialPrice ?
                 <>
@@ -163,13 +189,14 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
           <div className="right">
             <CustomTypography content={rating} weight='MEDIUM' color='BLACK' size='REGULAR' />
             <div className="staricon">
-              <Image src={StarIcon} width={16} height={16} alt='icon' />
+              {/* <Image src={StarIcon} width={16} height={16} alt='icon' /> */}
+              <IoMdStar size={12} />
             </div>
           </div>
 
         </div>
         <div className='cursor-pointer' onClick={() => router.push('/products/' + id)}>
-          <CustomTypography content={title} weight='REGULAR' color='BLACK' size='MEDIUM' />
+          <CustomTypography content={title} weight='REGULAR' color='BLACK' size='REGULAR' />
         </div>
 
 
@@ -199,33 +226,13 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
               <></>
           }
         </div>
-        {/* <div className='cursor-pointer flex justify-between items-center' onClick={() => router.push('/products/' + id)}>
-          {
-            data?.sku ?
-              <CustomTypography content={"SKU Code: " + data?.sku} weight='REGULAR' color='GREY' size='SMALL' />
-              :
-              <></>
-          }
-          {
-            (data?.sku && data?.item_code) ?
-              <span className='divider-vertical'></span>
-              :
-              <></>
-          }
-          {
-            data?.item_code ?
-              <CustomTypography content={"Item Code: " + data?.item_code} weight='REGULAR' color='GREY' size='SMALL' />
-              :
-              <></>
-          }
-        </div> */}
         {
           haveRemoveBtn ?
             <div className="flex justify-between items-center">
               {
                 isOutStock() ?
                   <button className={'productbtn'} onClick={() => {
-                    // handleAddToCart()
+                    handleAddNotify()
                   }}>
                     <div className='productbtn_text' >
                       Notify me

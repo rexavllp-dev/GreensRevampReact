@@ -304,5 +304,13 @@ export const products = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
+    },
+
+    removeSaveForLaterProduct: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete('/saveforlater/remove-save-for-later/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
     }
 }
