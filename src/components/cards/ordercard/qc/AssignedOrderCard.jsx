@@ -1,13 +1,13 @@
 'use client';
 import React, { useEffect } from 'react';
-import { MdKeyboardArrowRight, MdPrint } from 'react-icons/md';
+import { MdKeyboardArrowRight, MdPrint, MdQrCode } from 'react-icons/md';
 import './OrderCard.scss';
 import CustomTypography from '@/library/typography/CustomTypography';
 import { useRouter } from 'next/navigation';
 import CustomButton from '@/library/buttons/CustomButton';
 
 
-export default function OrderCard({ order_dat, open_modal, open_driver_modal, action_label }) {
+export default function AssignedOrderCard({ order_dat, open_modal, open_driver_modal, action_label, print_qr }) {
     const router = useRouter()
 
     const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
@@ -17,9 +17,9 @@ export default function OrderCard({ order_dat, open_modal, open_driver_modal, ac
         <div className="ordercard">
             <div className="header">
                 <CustomTypography content={'OID #'+order_dat.orderId} weight="MEDIUM" color="BLACK" size="MEDIUM-LARGE" />
-                {/* <div className="icon" >
-                    <MdPrint size={24} stroke='1' />
-                </div> */}
+                <div className="icon" >
+                    <MdQrCode size={24} stroke='1' onClick={() => print_qr(order_dat.orderId, order_dat.no_boxes)}/>
+                </div>
             </div>
             <div class="break"></div>
             <div className="footer">

@@ -1,6 +1,8 @@
 'use client';
 import React, { useEffect } from 'react';
 import Papa from 'papaparse';
+import QRCode from 'qrcode.react';
+import { useRouter } from "next/navigation";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDashbordOrders, handleAssignDriver, handleDownloadTripSheet } from "@/services/features/orderSlice";
@@ -23,6 +25,7 @@ import { IoMdDownload } from 'react-icons/io';
 export default function QcDashboard() {
 
   const dispatch = useDispatch();
+  const router   = useRouter();
 
   const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
   const [isDriverListOpen, setDriverListOpen] = React.useState(false);
@@ -98,14 +101,15 @@ export default function QcDashboard() {
   }
 
 
-  
-
 
   const assignDriver = () => {
       
       dispatch(handleAssignDriver({data:{userId:userId, orderId:orderId, driverId:driverId, boxes:noBoxes }})).then((res) => {
         if (res.payload?.success) {
+  
             toast.success(res.payload?.message)
+            window.open('/print_qr/'+orderId+'/'+noBoxes,  '_blank');
+
         } else {
             toast.error(res.payload?.message)
         }
