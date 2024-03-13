@@ -15,7 +15,12 @@ const initialState = {
     isPickersLoading: false,
     isPickersLoaded: false,
     isPickersLoadError: false,
-    allpickers: [],
+    allPickers: [],
+
+    isWarehouseUsersLoading:false,
+    isWarehouseUsersLoaded:false,
+    isWarehouseUsersLoadError:false,
+    warehouseUsers: [],
 
     isSingleUserLoading: false,
     isSingleUserLoaded: false,
@@ -195,6 +200,17 @@ export const getPickers = createAsyncThunk('getPickers', async ({ }, thunkAPI) =
     }
 })
 
+export const getWarehouseUsers = createAsyncThunk('getWarehouseUsers', async ({ }, thunkAPI) => {
+
+    try {
+        const response = await users.getWarehouseUsers()
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 
 export const createUserAddress = createAsyncThunk('createUserAddress', async ({ data }, thunkAPI) => {
     try {
@@ -293,6 +309,24 @@ const userSlice = createSlice({
                 state.isPickersLoading = false;
                 state.isPickersLoaded = false;
                 state.isPickersLoadError = true;
+            })
+            .addCase(getWarehouseUsers.pending, (state, action) => {
+                state.isWarehouseUsersLoading = true;
+                state.isWarehouseUsersLoaded = false;
+                state.isWarehouseUsersLoadError = false;
+            })
+
+            .addCase(getWarehouseUsers.fulfilled, (state, action) => {
+                state.isWarehouseUsersLoading = false;
+                state.isWarehouseUsersLoaded = true;
+                state.isWarehouseUsersLoadError = false;
+                state.warehouseUsers = action.payload;
+            })
+
+            .addCase(getWarehouseUsers.rejected, (state, action) => {
+                state.isWarehouseUsersLoading = false;
+                state.isWarehouseUsersLoaded = false;
+                state.isWarehouseUsersLoadError = true;
             })
 
             .addCase(getSingleUser.pending, (state, action) => {

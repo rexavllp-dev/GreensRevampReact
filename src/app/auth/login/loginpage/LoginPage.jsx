@@ -27,12 +27,12 @@ const LoginPage = () => {
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
 
-    const [loading, setLoading] = useState(false)
 
     const searchParams = useSearchParams()
     let from = searchParams.get('view');
 
     const [isLoginWithOTP, setIsLoginWithOTP] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [formData, setFormData] = React.useState({
         mobile: '',
         email_or_mobile: '',
@@ -172,10 +172,11 @@ const LoginPage = () => {
                 dispatch(login({ data })).then((res) => {
                     if (res.payload?.status == 200) {
                         toast.success(res.payload?.message);
-                        if (res.payload?.data?.user?.is_role == 7) {
+                        if (res.payload?.result?.user?.is_role == 7) {
                             router.push('/admin', { scroll: true });
+                        } else {
+                            router.push('/', { scroll: true });
                         }
-                        router.push('/', { scroll: true });
                     } else {
                         if (res.payload?.response?.data?.status == 422) {
                             if (res.payload?.response?.data?.unverified == 'email') {

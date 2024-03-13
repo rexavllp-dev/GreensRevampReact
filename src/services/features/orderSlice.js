@@ -3,6 +3,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { order } from "../actions/order";
 
 const initialState = {
+    isAllOrdersLoading: false,
+    isAllOrdersLoaded: false,
+    isAllOrdersLoadError: false,
+    allOrders: [],
+
     isOrderCreating: false,
     isOrderCreated: false,
     isOrderCreateError: false,
@@ -59,7 +64,32 @@ const initialState = {
     isTripSheetLoadError: false,
     tripSheet: [],
 
+    isCancelledOrdersLoading: false,
+    isCancelledOrdersLoaded: false,
+    isCancelledOrdersLoadError: false,
+    cancelledOrders: [],
+
+    isAllReturnsByAdminLoading:false,
+    isAllReturnsByAdminLoaded:false,
+    isAllReturnsByAdminLoadError:false,
+    allReturnsByAdmin: [],
+
+    isAllReplacesByAdminLoading:false,
+    isAllReplacesByAdminLoaded:false,
+    isAllReplacesByAdminLoadError:false,
+    allReplacesByAdmin: [],
+
 }
+
+export const getAllOrdersByAdmin = createAsyncThunk('getAllOrdersByAdmin', async ({ }, thunkAPI) => {
+    try {
+        const response = await order.getAllOrdersByAdmin();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
 export const createOrder = createAsyncThunk('createOrder', async ({ data }, thunkAPI) => {
     try {
@@ -91,9 +121,9 @@ export const getOrderItem = createAsyncThunk('getOrderItem', async ({ id }, thun
     }
 })
 
-export const getUserOrders = createAsyncThunk('getUserOrders', async ({sort }, thunkAPI) => {
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({ sort }, thunkAPI) => {
     try {
-        const response = await order.getUserOrders({sort});
+        const response = await order.getUserOrders({ sort });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -220,6 +250,42 @@ export const handleDownloadTripSheet = createAsyncThunk('handleDownloadTripSheet
 })
 
 
+//get cancelled 
+export const getCancelledOrders = createAsyncThunk('getCancelledOrders', async ({ }, thunkAPI) => {
+    try {
+
+        const response = await order.getCancelledOrders();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//get all returns by admin  
+export const getAllReturnsByAdmin = createAsyncThunk('getAllReturnsByAdmin', async ({ }, thunkAPI) => {
+    try {
+
+        const response = await order.getAllReturnsByAdmin();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//get all replacements by admin  
+export const getAllReplacementsByAdmin = createAsyncThunk('getAllReplacementsByAdmin', async ({ }, thunkAPI) => {
+    try {
+
+        const response = await order.getAllReplacementsByAdmin();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 
 
 
@@ -232,6 +298,24 @@ const orderSlice = createSlice({
     extraReducers: (builder) => {
 
         builder
+            //Get all orders by admin   
+            .addCase(getAllOrdersByAdmin.pending, (state, action) => {
+                state.isAllOrdersLoading = true;
+                state.isAllOrdersLoaded = false;
+                state.isAllOrdersLoadError = false;
+            })
+            .addCase(getAllOrdersByAdmin.fulfilled, (state, action) => {
+                state.isAllOrdersLoading = false;
+                state.isAllOrdersLoaded = true;
+                state.isAllOrdersLoadError = false;
+                state.allOrders = action.payload;
+            })
+            .addCase(getAllOrdersByAdmin.rejected, (state, action) => {
+                state.isAllOrdersLoading = false;
+                state.isAllOrdersLoaded = false;
+                state.isAllOrdersLoadError = true;
+            })
+
             // Create order
             .addCase(createOrder.pending, (state, action) => {
                 state.isOrderCreating = true;
@@ -379,8 +463,8 @@ const orderSlice = createSlice({
             })
 
 
-             // Get All Assigned orders
-             .addCase(getAllAssigedOrders.pending, (state, action) => {
+            // Get All Assigned orders
+            .addCase(getAllAssigedOrders.pending, (state, action) => {
                 state.isAssignedOrdersLoading = true;
                 state.isAssignedOrdersLoaded = false;
                 state.isAssignedOrdersLoadError = false;
@@ -435,13 +519,64 @@ const orderSlice = createSlice({
                 state.isDriverAssigningError = true;
             })
 
-            .addCase(handleDownloadTripSheet.rejected, (state, action) => {
-                state.isTripSheetLoading = false;
-                state.isTripSheetLoaded = false;
-                state.isTripSheetLoadError = true;
+            .addCase(getCancelledOrders.pending, (state, action) => {
+                state.isCancelledOrdersLoading = true;
+                state.isCancelledOrdersLoaded = false;
+                state.isCancelledOrdersLoadError = false;
             })
 
-            
+            .addCase(getCancelledOrders.fulfilled, (state, action) => {
+                state.isCancelledOrdersLoading = false;
+                state.isCancelledOrdersLoaded = true;
+                state.isCancelledOrdersLoadError = false;
+                state.cancelledOrders = action.payload;
+            })
+
+            .addCase(getCancelledOrders.rejected, (state, action) => {
+                state.isCancelledOrdersLoading = false;
+                state.isCancelledOrdersLoaded = false;
+                state.isCancelledOrdersLoadError = true;
+            })
+
+            .addCase(getAllReturnsByAdmin.pending, (state, action) => {
+                state.isAllReturnsByAdminLoading = true;
+                state.isAllReturnsByAdminLoaded = false;
+                state.isAllReturnsByAdminLoadError = false;
+            })
+
+            .addCase(getAllReturnsByAdmin.fulfilled, (state, action) => {
+                state.isAllReturnsByAdminLoading = false;
+                state.isAllReturnsByAdminLoaded = true;
+                state.isAllReturnsByAdminLoadError = false;
+                state.allReturnsByAdmin = action.payload;
+            })
+
+            .addCase(getAllReturnsByAdmin.rejected, (state, action) => {
+                state.isAllReturnsByAdminLoading = false;
+                state.isAllReturnsByAdminLoaded = false;
+                state.isAllReturnsByAdminLoadError = true;
+            })
+
+            .addCase(getAllReplacementsByAdmin.pending, (state, action) => {
+                state.isAllReplacesByAdminLoading = true;
+                state.isAllReplacesByAdminLoaded = false;
+                state.isAllReplacesByAdminLoadError = false;
+            })
+
+            .addCase(getAllReplacementsByAdmin.fulfilled, (state, action) => {
+                state.isAllReplacesByAdminLoading = false;
+                state.isAllReplacesByAdminLoaded = true;
+                state.isAllReplacesByAdminLoadError = false;
+                state.allReplacesByAdmin = action.payload;
+            })
+
+            .addCase(getAllReplacementsByAdmin.rejected, (state, action) => {
+                state.isAllReplacesByAdminLoading = false;
+                state.isAllReplacesByAdminLoaded = false;
+                state.isAllReplacesByAdminLoadError = true;
+            })
+
+
     }
 })
 
