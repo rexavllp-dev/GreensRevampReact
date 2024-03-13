@@ -28,7 +28,7 @@ const QcSidebar = () => {
         <div className='qcsidebar'>
             <div className="sidebar">
                 <div className="header">
-                    <Link href="/admin">
+                    <Link href="/qc">
                         <div className="logo">
                             <Image src={companyLogo} />
                         </div>

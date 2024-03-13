@@ -3,20 +3,22 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAssigedOrders, handleAssignDriver } from "@/services/features/orderSlice";
 import { getDrivers } from "@/services/features/userSlice";
+import { useRouter } from "next/navigation";
 
-
-import OrderCard from '@/components/cards/ordercard/qc/OrderCard';
+import AssignedOrderCard from '@/components/cards/ordercard/qc/AssignedOrderCard';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 import CustomTypography from '@/library/typography/CustomTypography';
 import OrderDetailsModal from '@/components/modal/order/OrderDetailsModal';
 import DriverListModal from '@/components/modal/order/qc/DriverListModal';
 import '../qc.scss'
 import { toast } from 'react-toastify';
+import printQr from '@/app/print_qr/[orderid]/[boxes]/page';
 
 
 export default function QcDashboard() {
 
   const dispatch = useDispatch();
+  const router   = useRouter();
 
   const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
   const [isDriverListOpen, setDriverListOpen] = React.useState(false);
@@ -77,12 +79,19 @@ export default function QcDashboard() {
       dispatch(handleAssignDriver({data:{userId:userId, orderId:orderId, driverId:driverId, boxes:noBoxes }})).then((res) => {
         if (res.payload?.success) {
             toast.success(res.payload?.message)
+            window.open('/print_qr/'+orderId+'/'+noBoxes,  '_blank');
+
         } else {
             toast.error(res.payload?.message)
         }
     }).catch((err) => {
         console.log(err)
     })
+  }
+
+  const printQr = (order_id, no_boxes) => {
+
+    window.open('/print_qr/'+order_id+'/'+no_boxes,  '_blank');
   }
 
 
@@ -107,7 +116,7 @@ export default function QcDashboard() {
         {
           dashboardOrders.result?.map((order) => {
             return (
-              <OrderCard action_label="Re-Assign Driver" open_driver_modal={(orderId) => setDriver(orderId)} open_modal={(data) => setModalOpen(data)} order_dat={order} key={order.id} />
+              <AssignedOrderCard action_label="Re-Assign Driver" open_driver_modal={(orderId) => setDriver(orderId)} open_modal={(data) => setModalOpen(data)} print_qr={(order_id, no_boxes) => printQr(order_id, no_boxes)}  order_dat={order} key={order.id} />
             )
           })
         }
