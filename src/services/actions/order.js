@@ -2,6 +2,15 @@
 import Axios from '../axios/Axios.js';
 export const order = {
 
+    //Get all orders by admin
+    getAllOrdersByAdmin: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/get-all-orders')
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+        })
+    },
+
     //Create order
     createOrder: (data) => {
         return new Promise((resolve, reject) => {
@@ -135,6 +144,33 @@ export const order = {
 
         return new Promise((resolve, reject) => {
             Axios.post('/orders/download_tripsheet', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getCancelledOrders: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/cancelled-orders')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getAllReturnsByAdmin: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/return/get-all-returns')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getAllReplacementsByAdmin: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/replacement/get-all-replacements')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

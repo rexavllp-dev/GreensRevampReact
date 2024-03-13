@@ -19,28 +19,32 @@ const Activity = () => {
         dispatch(getActivityLog({}))
     }, [])
 
+    React.useEffect(() => {
+      console.log(activityLog)
+    }, [activityLog])
+
 
     const [columnDefs] = React.useState([
         {
             headerName: 'Id',
-            field: 'id',
+            field: 'ua_id',
             checkboxSelection: true,
             headerCheckboxSelection: true,
             filter: false
         },
         {
             headerName: 'Name',
-            field: 'usr_name',
+            field: 'usr_firstname',
             minWidth: 150
         },
         {
             headerName: 'Activity',
-            field: 'comment',
+            field: 'ua_comment',
             minWidth: 250
         },
         {
             headerName: 'Created At',
-            field: 'product_created_at',
+            field: 'created_at',
             cellRenderer: (params) => {
                 const date = params.data?.created_at;
                 const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' };
@@ -69,7 +73,7 @@ const Activity = () => {
             </div>
 
 
-            <CustomTable columnDefs={columnDefs} rowData={[]}
+            <CustomTable columnDefs={columnDefs} rowData={activityLog?.result}
                 // selectedRows={selectedRows} setSelectedRows={setSelectedRows}
                 onRowClicked={handleRowClick}
             />

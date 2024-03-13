@@ -126,6 +126,17 @@ export const users = {
         })
 
     },
+    
+    getWarehouseUsers: () => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get(`/users/warehouse-users`)
+            .then(response => resolve(response))
+            .catch(error => reject(error))
+
+        })
+
+    },
 
     //Update user account to company account
     updateAccountToCompany: (data) => {

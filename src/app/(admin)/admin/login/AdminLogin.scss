@@ -1,0 +1,58 @@
+@import "../../../styles/mediaquery";
+
+.admin-login-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  height: 100vh;
+
+  @include for_breakpoint("small-screen", "mobile") {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .admin-login   {
+    width: 500px;
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // gap: 33px;
+      gap: 14px;
+      margin-bottom: 27px;
+
+      @include for_breakpoint("small-screen", "mobile") {
+        align-items: flex-start;
+        // gap: 28px;
+        gap: 14px;
+      }
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .submitbtn {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 10px;
+      }
+
+      @include for_breakpoint("small-screen", "mobile") {
+        gap: 14px;
+      }
+    }
+
+    .footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 37px;
+    }
+  }
+}

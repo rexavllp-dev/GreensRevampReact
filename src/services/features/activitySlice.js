@@ -39,7 +39,7 @@ const activiySlice = createSlice({
                 state.isActivityLogLoading = false;
                 state.isActivityLogLoaded = true;
                 state.isActivityLogLoadError = false;
-                state.wishlistProducts = action.payload;
+                state.activityLog = action.payload;
             })
             .addCase(getActivityLog.rejected, (state, action) => {
                 state.isActivityLogLoading = false;

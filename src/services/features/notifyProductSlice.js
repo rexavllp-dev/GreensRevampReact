@@ -32,7 +32,7 @@ export const getNotifiedProducts = createAsyncThunk('getNotifiedProducts', async
 // Add notify products
 export const addNotifyProducts = createAsyncThunk('addNotifyProducts', async ({ data }, thunkAPI) => {
     try {
-        const response = await wishlist.addNotifyProducts(data);
+        const response = await notifyProduct.addNotifyProducts(data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -43,7 +43,7 @@ export const addNotifyProducts = createAsyncThunk('addNotifyProducts', async ({ 
 // Delete notify products
 export const removeNotifyProducts = createAsyncThunk('removeNotifyProducts', async ({ id }, thunkAPI) => {
     try {
-        const response = await wishlist.removeNotifyProducts(id);
+        const response = await notifyProduct.removeNotifyProducts(id);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error

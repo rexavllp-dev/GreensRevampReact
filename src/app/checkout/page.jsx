@@ -374,7 +374,8 @@ const Checkout = () => {
             latitude: formData?.latitude,
             longitude: formData?.longitude,
 
-            orderItems: orderItems
+            orderItems: orderItems,
+            totals: cartProducts?.result?.totals
         }
         dispatch(createOrder({ data: data })).then((res) => {
             if (res.payload.success) {

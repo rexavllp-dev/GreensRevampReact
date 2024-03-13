@@ -1,0 +1,36 @@
+
+.order-details-admin {
+    padding: 20px 20px;
+  
+    .breadcrumb {
+      padding-bottom: 18px;
+    }
+  
+    .title {
+      padding-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  
+      .backbtn {
+        cursor: pointer;
+        padding-top: 3px;
+      }
+    }
+
+    .shippingdetails {
+        // padding-top: 30px;
+        width: 450px;
+    
+        .shippingdetails-header {
+          padding-bottom: 10px;
+        }
+    
+        .address {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          padding-bottom: 18px;
+        }
+      }
+}
