@@ -17,9 +17,7 @@ export default function OrderCard({ order_dat, open_modal, open_driver_modal, ac
         <div className="ordercard">
             <div className="header">
                 <CustomTypography content={'OID #'+order_dat.orderId} weight="MEDIUM" color="BLACK" size="MEDIUM-LARGE" />
-                {/* <div className="icon" >
-                    <MdPrint size={24} stroke='1' />
-                </div> */}
+    
             </div>
             <div class="break"></div>
             <div className="footer">
