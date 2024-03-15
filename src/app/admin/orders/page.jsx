@@ -31,8 +31,15 @@ const Orders = () => {
     });
 
     React.useEffect(() => {
-        dispatch(getAllOrdersByAdmin({}));
-    }, [])
+        dispatch(getAllOrdersByAdmin({
+            driver_id: filters.driver_id,
+            order_status_id: filters.order_status_id,
+            payment_method: filters.payment_method,
+            accepted_by: filters.accepted_by,
+            sort_by: sortBy,
+            search_query: searchQuery
+        }));
+    }, [filters.driver_id, filters.order_status_id, filters.payment_method, filters.accepted_by, sortBy, searchQuery])
 
     React.useEffect(() => {
         dispatch(getDrivers({}));
@@ -130,10 +137,6 @@ const Orders = () => {
         {
             label: 'Oldest',
             value: 'oldest'
-        },
-        {
-            label: 'Date',
-            value: 'date'
         }
     ];
 
@@ -173,6 +176,17 @@ const Orders = () => {
         {
             label: 'Cash on Delivery',
             value: 'Cash on Delivery'
+        }
+    ];
+
+    const shippingTypeOptions = [
+        {
+            label: 'Shipping',
+            value: 'Shipping'
+        },
+        {
+            label: 'Store Pickup',
+            value: 'Store Pickup'
         }
     ];
 
@@ -310,7 +324,7 @@ const Orders = () => {
                         }}
                     >
                         {
-                            orderStatusOptions.map((option) => (
+                            shippingTypeOptions.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}
                                 </SelectItem>

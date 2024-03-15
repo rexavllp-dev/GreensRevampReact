@@ -1,5 +1,4 @@
-
-.order-details-admin {
+.transactions-wrapper {
     padding: 20px 20px;
   
     .breadcrumb {
@@ -18,19 +17,20 @@
       }
     }
 
-    .shippingdetails {
-        // padding-top: 30px;
-        width: 450px;
-    
-        .shippingdetails-header {
-          padding-bottom: 10px;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 20px;
+        .searchinput {
+          width: 300px;
+          margin-bottom: 20px;
         }
     
-        .address {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-          padding-bottom: 18px;
+        .right {
+            display: flex;
+            gap: 20px;
         }
       }
-}
+  }
+  

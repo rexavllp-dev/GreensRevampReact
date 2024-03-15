@@ -14,7 +14,7 @@ export default function Sales() {
         {
             id: 2,
             name: 'Transactions',
-            url: '/admin/transactions',
+            url: '/admin/sales/transactions',
         },
         {
             id: 2,

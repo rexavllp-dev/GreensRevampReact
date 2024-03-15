@@ -69,21 +69,56 @@ const initialState = {
     isCancelledOrdersLoadError: false,
     cancelledOrders: [],
 
-    isAllReturnsByAdminLoading:false,
-    isAllReturnsByAdminLoaded:false,
-    isAllReturnsByAdminLoadError:false,
+    isAllReturnsByAdminLoading: false,
+    isAllReturnsByAdminLoaded: false,
+    isAllReturnsByAdminLoadError: false,
     allReturnsByAdmin: [],
 
-    isAllReplacesByAdminLoading:false,
-    isAllReplacesByAdminLoaded:false,
-    isAllReplacesByAdminLoadError:false,
+    isAllReplacesByAdminLoading: false,
+    isAllReplacesByAdminLoaded: false,
+    isAllReplacesByAdminLoadError: false,
     allReplacesByAdmin: [],
+
+    isOrderQuantityUpdating: false,
+    isOrderQuantityUpdated: false,
+    isOrderQuantityUpdateError: false,
+
+    isCreatingReason: false,
+    isCreatedReason: false,
+    isCreatingReasonError: false,
+
+    isUpdatingReason: false, 
+    isUpdatedReason: false,
+    isUpdatingReasonError: false,
+
+    isDeletingReason: false,
+    isDeletedReason: false,
+    isDeletingReasonError: false,
+
+    isAllReasonsLoading: false,
+    isAllReasonsLoaded: false,
+    isAllReasonsLoadError: false,
+    allReasons: [],
 
 }
 
-export const getAllOrdersByAdmin = createAsyncThunk('getAllOrdersByAdmin', async ({ }, thunkAPI) => {
+export const getAllOrdersByAdmin = createAsyncThunk('getAllOrdersByAdmin', async ({
+    driver_id,
+    order_status_id,
+    payment_method,
+    accepted_by,
+    sort_by,
+    search_query
+}, thunkAPI) => {
     try {
-        const response = await order.getAllOrdersByAdmin();
+        const response = await order.getAllOrdersByAdmin({
+            driver_id,
+            order_status_id,
+            payment_method,
+            accepted_by,
+            sort_by,
+            search_query
+        });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -286,10 +321,65 @@ export const getAllReplacementsByAdmin = createAsyncThunk('getAllReplacementsByA
     }
 })
 
+//Update order qunatity
+export const updateOrderQuantity = createAsyncThunk('updateOrderQuantity', async ({ data }, thunkAPI) => {
+    try {
 
+        const response = await order.updateOrderQuantity(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
+//Create reasons
+export const createReason = createAsyncThunk('createReason', async ({ data }, thunkAPI) => {
+    try {
 
+        const response = await order.createReason(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
+//Update reasons
+export const updateReason = createAsyncThunk('updateReason', async ({ data, id }, thunkAPI) => {
+    try {
+
+        const response = await order.updateReason({data, id});
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//Update reasons
+export const deleteReason = createAsyncThunk('deleteReason', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.deleteReason(data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//Get all reasons
+export const getAllReasons = createAsyncThunk('getAllReasons', async ({ type }, thunkAPI) => {
+    try {
+
+        const response = await order.getAllReasons({ type });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
 const orderSlice = createSlice({
     name: "order",
@@ -577,6 +667,98 @@ const orderSlice = createSlice({
             })
 
 
+            .addCase(updateOrderQuantity.pending, (state, action) => {
+                state.isOrderQuantityUpdating = true;
+                state.isOrderQuantityUpdated = false;
+                state.isOrderQuantityUpdateError = false;
+            })
+            .addCase(updateOrderQuantity.fulfilled, (state, action) => {
+                state.isOrderQuantityUpdating = false;
+                state.isOrderQuantityUpdated = true;
+                state.isOrderQuantityUpdateError = false;
+            })
+            .addCase(updateOrderQuantity.rejected, (state, action) => {
+                state.isOrderQuantityUpdating = false;
+                state.isOrderQuantityUpdated = false;
+                state.isOrderQuantityUpdateError = true;
+            })
+
+            // Create Reason
+            .addCase(createReason.pending, (state, action) => {
+                state.isCreatingReason = true;
+                state.isCreatedReason = false;
+                state.isCreatingReasonError = false;
+            })
+
+            .addCase(createReason.fulfilled, (state, action) => {
+                state.isCreatingReason = false;
+                state.isCreatedReason = true;
+                state.isCreatingReasonError = false;
+            })
+
+            .addCase(createReason.rejected, (state, action) => {
+                state.isCreatingReason = false;
+                state.isCreatedReason = false;
+                state.isCreatingReasonError = true;
+            })
+
+            // Update reason
+            .addCase(updateReason.pending, (state, action) => {
+                state.isUpdatingReason = true;
+                state.isUpdatedReason = false;
+                state.isUpdatingReasonError = false;
+            })
+
+            .addCase(updateReason.fulfilled, (state, action) => {
+                state.isUpdatingReason = false;
+                state.isUpdatedReason = true;
+                state.isUpdatingReasonError = false;
+            })
+
+            .addCase(updateReason.rejected, (state, action) => {
+                state.isUpdatingReason = false;
+                state.isUpdatedReason = false;
+                state.isUpdatingReasonError = true;
+            })
+
+            // delete reason
+            .addCase(deleteReason.pending, (state, action) => {
+                state.isDeletingReason = true;
+                state.isDeletedReason = false;
+                state.isDeletingReasonError = false;
+            })
+
+            .addCase(deleteReason.fulfilled, (state, action) => {
+                state.isDeletingReason = false;
+                state.isDeletedReason = true;
+                state.isDeletingReasonError = false;
+            })
+
+            .addCase(deleteReason.rejected, (state, action) => {
+                state.isDeletingReason = false;
+                state.isDeletedReason = false;
+                state.isDeletingReasonError = true;
+            })
+
+            // get all reasons
+            .addCase(getAllReasons.pending, (state, action) => {
+                state.isAllReasonsLoading = true;
+                state.isAllReasonsLoaded = false;
+                state.isAllReasonsLoadError = false;
+            })
+
+            .addCase(getAllReasons.fulfilled, (state, action) => {
+                state.isAllReasonsLoading = false;
+                state.isAllReasonsLoaded = true;
+                state.isAllReasonsLoadError = false;
+                state.allReasons = action.payload;
+            })
+
+            .addCase(getAllReasons.rejected, (state, action) => {
+                state.isAllReasonsLoading = false;
+                state.isAllReasonsLoaded = false;
+                state.isAllReasonsLoadError = true;
+            })
     }
 })
 

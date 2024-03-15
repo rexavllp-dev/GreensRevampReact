@@ -5,7 +5,7 @@ import { convertDate } from '@/utils/helpers/convertDate'
 
 const OrderInformation = ({ data }) => {
     return (
-        <Card>
+        <Card radius='none'>
             <CardBody>
                 <div className="shippingdetails">
 

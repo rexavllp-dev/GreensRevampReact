@@ -7,15 +7,20 @@ const initialState = {
     isPaymentCreating: false,
     isPaymentCreated: false,
     isPaymentCreateError: false,
-    stripeUrl:{},
+    stripeUrl: {},
 
-    isPayCompleting:false,
-    isPayCompleted:false,
-    isPayCompleteError:false,
+    isPayCompleting: false,
+    isPayCompleted: false,
+    isPayCompleteError: false,
+
+    isAllTransactionsLoading: false,
+    isAllTransactionsLoaded: false,
+    isAllTransactionsLoadError: false,
+    allTransactions: []
 }
 
-export const getStripeUrl = createAsyncThunk('getStripeUrl', async ({data}, thunkAPI) => {
-    
+export const getStripeUrl = createAsyncThunk('getStripeUrl', async ({ data }, thunkAPI) => {
+
     try {
 
         const response = await payment.getStripeUrl(data);
@@ -27,11 +32,23 @@ export const getStripeUrl = createAsyncThunk('getStripeUrl', async ({data}, thun
     }
 })
 
-export const payComplete = createAsyncThunk('payComplete', async ({data}, thunkAPI) => {
-    
+export const payComplete = createAsyncThunk('payComplete', async ({ data }, thunkAPI) => {
+
     try {
 
         const response = await payment.payComplete(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getAllTransactions = createAsyncThunk('getAllTransactions', async ({ }, thunkAPI) => {
+
+    try {
+        const response = await payment.getAllTransactions();
         return thunkAPI.fulfillWithValue(response.data);
 
     } catch (error) {
@@ -65,6 +82,7 @@ const paymentSlice = createSlice({
                 state.isPaymentCreated = false;
                 state.isPaymentCreateError = true;
             })
+
             // Pay complete
             .addCase(payComplete.pending, (state, action) => {
                 state.isPayCompleting = true;
@@ -81,6 +99,28 @@ const paymentSlice = createSlice({
                 state.isPayCompleted = false;
                 state.isPayCompleteError = true;
             })
+
+            //Get all transactions
+            .addCase(getAllTransactions.pending, (state, action) => {
+                state.isAllTransactionsLoading = true;
+                state.isAllTransactionsLoaded = false;
+                state.isAllTransactionsLoadError = false;
+            })
+
+            .addCase(getAllTransactions.fulfilled, (state, action) => {
+                state.isAllTransactionsLoading = false;
+                state.isAllTransactionsLoaded = true;
+                state.isAllTransactionsLoadError = false;
+                state.allTransactions = action.payload;
+            })
+
+            .addCase(getAllTransactions.rejected, (state, action) => {
+                state.isAllTransactionsLoading = false;
+                state.isAllTransactionsLoaded = false;
+                state.isAllTransactionsLoadError = true;
+            })
+
+
     }
 })
 

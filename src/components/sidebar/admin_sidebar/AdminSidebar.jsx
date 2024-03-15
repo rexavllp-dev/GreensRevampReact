@@ -68,6 +68,11 @@ const AdminSidebar = () => {
             id: 12,
             name: 'Recipes',
             url: '/admin/recipes',
+        },
+        {
+            id: 1,
+            name: 'Reasons',
+            url: '/admin/reasons',
         }
 
     ]

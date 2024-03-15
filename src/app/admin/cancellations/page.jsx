@@ -76,7 +76,7 @@ const Cancellations = () => {
     ]);
 
     const handleRowClick = (data)=>{
-        router.push(`/admin/cancellations/${data?.orderId}`)
+        router.push(`/admin/orders/${data?.orderId}`)
     }
 
     return (

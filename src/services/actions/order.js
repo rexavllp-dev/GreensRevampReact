@@ -3,11 +3,18 @@ import Axios from '../axios/Axios.js';
 export const order = {
 
     //Get all orders by admin
-    getAllOrdersByAdmin: () => {
+    getAllOrdersByAdmin: ({
+        driver_id,
+        order_status_id,
+        payment_method,
+        accepted_by,
+        sort_by,
+        search_query
+    }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/orders/get-all-orders')
-            .then(response => resolve(response))
-            .catch(error => reject(error))
+            Axios.get('/orders/get-all-orders?driver_id=' + driver_id + '&order_status_id=' + order_status_id + '&payment_method=' + payment_method + '&accepted_by=' + accepted_by + '&sort_by=' + sort_by + '&search_query=' + search_query)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
         })
     },
 
@@ -175,5 +182,44 @@ export const order = {
                 .catch(error => reject(error))
         })
     },
+    updateOrderQuantity: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/orders/update_order_item_qty', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    createReason: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/cancelreasons/create-cancel-reason', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    updateReason: ({ data, id }) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/cancelreasons/update-cancel-reason/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    deleteReason: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/cancelreasons/delete-cancel-reason?data=${JSON.stringify(data)}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getAllReasons: ({ type }) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/cancelreasons/get-cancel-reasons?type=' + type)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    }
 
 }
