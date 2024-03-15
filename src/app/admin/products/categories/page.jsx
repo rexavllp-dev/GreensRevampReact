@@ -1,193 +1,132 @@
 "use client"
 import CustomTypography from '@/library/typography/CustomTypography'
 import React from 'react'
-import { IoFolderOpenOutline } from 'react-icons/io5'
+import {useEffect, useState} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { IoAddCircleOutline, IoFolderOpen, IoFolderOpenOutline, IoPencil, IoPencilOutline, IoPencilSharp, IoTime, IoTrashBin } from 'react-icons/io5'
 import "./Categories.scss"
 import CustomTabs from '@/components/customtabs/CustomTabs'
-import CustomButton from '@/library/buttons/CustomButton'
-import CustomToggleButton from '@/library/buttons/togglebutton/CustomToggleButton'
-import CustomInput from '@/library/input/custominput/CustomInput'
-import ImageUpload from '@/components/imageupload/ImageUpload'
+import GeneralTab from '../categories/tabs/GeneralTab'
+import ImagesTab from '../categories/tabs/ImagesTab'
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
+import { getCategoryTree, createCategory, updateCategory, deleteCategory} from "@/services/features/categorySlice";
+import { Button } from '@nextui-org/react';
+import { toast } from 'react-toastify';
 
 function Categories() {
 
-  const router = useRouter()
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = React.useState({
-    title: '',
-    status: true,
-  })
+  const { allcategories, isCategoryTreeLoaded, isCreateCategoryLoaded, isUpdateCategoryLoaded, isDeleteCategoryLoaded} = useSelector(state => state.categories)
+  const [categoryTreeData, setCategoryTreeData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [opType, setOpType]                     = useState('Add');
+  const [tabs, setTabs]                         = useState([]);
+  useEffect(() => {
+      dispatch(getCategoryTree())
+  }, [])
 
-  const GeneralTab = () => {
-    return (
-      <div className='categorytab'>
-        <div className="flex flex-col gap-2">
-          <CustomInput name='title' type='text'
-            maxLength={100}
-            placeholder='Title' label={'Title'}
-            isRequired={true}
-            onChange={(e) => { handleInputChange({ e }) }}
-            value={formData.title}
-          />
-          <CustomToggleButton label='Status' isRequired={true} value={formData.status}
-            onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
-          />
-          <div className="flex justify-end">
-            <CustomButton label='Save Changes' />
-          </div>
-        </div>
-      </div>
-    )
+  useEffect(() => {
+    dispatch(getCategoryTree())
+  }, [isCreateCategoryLoaded, isUpdateCategoryLoaded, isDeleteCategoryLoaded])
+
+
+  useEffect(() => {
+  if(isCategoryTreeLoaded){
+    setCategoryTreeData(allcategories.data);
   }
-
-  const ImagesTab = () => {
-    return (
-      <div className='categorytab'>
-        <div className="stack mb-3">
-
-          <CustomTypography content='Logo' color="BLACK" size="MEDIUM" weight="REGULAR" />
-          <ImageUpload
-            name={'event_img_path'}
-            handleFileUpload={handleFileUpload}
-            // images={event?.images}
-            handleDeleteImage={handleDeleteImage}
-            haveUploadSize={true}
-            uploadSize={{
-              "width": '1920',
-              "height": '1080'
-            }}
-          />
-
-        </div>
-
-        <div className="stack">
-          <CustomTypography content='Banner Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
-          <ImageUpload
-            name={'event_img_path'}
-            handleFileUpload={handleFileUpload}
-            // images={event?.images}
-            handleDeleteImage={handleDeleteImage}
-            haveUploadSize={true}
-            uploadSize={{
-              "width": '1920',
-              "height": '1080'
-            }}
-          />
-        </div>
-        <div className="flex justify-end mt-3">
-          <CustomButton label='Save Changes' />
-        </div>
-      </div>
-    )
-  }
+}, [allcategories])
 
 
-  const tabs = [
-    {
+const submitCategory = (data) => {
+    
+   if(data.op_type == 'Add'){
+
+      dispatch(createCategory({ data: data })).then((res) => {
+
+        if (res.payload?.success) {
+            toast.success(res.payload.message);
+        } else {
+            toast.error(res.payload.message)
+        }
+      });
+
+   } else if(data.op_type == 'Edit'){
+
+      dispatch(updateCategory({ data: data, id: data.cat_id })).then((res) => {
+          if (res.payload?.success) {
+              toast.success(res.payload.message);
+          } else {
+              toast.error(res.payload.message)
+          }
+      });
+
+   }
+}
+
+const deleteCat = (id) => {
+  dispatch(deleteCategory({ id: id })).then((res) => {
+    if (res.payload?.success) {
+        toast.success(res.payload.message);
+    } else {
+        toast.error(res.payload.message)
+    }
+});
+
+}
+
+useEffect(() => {
+
+  if(opType == 'Add'){
+    setTabs([{
       id: 1,
       label: "General",
-      component: <GeneralTab />
+      component: <GeneralTab op_type={opType} selected_cat={selectedCategory} submit_data={(data) => submitCategory(data)} />
+    }]);
+  } else {
+
+    setTabs([{
+      id: 1,
+      label: "General",
+      component: <GeneralTab op_type={opType} selected_cat={selectedCategory} submit_data={(data) => submitCategory(data)} />
     },
     {
       id: 2,
       label: "Images",
-      component: <ImagesTab />
-    }
-  ]
-
-  const categories = [
-    {
-      id: 1,
-      name: 'Ingredients',
-      children: [
-        {
-          id: 1,
-          name: "Toppings & Fillings",
-          children: [
-            {
-              id: 1,
-              name: "Item"
-            },
-            {
-              id: 2,
-              name: "Item2"
-            },
-          ]
-        },
-        {
-          id: 2,
-          name: "Basic Ingredients"
-        },
-        {
-          id: 3,
-          name: "Food Colours"
-        },
-        {
-          id: 4,
-          name: "Flavours"
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Chocolates'
-    },
-    {
-      id: 3,
-      name: "Ho.Re.Ca"
-    },
-    {
-      id: 4,
-      name: 'Baking supplies'
-    }
-  ]
-
-  const handleInputChange = ({ e }) => {
-    setFormData((prev) => ({
-      ...prev, [e.target.name]: e.target.value
-    }))
-  }
-
-  const handleFileUpload = async (event) => {
-    let files = null;
+      component: <ImagesTab data={selectedCategory} id={selectedCategory.id}/>
+    }]);
 
   }
 
-  const handleDeleteImage = (imgname) => {
+}, [selectedCategory, opType])
 
-  }
 
-  const CategoryTree = ({ category }) => {
+
+  const CategoryTreeNode = ({ category, level }) => {
+
     const [expanded, setExpanded] = React.useState(false);
-
-    const toggleCategory = () => {
-      setExpanded(!expanded);
-    };
-
+    const marginLeft = level * 20;
     return (
       <div className='flex flex-col gap-3'>
-        <div className="item flex items-center gap-2 cursor-pointer" key={category.id}>
+        <div className={`item flex treeblock items-center gap-2 cursor-pointer ${(selectedCategory.id == category.id)? 'selectedCategory' : ''}`} style={{ marginLeft }}>
           <IoFolderOpenOutline size={30} />
-          <CustomTypography content={category.name} />
-        </div>
-        <div className='flex flex-col gap-3 mb-3'>
-          {category.children?.map((subItem, i) => {
-            return (
-              <div className='item flex ml-12 items-center gap-2 cursor-pointer' key={subItem.id}>
-                <IoFolderOpenOutline size={30} />
-                <CustomTypography content={subItem.name} />
-              </div>
-            )
-          })}
-        </div>
+          <span style={{flex:1}}>{category.name}</span>
+          <IoPencilSharp size={15} onClick={() =>  { setSelectedCategory(category); setOpType('Edit'); }}  />
+          <IoAddCircleOutline size={25} style={{cursor:'pointer'}}  onClick={() => { setOpType('Add'); setSelectedCategory(category)}}/>
+          <IoTrashBin size={20} style={{cursor:'pointer'}}  onClick={() => deleteCat(category.id)}/>
+        </div>        
+          <div className='flex flex-col'>
+            {category.children?.map((subItem) => (
+              <CategoryTreeNode key={subItem.id} category={subItem}  level={level + 1} />
+            ))}
+          </div>
+
       </div>
-    )
-
-  }
-
+    );
+  };
 
   return (
     <div className='categories_section_wrapper'>
@@ -203,10 +142,17 @@ function Categories() {
       <div className='categories_section'>
         <div className="categorytree">
 
+        <div className='flex flex-col gap-3 mb-15'>
+            <div className={`item flex items-center gap-2 cursor-pointer ${(selectedCategory == 0)? 'selectedCategory' : ''}`} onClick={() =>  {setSelectedCategory(0); setOpType('Add')}}>
+              <IoFolderOpen size={30} />
+              <span>Root</span>
+            </div>
+        </div>
+
           {
-            categories?.map((item, i) => {
+            categoryTreeData?.map((item, i) => {
               return (
-                <CategoryTree key={item.id} category={item} />
+                <CategoryTreeNode key={item.id} category={item} level={0}/>
               )
             })
           }

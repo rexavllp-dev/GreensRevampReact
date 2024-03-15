@@ -10,6 +10,7 @@ import { IoIosClose, IoIosCloseCircleOutline } from 'react-icons/io';
 const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
 
     const inputFileRef = useRef()
+    
 
     return (
         <>
