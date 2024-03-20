@@ -34,7 +34,7 @@ const OrderUpdateModal = ({ open, handleClose, editData }) => {
     const handleSubmit = () => {
         dispatch(updateOrderQuantity({
             data: {
-                "orderItemId": editData?.id,
+                "orderItemId": editData?.itemId,
                 "opQty": formData?.quantity
             }
         })).then((res) => {

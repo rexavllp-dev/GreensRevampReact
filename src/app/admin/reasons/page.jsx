@@ -4,7 +4,7 @@ import CustomTable from '@/components/customtable/CustomTable'
 import CustomTypography from '@/library/typography/CustomTypography';
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import "./Reasons.scss";
 import SearchInput from '@/library/input/searchinput/SearchInput';
@@ -13,6 +13,7 @@ import CreateReasonModal from '@/components/modal/reasons/CreateReasonModal';
 import CustomButton from '@/library/buttons/CustomButton';
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { toast } from 'react-toastify';
+import { MdEdit } from 'react-icons/md';
 
 const Reasons = () => {
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const Reasons = () => {
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [createReasonModalOpen, setCreateReasonModalOpen] = React.useState(false);
     const [type, setType] = React.useState('');
+    const [editData, setEditData] = React.useState({});
 
     React.useEffect(() => {
         dispatch(getAllReasons({ type }));
@@ -92,6 +94,7 @@ const Reasons = () => {
             field: 'reason_type',
             minWidth: 150
         },
+
         {
             headerName: 'Status',
             field: 'clr_status',
@@ -122,11 +125,28 @@ const Reasons = () => {
                 return normalDateTime;
             }
         },
+        {
+            headerName: 'Action',
+            field: 'action',
+            minWidth: 150,
+            cellRenderer: (params) => {
+                return (
+                    <button className='editbtn' onClick={() => handleEdit(params.data)}>
+                        <MdEdit color='#555' size={24} />
+                    </button>
+                )
+            }
+        },
 
     ]);
 
     const handleRowClick = (data) => {
 
+    }
+
+    const handleEdit = (data) => {
+        setEditData(data);
+        setCreateReasonModalOpen(true); // Open the modal
     }
 
     const handleDeleteReasons = () => {
@@ -187,7 +207,10 @@ const Reasons = () => {
                 </Select> */}
                 <div className="right">
                     <CustomButton label="Delete" variant="danger" height={'42px'} onClick={() => handleDeleteReasons()} />
-                    <CustomButton label='Create Reason' variant='primary' height={'42px'} onClick={() => setCreateReasonModalOpen(true)} />
+                    <CustomButton label='Create Reason' variant='primary' height={'42px'} onClick={() => {
+                        setEditData({});
+                        setCreateReasonModalOpen(true);
+                    }} />
                 </div>
             </div>
 
@@ -198,7 +221,7 @@ const Reasons = () => {
                 onRowClicked={handleRowClick}
             />
 
-            <CreateReasonModal open={createReasonModalOpen} handleClose={() => setCreateReasonModalOpen(false)} />
+            <CreateReasonModal open={createReasonModalOpen} editData={editData} handleClose={() => setCreateReasonModalOpen(false)} />
         </div>
     )
 }

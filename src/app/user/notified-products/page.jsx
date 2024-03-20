@@ -95,7 +95,7 @@ const NotifiedProducts = () => {
         }
     }
 
-    const handleRemoveWishlist = (id) => {
+    const handleRemoveNotifiedProduct = (id) => {
         dispatch(removeNotifyProducts({ id })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload?.message)
@@ -112,19 +112,20 @@ const NotifiedProducts = () => {
             </div>
 
             {
-                notifyProducts?.result?.allWishlist?.length ?
+                notifyProducts?.result?.allNotifyProducts?.length ?
                     <div
                         className='products-wrapper'
                     >
                         {
-                            notifyProducts?.result?.allWishlist?.map(product => (
+                            notifyProducts?.result?.allNotifyProducts?.map(product => (
                                 <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
                                     specialPrice={product?.prdPrice[0]?.specialPrice}
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
                                     data={product}
                                     haveRemoveBtn={true}
-                                    handleRemove={() => handleRemoveWishlist(product?.wishlistId)}
+                                    hideNotifyBtn={true}
+                                    handleRemove={() => handleRemoveNotifiedProduct(product?.notifyProductsId)}
                                     img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
                                         (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
                                         'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
@@ -142,31 +143,6 @@ const NotifiedProducts = () => {
 
 
 
-            <div className="itemcard-wrapper">
-                <div className="header">
-                    <CustomTypography content="Recommended Products with your order" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
-
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'}
-                            iconColor={'#32893B'} icon={"ArrowLeft"}
-                            onClick={() => handleNav('recommendedProdRef', 'left')}
-                        />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                            backgroundColor={'#32893B'} icon={"ArrowRight"}
-                            onClick={() => handleNav('recommendedProdRef', 'right')}
-                        />
-                    </div>
-
-                </div>
-                <div className="items" ref={recommendedProdRef}>
-                    {
-                        products.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
-                        ))
-                    }
-                </div>
-            </div>
         </div >
     )
 }

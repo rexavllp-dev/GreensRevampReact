@@ -22,6 +22,11 @@ const initialState = {
     isOrderItemLoadError: false,
     orderItem: [],
 
+    isAllOrderItemsLoading: false,
+    isAllOrderItemsLoaded: false,
+    isAllOrderItemsLoadError: false,
+    allOrderItems: [],
+
     isUserOrdersLoading: false,
     isUserOrdersLoaded: false,
     isUserOrdersLoadError: false,
@@ -87,7 +92,7 @@ const initialState = {
     isCreatedReason: false,
     isCreatingReasonError: false,
 
-    isUpdatingReason: false, 
+    isUpdatingReason: false,
     isUpdatedReason: false,
     isUpdatingReasonError: false,
 
@@ -156,9 +161,19 @@ export const getOrderItem = createAsyncThunk('getOrderItem', async ({ id }, thun
     }
 })
 
-export const getUserOrders = createAsyncThunk('getUserOrders', async ({ sort }, thunkAPI) => {
+export const getAllOrderItems = createAsyncThunk('getAllOrderItems', async ({ id }, thunkAPI) => {
     try {
-        const response = await order.getUserOrders({ sort });
+        const response = await order.getAllOrderItems(id);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({ sort, filters}, thunkAPI) => {
+    try {
+        const response = await order.getUserOrders({ sort, filters});
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -349,7 +364,7 @@ export const createReason = createAsyncThunk('createReason', async ({ data }, th
 export const updateReason = createAsyncThunk('updateReason', async ({ data, id }, thunkAPI) => {
     try {
 
-        const response = await order.updateReason({data, id});
+        const response = await order.updateReason({ data, id });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -439,6 +454,7 @@ const orderSlice = createSlice({
                 state.isOrderLoaded = false;
                 state.isOrderLoadError = true;
             })
+
             // Get order item
             .addCase(getOrderItem.pending, (state, action) => {
                 state.isOrderItemLoading = true;
@@ -456,6 +472,25 @@ const orderSlice = createSlice({
                 state.isOrderItemLoaded = false;
                 state.isOrderItemLoadError = true;
             })
+
+            // Get all order items
+            .addCase(getAllOrderItems.pending, (state, action) => {
+                state.isAllOrderItemsLoading = true;
+                state.isAllOrderItemsLoaded = false;
+                state.isAllOrderItemsLoadError = false;
+            })
+            .addCase(getAllOrderItems.fulfilled, (state, action) => {
+                state.isAllOrderItemsLoading = false;
+                state.isAllOrderItemsLoaded = true;
+                state.isAllOrderItemsLoadError = false;
+                state.allOrderItems = action.payload;
+            })
+            .addCase(getAllOrderItems.rejected, (state, action) => {
+                state.isAllOrderItemsLoading = false;
+                state.isAllOrderItemsLoaded = false;
+                state.isAllOrderItemsLoadError = true;
+            })
+
             // Get user orders
             .addCase(getUserOrders.pending, (state, action) => {
                 state.isUserOrdersLoading = true;
@@ -473,7 +508,6 @@ const orderSlice = createSlice({
                 state.isUserOrdersLoaded = false;
                 state.isUserOrdersLoadError = true;
             })
-
 
             // Get All Dashboard orders
             .addCase(getAllDashbordOrders.pending, (state, action) => {

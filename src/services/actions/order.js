@@ -39,16 +39,25 @@ export const order = {
     //Get order item
     getOrderItem: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/cancelorders/all-order-items/' + id)
+            Axios.get('/orders/order-item/' + id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    //Get all order items
+    getAllOrderItems: (id) => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/orders/all-order-items/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
     //Get user orders
-    getUserOrders: ({ sort }) => {
+    getUserOrders: ({ sort, filters }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/orders/get-user-orders?sort=' + sort)
+            Axios.get('/orders/get-user-orders?sort=' + sort + '&filters=' + filters)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

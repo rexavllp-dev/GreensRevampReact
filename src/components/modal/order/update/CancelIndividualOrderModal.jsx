@@ -27,7 +27,7 @@ const CancelIndividualOrderModal = ({ open, handleClose, editData }) => {
     const handleSubmit = () => {
         dispatch(cancelIndividualOrder({
             data: {
-                order_id: editData?.id,
+                order_id: editData?.itemId,
                 cancel_note: formData?.cancel_note,
             }
         })).then((res) => {

@@ -3,7 +3,7 @@ import React from 'react'
 import CustomTypography from '@/library/typography/CustomTypography'
 import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { Card, CardBody, Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from '@nextui-org/react'
-import { cancelOrder, getOrder, getUserOrders } from '@/services/features/orderSlice';
+import { cancelOrder, getAllOrderItems, getOrder, getOrderItem, getUserOrders } from '@/services/features/orderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ const OrderDetails = ({ params }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { singleOrder } = useSelector((state) => state.order);
+    const { singleOrder, allOrderItems } = useSelector((state) => state.order);
 
     const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
     const [isCancelOrderModalOpen, setIsCancelOrderModalOpen] = React.useState(false);
@@ -34,6 +34,7 @@ const OrderDetails = ({ params }) => {
 
     React.useEffect(() => {
         dispatch(getOrder({ id: params.id }));
+        dispatch(getAllOrderItems({ id: params.id }));
     }, [params.id]);
 
     const tabs = [
@@ -102,13 +103,13 @@ const OrderDetails = ({ params }) => {
                 </TableHeader>
                 <TableBody>
                     {
-                        order?.orderItems?.map((item, index) => {
+                        allOrderItems?.result?.map((item, index) => {
                             return (
                                 <TableRow key={item.id}>
-                                    <TableCell>{item?.product_name}</TableCell>
-                                    <TableCell>{item?.order_op_unit_price}</TableCell>
-                                    <TableCell>{item?.order_op_qty}</TableCell>
-                                    <TableCell>{item?.order_op_line_total}</TableCell>
+                                    <TableCell>{item?.prd_name}</TableCell>
+                                    <TableCell>{item?.op_unit_price}</TableCell>
+                                    <TableCell>{item?.op_qty}</TableCell>
+                                    <TableCell>{item?.op_line_total}</TableCell>
                                     <TableCell>{item?.refund_type}</TableCell>
                                     <TableCell>{handleShowStatus(item)}</TableCell>
                                     <TableCell className='flex flex-col gap-3'>

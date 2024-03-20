@@ -30,6 +30,7 @@ import { IoIosReturnLeft } from 'react-icons/io';
 import { BiCategoryAlt } from "react-icons/bi";
 import Badge from '@/components/badges/Badge';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { addNotifyProducts } from '@/services/features/notifyProductSlice';
 
 
 const products = [
@@ -359,6 +360,23 @@ const ProductDetails = ({ params }) => {
         }
     }
 
+    
+  // Add notify product
+  const handleNotifyProduct = () => {
+    const productData = {
+      product_id: params.id
+    }
+    dispatch(addNotifyProducts({ data: productData })).then((res) => {
+      if (res.payload?.success) {
+        toast.success(res.payload?.message);
+      } else {
+        toast.error(res.payload?.message);
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
     return (
         <div className='product_details_wrapper'>
             <div className='product_details'>
@@ -591,8 +609,16 @@ const ProductDetails = ({ params }) => {
                             <div className="outofstock pt-3">
                                 <CustomTypography content="Out of Stock" color="DANGER" size="LARGE" weight="SEMI-BOLD" />
 
-                                <div className="mt-3">
-                                    <CustomButton variant='primary' label='Add to Wishlist' onClick={() => handleWishlist()} />
+                                <div className="mt-3 flex gap-3">
+                                    <div className='iconbtn' onClick={() => handleWishlist()}>
+                                        {
+                                            singleProduct?.data?.product?.wishlist_id ? <AiFillHeart size={28} color='#E54333' /> : <AiOutlineHeart size={28} color='#E54333' />
+                                        }
+                                        {/* <CiHeart size={28} color='#E54333' /> */}
+                                    </div>
+                                    <CustomButton variant='transparent' label='Notify me' onClick={() => {
+                                        handleNotifyProduct()
+                                    }} />
                                 </div>
                             </div>
                             :

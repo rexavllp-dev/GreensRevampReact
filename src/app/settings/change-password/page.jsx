@@ -10,6 +10,7 @@ import { updatePassword } from '@/services/features/userSlice';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/helpers/validationRules';
+import { logout } from '@/services/features/authSlice';
 
 const ChangePassword = () => {
 
@@ -52,7 +53,6 @@ const ChangePassword = () => {
                 message: ''
             }
         }))
-
     }
 
     const validateForm = () => {
@@ -141,7 +141,7 @@ const ChangePassword = () => {
     };
 
     const handleSubmit = () => {
-        if(!validateForm()) {
+        if (!validateForm()) {
             toast.error('validate this')
             return;
         }
@@ -155,7 +155,9 @@ const ChangePassword = () => {
         })).then(res => {
             if (res.payload.success) {
                 toast.success(res.payload.message);
-                router.push('/user/account')
+                // router.push('/user/account');
+                dispatch(logout());
+                router.push('/auth/login');
             } else {
                 toast.error(res.payload.message);
             }

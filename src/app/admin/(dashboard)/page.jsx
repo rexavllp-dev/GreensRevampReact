@@ -1,10 +1,11 @@
 import CustomTable from "@/components/customtable/CustomTable";
+import './AdminDashboard.scss'
 
 
 export default function AdminDashboard() {
 
     return (
-        <div>
+        <div className="admin-dashboard">
          Dashboard
         </div>
     )
