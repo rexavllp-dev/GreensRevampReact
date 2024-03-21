@@ -35,9 +35,9 @@ export const admin = {
 
     getOutOfStockProducts: () => {
         return new Promise((resolve, reject) => {
-            // Axios.get('/admin/dashboard/get_all_out_of_stock_products')
-                // .then(response => resolve(response))
-                // .catch(error => reject(error))
+            Axios.get('/admin/dashboard/get_all_out_of_stock')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
         })
     },
 
@@ -52,6 +52,13 @@ export const admin = {
     getAllMinQtyProducts: () => {   
         return new Promise((resolve, reject) => {
             Axios.get('/admin/dashboard/get_all_products_min_qty')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getExpiredTradeLicenses: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/dashboard/get_all_expired_trade_licenses')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

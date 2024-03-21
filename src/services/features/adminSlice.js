@@ -37,6 +37,11 @@ const initialState = {
     isAllMinQtyProductsLoaded:false,
     isAllMinQtyProductsLoadError:false,
     allMinQtyProducts:[],
+
+    isExpiredTradeLicensesLoading:false,
+    isExpiredTradeLicensesLoaded:false,
+    isExpiredTradeLicensesLoadError:false,
+    expiredTradeLicenses:[],
 }
 
 // Get latest orders
@@ -108,6 +113,17 @@ export const getExpiredProducts = createAsyncThunk('getExpiredProducts', async (
 export const getAllMinQtyProducts = createAsyncThunk('getAllMinQtyProducts', async ({ }, thunkAPI) => {
     try {
         const response = await admin.getAllMinQtyProducts();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//get expired trade licenses
+export const getExpiredTradeLicenses = createAsyncThunk('getExpiredTradeLicenses', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.getExpiredTradeLicenses();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -252,6 +268,23 @@ const adminSlice = createSlice({
                 state.isAllMinQtyProductsLoading = false;
                 state.isAllMinQtyProductsLoaded = false;
                 state.isAllMinQtyProductsLoadError = true;
+            })
+
+            .addCase(getExpiredTradeLicenses.pending, (state, action) => {
+                state.isExpiredTradeLicensesLoading = true;
+                state.isExpiredTradeLicensesLoaded = false;
+                state.isExpiredTradeLicensesLoadError = false;
+            })
+            .addCase(getExpiredTradeLicenses.fulfilled, (state, action) => {
+                state.isExpiredTradeLicensesLoading = false;
+                state.isExpiredTradeLicensesLoaded = true;
+                state.isExpiredTradeLicensesLoadError = false;
+                state.expiredTradeLicenses = action.payload;
+            })
+            .addCase(getExpiredTradeLicenses.rejected, (state, action) => {
+                state.isExpiredTradeLicensesLoading = false;
+                state.isExpiredTradeLicensesLoaded = false;
+                state.isExpiredTradeLicensesLoadError = true;
             })
     }
 })

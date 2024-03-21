@@ -64,7 +64,7 @@ export default function DashboardTable({ columns, data, key }) {
             <TableBody emptyContent={"No data found"} items={data}>
                 {(item) => (
                     // <TableRow >
-                    <TableRow key={key ? item[key] : item.id}>
+                    <TableRow key={item.id}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                     </TableRow>
                 )}
