@@ -63,5 +63,26 @@ export const admin = {
                 .catch(error => reject(error))
         })
     },
+    getTotalOrderCount: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/dashboard/get_all_total_orders')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getTotalSales: ({ filterBy, fromDate, toDate }) => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/dashboard/get_all_total_sales?filterBy='+ filterBy + '&fromDate=' + fromDate + '&toDate=' + toDate)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+    getTotalCountDashboard: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/dashboard/get_all_total_counts')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
 }

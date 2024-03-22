@@ -7,7 +7,7 @@ const TabCard = ({ id, title, count, isActive, setSelectedTab }) => {
             {
                 isActive &&  <div className="topborder"></div>
             }
-            <div className={isActive ? "count active" : "count"}>
+            <div className={(isActive || (parseInt(count) > 0)) ? "count active" : "count"}>
                 <p>{count}</p>
             </div>
             <p className={isActive ? "title active" : "title "}>{title}</p>
