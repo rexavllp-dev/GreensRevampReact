@@ -31,6 +31,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import Badge from '@/components/badges/Badge';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { addNotifyProducts } from '@/services/features/notifyProductSlice';
+import Link from 'next/link';
 
 
 const products = [
@@ -360,22 +361,23 @@ const ProductDetails = ({ params }) => {
         }
     }
 
-    
-  // Add notify product
-  const handleNotifyProduct = () => {
-    const productData = {
-      product_id: params.id
+
+    // Add notify product
+    const handleNotifyProduct = () => {
+        const productData = {
+            product_id: params.id
+        }
+        dispatch(addNotifyProducts({ data: productData })).then((res) => {
+            if (res.payload?.success) {
+                toast.success(res.payload?.message);
+            } else {
+                toast.error(res.payload?.message);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
-    dispatch(addNotifyProducts({ data: productData })).then((res) => {
-      if (res.payload?.success) {
-        toast.success(res.payload?.message);
-      } else {
-        toast.error(res.payload?.message);
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+
 
     return (
         <div className='product_details_wrapper'>
@@ -421,9 +423,18 @@ const ProductDetails = ({ params }) => {
                                     className={`accordion-header ${expandedIndex === index ? 'expanded' : ''}`}
                                 >
                                     <div className="accordianitem">
-                                        <div className="flex items-center justify-between cursor-pointer" onClick={() => handleItemClick(index)}>
-                                            <CustomTypography content={item.label} color="GREY" size="MEDIUM-LARGE" weight="MEDIUM" />
-                                            <MdKeyboardArrowDown size={24} className='mt-1' />
+                                        <div className="flex items-center w-full justify-between cursor-pointer" >
+                                            <div className='flex items-center gap-3'>
+                                                <CustomTypography content={item.label} color="GREY" size="MEDIUM-LARGE" weight="MEDIUM" />
+                                                {(index === 4) && (
+                                                    <Link href={'/products/review/' + params.id}>
+                                                        <button className="create-review-btn">Create Review</button>
+                                                    </Link>
+                                                )}
+                                            </div>
+                                            <div className="cursor-pointer" onClick={() => handleItemClick(index)}>
+                                                <MdKeyboardArrowDown size={24} className='mt-1' />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -504,9 +504,9 @@ export const createProductReviewByAdmin = createAsyncThunk('createProductReviewB
     }
 })
 
-export const getProductReview = createAsyncThunk('getProductReview', async ({ id }, thunkAPI) => {
+export const getAllProductReviews = createAsyncThunk('getAllProductReviews', async ({  }, thunkAPI) => {
     try {
-        const response = await products.getProductReview({ id });
+        const response = await products.getAllProductReviews();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1165,20 +1165,20 @@ const productSlice = createSlice({
                 state.isReviewCreateByAdminError = true;
             })
 
-            .addCase(getProductReview.pending, (state, action) => {
+            .addCase(getAllProductReviews.pending, (state, action) => {
                 state.isReviewIsLoading = true;
                 state.isReviewIsLoaded = false;
                 state.isReviewIsLoadError = false;
             })
 
-            .addCase(getProductReview.fulfilled, (state, action) => {
+            .addCase(getAllProductReviews.fulfilled, (state, action) => {
                 state.isReviewIsLoading = false;
                 state.isReviewIsLoaded = true;
                 state.isReviewIsLoadError = false;
                 state.allReviews = action.payload;
             })
 
-            .addCase(getProductReview.rejected, (state, action) => {
+            .addCase(getAllProductReviews.rejected, (state, action) => {
                 state.isReviewIsLoading = false;
                 state.isReviewIsLoaded = false;
                 state.isReviewIsLoadError = true;

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomTypography from "@/library/typography/CustomTypography";
 import ChartComponent from "@/components/chart/ChartComponent";
 import { Select, SelectItem } from "@nextui-org/react";
-import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts } from "@/services/features/adminSlice";
+import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts, getTotalCountDashboard, getTotalOrderCount, getTotalSales } from "@/services/features/adminSlice";
 
 
 export default function AdminDashboard() {
@@ -19,10 +19,19 @@ export default function AdminDashboard() {
     const [tableData, setTableData] = React.useState([])
     const [tableColumns, setTableColumns] = React.useState(orderColumns || [])
     const [key, setKey] = React.useState('')
+    const [salesFilterBy, setSalesFilterBy] = React.useState('today')
+    const [totalOrdersFilterBy, setTotalOrdersFilterBy] = React.useState('today')
 
     const { latestOrders, latestCancelledOrders, latestReturnedOrders,
         latestReplacedOrders, outOfStockProducts, expiredTradeLicenses,
-        expiredProducts, allMinQtyProducts } = useSelector((state) => state.admin);
+        expiredProducts, allMinQtyProducts, totalCountDashboard,
+        totalSales, totalOrderCount } = useSelector((state) => state.admin);
+
+    React.useEffect(() => {
+        dispatch(getTotalSales({ filterBy: salesFilterBy, fromDate: null, toDate: null }))
+        dispatch(getTotalOrderCount({}))
+        dispatch(getTotalCountDashboard({}))
+    }, [])
 
     React.useEffect(() => {
         if (selectedTab === 0) {
@@ -34,7 +43,7 @@ export default function AdminDashboard() {
         } else if (selectedTab === 1) {
 
             dispatch(getLatestCancelledOrders({}))
-            setTableData(latestCancelledOrders?.result || [])
+            setTableData(latestCancelledOrders?.result?.data || [])
             setTableColumns(cancelledOrdersColumns)
 
         } else if (selectedTab === 2) {
@@ -82,7 +91,7 @@ export default function AdminDashboard() {
             setKey('orderId')
         }
         else if (selectedTab === 1) {
-            setTableData(latestCancelledOrders?.result || [])
+            setTableData(latestCancelledOrders?.result?.data || [])
             setKey('id')
         } else if (selectedTab === 2) {
             setTableData(latestReturnedOrders?.result?.data || [])
@@ -105,43 +114,43 @@ export default function AdminDashboard() {
         {
             id: 0,
             title: "Latest Orders",
-            count: 100,
+            count: totalCountDashboard?.result?.totalRecentOrders,
             column: orderColumns
         },
         {
             id: 1,
             title: "Latest Cancelled Orders",
-            count: 5,
+            count: totalCountDashboard?.result?.totalCanceledOrders,
             column: orderColumns
         },
         {
             id: 2,
             title: "Latest Returned Orders",
-            count: 100,
+            count: totalCountDashboard?.result?.totalExpiredProducts,
             column: orderColumns
         },
         {
             id: 3,
             title: "Latest Replaced Orders",
-            count: 100,
+            count: totalCountDashboard?.result?.totalReplacementOrders,
             column: orderColumns
         },
         {
             id: 4,
             title: "Out of Stock Products",
-            count: 100,
+            count: totalCountDashboard?.result?.totalOutOfStockProducts,
             column: orderColumns
         },
         {
             id: 5,
             title: "Product Expiry",
-            count: 0,
+            count: totalCountDashboard?.result?.totalExpiredProducts,
             column: orderColumns
         },
         {
             id: 6,
             title: "Minimum Quantity",
-            count: 0,
+            count: totalCountDashboard?.result?.totalProductsMinQty,
             column: orderColumns
         },
         {
@@ -159,7 +168,7 @@ export default function AdminDashboard() {
         {
             id: 9,
             title: "Trade License Expiry",
-            count: 0,
+            count: totalCountDashboard?.result?.totalExpiredTradeLicenses,
             column: orderColumns
         }
     ]
@@ -190,12 +199,22 @@ export default function AdminDashboard() {
 
     const sortOptions = [
         {
-            label: 'Newest',
-            value: 'newest'
+            label: 'Today',
+            value: 'today'
         },
         {
-            label: 'Oldest',
+            label: 'This week',
             value: 'oldest'
+        }
+    ];
+    const totalOrderOptions = [
+        {
+            label: 'Today',
+            value: 'today'
+        },
+        {
+            label: 'This week',
+            value: 'week'
         }
     ];
     return (
@@ -250,15 +269,13 @@ export default function AdminDashboard() {
                                         variant='bordered'
                                         placeholder=''
                                         className="max-w-xs"
-                                        selectedKeys={[]}
+                                        selectedKeys={[totalOrdersFilterBy]}
                                         onChange={(e) => {
-                                            // if (e.target?.value !== sortBy) {
-                                            //     setSortBy(e.target.value)
-                                            // }
+                                            setTotalOrdersFilterBy(e.target.value)
                                         }}
                                     >
                                         {
-                                            sortOptions.map((option) => (
+                                            totalOrderOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </SelectItem>
@@ -270,15 +287,15 @@ export default function AdminDashboard() {
                             <div className="items-wrapper">
                                 <div className="item">
                                     <p className="label">Completed</p>
-                                    <p className="value">50</p>
+                                    <p className="value">{totalOrderCount?.result?.completed_count || ''}</p>
                                 </div>
                                 <div className="item">
                                     <p className="label">Pending</p>
-                                    <p className="value">15</p>
+                                    <p className="value">{totalOrderCount?.result?.pending_count || ''}</p>
                                 </div>
                                 <div className="item">
                                     <p className="label">Cancelled</p>
-                                    <p className="value">2</p>
+                                    <p className="value">{totalOrderCount?.result?.canceled_count || ''}</p>
                                 </div>
                             </div>
                         </div>

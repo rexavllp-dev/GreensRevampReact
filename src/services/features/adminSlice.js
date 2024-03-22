@@ -61,6 +61,21 @@ const initialState = {
     isExpiredTradeLicensesLoaded:false,
     isExpiredTradeLicensesLoadError:false,
     expiredTradeLicenses:[],
+
+    isTotalOrderCountLoading:false,
+    isTotalOrderCountLoaded:false,
+    isTotalOrderCountLoadError:false,
+    totalOrderCount:{},
+
+    isTotalSalesLoading:false,
+    isTotalSalesLoaded:false,
+    isTotalSalesLoadError:false,
+    totalSales:{},
+
+    isTotalCountDashboardLoading: false,
+    isTotalCountDashboardLoaded: false,
+    isTotalCountDashboardLoadError: false,
+    totalCountDashboard: {},
 }
 
 // Get latest orders
@@ -161,6 +176,38 @@ export const getExpiredTradeLicenses = createAsyncThunk('getExpiredTradeLicenses
     }
 })
 
+//get total order count
+export const getTotalOrderCount = createAsyncThunk('getTotalOrderCount', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.getTotalOrderCount();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//get total sales
+export const getTotalSales = createAsyncThunk('getTotalSales', async ({filterBy, fromDate, toDate}, thunkAPI) => {
+    try {
+        const response = await admin.getTotalSales({filterBy, fromDate, toDate});
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//get total count in dashboard tables
+export const getTotalCountDashboard = createAsyncThunk('getTotalCountDashboard', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.getTotalCountDashboard();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
 
 
@@ -366,6 +413,63 @@ const adminSlice = createSlice({
                 state.isExpiredTradeLicensesLoading = false;
                 state.isExpiredTradeLicensesLoaded = false;
                 state.isExpiredTradeLicensesLoadError = true;
+            })
+
+            .addCase(getTotalOrderCount.pending, (state, action) => {
+                state.isTotalOrderCountLoading = true;
+                state.isTotalOrderCountLoaded = false;
+                state.isTotalOrderCountLoadError = false;
+            })
+
+            .addCase(getTotalOrderCount.fulfilled, (state, action) => {
+                state.isTotalOrderCountLoading = false;
+                state.isTotalOrderCountLoaded = true;
+                state.isTotalOrderCountLoadError = false;
+                state.totalOrderCount = action.payload;
+            })
+
+            .addCase(getTotalOrderCount.rejected, (state, action) => {
+                state.isTotalOrderCountLoading = false;
+                state.isTotalOrderCountLoaded = false;
+                state.isTotalOrderCountLoadError = true;
+            })
+
+            .addCase(getTotalSales.pending, (state, action) => {
+                state.isTotalSalesLoading = true;
+                state.isTotalSalesLoaded = false;
+                state.isTotalSalesLoadError = false;
+            })
+
+            .addCase(getTotalSales.fulfilled, (state, action) => {
+                state.isTotalSalesLoading = false;
+                state.isTotalSalesLoaded = true;
+                state.isTotalSalesLoadError = false;
+                state.totalSales = action.payload;
+            })
+
+            .addCase(getTotalSales.rejected, (state, action) => {
+                state.isTotalSalesLoading = false;
+                state.isTotalSalesLoaded = false;
+                state.isTotalSalesLoadError = true;
+            })
+
+            .addCase(getTotalCountDashboard.pending, (state, action) => {
+                state.isTotalCountDashboardLoading = true;
+                state.isTotalCountDashboardLoaded = false;
+                state.isTotalCountDashboardLoadError = false;
+            })
+
+            .addCase(getTotalCountDashboard.fulfilled, (state, action) => {
+                state.isTotalCountDashboardLoading = false;
+                state.isTotalCountDashboardLoaded = true;
+                state.isTotalCountDashboardLoadError = false;
+                state.totalCountDashboard = action.payload;
+            })
+
+            .addCase(getTotalCountDashboard.rejected, (state, action) => {
+                state.isTotalCountDashboardLoading = false;
+                state.isTotalCountDashboardLoaded = false;
+                state.isTotalCountDashboardLoadError = true;
             })
     }
 })

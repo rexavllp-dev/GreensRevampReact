@@ -268,6 +268,13 @@ export const products = {
                 .catch(error => reject(error))
         })
     },
+    getAllProductReviews: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/products/review/get-all-reviews?sortBy=recent`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
     getProductOptions: ({ id }) => {
         return new Promise((resolve, reject) => {
             Axios.get('/products/get-options/' + id)
