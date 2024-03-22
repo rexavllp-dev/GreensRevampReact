@@ -12,6 +12,8 @@ import CustomInput from '@/library/input/custominput/CustomInput';
 import ImageGallery from '@/components/imagegallery/ImageGallery';
 import CustomButton from '@/library/buttons/CustomButton';
 import ReactStars from "react-rating-stars-component";
+import { createReview } from '@/services/features/reviewSlice';
+import { toast } from 'react-toastify';
 
 const ReviewProduct = ({ params }) => {
     const dispatch = useDispatch();
@@ -19,10 +21,9 @@ const ReviewProduct = ({ params }) => {
     const { singleProduct } = useSelector((state) => state.products)
 
     const [formData, setFormData] = React.useState({
+        rating: 0,
+        review_heading: '',
         review: '',
-        summary: '',
-        review: '',
-        rating: 0
     })
 
     const [reviewImages, setReviewImages] = React.useState([]);
@@ -32,7 +33,7 @@ const ReviewProduct = ({ params }) => {
     }, [params?.id]);
 
     useEffect(() => {
-       console.log(formData)
+        console.log(formData)
     }, [formData]);
 
     const handleInputChange = ({ e }) => {
@@ -57,7 +58,29 @@ const ReviewProduct = ({ params }) => {
     }
 
     const submitReview = () => {
+        const data = {
+            product_id: params.id,
+            rating: formData.rating,
+            review_heading: formData.review_heading,
+            review: formData.review,
+        }
+        const reviewFormData = new FormData();
 
+        for (let i = 0; i < reviewImages.length; i++) {
+            reviewFormData.append('files', reviewImages[i].file);
+        }
+
+        reviewFormData.append('data', JSON.stringify(data));
+
+        dispatch(createReview({ data: reviewFormData })).then((res)=>{
+            if(res.payload.success){
+                toast.success(res.payload.message)
+            }else {
+                toast.error(res.payload.message)
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
 
 
@@ -115,41 +138,34 @@ const ReviewProduct = ({ params }) => {
                             }
                         </div>
                         <div className="prd_item">
-                            {/* <div className="rating">
-                                <div className="star ml-2"> */}
+                            <div className='rating'>
                                 <CustomTypography content='Your rating' size='REGULAR' weight='REGULAR' color='GRAY-DARK' />
-                                    <ReactStars
-                                        classNames={'mb-1'}
-                                        count={5}
-                                        onChange={(e) => {
-                                            setFormData((prev) => ({
-                                                ...prev, rating: e
-                                            }))
-                                        }}
-                                        value={formData?.rating}
-                                        size={24}
-                                        activeColor="#ffd700"
-                                    />
-                                    {/* <IoIosStar />
-                                    <IoIosStar />
-                                    <IoIosStar />
-                                    <IoIosStar />
-                                    <IoStarOutline /> */}
-                                {/* </div>
-                            </div> */}
+                                <ReactStars
+                                    classNames={'mb-1'}
+                                    count={5}
+                                    onChange={(e) => {
+                                        setFormData((prev) => ({
+                                            ...prev, rating: e
+                                        }))
+                                    }}
+                                    value={formData?.rating}
+                                    size={24}
+                                    activeColor="#ffd700"
+                                />
+                            </div>
                         </div>
                     </div>
 
                     <div className="review-form">
-                        <CustomInput name='review' type='text'
+                        <CustomInput name='review_heading' type='text'
                             maxLength={100}
                             placeholder='Heading' label={'Review Heading'}
                             onChange={(e) => { handleInputChange({ e }) }}
-                            value={formData.review}
+                            value={formData.review_heading}
                         />
                         <CustomTextarea label={'Review Summary'}
                             placeholder={'Review Summary'}
-                            name={'review_summary'} value={''}
+                            name={'review'} value={formData.review}
                             onChange={(e) => { handleInputChange({ e }) }}
                         />
                         <ImageUpload

@@ -12,7 +12,12 @@ export const reviews = {
     },
     createReview: ({ data }) => {
         return new Promise((resolve, reject) => {
-            Axios.post('/products/review/create-review', data)
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            Axios.post('/products/review/create-review', data, config)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

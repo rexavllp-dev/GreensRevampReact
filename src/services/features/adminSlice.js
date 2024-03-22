@@ -1,7 +1,6 @@
 "use client"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { admin } from "../actions/admin";
-import { Container } from "postcss";
 
 const initialState = {
 
@@ -34,35 +33,35 @@ const initialState = {
     isLatestReplacedOrdersLoadError: false,
     latestReplacedOrders: [],
 
-    isOutOfStockProductsLoading:false,
-    isOutOfStockProductsLoaded:false,
-    isOutOfStockProductsLoadError:false,
-    outOfStockProducts:[],
+    isOutOfStockProductsLoading: false,
+    isOutOfStockProductsLoaded: false,
+    isOutOfStockProductsLoadError: false,
+    outOfStockProducts: [],
 
-    isExpiredProductsLoading:false,
-    isExpiredProductsLoaded:false,
-    isExpiredProductsLoadError:false,
-    expiredProducts:[],
+    isExpiredProductsLoading: false,
+    isExpiredProductsLoaded: false,
+    isExpiredProductsLoadError: false,
+    expiredProducts: [],
 
-    isAllMinQtyProductsLoading:false,
-    isAllMinQtyProductsLoaded:false,
-    isAllMinQtyProductsLoadError:false,
-    allMinQtyProducts:[],
+    isAllMinQtyProductsLoading: false,
+    isAllMinQtyProductsLoaded: false,
+    isAllMinQtyProductsLoadError: false,
+    allMinQtyProducts: [],
 
-    isExpiredTradeLicensesLoading:false,
-    isExpiredTradeLicensesLoaded:false,
-    isExpiredTradeLicensesLoadError:false,
-    expiredTradeLicenses:[],
+    isExpiredTradeLicensesLoading: false,
+    isExpiredTradeLicensesLoaded: false,
+    isExpiredTradeLicensesLoadError: false,
+    expiredTradeLicenses: [],
 
-    isTotalOrderCountLoading:false,
-    isTotalOrderCountLoaded:false,
-    isTotalOrderCountLoadError:false,
-    totalOrderCount:{},
+    isTotalOrderCountLoading: false,
+    isTotalOrderCountLoaded: false,
+    isTotalOrderCountLoadError: false,
+    totalOrderCount: {},
 
-    isTotalSalesLoading:false,
-    isTotalSalesLoaded:false,
-    isTotalSalesLoadError:false,
-    totalSales:{},
+    isTotalSalesLoading: false,
+    isTotalSalesLoaded: false,
+    isTotalSalesLoadError: false,
+    totalSales: {},
 
     isTotalCountDashboardLoading: false,
     isTotalCountDashboardLoaded: false,
@@ -71,16 +70,15 @@ const initialState = {
 }
 
 
-
 // update banner
 export const updateBanner = createAsyncThunk('updateBanner', async ({ data, id }, thunkAPI) => {
     try {
-            const response = await admin.updateBanner({data, id}); 
-            return thunkAPI.fulfillWithValue(response.data);
-        } catch (error) {
-            // throw error
-            return thunkAPI.rejectWithValue(error.response.data);
-        }
+        const response = await admin.updateBanner({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
 })
 
 // Get latest orders
@@ -95,9 +93,9 @@ export const getLatestOrders = createAsyncThunk('getLatestOrders', async ({ }, t
 })
 
 // listBanner
-export const listBanner = createAsyncThunk('listBanner', async ({}, thunkAPI) => {
+export const listBanner = createAsyncThunk('listBanner', async ({ }, thunkAPI) => {
     try {
-        const response = await admin.listBanner(); 
+        const response = await admin.listBanner();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -193,9 +191,9 @@ export const getTotalOrderCount = createAsyncThunk('getTotalOrderCount', async (
 })
 
 //get total sales
-export const getTotalSales = createAsyncThunk('getTotalSales', async ({filterBy, fromDate, toDate}, thunkAPI) => {
+export const getTotalSales = createAsyncThunk('getTotalSales', async ({ filterBy, fromDate, toDate }, thunkAPI) => {
     try {
-        const response = await admin.getTotalSales({filterBy, fromDate, toDate});
+        const response = await admin.getTotalSales({ filterBy, fromDate, toDate });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -258,10 +256,10 @@ const adminSlice = createSlice({
 
             .addCase(listBanner.fulfilled, (state, action) => {
 
-                state.isHomeBannerLoading    = false;
-                state.isHomeBannerLoaded     = true;
-                state.isHomeBannerLoadError  = false;
-                state.homebanners            = action.payload; 
+                state.isHomeBannerLoading = false;
+                state.isHomeBannerLoaded = true;
+                state.isHomeBannerLoadError = false;
+                state.homebanners = action.payload;
 
 
             })
