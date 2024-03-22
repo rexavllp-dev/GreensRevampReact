@@ -12,16 +12,8 @@ const initialState = {
 
     isHomeBannerUpdating: false,
     isHomeBannerUpdated: false,
-    isHomeBannerUpdateError: false
-}
+    isHomeBannerUpdateError: false,
 
-
-// update banner
-export const updateBanner = createAsyncThunk('updateBanner', async ({ data, id }, thunkAPI) => {
-    try {
-        const response = await admin.updateBanner({data, id}); 
-
-const initialState = {
     isLatestOrdersLoading: false,
     isLatestOrdersLoaded: false,
     isLatestOrdersLoadError: false,
@@ -77,6 +69,19 @@ const initialState = {
     isTotalCountDashboardLoadError: false,
     totalCountDashboard: {},
 }
+
+
+
+// update banner
+export const updateBanner = createAsyncThunk('updateBanner', async ({ data, id }, thunkAPI) => {
+    try {
+            const response = await admin.updateBanner({data, id}); 
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            // throw error
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+})
 
 // Get latest orders
 export const getLatestOrders = createAsyncThunk('getLatestOrders', async ({ }, thunkAPI) => {

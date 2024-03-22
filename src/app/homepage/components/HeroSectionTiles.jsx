@@ -51,30 +51,30 @@ const HeroSectionTiles = () => {
 
     <div className="homepage-tile-webview">
                 <div className="section-one">
-                    <ImageCard  title={homebanners[1]?.banner_caption} link={homebanners[1]?.banner_link} img={homebanners[1]?.banner_image} buttonText={homebanners[1]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                    <ImageCard title={homebanners[2]?.banner_caption} link={homebanners[2]?.banner_link} img={homebanners[2]?.banner_image} buttonText={homebanners[2]?.banner_link_text}  cardHeight={"612px"} cardWidth={"100%"} />
-                    <ImageCard title={homebanners[3]?.banner_caption} link={homebanners[3]?.banner_link} img={homebanners[3]?.banner_image} buttonText={homebanners[3]?.banner_link_text}  cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard  title={homebanners[1]?.banner_caption} link={homebanners[1]?.banner_link} img={homebanners[1]?.banner_image ? homebanners[1]?.banner_image : ''} buttonText={homebanners[1]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={homebanners[2]?.banner_caption} link={homebanners[2]?.banner_link} img={homebanners[2]?.banner_image ? homebanners[2]?.banner_image : ''} buttonText={homebanners[2]?.banner_link_text}  cardHeight={"612px"} cardWidth={"100%"} />
+                    <ImageCard title={homebanners[3]?.banner_caption} link={homebanners[3]?.banner_link} img={homebanners[3]?.banner_image ? homebanners[3]?.banner_image : ''} buttonText={homebanners[3]?.banner_link_text}  cardHeight={"300px"} cardWidth={"100%"} />
                 </div>
                 <div className="section-two">
-                    <ImageCard title={homebanners[4]?.banner_caption} link={homebanners[4]?.banner_link} img={homebanners[4]?.banner_image} buttonText={homebanners[4]?.banner_link_text} cardHeight={"394px"} cardWidth={'100%'} />
+                    <ImageCard title={homebanners[4]?.banner_caption} link={homebanners[4]?.banner_link} img={homebanners[4]?.banner_image ? homebanners[4]?.banner_image : ''} buttonText={homebanners[4]?.banner_link_text} cardHeight={"394px"} cardWidth={'100%'} />
                     <div className="subsection-one">
                         <div className="leftsection">
-                            <ImageCard title={homebanners[5]?.banner_caption} link={homebanners[5]?.banner_link} img={homebanners[5]?.banner_image} buttonText={homebanners[5]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                            <ImageCard title={homebanners[5]?.banner_caption} link={homebanners[5]?.banner_link} img={homebanners[5]?.banner_image ? homebanners[5]?.banner_image : ''} buttonText={homebanners[5]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
                         </div>
                         <div className="rightsection">
-                            <ImageCard title={homebanners[6]?.banner_caption} link={homebanners[6]?.banner_link} img={homebanners[6]?.banner_image} buttonText={homebanners[6]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                            <ImageCard title={homebanners[6]?.banner_caption} link={homebanners[6]?.banner_link} img={homebanners[6]?.banner_image ? homebanners[6]?.banner_image : ''} buttonText={homebanners[6]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
                         </div>
                     </div>
                     <div className="subsection-two">
-                        <ImageCard title={homebanners[7]?.banner_caption} link={homebanners[7]?.banner_link} img={homebanners[7]?.banner_image} buttonText={homebanners[7]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
-                        <ImageCard title={homebanners[8]?.banner_caption} link={homebanners[8]?.banner_link} img={homebanners[8]?.banner_image} buttonText={homebanners[8]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                        <ImageCard title={homebanners[7]?.banner_caption} link={homebanners[7]?.banner_link} img={homebanners[7]?.banner_image ? homebanners[7]?.banner_image : ''} buttonText={homebanners[7]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                        <ImageCard title={homebanners[8]?.banner_caption} link={homebanners[8]?.banner_link} img={homebanners[8]?.banner_image ? homebanners[8]?.banner_image : ''} buttonText={homebanners[8]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
                     </div>
 
                 </div>
                 <div className="section-three">
-                    <ImageCard title={homebanners[9]?.banner_caption} link={homebanners[9]?.banner_link} img={homebanners[9]?.banner_image} buttonText={homebanners[9]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                    <ImageCard title={homebanners[10]?.banner_caption} link={homebanners[10]?.banner_link} img={homebanners[10]?.banner_image} buttonText={homebanners[10]?.banner_link_text} cardHeight={"612px"} cardWidth={"100%"} />
-                    <ImageCard title={homebanners[11]?.banner_caption} link={homebanners[11]?.banner_link} img={homebanners[11]?.banner_image} buttonText={homebanners[11]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={homebanners[9]?.banner_caption} link={homebanners[9]?.banner_link} img={homebanners[9]?.banner_image ? homebanners[9]?.banner_image : ''} buttonText={homebanners[9]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    <ImageCard title={homebanners[10]?.banner_caption} link={homebanners[10]?.banner_link} img={homebanners[10]?.banner_image ? homebanners[10]?.banner_image : ''} buttonText={homebanners[10]?.banner_link_text} cardHeight={"612px"} cardWidth={"100%"} />
+                    <ImageCard title={homebanners[11]?.banner_caption} link={homebanners[11]?.banner_link} img={homebanners[11]?.banner_image ? homebanners[11]?.banner_image : ''} buttonText={homebanners[11]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
                 </div>
             </div>
 

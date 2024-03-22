@@ -55,6 +55,8 @@ const BannerTab = () => {
                 
                 setHomeBanners(arr)
 
+                console.log(homebanners);
+
             } else {
                 console.log(res);
             }
@@ -93,32 +95,8 @@ const BannerTab = () => {
 <div className="homepage-tile-container">
             
             <div className="homepage-tile-webview">
-                <div className="section-one">
-                    <EditableImageCard bannerid={1} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[1]?.banner_caption} link={homebanners[1]?.banner_link} img={homebanners[1]?.banner_image} buttonText={homebanners[1]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                    <EditableImageCard bannerid={2} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[2]?.banner_caption} link={homebanners[2]?.banner_link} img={homebanners[2]?.banner_image} buttonText={homebanners[2]?.banner_link_text}  cardHeight={"612px"} cardWidth={"100%"} />
-                    <EditableImageCard bannerid={3} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[3]?.banner_caption} link={homebanners[3]?.banner_link} img={homebanners[3]?.banner_image} buttonText={homebanners[3]?.banner_link_text}  cardHeight={"300px"} cardWidth={"100%"} />
-                </div>
-                <div className="section-two">
-                    <EditableImageCard bannerid={4} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[4]?.banner_caption} link={homebanners[4]?.banner_link} img={homebanners[4]?.banner_image} buttonText={homebanners[4]?.banner_link_text} cardHeight={"394px"} cardWidth={'100%'} />
-                    <div className="subsection-one">
-                        <div className="leftsection">
-                            <EditableImageCard bannerid={5} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[5]?.banner_caption} link={homebanners[5]?.banner_link} img={homebanners[5]?.banner_image} buttonText={homebanners[5]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
-                        </div>
-                        <div className="rightsection">
-                            <EditableImageCard bannerid={6} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[6]?.banner_caption} link={homebanners[6]?.banner_link} img={homebanners[6]?.banner_image} buttonText={homebanners[6]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
-                        </div>
-                    </div>
-                    <div className="subsection-two">
-                        <EditableImageCard bannerid={7} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[7]?.banner_caption} link={homebanners[7]?.banner_link} img={homebanners[7]?.banner_image} buttonText={homebanners[7]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
-                        <EditableImageCard bannerid={8} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[8]?.banner_caption} link={homebanners[8]?.banner_link} img={homebanners[8]?.banner_image} buttonText={homebanners[8]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                    </div>
-
-                </div>
-                <div className="section-three">
-                    <EditableImageCard bannerid={9} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[9]?.banner_caption} link={homebanners[9]?.banner_link} img={homebanners[9]?.banner_image} buttonText={homebanners[9]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                    <EditableImageCard bannerid={10} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[10]?.banner_caption} link={homebanners[10]?.banner_link} img={homebanners[10]?.banner_image} buttonText={homebanners[10]?.banner_link_text} cardHeight={"612px"} cardWidth={"100%"} />
-                    <EditableImageCard bannerid={11} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[11]?.banner_caption} link={homebanners[11]?.banner_link} img={homebanners[11]?.banner_image} buttonText={homebanners[11]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
-                </div>
+                sdasdasdsad
+                asdasdsa
             </div>
 
 
