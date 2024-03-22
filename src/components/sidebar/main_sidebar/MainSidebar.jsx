@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cookies } from 'react-cookie';
 import { logout } from '@/services/features/authSlice';
+import { getMainTree } from "@/services/features/categorySlice";
+
 
 const cookies = new Cookies();
 
@@ -28,6 +30,9 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
 
   const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
   const { isLoggedIn, authCount} = useSelector(state => state.auth);
+  const { maincategories, isMainCategoryTreeLoaded} = useSelector(state => state.categories)
+  const [categoryTreeData, setCategoryTreeData] = useState([]);
+  
 
   useEffect(() => {
     setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
@@ -37,6 +42,22 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
     dispatch(logout());
     onClose();
   }
+
+
+  useEffect(() => {
+    dispatch(getMainTree())
+  }, [])
+
+  useEffect(() => {
+    if(isMainCategoryTreeLoaded){
+
+      setCategoryTreeData(maincategories.data);
+      console.log(categoryTreeData);
+
+    }
+  }, [maincategories])
+  
+  
 
 
   const menuItems = [
@@ -49,204 +70,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
       isActive: false,
       isMobile: false,
       isMainMenu: true,
-      children: [
-        {
-          id: 1,
-          title: 'Ingredients',
-          icon: Category1,
-          isIcon: false,
-          link: '/ingredients',
-          isActive: false,
-
-          children: [
-            {
-              id: 1,
-              title: 'Toppings & Fillings',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-            {
-              id: 2,
-              title: 'Basic Ingredients',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-            {
-              id: 3,
-              title: 'Food Colours',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-            {
-              id: 4,
-              title: 'Flavours',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-            {
-              id: 5,
-              title: 'Mixes',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-            {
-              id: 6,
-              title: 'Edible Gold & Silver',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: "Ingredients"
-            },
-          ]
-        },
-        {
-          id: 2,
-          title: 'Cake Decorations',
-          icon: Category2,
-          isIcon: false,
-          isActive: false,
-          link: '/ingredients',
-
-          children: [
-            {
-              id: 1,
-              title: 'Edible Prints',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: 'Cake Decorations',
-              children: [
-                {
-                  id: 1,
-                  title: 'Edible Ink',
-                  icon: '',
-                  isIcon: false,
-                  isActive: false,
-                  link: '/ingredients',
-                  parentMenu: 'Edible Prints'
-                },
-                {
-                  id: 2,
-                  title: 'Wafer Sheets',
-                  icon: '',
-                  isIcon: false,
-                  isActive: false,
-                  link: '/ingredients',
-                  parentMenu: 'Edible Prints'
-                },
-                {
-                  id: 3,
-                  title: 'Frosting Sheets',
-                  icon: '',
-                  isIcon: false,
-                  isActive: false,
-                  link: '/ingredients',
-                  parentMenu: 'Edible Prints'
-                },
-              ]
-            },
-            {
-              id: 2,
-              title: 'Air Brush',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/ingredients',
-              parentMenu: 'Cake Decorations'
-            },
-            {
-              id: 3,
-              title: 'Tools & Accessories',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/tools',
-              parentMenu: "Cake Decorations"
-            },
-            {
-              id: 4,
-              title: 'Essentials',
-              icon: '',
-              isIcon: false,
-              isActive: false,
-              link: '/essentials',
-              parentMenu: "Cake Decorations"
-            }
-          ]
-        },
-        {
-          id: 3,
-          title: 'Baking Supplies',
-          icon: Category3,
-          isIcon: false,
-          isActive: false,
-          link: '/ingredients',
-
-        },
-        {
-          id: 4,
-          title: 'Chocolate',
-          icon: Category4,
-          isIcon: false,
-          isActive: false,
-          link: '/ingredients',
-
-        },
-        {
-          id: 5,
-          title: 'Ho. Re. Ca.',
-          icon: Category5,
-          isIcon: false,
-          isActive: false,
-          link: '/ingredients',
-
-        },
-        {
-          id: 6,
-          title: 'Seasonal',
-          icon: Category6,
-          isIcon: false,
-          isActive: false,
-          link: '/ingredients',
-        },
-        {
-          id: 7,
-          title: 'New',
-          icon: '',
-          isIcon: false,
-          isActive: false,
-          link: '/new',
-          // isMobile: true
-        },
-        {
-          id: 8,
-          title: 'Sale',
-          color: 'RED',
-          icon: '',
-          isIcon: false,
-          isActive: false,
-          link: '/new',
-          // isMobile: true
-        },
-
-      ]
+      children:categoryTreeData
     },
     {
       id: 2,
@@ -551,12 +375,19 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
     },
   ]
 
-  const [navItems, setNavItems] = useState(menuItems);
+  const [navItems, setNavItems] = useState([]);
   const [parentMenu, setParentMenu] = useState([]);
   const [isMainMenu, setIsMainMenu] = useState(true)
   const [menuTitles, setMenuTitles] = useState(['Main Menu']);
 
   useEffect(() => {
+
+      setNavItems(menuItems);
+      
+  }, [categoryTreeData])
+
+  useEffect(() => {
+    
     switch (routeModule) {
       case 'categories':
         setParentMenu([])
@@ -580,7 +411,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
         break
 
     }
-  }, [routeModule, open])
+  }, [routeModule, open, categoryTreeData])
 
 
   const handleItemClick = (item, parent) => {
@@ -734,7 +565,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
 
               else {
                 return (
-                  <div className="item" key={index} onClick={() => handleItemClick(item, navItems)}>
+                  <div className="item" key={index}>
                     <div className="title">
 
                       {item.isIcon ?
@@ -758,8 +589,9 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
 
                       <CustomTypography content={item.title} color={item.color ? item.color : 'BLACK'} size='MEDIUM' weight='MEDIUM' />
                     </div>
-
-                    <Image src={KeyArrowRight} alt='arrow' width={24} height={24} />
+                    {item.children.length != 0 ?
+                    <Image src={KeyArrowRight} alt='arrow' width={24} height={24} onClick={() => handleItemClick(item, navItems)} />
+                    : ''}
                   </div>
                 )
               }

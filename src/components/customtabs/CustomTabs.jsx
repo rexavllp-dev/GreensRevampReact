@@ -42,7 +42,7 @@ export default function CustomTabs({ tabs, id, isAdvanced, isProductTable }) {
         }}
       >
         {
-          tabs.map((obj, i) => (
+          tabs?.map((obj, i) => (
             <Tab key={obj.id} title={obj.label}>
               {
                 obj.component

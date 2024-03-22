@@ -12,83 +12,130 @@ import { NUMBER_REGEX, SPECIAL_CHARS_REGEX, UPPERCASE_REGEX } from '@/utils/help
 import { createUserByAdmin } from '@/services/features/userSlice';
 import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import './BannerTab.scss'
 import { CustomCalendar } from '@/library/calendar/CustomCalendar';
+import ImageUpload from '@/components/imageupload/ImageUpload';
+import { Button } from '@nextui-org/react';
+import EditableImageCard from '@/components/cards/imagecard/EditableImageCard';
+import appConfig from '@/config/appConfig'
+import BannerEditModal from '@/components/modal/admin/BannerEditModal';
+import { listBanner, updateBanner } from "@/services/features/adminSlice";
+
+
 
 const BannerTab = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
+    const [isEditModalOpen, setEditModalOpen] = React.useState(false);
+    const [homebanners, setHomeBanners] = React.useState([]);
 
-    const roles = [
-        { label: 'Customer', value: 1 },
-        { label: 'Admin', value: 2 },
-        { label: 'Delivery', value: 3 },
-    ]
-
-    const [formData, setFormData] = React.useState({
-        first_name: '',
-        last_name: '',
-        mobile: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-        status: true,
-        notes: ''
-    })
-
-    const [errors, setErrors] = React.useState({
-        first_name: {
-            error: false,
-            message: ''
-        },
-        last_name: {
-            error: false,
-            message: ''
-        },
-        mobile: {
-            error: false,
-            message: ''
-        },
-        email: {
-            error: false,
-            message: ''
-        },
-        password: {
-            error: false,
-            message: ''
-        },
-        confirm_password: {
-            error: false,
-            message: ''
-        }
-    })
-
-    const [loading, setLoading] = React.useState(false);
-
-    const handleInputChange = ({ e, country }) => {
-
-        setFormData((prev) => ({
-            ...prev, [e.target.name]: e.target.value
-        }))
-    }
+    const [bannerid, setBannerId] = React.useState();
+    const imageUrl = appConfig.server.imageUrl;
 
 
+    const {
+        isHomeBannerUpdated,
+    } = useSelector(state => state.admin);
 
 
-    const handleSubmit = () => {
+    useEffect(() => {
 
-    }
+
+        dispatch(listBanner({})).then((res) => {
+            if (res.payload?.success) {
+                var arr = [];
+                res.payload?.result.map((value) => {
+
+                    arr[value.banner_id] = value;
+
+                });
+                
+                setHomeBanners(arr)
+
+            } else {
+                console.log(res);
+            }
+          });
+
+    }, [isHomeBannerUpdated])
+
+
+    const handleSubmit = (bannerid, formData) => {
+
+
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+  
+          dispatch(updateBanner({ data: formDataToSend,  id: bannerid})).then((res) => {
+  
+            console.log(bannerid);
+  
+              if (res.payload?.success) {
+                  toast.success(res.payload.message);
+                  setEditModalOpen(false);
+              } else {
+                  //toast.error(res.payload.message)
+                  console.log(res);
+              }
+            });
+      }
+  
+
 
     return (
         <div className='badgestab'>
 
-
+<div className="homepage-tile-container">
             
+            <div className="homepage-tile-webview">
+                <div className="section-one">
+                    <EditableImageCard bannerid={1} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[1]?.banner_caption} link={homebanners[1]?.banner_link} img={homebanners[1]?.banner_image} buttonText={homebanners[1]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    <EditableImageCard bannerid={2} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[2]?.banner_caption} link={homebanners[2]?.banner_link} img={homebanners[2]?.banner_image} buttonText={homebanners[2]?.banner_link_text}  cardHeight={"612px"} cardWidth={"100%"} />
+                    <EditableImageCard bannerid={3} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[3]?.banner_caption} link={homebanners[3]?.banner_link} img={homebanners[3]?.banner_image} buttonText={homebanners[3]?.banner_link_text}  cardHeight={"300px"} cardWidth={"100%"} />
+                </div>
+                <div className="section-two">
+                    <EditableImageCard bannerid={4} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[4]?.banner_caption} link={homebanners[4]?.banner_link} img={homebanners[4]?.banner_image} buttonText={homebanners[4]?.banner_link_text} cardHeight={"394px"} cardWidth={'100%'} />
+                    <div className="subsection-one">
+                        <div className="leftsection">
+                            <EditableImageCard bannerid={5} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[5]?.banner_caption} link={homebanners[5]?.banner_link} img={homebanners[5]?.banner_image} buttonText={homebanners[5]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                        </div>
+                        <div className="rightsection">
+                            <EditableImageCard bannerid={6} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[6]?.banner_caption} link={homebanners[6]?.banner_link} img={homebanners[6]?.banner_image} buttonText={homebanners[6]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                        </div>
+                    </div>
+                    <div className="subsection-two">
+                        <EditableImageCard bannerid={7} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[7]?.banner_caption} link={homebanners[7]?.banner_link} img={homebanners[7]?.banner_image} buttonText={homebanners[7]?.banner_link_text} cardHeight={"250px"} cardWidth={'100%'} />
+                        <EditableImageCard bannerid={8} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[8]?.banner_caption} link={homebanners[8]?.banner_link} img={homebanners[8]?.banner_image} buttonText={homebanners[8]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    </div>
 
+                </div>
+                <div className="section-three">
+                    <EditableImageCard bannerid={9} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[9]?.banner_caption} link={homebanners[9]?.banner_link} img={homebanners[9]?.banner_image} buttonText={homebanners[9]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                    <EditableImageCard bannerid={10} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[10]?.banner_caption} link={homebanners[10]?.banner_link} img={homebanners[10]?.banner_image} buttonText={homebanners[10]?.banner_link_text} cardHeight={"612px"} cardWidth={"100%"} />
+                    <EditableImageCard bannerid={11} setModal={(bannerid) =>  {setEditModalOpen(true); setBannerId(bannerid)}} title={homebanners[11]?.banner_caption} link={homebanners[11]?.banner_link} img={homebanners[11]?.banner_image} buttonText={homebanners[11]?.banner_link_text} cardHeight={"300px"} cardWidth={"100%"} />
+                </div>
+            </div>
+
+
+            </div>
+
+            <BannerEditModal
+                  isOpen={isEditModalOpen}
+                  onClose={() => setEditModalOpen(false)}
+                  title="Edit Bannerß"
+                  bannerid={bannerid}
+                  bannerData={homebanners[bannerid]}
+                  handleSubmit={(bannerid, formData) => handleSubmit(bannerid, formData)}
+            />
+            
+            
         </div>
+        
     )
 }
 

@@ -11,6 +11,19 @@ export const categories = {
         })
     },
 
+
+     //Get category tree
+    getMainTree: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/categories/get-main-tree')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    
+
     createCategory: (data) => {
         return new Promise((resolve, reject) => {
             Axios.post('/categories/create-category', data)

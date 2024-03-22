@@ -7,7 +7,7 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import { IoIosClose, IoIosCloseCircleOutline } from 'react-icons/io';
 
 
-const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
+const ImageUpload = ({ name, images, label, isDelete,  handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
 
     const inputFileRef = useRef()
     
@@ -47,9 +47,14 @@ const ImageUpload = ({ name, images, label, handleFileUpload, handleDeleteImage,
                         if (img?.url) {
                             return (
                                 <div className="imgcard">
+                                    {isDelete? 
                                     <div className="closeicon" onClick={() => handleDeleteImage(img)}>
                                         <IoIosCloseCircleOutline size={20} />
                                     </div>
+
+                                    :   ''
+
+                                    }
                                     <img
                                         src={isProductImg ? img?.url : img}
                                         alt={isProductImg ? img?.url : img}

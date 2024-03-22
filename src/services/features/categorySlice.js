@@ -32,7 +32,10 @@ const initialState = {
     isDeleteImageError: false,
 
 
-    
+    isMainCategoryTreeLoading: false,
+    isMainCategoryTreeLoaded: false,
+    isMainCategoryTreeLoadError: false,
+    maincategories: [],    
 }
 
 export const getCategoryTree = createAsyncThunk('getCategoryTree', async (data, thunkAPI) => {
@@ -44,6 +47,17 @@ export const getCategoryTree = createAsyncThunk('getCategoryTree', async (data, 
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+export const getMainTree = createAsyncThunk('getMainTree', async (data, thunkAPI) => {
+    try {
+        const response = await categories.getMainTree();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 
 
 export const createCategory = createAsyncThunk('createCategory', async ({ data }, thunkAPI) => {
@@ -116,7 +130,7 @@ const categorySlice = createSlice({
     extraReducers: (builder) => {
 
         builder
-            // Get all brands
+            // Get all categories
             .addCase(getCategoryTree.pending, (state, action) => {
                 state.isCategoryTreeLoading = true;
                 state.isCategoryTreeLoaded = false;
@@ -129,6 +143,25 @@ const categorySlice = createSlice({
                 state.allcategories = action.payload;
             })
             .addCase(getCategoryTree.rejected, (state, action) => {
+                state.isCategoryTreeLoading = false;
+                state.isCategoryTreeLoaded = false;
+                state.isCategoryTreeLoadError = true;
+            })
+
+
+             // Get all main categories
+             .addCase(getMainTree.pending, (state, action) => {
+                state.isCategoryTreeLoading = true;
+                state.isCategoryTreeLoaded = false;
+                state.isCategoryTreeLoadError = false;
+            })
+            .addCase(getMainTree.fulfilled, (state, action) => {
+                state.isMainCategoryTreeLoading = false;
+                state.isMainCategoryTreeLoaded = true;
+                state.isMainCategoryTreeLoadError = false;
+                state.maincategories = action.payload;
+            })
+            .addCase(getMainTree.rejected, (state, action) => {
                 state.isCategoryTreeLoading = false;
                 state.isCategoryTreeLoaded = false;
                 state.isCategoryTreeLoadError = true;

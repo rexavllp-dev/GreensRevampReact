@@ -14,6 +14,7 @@ import orderSlice from "./features/orderSlice";
 import wishlistSlice from "./features/wishlistSlice";
 import notifyProductSlice from "./features/notifyProductSlice";
 import activitySlice from "./features/activitySlice";
+import adminSlice from "./features/adminSlice";
 // import thunk from 'redux-thunk';
 
 export const store = configureStore({
@@ -31,7 +32,8 @@ export const store = configureStore({
         order: orderSlice,
         wishlist: wishlistSlice,
         notifyProducts: notifyProductSlice,
-        activity: activitySlice
+        activity: activitySlice,
+        admin:adminSlice
         // middleware: [thunk],
     }
 })

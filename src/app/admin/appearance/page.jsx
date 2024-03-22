@@ -8,6 +8,7 @@ import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs'
 import "./appearnceSettings.scss"
 import { useRouter, useSearchParams } from 'next/navigation'
 import BannerlTab from './tabs/banner/BannerTab';
+import BannerCatTab from './tabs/category/CategoryTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '@/services/features/productSlice';
 import CustomSwitchButton from '@/library/buttons/switchbtn/CustomSwitchButton';
@@ -68,34 +69,41 @@ const appearnceSettings = () => {
             component: <BannerlTab id={id} data={singleProduct} />
         },
         {
-            id: 2,
-            label: "Shop by Category",
-            component: <BannerlTab id={id} data={singleProduct} />
-        },
+                id: 2,
+                label: "Shop by Category",
+                component: <BannerCatTab id={id} data={singleProduct} />
+                // component: "uii"
+        }
+        // {
+        //     id: 2,
+        //     label: "Shop by Category",
+        //     component: <CategoryTab id={id} data={singleProduct} />,
+        //     // component: "uii"
+        // },
 
-        {
-            id: 3,
-            label: "Favorite Brands",
-            component: <BannerlTab id={id} data={singleProduct} />
-        },
+        // {
+        //     id: 3,
+        //     label: "Favorite Brands",
+        //     component: <BannerlTab id={id} data={singleProduct} />
+        // },
 
-        {
-            id: 4,
-            label: "Shop by Season",
-            component: <BannerlTab id={id} data={singleProduct} />
-        },
+        // {
+        //     id: 4,
+        //     label: "Shop by Season",
+        //     component: <BannerlTab id={id} data={singleProduct} />
+        // },
 
-        {
-            id: 5,
-            label: "Ad Banners",
-            component: <BannerlTab id={id} data={singleProduct} />
-        },
+        // {
+        //     id: 5,
+        //     label: "Ad Banners",
+        //     component: <BannerlTab id={id} data={singleProduct} />
+        // },
 
-        {
-            id: 5,
-            label: "Others",
-            component: <BannerlTab id={id} data={singleProduct} />
-        },
+        // {
+        //     id: 5,
+        //     label: "Others",
+        //     component: <BannerlTab id={id} data={singleProduct} />
+        // },
        
     ]
 
@@ -119,6 +127,7 @@ const appearnceSettings = () => {
            
 
             <CustomTabs tabs={basicTabs} id={id} isAdvanced={false} />
+            
 
         </div>
     )

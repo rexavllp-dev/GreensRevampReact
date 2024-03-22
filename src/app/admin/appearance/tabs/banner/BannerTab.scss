@@ -1,55 +1,100 @@
-.badgestab {
+@import "../../../../styles/mediaquery";
+
+.homepage-tile-container {
+  .homepage-tile-webview {
     width: 100%;
-    padding: 25px 120px 30px 0px;
-    background-color: #ffffff;
-    .form {
-      width: 100%;
+    display: flex;
+    gap: 20px;
+
+    @include for_breakpoint("small-screen", "mobile") {
+        display: none;
+    }
+    .section-one {
+      width: 25%;
       display: flex;
-      gap: 50px;
-      align-items: flex-start;
-  
-      .stack {
-        width: 50%;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .section-two {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .subsection-one {
+        width: 100%;
+        display: flex;
+        gap: 20px;
+        overflow: hidden;
+        .leftsection {
+          width: 50%;
+        }
+        .rightsection {
+          width: 50%;
+        }
+      }
+      .subsection-two {
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 20px;
       }
+    }
+    .section-three {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+
+  .homepage-tile-mobileview {
+    display: none;
+    width: 100%;
+    // display: flex;
+    // flex-direction: column;
+    gap: 16px;
   
-      .editbtn {
+    @include for_breakpoint("small-screen", "mobile") {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .rightsplit {
         display: flex;
-        width: 100%;
-        justify-content: flex-end;
-  
-        .btn {
+        gap: 16px;
+
+        .leftsection {
+          width: 50%;
+        }
+        .rightsection {
+          width: 50%;
           display: flex;
-          align-items: center;
-          padding: 5px;
-          border-radius: 50%;
-          cursor: pointer;
-          // border: 1px solid #ccc;
+          flex-direction: column;
+          gap: 16px;
+        }
+      }
+
+      .leftsplit {
+        display: flex;
+        gap: 16px;
+
+        .leftsection {
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .rightsection {
+          width: 50%;
         }
       }
     }
-    .shippingdetails {
-      // padding-top: 30px;
-      width: 450px;
-  
-      .shippingdetails-header {
-        padding-bottom: 10px;
-      }
-  
-      .address {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        padding-bottom: 18px;
-      }
-    }
-    .savebtn {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      padding-top: 20px;
-    }
   }
-  
+}
