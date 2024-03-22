@@ -46,7 +46,7 @@ const CreateReasonModal = ({ open, handleClose, editData }) => {
     ]
 
     useEffect(() => {
-        if (editData) {
+        if (editData?.id) {
             setFormData({
                 clr_reason: editData?.clr_reason,
                 clr_status: editData?.clr_status,
@@ -54,7 +54,10 @@ const CreateReasonModal = ({ open, handleClose, editData }) => {
             })
         }
     }, [editData]);
-
+    
+    useEffect(()=>{
+        console.log(formData)
+    }, [formData])
     const handleInputChange = ({ e, country }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
@@ -65,7 +68,7 @@ const CreateReasonModal = ({ open, handleClose, editData }) => {
         if (editData?.id) {
             dispatch(updateReason({
                 data: formData,
-                id: id
+                id: editData?.id
             })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload?.message);
@@ -106,8 +109,8 @@ const CreateReasonModal = ({ open, handleClose, editData }) => {
             <ModalContent>
                 {(handleClose) => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Create New Reason</ModalHeader>
-                        <ModalBody>
+                        <ModalHeader className="flex flex-col gap-1">{editData?.id ? 'Update Reason' : 'Create New Reason'}</ModalHeader>
+                        < ModalBody >
                             <div className='flex flex-col gap-3'>
                                 <CustomTextarea label={'Reason'}
                                     placeholder={'Reason'}
@@ -118,12 +121,12 @@ const CreateReasonModal = ({ open, handleClose, editData }) => {
                                 <CustomSelect label={'Reason Type'} value={formData.reason_type}
                                     data={reasonTypes} name={'reason_type'} onChange={(e) => { handleInputChange({ e }) }}
                                 />
-                                <CustomToggleButton label='Product Status' value={formData.clr_status}
+                                <CustomToggleButton label='Status' value={formData.clr_status}
                                     onChange={(value) => { setFormData((prev) => ({ ...prev, clr_status: value })) }}
                                 />
 
                                 <div className='flex gap-3 justify-end'>
-                                    <CustomButton label='Create' variant='primary' onClick={() => {
+                                    <CustomButton label='Submit' variant='primary' onClick={() => {
                                         handleSubmit();
                                     }} />
                                 </div>

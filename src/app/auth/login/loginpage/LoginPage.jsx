@@ -14,6 +14,7 @@ import { login, loginWithOtp } from '@/services/features/authSlice'
 import { toast } from 'react-toastify'
 import { Cookies } from 'react-cookie'
 import Axios from '../../../../services/axios/Axios'
+import CustomPhoneInput from '@/library/input/phoneinput/CustomPhoneInput'
 
 // set up cookies
 const cookies = new Cookies();
@@ -37,7 +38,8 @@ const LoginPage = () => {
         mobile: '',
         email_or_mobile: '',
         password: '',
-        keep_me_signed: false
+        keep_me_signed: false,
+        usr_mobile_country_code: '',
     });
 
     const [errors, setErrors] = React.useState({
@@ -146,6 +148,7 @@ const LoginPage = () => {
             if (validateMobile()) {
                 let data = {
                     usr_mobile_number: formData.mobile,
+                    usr_mobile_country_code: formData.usr_mobile_country_code
                 }
 
                 setLoading(true);
@@ -196,6 +199,17 @@ const LoginPage = () => {
         }
     }
 
+
+    const handlePhoneChange = (name, value, countryCode) => {
+        const re = /^[0-9\b]+$/;
+        // if value is not blank, then test the regex
+        if (value === '' || re.test(value)) {
+            setFormData((prev) => ({
+                ...prev, [name]: value, usr_mobile_country_code: countryCode
+            }))
+        }
+    }
+
     const handleGoogleLogin = () => {
         window.open('https://api.greens-intl.ae/api/v1/users/auth/google', '_self');
     }
@@ -217,12 +231,26 @@ const LoginPage = () => {
             <div className='form'>
                 {
                     isLoginWithOTP ?
-                        <CustomInput name='mobile' type='text'
-                            maxLength={100}
-                            placeholder='Mobile Number' label={'Mobile Number'}
+                        // <CustomInput name='mobile' type='text'
+                        //     maxLength={100}
+                        //     placeholder='Mobile Number' label={'Mobile Number'}
+                        //     isRequired={true}
+                        //     onChange={(e) => { handleInputChange({ e }) }}
+                        //     value={formData.mobile}
+                        //     isInvalid={errors.mobile.error}
+                        //     errMsg={errors.mobile.message}
+                        // />
+
+                        <CustomPhoneInput
                             isRequired={true}
-                            onChange={(e) => { handleInputChange({ e }) }}
+                            name={'mobile'}
                             value={formData.mobile}
+                            country={formData.usr_mobile_country_code}
+                            placeholder='Mobile Number'
+                            label='Mobile Number'
+                            onChange={(value, country) => {
+                                handlePhoneChange('mobile', value, country)
+                            }}
                             isInvalid={errors.mobile.error}
                             errMsg={errors.mobile.message}
                         />

@@ -23,7 +23,7 @@ export const notifyProduct = {
     // Remove notified products
     removeNotifyProducts: (id) => {
         return new Promise((resolve, reject) => {
-            Axios.delete('/wishlist/remove-wishlist/' + id)
+            Axios.delete('/users/delete-notify-product/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

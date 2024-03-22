@@ -62,14 +62,14 @@ const PurchaseHistory = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
-    const [sortBy, setSortBy] = React.useState('');
+    const [sortBy, setSortBy] = React.useState('newest');
     const [filters, setFilters] = React.useState('');
 
     const { userOrders } = useSelector((state) => state.order);
 
     React.useEffect(() => {
-        dispatch(getUserOrders({ sort: sortBy }))
-    }, [sortBy]);
+        dispatch(getUserOrders({ sort: sortBy, filters: filters }))
+    }, [sortBy, filters]);
 
     return (
         <div className='purchase-history'>
@@ -145,7 +145,7 @@ const PurchaseHistory = () => {
                                     <span> </span>
                                     <CustomTypography content={item?.productTotalQty + ' Items'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                     <span> </span>
-                                    <CustomTypography content={`Total AED ${item?.op_line_total}`} color={'BLACK'} size='MEDIUM' weight='MEDIUM' />
+                                    <CustomTypography content={`Total AED ${item?.ord_grand_total}`} color={'BLACK'} size='MEDIUM' weight='MEDIUM' />
                                     <span> </span>
                                     <CustomTypography content={item?.ord_payment_method === 'Credit Card/ Debit Card' ? 'Prepaid' : 'COD'} color={'BLACK'} size='MEDIUM-SMALL' weight='MEDIUM' />
                                 </div>

@@ -17,7 +17,7 @@ import { CiHeart } from "react-icons/ci";
 import { FaStar } from 'react-icons/fa';
 import { addNotifyProducts } from '@/services/features/notifyProductSlice';
 
-const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove, hideNotifyBtn }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()
@@ -231,13 +231,20 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
             <div className="flex justify-between items-center">
               {
                 isOutStock() ?
-                  <button className={'productbtn'} onClick={() => {
-                    handleAddNotify()
-                  }}>
-                    <div className='productbtn_text' >
-                      Notify me
-                    </div >
-                  </button >
+                  <>
+                    {
+                      !hideNotifyBtn ?
+                        <button className={'productbtn'} onClick={() => {
+                          handleAddNotify()
+                        }}>
+                          <div className='productbtn_text' >
+                            Notify me
+                          </div >
+                        </button >
+                        :
+                        <></>
+                    }
+                  </>
                   :
                   <button className={'productbtn'} onClick={() => {
                     handleAddToCart()
@@ -255,13 +262,20 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
             <div className="flex justify-center">
               {
                 isOutStock() ?
-                  <button className={'productbtn'} onClick={() => {
-                    // handleAddToCart()
-                  }}>
-                    <div className='productbtn_text' >
-                      Notify me
-                    </div >
-                  </button >
+                  <>
+                    {
+                      !hideNotifyBtn ?
+                        <button className={'productbtn'} onClick={() => {
+                          handleAddNotify()
+                        }}>
+                          <div className='productbtn_text' >
+                            Notify me
+                          </div >
+                        </button >
+                        :
+                        <> </>
+                    }
+                  </>
                   :
                   <button className={'productbtn'} onClick={() => {
                     handleAddToCart()
@@ -275,7 +289,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
         }
       </div>
 
-    </div>
+    </div >
   )
 }
 

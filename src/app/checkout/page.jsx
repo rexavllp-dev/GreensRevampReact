@@ -345,7 +345,7 @@ const Checkout = () => {
         let orderItems = cartProducts?.result?.products?.map((item) => {
             return {
                 product_id: item.productId,
-                op_actual_price: item.priceVat,
+                op_actual_price: item.product_price,
                 op_unit_price: item.priceVat,
                 op_qty: item.quantity,
                 op_line_total: item.totalPriceWithVat
@@ -405,34 +405,29 @@ const Checkout = () => {
 
                     {/* <div> */}
                     {steps.map((step, index) => {
-                        if (currentStep === 3 && (formData?.shipping_method === "Store Pickup")) {
-                            return <></>
-                        } else {
-                            return (
-                                <>
-                                    <div className="title" key={index} onClick={() => currentStep > (index + 1) && setCurrentStep(index + 1)}>
-                                        <CustomTypography content={index + 1 + '.' + step.title}
-                                            color={index === (currentStep - 1) ? "BLACK" : "GRAY-LIGHT"}
-                                            size="LARGE" weight="SEMI-BOLD"
-                                        />
-                                    </div>
-                                    {
-                                        index !== (currentStep - 1) &&
-                                        <Divider className='mt-4 mb-4' />
-                                    }
-                                    {index < steps.length - 1 && <div className="divider"></div>}
-                                    {
-                                        (index === (currentStep - 1)) && (
-                                            <>
-                                                {/* if store pickup is selected delivery instructions step removed */}
-                                                {steps[index].component}
-                                            </>
-                                        )
-                                    }
-                                </>
-                            )
-                        }
-
+                        return (
+                            <>
+                                <div className="title" key={index} onClick={() => currentStep > (index + 1) && setCurrentStep(index + 1)}>
+                                    <CustomTypography content={index + 1 + '.' + step.title}
+                                        color={index === (currentStep - 1) ? "BLACK" : "GRAY-LIGHT"}
+                                        size="LARGE" weight="SEMI-BOLD"
+                                    />
+                                </div>
+                                {
+                                    index !== (currentStep - 1) &&
+                                    <Divider className='mt-4 mb-4' />
+                                }
+                                {index < steps.length - 1 && <div className="divider"></div>}
+                                {
+                                    (index === (currentStep - 1)) && (
+                                        <>
+                                            {/* if store pickup is selected delivery instructions step removed */}
+                                            {steps[index].component}
+                                        </>
+                                    )
+                                }
+                            </>
+                        )
                     }
                     )}
                     {/* </div> */}

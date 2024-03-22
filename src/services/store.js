@@ -33,7 +33,7 @@ export const store = configureStore({
         wishlist: wishlistSlice,
         notifyProducts: notifyProductSlice,
         activity: activitySlice,
-        admin:adminSlice
+        admin: adminSlice
         // middleware: [thunk],
     }
 })
