@@ -22,7 +22,7 @@ const ReviewProduct = ({ params }) => {
 
     const [formData, setFormData] = React.useState({
         rating: 0,
-        review_heading: '',
+        heading_review: '',
         review: '',
     })
 
@@ -61,7 +61,7 @@ const ReviewProduct = ({ params }) => {
         const data = {
             product_id: params.id,
             rating: formData.rating,
-            review_heading: formData.review_heading,
+            heading_review: formData.heading_review,
             review: formData.review,
         }
         const reviewFormData = new FormData();
@@ -157,11 +157,11 @@ const ReviewProduct = ({ params }) => {
                     </div>
 
                     <div className="review-form">
-                        <CustomInput name='review_heading' type='text'
+                        <CustomInput name='heading_review' type='text'
                             maxLength={100}
                             placeholder='Heading' label={'Review Heading'}
                             onChange={(e) => { handleInputChange({ e }) }}
-                            value={formData.review_heading}
+                            value={formData.heading_review}
                         />
                         <CustomTextarea label={'Review Summary'}
                             placeholder={'Review Summary'}

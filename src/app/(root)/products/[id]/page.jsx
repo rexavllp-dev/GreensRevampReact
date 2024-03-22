@@ -32,6 +32,7 @@ import Badge from '@/components/badges/Badge';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { addNotifyProducts } from '@/services/features/notifyProductSlice';
 import Link from 'next/link';
+import { getAllReviewsByProductId } from '@/services/features/reviewSlice';
 
 
 const products = [
@@ -136,8 +137,13 @@ const ProductDetails = ({ params }) => {
             data: ''
         },
     ]);
-    const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
+    const { singleProduct, optionValues,
+        allVariantsByProduct, 
+        allOptionsByProduct, productOptions,
+        relatedProducts } = useSelector((state) => state.products)
+        
     const { bulkStatusData } = useSelector((state) => state.bulk)
+    const { allReviewsByProduct } = useSelector((state) => state.reviews)
     const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
 
 
@@ -182,6 +188,7 @@ const ProductDetails = ({ params }) => {
     useEffect(() => {
         dispatch(getAllRelatedProducts({ id: params.id }))
         dispatch(getBulkStatus({ id: params.id }))
+        dispatch(getAllReviewsByProductId({ id: params.id }))
     }, [])
 
     useEffect(() => {
@@ -443,7 +450,7 @@ const ProductDetails = ({ params }) => {
                                     ((expandedIndex === index) && (index === 4)) ?
                                         (
                                             <div className="w-full reviews_section">
-                                                <ReviewSection />
+                                                <ReviewSection data={allReviewsByProduct?.result} />
 
                                             </div>
                                         )

@@ -29,4 +29,11 @@ export const reviews = {
                 .catch(error => reject(error))
         })
     },
+    updateReview: ({data, id}) => {
+        return new Promise((resolve, reject) => {
+            Axios.put('/products/review/update-review/' + id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 }
