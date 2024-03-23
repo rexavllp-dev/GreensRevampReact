@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "./ReviewModal.scss";
 import CustomToggleButton from "@/library/buttons/togglebutton/CustomToggleButton";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { updateReview } from "@/services/features/reviewSlice";
 
 export default function ReviewModal({ open, handleClose, editData }) {
     const dispatch = useDispatch();
@@ -19,6 +21,7 @@ export default function ReviewModal({ open, handleClose, editData }) {
         rating: 0,
         heading_review: '',
         review: '',
+        is_approved: false
     })
 
     const [reviewImages, setReviewImages] = React.useState([]);
@@ -54,22 +57,16 @@ export default function ReviewModal({ open, handleClose, editData }) {
 
     const submitReview = () => {
         const data = {
-            product_id: params.id,
             rating: formData.rating,
             heading_review: formData.heading_review,
             review: formData.review,
-        }
-        const reviewFormData = new FormData();
-
-        for (let i = 0; i < reviewImages.length; i++) {
-            reviewFormData.append('files', reviewImages[i].file);
+            is_approved: formData.is_approved
         }
 
-        reviewFormData.append('data', JSON.stringify(data));
-
-        dispatch(updateReview({ data: reviewFormData })).then((res) => {
+        dispatch(updateReview({ data, id: editData?.reviewId })).then((res) => {
             if (res.payload.success) {
-                toast.success(res.payload.message)
+                toast.success(res.payload.message);
+                handleClose();
             } else {
                 toast.error(res.payload.message)
             }
@@ -78,10 +75,9 @@ export default function ReviewModal({ open, handleClose, editData }) {
         })
     }
 
-
     return (
         <Modal
-            size={'4xl'}
+            size={'xl'}
             isOpen={open}
             onClose={() => {
                 handleClose();
@@ -105,10 +101,12 @@ export default function ReviewModal({ open, handleClose, editData }) {
                             onChange={(e) => { handleInputChange({ e }) }}
                         />
                         <ImageUpload
+                            hideBrowseBtn={true}
                             isProductImg={true}
+                            hideDelete={true}
                             name={'prd_additional_img'}
                             handleFileUpload={handleFileUpload}
-                            images={editData?.reviewImages}
+                            images={editData?.reviewimages}
                             handleDeleteImage={handleDeleteImage}
                             haveUploadSize={true}
                             required={true}

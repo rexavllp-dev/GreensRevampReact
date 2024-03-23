@@ -14,8 +14,8 @@ const BulkDiscountModal = ({ open, handleClose, id, isUpdate, updateData }) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
     const [formData, setFormData] = React.useState({
-        start_range: 0,
-        end_range: 100,
+        start_range: '',
+        end_range: '',
         discounted_price: ''
     })
 
@@ -25,6 +25,12 @@ const BulkDiscountModal = ({ open, handleClose, id, isUpdate, updateData }) => {
                 start_range: updateData?.start_range,
                 end_range: updateData?.end_range,
                 discounted_price: updateData?.discounted_price
+            })
+        }else {
+            setFormData({
+                start_range: '',
+                end_range: '',
+                discounted_price: ''
             })
         }
     }, [updateData])

@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { getUserDetailsByUser, updateUserDetailsByUser } from '@/services/features/userSlice';
 import CompanyUserForm from './forms/CompanyUserForm';
 import UserForm from './forms/UserForm';
+import Link from 'next/link';
 
 const UserAccount = () => {
 
@@ -68,7 +69,9 @@ const UserAccount = () => {
                                     <div className="account_card mb-5">
                                         <CustomTypography content={"Change password"} color={'BLACK'} size='MEDIUM-LARGE' weight='SEMI-BOLD' />
                                         <div className='place-self-end'>
-                                            <CustomButton variant='primary' label='Continue' onClick={() => { router.push('/settings/change-password') }} />
+                                            <Link href={'/settings/change-password'}>
+                                                <CustomButton variant='primary' label='Continue' />
+                                            </Link>
                                         </div>
                                     </div>
                             }

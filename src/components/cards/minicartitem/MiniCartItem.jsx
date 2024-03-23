@@ -8,12 +8,20 @@ import { toast } from 'react-toastify'
 import CountButton from '@/library/buttons/countbtn/CountButton'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal'
+import { createSaveForLater } from '@/services/features/productSlice'
 
 export default function MiniCartItem({ data }) {
     const dispatch = useDispatch();
     const router = useRouter();
 
+    // const token = cookies.get('accessToken')
+    const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
+
+    const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
+
     const [count, setCount] = React.useState(data?.quantity);
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
 
 
     React.useEffect(() => {
@@ -77,7 +85,24 @@ export default function MiniCartItem({ data }) {
         })
     }
 
-    const handleRemoveItemFromCart = () => {
+    const handleRemoveItemFromCart = (saveForLater) => {
+        setConfirmationOpen(false)
+        if (saveForLater) {
+            dispatch(createSaveForLater({
+                data: {
+                    product_id: data?.productId
+                }
+            })).then((res) => {
+                if (res.payload?.success) {
+
+                } else {
+
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+
         dispatch(deleteProductFromCart({ id: data?.productId })).then((res) => {
             if (res.payload?.success) {
                 toast.success(res.payload?.message);
@@ -87,6 +112,15 @@ export default function MiniCartItem({ data }) {
         }).catch((err) => {
             console.log(err)
         })
+    }
+
+    const handleDeleteBtn = () => {
+        if (isLoggedIn) {
+            setConfirmationOpen(true);
+        } else {
+            handleRemoveItemFromCart(false);
+        }
+
     }
 
     return (
@@ -155,9 +189,19 @@ export default function MiniCartItem({ data }) {
                 {/* <CountButton count={data.quantity} updateCount={updateCount} /> */}
             </div>
             <MdDelete size={40}
-                onClick={() => handleRemoveItemFromCart()}
+                onClick={() => handleDeleteBtn()}
                 className=' icon cursor-pointer'
                 color='#555' onAn />
+
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => handleRemoveItemFromCart(false)}
+                onConfirm={() => handleRemoveItemFromCart(true)}
+                title="Do you want save this product for later?"
+                successText="SAVE FOR LATER"
+                cancelText="No, thanks!"
+                message={data?.name}
+            />
         </div>
     )
 }

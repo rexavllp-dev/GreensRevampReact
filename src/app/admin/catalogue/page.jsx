@@ -139,7 +139,7 @@ export default function Catalogue() {
         }
     }
 
-    const handleRowClick = (data)=>{
+    const handleRowClick = (data) => {
         router.push(`/admin/catalogue/manage/?id=${data?.id}`)
     }
 

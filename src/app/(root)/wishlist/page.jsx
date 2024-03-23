@@ -130,6 +130,7 @@ const Wishlist = () => {
                                     specialPrice={product?.prdPrice[0]?.specialPrice}
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
+                                    wishlistLabel={'wishlistId'}
                                     data={product}
                                     haveRemoveBtn={true}
                                     handleRemove={() => handleRemoveWishlist(product?.product_id)}

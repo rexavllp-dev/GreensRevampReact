@@ -51,6 +51,21 @@
   }
 
   .reviews {
+    .product {
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+      padding: 10px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .edit-review-btn{
+      background-color: #E8F9EA;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 4px 16px;
+      border-radius: 50px;
+    }
+  
     .star {
       display: flex;
       align-items: center;

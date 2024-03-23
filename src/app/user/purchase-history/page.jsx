@@ -8,6 +8,7 @@ import { getUserOrders } from '@/services/features/orderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const sortOptions = [
     {
@@ -176,14 +177,16 @@ const PurchaseHistory = () => {
                                     {
                                         item?.products?.map((item, i) => {
                                             return (
-                                                <div className='item-image'>
-                                                    <Image width={48} height={48} alt="product"
-                                                        src={item?.image_url ?
-                                                            item?.image_url :
-                                                            'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
-                                                    />
-                                                    <span>{item?.op_qty}</span>
-                                                </div>
+                                                <Link href={`/products/${item?.productId}`} key={item.productId}>
+                                                    <div className='item-image'>
+                                                        <Image width={48} height={48} alt="product"
+                                                            src={item?.image_url ?
+                                                                item?.image_url :
+                                                                'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'}
+                                                        />
+                                                        <span>{item?.op_qty}</span>
+                                                    </div>
+                                                </Link>
                                             )
                                         })
                                     }

@@ -6,6 +6,7 @@ import './ReviewSection.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import { Divider, Image, Select, SelectItem } from '@nextui-org/react'
 import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
+import ReactStars from "react-rating-stars-component";
 
 const ReviewSection = ({ data }) => {
 
@@ -141,17 +142,23 @@ const ReviewSection = ({ data }) => {
                     <>
                         <div className="reviews mt-3">
                             <div className="star mb-3">
-                                <IoIosStar />
-                                <IoIosStar />
-                                <IoIosStar />
-                                <IoIosStar />
-                                <IoStarOutline />
+                                <ReactStars
+                                    count={5}
+                                    value={review?.rating}
+                                    edit={false}
+                                    size={20}
+                                    isHalf={true}
+                                    emptyIcon={<i className="far fa-star"></i>}
+                                    halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                    fullIcon={<i className="fa fa-star"></i>}
+                                    activeColor="#ffd700"
+                                />
                             </div>
-                            <div className='flex gap-3'>
+                            <div className='flex gap-3 mb-3'>
                                 {
-                                    data?.reviewimages?.map((image) => (
-                                        <div>
-                                            <Image width={40} height={40} src={image?.url} alt='review-img' />
+                                    review?.reviewimages?.map((image) => (
+                                        <div key={image?.id}>
+                                            <Image radius='none' width={80} height={80} src={image?.url} alt='review-img' />
                                         </div>
                                     ))
                                 }

@@ -196,9 +196,6 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress, err
                                 placeholder='Zip Code' label={'Zip Code'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.zip_code}
-                                isRequired={true}
-                                isInvalid={errors.zip_code.error}
-                                errMsg={errors.zip_code.message}
                             />
                             <CustomTextarea label={'Delivery Remarks'}
                                 placeholder={'Delivery Remarks'}

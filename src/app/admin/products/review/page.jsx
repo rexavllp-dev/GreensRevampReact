@@ -23,10 +23,11 @@ export default function Reviews() {
     const dispatch = useDispatch();
 
     const { allReviews } = useSelector(state => state.products)
+    const { isUpdateReviewLoaded } = useSelector(state => state.reviews)
 
     useEffect(() => {
         dispatch(getAllProductReviews({}))
-    }, [])
+    }, [isUpdateReviewLoaded]);
 
     const [columnDefs] = useState([
         { headerName: 'Id', field: 'reviewId', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
@@ -44,7 +45,7 @@ export default function Reviews() {
             headerName: 'Review Heading', field: 'heading_review'
         },
         {
-            headerName: 'Review', field: 'review', minWidth: 300
+            headerName: 'Review', field: 'review'
         },
         {
             headerName: 'Rating', field: 'rating',

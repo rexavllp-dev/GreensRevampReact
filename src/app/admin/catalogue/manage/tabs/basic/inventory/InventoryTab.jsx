@@ -190,6 +190,7 @@ const InventoryTab = ({ id, data }) => {
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.sku}
                         disabled={isDisabled}
+                        isRequired={true}
                     />
                     <CustomInput name='ein_code' type='text'
                         maxLength={100}
@@ -210,6 +211,7 @@ const InventoryTab = ({ id, data }) => {
                         value={formData.inventory_management} name={'inventory_management'}
                         data={trackInventory} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
                     />
                     {
                         formData?.inventory_management === 'true' &&
@@ -220,6 +222,7 @@ const InventoryTab = ({ id, data }) => {
                                 disabled={true}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.product_quantity}
+                                isRequired={true}
                             />
                             {
                                 data?.data?.product?.product_inventory_id == null ?
@@ -251,12 +254,14 @@ const InventoryTab = ({ id, data }) => {
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.max_qty}
                         disabled={isDisabled}
+                        isRequired={true}
                     />
                     <CustomSelect label={'Stock Availablility'}
                         value={formData.stock_availability} name={'stock_availability'}
                         data={stockAvailibility}
                         onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
                     />
                 </div>
 

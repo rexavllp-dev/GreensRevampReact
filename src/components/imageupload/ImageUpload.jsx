@@ -7,18 +7,25 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import { IoIosClose, IoIosCloseCircleOutline } from 'react-icons/io';
 
 
-const ImageUpload = ({ name, images, label, isDelete,  handleFileUpload, handleDeleteImage, haveUploadSize, uploadSize, required, haveIcon, isProductImg }) => {
+const ImageUpload = ({ name, images, label,
+    isDelete, handleFileUpload,
+    handleDeleteImage, haveUploadSize, uploadSize,
+    required, haveIcon, isProductImg, hideBrowseBtn,
+    hideDelete }) => {
 
     const inputFileRef = useRef()
-    
+
 
     return (
         <>
             <div className="uploadmedia">
                 <div className="uploadheader">
-                    <CustomButton label={'Browse'} variant={"primary"}
-                        haveIcon={true} icon={'UploadIcon'}
-                        onClick={() => { inputFileRef.current.click(); }} />
+                    {
+                        !hideBrowseBtn &&
+                        <CustomButton label={'Upload Image'} variant={"primary"}
+                            haveIcon={true} icon={'UploadIcon'}
+                            onClick={() => { inputFileRef.current.click(); }} />
+                    }
 
                     <input
                         id='fileupload'
@@ -47,13 +54,12 @@ const ImageUpload = ({ name, images, label, isDelete,  handleFileUpload, handleD
                         if (img?.url) {
                             return (
                                 <div className="imgcard">
-                                    {isDelete? 
-                                    <div className="closeicon" onClick={() => handleDeleteImage(img)}>
-                                        <IoIosCloseCircleOutline size={20} />
-                                    </div>
-
-                                    :   ''
-
+                                    {hideDelete ?
+                                        <></>
+                                        :
+                                        <div className="closeicon" onClick={() => handleDeleteImage(img)}>
+                                            <IoIosCloseCircleOutline size={20} />
+                                        </div>
                                     }
                                     <img
                                         src={isProductImg ? img?.url : img}

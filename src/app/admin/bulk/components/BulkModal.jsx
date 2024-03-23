@@ -90,6 +90,20 @@ const BulkModal = ({ open, handleClose, id, isUpdate, updateData }) => {
                         <ModalHeader className="flex flex-col gap-1">Update Bulk Request</ModalHeader>
                         <ModalBody>
                             <div className='flex flex-col gap-3'>
+                                <CustomInput name='product_name' type='text'
+                                    maxLength={100}
+                                    placeholder='Product Name' label={'Product Name'}
+                                    // onChange={(e) => { handleInputChange({ e }) }}
+                                    value={updateData?.prd_name}
+                                    disabled={true}
+                                />
+                                <CustomInput name='qty' type='text'
+                                    maxLength={100}
+                                    placeholder='Normal Max Quantity' label={'Normal Max Quantity'}
+                                    // onChange={(e) => { handleInputChange({ e }) }}
+                                    value={updateData?.max_qty}
+                                    disabled={true}
+                                />
                                 <CustomInput name='usr_firstname' type='text'
                                     maxLength={100}
                                     placeholder='First Name' label={'First Name'}

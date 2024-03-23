@@ -16,6 +16,7 @@ import { getSaveForLater, removeSaveForLaterProduct } from '@/services/features/
 import { Tooltip } from '@nextui-org/react';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const products = [
     {
@@ -84,6 +85,7 @@ const Cart = () => {
     const recommendedProdRef = React.useRef();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
     const { saveForLater, isSaveForLaterCreated, isSaveForLaterRemoved } = useSelector((state) => state.products)
+    const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
 
     // States
     const [selected, setSelected] = useState('shipping');
@@ -98,7 +100,7 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getSaveForLater({}));
-    }, [isSaveForLaterCreated, isSaveForLaterRemoved])
+    }, [isSaveForLaterCreated, isSaveForLaterRemoved, isWishlistRemoved, isProductAddedToWishlist])
 
 
     // useEffect(() => {
@@ -364,7 +366,10 @@ const Cart = () => {
                                 </div>
 
                                 <div className="btn">
-                                    <CustomButton fullWidth label='Proceed to Checkout' variant='primary' onClick={() => { handleCheckout() }} />
+
+                                    <Link href={isLoggedIn ? (cartProducts?.result?.isStorePickup ? '/checkout?m=storePickup' : '/checkout?m=shipping') : '/auth/login'}>
+                                        <CustomButton fullWidth label='Proceed to Checkout' variant='primary' />
+                                    </Link>
                                 </div>
 
                             </div>
@@ -379,60 +384,6 @@ const Cart = () => {
                                         <CustomTypography content="Apply" color="WHITE" size="MEDIUM" weight="MEDIUM" />
                                     </button>
                                 </div>
-
-                                <div className="item">
-                                    <CustomTypography content="Coupons" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                </div>
-
-                                <div className="item">
-                                    <div className='flex gap-4'>
-                                        <CustomTypography content="#FIRSTHI15 " color="BLACK" size="MEDIUM" weight="REGULAR" />
-                                        <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" />
-                                    </div>
-                                    <button className='txtbtn'>
-                                        Remove
-                                    </button>
-                                </div>
-                                <div className="item">
-                                    <div className='flex gap-4'>
-                                        <CustomTypography content="#GIFT20 " color="BLACK" size="MEDIUM" weight="REGULAR" />
-                                        {/* <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" /> */}
-                                    </div>
-                                    <button className='txtbtn'>
-                                        Apply
-                                    </button>
-                                </div>
-                                <div className="item">
-                                    <div className='flex gap-4'>
-                                        <CustomTypography content="#REFUND20 " color="BLACK" size="MEDIUM" weight="REGULAR" />
-                                        {/* <CustomTypography content="Applied" color="gray-light" size="MEDIUM" weight="REGULAR" /> */}
-                                    </div>
-                                    <button className='txtbtn'>
-                                        Apply
-                                    </button>
-                                </div>
-
-
-                                <div className="item">
-                                    <CustomTypography content="Reward Points (2057)" color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                                </div>
-                                <div className="item">
-                                    <div className='flex gap-1 items-center'>
-                                        <div className='rwd-btn'>
-                                            <FaMinus color='#32893b' stroke-width="0.5" />
-                                        </div>
-                                        <input className='rwd-input' value={0} type="text" />
-                                        <div className='rwd-btn mr-3'>
-                                            <FaPlus color='#32893b' />
-                                        </div>
-                                        <CustomTypography content="(-20AED)" color="gray-light" size="MEDIUM" weight="REGULAR" />
-                                    </div>
-
-                                    <button className='txtbtn'>
-                                        Apply
-                                    </button>
-                                </div>
-
                             </div>
 
 
@@ -471,6 +422,7 @@ const Cart = () => {
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}
                                     data={product}
+                                    isSaveForLater={true}
                                     haveRemoveBtn={true}
                                     handleRemove={() => handleRemoveSaveForLater(product?.save_for_later_id)}
                                     img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
