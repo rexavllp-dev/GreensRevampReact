@@ -17,6 +17,7 @@ import { Tooltip } from '@nextui-org/react';
 import InfoIcon from '@/components/customicons/InfoIcon';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getWishlist } from '@/services/features/wishlistSlice';
 
 const products = [
     {
@@ -85,7 +86,7 @@ const Cart = () => {
     const recommendedProdRef = React.useRef();
     const { cartProducts, productQuantityUpdated, productRemovedFromCart, isCartFlagsUpdated } = useSelector((state) => state.cart)
     const { saveForLater, isSaveForLaterCreated, isSaveForLaterRemoved } = useSelector((state) => state.products)
-    const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
+    const { isWishlistRemoved, isProductAddedToWishlist, wishlistProducts } = useSelector((state) => state.wishlist)
 
     // States
     const [selected, setSelected] = useState('shipping');
@@ -93,6 +94,10 @@ const Cart = () => {
     // const token = cookies.get('accessToken')
     const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
     const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
+
+    useEffect(() => {
+        dispatch(getWishlist({}));
+    }, [isWishlistRemoved, isProductAddedToWishlist])
 
     useEffect(() => {
         dispatch(getCartProducts({}));
@@ -436,31 +441,45 @@ const Cart = () => {
                 </div>
             }
 
-            <div className="itemcard-wrapper">
-                <div className="header">
-                    <CustomTypography content="Add products from your wishlist" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+            {
+                wishlistProducts?.result?.allWishlist?.length ?
+                    <div className="itemcard-wrapper">
+                        <div className="header">
+                            <CustomTypography content="Add products from your wishlist" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'}
-                            iconColor={'#32893B'} icon={"ArrowLeft"}
-                            onClick={() => handleNav('recommendedProdRef', 'left')}
-                        />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                            backgroundColor={'#32893B'} icon={"ArrowRight"}
-                            onClick={() => handleNav('recommendedProdRef', 'right')}
-                        />
+                            <div className="scrollbuttons">
+                                <CustomIconButton variant={'secondary'}
+                                    iconColor={'#32893B'} icon={"ArrowLeft"}
+                                    onClick={() => handleNav('recommendedProdRef', 'left')}
+                                />
+                                <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                                    backgroundColor={'#32893B'} icon={"ArrowRight"}
+                                    onClick={() => handleNav('recommendedProdRef', 'right')}
+                                />
+                            </div>
+
+                        </div>
+                        <div className="items" ref={recommendedProdRef}>
+                            {
+                                wishlistProducts?.result?.allWishlist?.map(product => (
+                                    <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                        specialPrice={product?.prdPrice[0]?.specialPrice}
+                                        normalPrice={product?.prdPrice[0]?.price}
+                                        rating={product.rating}
+                                        wishlistLabel={'wishlistId'}
+                                        data={product}
+                                        img={(product?.product_img?.find((img) => img.is_baseimage === true)) ?
+                                            (product?.product_img?.find((img) => img.is_baseimage === true)?.url) :
+                                            'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                                        }
+                                    />
+                                ))
+                            }
+                        </div>
                     </div>
-
-                </div>
-                <div className="items" ref={recommendedProdRef}>
-                    {
-                        products.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price} data={product}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
-                        ))
-                    }
-                </div>
-            </div>
+                    :
+                    <></>
+            }
             <div className="itemcard-wrapper">
                 <div className="header">
                     <CustomTypography content="Recommended Products with your order" weight="SEMI-BOLD" color="BLACK" size="LARGE" />

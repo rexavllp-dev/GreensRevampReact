@@ -188,7 +188,7 @@ export default function MiniCartItem({ data }) {
 
                 {/* <CountButton count={data.quantity} updateCount={updateCount} /> */}
             </div>
-            <MdDelete size={40}
+            <MdDelete size={36}
                 onClick={() => handleDeleteBtn()}
                 className=' icon cursor-pointer'
                 color='#555' onAn />

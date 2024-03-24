@@ -176,6 +176,7 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress, err
                                 isInvalid={errors.address_line_2.error}
                                 errMsg={errors.address_line_2.message}
                             />
+                            <CustomTypography content='Billing Address' color="BLACK" size="REGULAR" weight="MEDIUM" />
                             <CustomInput name='address_line_2' type='text'
                                 maxLength={100}
                                 placeholder='Address Line 2' label={'Address Line 2'}
