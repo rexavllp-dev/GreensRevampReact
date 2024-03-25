@@ -8,7 +8,11 @@ import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs'
 import "./appearnceSettings.scss"
 import { useRouter, useSearchParams } from 'next/navigation'
 import BannerlTab from './tabs/banner/BannerTab';
-import BannerCatTab from './tabs/category/CategoryTab';
+import CategoryTab from './tabs/category/CategoryTab';
+import BrandTab from './tabs/brand/BrandTab';
+import SeasonTab from './tabs/season/SeasonTab';
+import AdsTab from './tabs/ads/AdsTab';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '@/services/features/productSlice';
 import CustomSwitchButton from '@/library/buttons/switchbtn/CustomSwitchButton';
@@ -66,32 +70,31 @@ const appearnceSettings = () => {
         {
             id: 1,
             label: "Banners",
-            component: <BannerlTab id={id} data={singleProduct} />
+            component: <BannerlTab id={id} data='' />
         },
         {
                 id: 2,
                 label: "Shop by Category",
-                component: <BannerCatTab id={id} data={singleProduct} />
+                component: <CategoryTab id={id} data='' />
                 // component: "uii"
-        }
-        // {
-        //     id: 2,
-        //     label: "Shop by Category",
-        //     component: <CategoryTab id={id} data={singleProduct} />,
-        //     // component: "uii"
-        // },
+        },
+        {
+            id: 3,
+            label: "Favorite Brands",
+            component: <BrandTab id={id} data='' />
+        },
 
-        // {
-        //     id: 3,
-        //     label: "Favorite Brands",
-        //     component: <BannerlTab id={id} data={singleProduct} />
-        // },
+        {
+            id: 4,
+            label: "Shop by Season",
+            component: <SeasonTab id={id} data='' />
+        },
 
-        // {
-        //     id: 4,
-        //     label: "Shop by Season",
-        //     component: <BannerlTab id={id} data={singleProduct} />
-        // },
+        {
+            id: 5,
+            label: "Ads",
+            component: <AdsTab id={id} data='' />
+        },
 
         // {
         //     id: 5,

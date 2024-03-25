@@ -177,6 +177,12 @@ const initialState = {
     isSaveForLaterRemoving:false,
     isSaveForLaterRemoved:false,
     isSaveForLaterRemoveError:false,
+
+
+    isTopTrendingLoading: false,
+    isTopTrendingLoaded: false,
+    isTopTrendingLoadError: false,
+    topTrendingProducts: [],
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query, sort }, thunkAPI) => {
@@ -579,6 +585,35 @@ export const removeSaveForLaterProduct = createAsyncThunk('removeSaveForLaterPro
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+
+export const topTrendingProducts = createAsyncThunk('topTrendingProducts', async ({}, thunkAPI) => {
+    try {
+        const response = await products.topTrendingProducts();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const recentViews = createAsyncThunk('recentViews', async ({}, thunkAPI) => {
+    try {
+        const response = await products.recentViews();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+
+
 
 
 
@@ -1312,6 +1347,26 @@ const productSlice = createSlice({
                 state.isSaveForLaterRemoving = false;
                 state.isSaveForLaterRemoved = false;
                 state.isSaveForLaterRemoveError = true;
+            })
+
+
+            .addCase(topTrendingProducts.pending, (state, action) => {
+                state. isTopTrendingLoading = true;
+                state. isTopTrendingLoaded = false;
+                state. isTopTrendingLoadError = false;
+            })
+
+            .addCase(topTrendingProducts.fulfilled, (state, action) => {
+                state. isTopTrendingLoading = false;
+                state. isTopTrendingLoaded = true;
+                state. isTopTrendingLoadError = false;
+                state.topTrendingProducts = action.payload;
+            })
+
+            .addCase(topTrendingProducts.rejected, (state, action) => {
+                state. isTopTrendingLoading = false;
+                state. isTopTrendingLoaded = false;
+                state. isTopTrendingLoadError = true;
             })
     }
 })

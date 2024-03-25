@@ -60,7 +60,6 @@ export default function QcDashboard() {
 
     setOrderId(orderId);
     if(allDrivers){
-
         var arr = [];
         allDrivers.result?.map((driver) => {
           arr.push({ value: driver.id, label: driver.usr_firstname });

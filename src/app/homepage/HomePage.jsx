@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   Brand1,
   Brand2,
@@ -35,12 +35,19 @@ import Chatbot from '@/components/chatbot/Chatbot';
 import HeroSectionTiles from './components/HeroSectionTiles';
 import useWindowSize from '@/hooks/useWindowSize';
 import ImageSlider from '@/components/slider/ImageSlider';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLanguage } from '@/providers/LanguageProvider';
 import appConfig from '@/config/appConfig';
+import { listHomeCategory, listHomeBrand, listHomeSeason, listHomeAds } from "@/services/features/adminSlice";
+import { topTrendingProducts, recentViews } from "@/services/features/productSlice";
+
+
 // import { useWindowWidth } from '@react-hook/window-size';
 
 const HomePage = () => {
+
+  const dispatch = useDispatch();
+
   const imageUrl = appConfig.server.imageUrl;
 
   const { width, height } = useWindowSize();
@@ -55,6 +62,85 @@ const HomePage = () => {
   const recentProductsRef = useRef();
   const trendingProductsRef = useRef();
   const professionalsRef = useRef();
+
+  const [homecategories, setHomeCategories]               = React.useState([]);
+  const [homebrands, setHomeBrands]                       = React.useState([]);
+  const [homeseason, setHomeseasons]                      = React.useState([]);
+  const [homeads, setHomeAds]                             = React.useState([]);
+  const [toptrendingproducts, setToptrendingproducts]     = React.useState([]);
+  
+
+  useEffect(() => {
+
+    dispatch(listHomeCategory({})).then((response) => {
+      if (response.payload?.success) {
+        setHomeCategories(response.payload.result);
+
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+    dispatch(listHomeBrand({})).then((response) => {
+      if (response.payload?.success) {
+        setHomeBrands(response.payload.result);
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+    dispatch(listHomeSeason({})).then((response) => {
+      if (response.payload?.success) {
+          setHomeseasons(response.payload.result);
+          //console.log(response.payload.result);
+      }
+    }).catch((err) => {
+          console.log(err);
+    })
+
+
+    dispatch(listHomeAds({})).then((response) => {
+      if (response.payload?.success) {
+        setHomeAds(response.payload.result);
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+    dispatch(listHomeAds({})).then((response) => {
+      if (response.payload?.success) {
+        setHomeAds(response.payload.result);
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+    dispatch(topTrendingProducts({})).then((response) => {
+      if (response.payload?.success) {
+        setToptrendingproducts(response.payload.result);
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+    dispatch(recentViews({})).then((response) => {
+      if (response.payload?.success) {
+        recentViews(response.payload.result);
+      }
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+    
+    
+
+
+  }, [])
+
 
   /** Decrements or increments scollLeft property to scroll left or right respectively */
   const handleNav = (ref, direction) => {
@@ -106,43 +192,6 @@ const HomePage = () => {
     }
   }
 
-  const categories = [
-    {
-      id: 1,
-      title: 'Food Colours',
-      img: imageUrl + '/images/category2.png'
-    },
-    {
-      id: 2,
-      title: 'Ingredients',
-      img: imageUrl + '/images/category1.png'
-    },
-    {
-      id: 3,
-      title: 'Baking Supplies',
-      img: imageUrl + '/images/category3.png'
-    },
-    {
-      id: 4,
-      title: 'Cake Decorations',
-      img: imageUrl + '/images/category4.png'
-    },
-    {
-      id: 5,
-      title: 'Chocolate',
-      img: imageUrl + '/images/category1.png'
-    },
-    {
-      id: 6,
-      title: 'Chocolate',
-      img: imageUrl + '/images/category2.png'
-    },
-    {
-      id: 7,
-      title: 'Chocolate',
-      img: imageUrl + '/images/category4.png'
-    },
-  ]
 
 
   const seasons = [
@@ -446,9 +495,9 @@ const HomePage = () => {
           </div>
           <div className="categories" ref={categoryRef}>
             {
-              categories.map((category) => (
+              homecategories.map((category) => (
                 <CategoryCard key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
-                  title={category.title} haveTitle={true} img={category.img} />
+                  title={category.cat_name} haveTitle={true} img={category.cat_logo? category.cat_logo : ''} />
               ))
             }
           </div>
@@ -479,9 +528,9 @@ const HomePage = () => {
                   />
                 ))
                 :
-                brands?.map((category) => (
-                  <CategoryCard key={category.id}
-                    img={category.img}
+                homebrands?.map((brand) => (
+                  <CategoryCard key={brand.brd_name}
+                    img={brand.brd_logo? brand.brd_logo : ''}
                     cardWidth={isMobileView ? 94 : 140} cardHeight={isMobileView ? 94 : 140}
                     haveTitle={false}
                   // imgPadding={30}
@@ -522,9 +571,9 @@ const HomePage = () => {
           </div>
           <div className="categories" ref={seasonRef}>
             {
-              seasons.map((obj) => (
+              homeseason.map((obj) => (
                 <CategoryCard key={obj.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
-                  title={obj.title} haveTitle={true} img={obj.img} />
+                  title={obj.season_name} haveTitle={true} img={obj.season_image? obj.season_image : ''} />
               ))
             }
           </div>
@@ -541,17 +590,24 @@ const HomePage = () => {
 
 
         {/* Events section started  */}
-        <div className="events">
-          <ImageCard
-            img={eventImg1}
-            haveButton={false}
-            haveTitle={false}
-            objectFit={'cover'}
-            // cardHeight={"auto"}
-            cardHeight={isMobileView ? "190px" : "335px"}
-            cardWidth={"100%"}
-          />
-        </div>
+
+        { homeads.map((val) => {
+          return <div className="events">
+            <ImageCard
+              img={val.ads_image}
+              haveButton={false}
+              haveTitle={false}
+              objectFit={'cover'}
+              // cardHeight={"auto"}
+              cardHeight={isMobileView ? "190px" : "335px"}
+              cardWidth={"100%"}
+            />
+          </div>
+
+          })
+        }
+
+        
         {/* Events section ended  */}
 
         {/* Recently viewed section started  */}
@@ -604,7 +660,7 @@ const HomePage = () => {
           </div>
           <div className="categories" ref={trendingProductsRef}>
             {
-              products.map(product => (
+              toptrendingproducts.map(product => (
                 <ProductCard key={product.id} title={product.title} price={product.price}
                   previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
               ))
@@ -615,7 +671,7 @@ const HomePage = () => {
 
 
         {/* Made for Professionals section started  */}
-        <div className="categories-wrapper mb-5">
+        {/* <div className="categories-wrapper mb-5">
           <div className="header">
             <div className="leftsection"></div>
             <CustomTypography content={getTranslation('made_for_professionals')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
@@ -640,7 +696,7 @@ const HomePage = () => {
               ))
             }
           </div>
-        </div>
+        </div> */}
         {/* Made for Professionals section ended  */}
 
 

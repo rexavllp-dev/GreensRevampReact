@@ -19,6 +19,7 @@ import ConfirmationModal from "@/components/modal/confirmation-modal/Confirmatio
 
 
 export default function Catalogue() {
+    
     const router = useRouter();
     const dispatch = useDispatch();
     const { isOpen, onOpen, onClose } = useDisclosure();

@@ -6,76 +6,78 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import "./CategoryTab.scss";
+import "./BrandTab.scss";
 import { getAllOrdersByAdmin } from '@/services/features/orderSlice';
 import SearchInput from '@/library/input/searchinput/SearchInput';
 import { Button, Select, SelectItem, useDisclosure } from '@nextui-org/react';
 import { getDrivers, getWarehouseUsers } from '@/services/features/userSlice';
 import { getAllCategories } from '@/services/features/paymentSlice';
 import CustomSelect from '@/library/select/custom-select/CustomSelect';
-import { getCategoryTree} from "@/services/features/categorySlice";
-import { addHomePageCategory, listHomeCategory, deleteHomeCategory } from "@/services/features/adminSlice";
+
+import { getAllBrands } from "@/services/features/brandSlice";
+import { addHomePageBrand, listHomeBrand, deleteHomeBrand } from "@/services/features/adminSlice";
 import { toast } from 'react-toastify';
 import CustomButton from '@/library/buttons/CustomButton';
 import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
 
-const CategoryTab = () => {
+const BrandTab = () => {
 
     const dispatch = useDispatch();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [categoryTreeData, setCategoryTreeData] = useState([]);
-    const [homecategories, setHomecategories] = useState([]);
+    const [brandTreeData, setBrandTreeData] = useState([]);
+    const [homebrands, setHomebrands] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { allcategories, isCategoryTreeLoaded}  = useSelector(state => state.categories)
-    const { addHomeCategoryLoaded, deleteHomeCategoryLoaded }  = useSelector(state => state.admin)
+    const { allBrands, isAllBrandsLoaded}  = useSelector(state => state.brands)
+    const { addHomeBrandLoaded, deleteHomeBrandLoaded }  = useSelector(state => state.admin)
     const [selectedRows, setSelectedRows] = React.useState([]);
-    const [categoryid, setCategoryId] = useState(0);
+    const [brandid, setBrandId] = useState(0);
 
     const [isConfirmationOpen, setConfirmationOpen] = React.useState(false)
 
     useEffect(() => {
 
-        dispatch(getCategoryTree({}))
-        dispatch(listHomeCategory({})).then((response) => {
+        dispatch(getAllBrands({}))
+        dispatch(listHomeBrand({})).then((response) => {
+
             if (response.payload?.success) {
-                setHomecategories(response.payload.result);
+                setHomebrands(response.payload.result);
             }
+
         }).catch((err) => {
             console.log(err);
         })
 
-    }, [addHomeCategoryLoaded, deleteHomeCategoryLoaded])
+    }, [addHomeBrandLoaded, deleteHomeBrandLoaded])
 
 
     useEffect(() => {
 
-        if(isCategoryTreeLoaded){
-
-            setCategoryTreeData(allcategories.data);
+        if(isAllBrandsLoaded){
+            setBrandTreeData(allBrands.data);
         }
-      }, [isCategoryTreeLoaded])
+      }, [isAllBrandsLoaded])
 
       useEffect(() => {
 
-        if(addHomeCategoryLoaded){
+        if(addHomeBrandLoaded){
 
-           toast.success('Category Addedd');
+           toast.success('Brand Addedd');
         }
-      }, [addHomeCategoryLoaded])
+      }, [addHomeBrandLoaded])
 
 
 
     const [columnDefs] = React.useState([
         {
             headerName: 'ID',
-            field: 'homepage_category_id',
+            field: 'homepage_brand_id',
             checkboxSelection: true,
             headerCheckboxSelection: true,
             filter: false
         },
         {
-            headerName: 'Category Name',
-            field: 'cat_name',
+            headerName: 'Brand Name',
+            field: 'brd_name',
             minWidth: 150
         },
         // {
@@ -105,42 +107,21 @@ const CategoryTab = () => {
 
     ]);
 
-     // Function to recursively build category options
-        const buildCategoryOptions = (categories, depth = 0) => {
-            return categories.flatMap(category => {
-            const label = `${'--'.repeat(depth)} ${category.name}`; // Use dashes for indentation
-            const options = [{ id: category.id, label: label }];
-            if (category.children && category.children.length > 0) {
-                options.push(...buildCategoryOptions(category.children, depth + 1)); // Recursively build child options
-            }
-            return options;
-            });
-        };
-
-        // Function to render options for select box
-        const renderOptions = (options) => {
-            return options.map(option => (
-            <option key={option.id} value={option.id}>
-                {option.label}
-            </option>
-            ));
-        };
-
-
-        const handleCategoryChange = (e) => {
-            setCategoryId(e.target.value);
+        const handleBrandChange = (e) => {
+            setBrandId(e.target.value);
         }
-        const handleCategoryAddition = () => {
-            dispatch(addHomePageCategory({data:{category_id:categoryid}}));
+        const handleBrandAddition = () => {
+            dispatch(addHomePageBrand({data:{brand_id:brandid}}));
         }
 
-        const HandleDeleteCategory = () => {
+        const HandleDeleteBrand = () => {
+
             setConfirmationOpen(false);
             onClose(); // Close the main modal
             if (selectedRows.length > 0) {
-                const data = selectedRows.map(row => row.homepage_category_id);
+                const data = selectedRows.map(row => row.homepage_brand_id);
                 setLoading(true)
-                dispatch(deleteHomeCategory({ data: data })).then((res) => {
+                dispatch(deleteHomeBrand({ data: data })).then((res) => {
                     if (res.payload?.success) {
                         toast.success(res.payload?.message);
                     } else {
@@ -165,18 +146,23 @@ const CategoryTab = () => {
 
             <div className="header">
                 <div className="searchinput">
-                <select className='selectOption' onChange={(e) => handleCategoryChange(e)}>
-                    <option value="">Select Category</option>
-                    {renderOptions(buildCategoryOptions(categoryTreeData))}
-                    </select> 
-                    <Button color='primary' onClick={() => handleCategoryAddition()}>Add</Button>
+                <select className='selectOption' onChange={(e) => handleBrandChange(e)}>
+                    <option value="">Select Brand</option>
+                    {
+
+                        brandTreeData?.map((value) => {
+                            return(<option value={value.id}>{value.brd_name}</option>)
+                        })
+                    }
+                </select>
+                <Button color='primary' onClick={() => handleBrandAddition()}>Add</Button>
                 </div>
                 <div className="right">
                     <CustomButton label="Delete" variant="danger" height={'42px'} onClick={() => setConfirmationOpen(true)} />
                 </div>
             </div>
 
-            <CustomTable columnDefs={columnDefs} rowData={homecategories}
+            <CustomTable columnDefs={columnDefs} rowData={homebrands}
                 selectedRows={selectedRows} setSelectedRows={setSelectedRows}
                 onRowClicked={handleRowClick}
             />
@@ -184,7 +170,7 @@ const CategoryTab = () => {
             <ConfirmationModal
                 isOpen={isConfirmationOpen}
                 onClose={() => setConfirmationOpen(false)}
-                onConfirm={HandleDeleteCategory}
+                onConfirm={HandleDeleteBrand}
                 title="Confirmation"
                 message="Are you sure you want to delete this product?"
             />
@@ -193,4 +179,4 @@ const CategoryTab = () => {
     )
 }
 
-export default CategoryTab
+export default BrandTab

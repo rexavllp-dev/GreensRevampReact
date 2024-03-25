@@ -110,4 +110,160 @@ export const admin = {
         })
     },
 
+    addHomePageCategory: ({data}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/admin/homepage_category/create_homepage_category', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    listHomeCategory: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/homepage_category/get_all_homepage_categories')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    deleteHomeCategory: ({data}) => {   
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/admin/homepage_category/delete_homepage_category?data=${JSON.stringify(data)}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    listHomeCategory: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/homepage_category/get_all_homepage_categories')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    listHomeBrand: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/homepage_brand/get_all_homepage_brands')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },    
+
+
+    addHomePageBrand: ({data}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/admin/homepage_brand/create_homepage_brand', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    deleteHomeBrand: ({data}) => {   
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/admin/homepage_brand/delete_homepage_brand?data=${JSON.stringify(data)}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    listHomeSeason: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/seasons/get_all_seasons')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getSeason: ({id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/seasons/get_season/'+id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    createSeason: ({data}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/admin/seasons/create_season', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    updateSeason: ({data, id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.put('/admin/seasons/update_season/'+id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    deleteSeason: ({data, id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/admin/seasons/delete_season?data=${JSON.stringify(data)}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    listHomeAds: () => {   
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/ads/get_all_ads')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    getAds: ({id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/ads/get_ads/'+id)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    createAds: ({data}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.post('/admin/ads/create_ads', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    updateAds: ({data, id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.put('/admin/ads/update_ads/'+id, data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    deleteAds: ({data, id}) => {   
+
+        return new Promise((resolve, reject) => {
+            Axios.delete(`/admin/ads/delete_ads?data=${JSON.stringify(data)}`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
+    
+    
+    
+    
+
 }

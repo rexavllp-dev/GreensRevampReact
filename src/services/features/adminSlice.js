@@ -67,6 +67,76 @@ const initialState = {
     isTotalCountDashboardLoaded: false,
     isTotalCountDashboardLoadError: false,
     totalCountDashboard: {},
+
+    addHomeCategoryLoading: false,
+    addHomeCategoryLoaded: false,
+    addHomeCategoryLoadError: false,
+
+
+    addHomeBrandLoading: false,
+    addHomeBrandLoaded: false,
+    addHomeBrandLoadError: false,
+
+
+    listHomeCategoryLoading: false,
+    listHomeCategoryLoaded: false,
+    listHomeCategoryLoadError: false,
+    listhomecategory: {},
+
+    deleteHomeCategoryLoading: false,
+    deleteHomeCategoryLoaded: false,
+    deleteHomeCategoryLoadError: false,
+
+    listHomeBrandLoading: false,
+    listHomeBrandLoaded: false,
+    listHomeBrandLoadError: false,
+    listhomebrand: {},
+
+
+    deleteHomeBrandLoading: false,
+    deleteHomeBrandLoaded: false,
+    deleteHomeBrandLoadError: false,
+
+
+    listSeasonLoading: false,
+    listSeasonLoaded: false,
+    listSeasonLoadError: false,
+    allseasons: {},
+
+
+    createSeasonLoading: false,
+    createSeasonLoaded: false,
+    createSeasonLoadError: false,
+
+
+    deleteSeasonLoading: false,
+    deleteSeasonLoaded: false,
+    deleteSeasonLoadError: false,
+
+    updateSeasonLoading: false,
+    updateSeasonLoaded: false,
+    updateSeasonLoadError: false,
+
+
+    listAdsLoading: false,
+    listAdsLoaded: false,
+    listAdsLoadError: false,
+    allads: {},
+
+
+    createAdsLoading: false,
+    createAdsLoaded: false,
+    createAdsLoadError: false,
+
+
+    deleteAdsLoading: false,
+    deleteAdsLoaded: false,
+    deleteAdsLoadError: false,
+
+    updateAdsLoading: false,
+    updateAdsLoaded: false,
+    updateAdsLoadError: false,
+
 }
 
 
@@ -80,6 +150,8 @@ export const updateBanner = createAsyncThunk('updateBanner', async ({ data, id }
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+
 
 // Get latest orders
 export const getLatestOrders = createAsyncThunk('getLatestOrders', async ({ }, thunkAPI) => {
@@ -211,6 +283,206 @@ export const getTotalCountDashboard = createAsyncThunk('getTotalCountDashboard',
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
+
+export const listHomeCategory = createAsyncThunk('listHomeCategory', async ({ }, thunkAPI) => {
+    try {
+
+
+        const response = await admin.listHomeCategory();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const addHomePageCategory = createAsyncThunk('addHomePageCategory', async ({ data }, thunkAPI) => {
+
+    try {
+        const response = await admin.addHomePageCategory({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+// update banner
+export const deleteHomeCategory = createAsyncThunk('deleteHomeCategory', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await admin.deleteHomeCategory({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+
+export const listHomeBrand = createAsyncThunk('listHomeBrand', async ({ }, thunkAPI) => {
+    try {
+
+        const response = await admin.listHomeBrand();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+export const addHomePageBrand = createAsyncThunk('addHomePageBrand', async ({ data }, thunkAPI) => {
+
+    try {
+        const response = await admin.addHomePageBrand({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const deleteHomeBrand = createAsyncThunk('deleteHomeBrand', async ({ data }, thunkAPI) => {
+    try {
+
+   
+        const response = await admin.deleteHomeBrand({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+export const listHomeSeason = createAsyncThunk('listHomeSeason', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.listHomeSeason();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+export const createSeason = createAsyncThunk('createSeason', async ({ data }, thunkAPI) => {
+
+    try {
+      
+        const response = await admin.createSeason({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateSeason = createAsyncThunk('updateSeason', async ({ data, id }, thunkAPI) => {
+
+    try {
+        const response = await admin.updateSeason({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+export const deleteSeason = createAsyncThunk('deleteSeason', async ({ data }, thunkAPI) => {
+    try {
+        const response = await admin.deleteSeason({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getSeason = createAsyncThunk('getSeason', async ({ id }, thunkAPI) => {
+
+    try {
+        const response = await admin.getSeason({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const listHomeAds = createAsyncThunk('listHomeAds', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.listHomeAds();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+
+
+export const createAds = createAsyncThunk('createAds', async ({ data }, thunkAPI) => {
+
+    try {
+      
+        const response = await admin.createAds({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const updateAds = createAsyncThunk('updateAds', async ({ data, id }, thunkAPI) => {
+
+    try {
+        const response = await admin.updateAds({ data, id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+export const getAds = createAsyncThunk('getAds', async ({ id }, thunkAPI) => {
+
+    try {
+        const response = await admin.getAds({ id });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const deleteAds = createAsyncThunk('deleteAds', async ({ data }, thunkAPI) => {
+    try {
+        const response = await admin.deleteAds({ data });
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
 
 
 
@@ -474,6 +746,271 @@ const adminSlice = createSlice({
                 state.isTotalCountDashboardLoaded = false;
                 state.isTotalCountDashboardLoadError = true;
             })
+
+
+            .addCase(addHomePageCategory.pending, (state, action) => {
+                state.addHomeCategoryLoading = true;
+                state.addHomeCategoryLoaded = false;
+                state.addHomeCategoryLoadError = false;
+            })
+
+            .addCase(addHomePageCategory.fulfilled, (state, action) => {
+                state.addHomeCategoryLoading = false;
+                state.addHomeCategoryLoaded = true;
+                state.addHomeCategoryLoadError = false;
+            })
+
+            .addCase(addHomePageCategory.rejected, (state, action) => {
+                state.addHomeCategoryLoading = false;
+                state.addHomeCategoryLoaded = false;
+                state.addHomeCategoryLoadError = true;
+            })
+
+
+       
+            .addCase(listHomeCategory.pending, (state) => {
+
+                state.listHomeCategoryLoading = true;
+                state.listHomeCategoryLoaded = false;
+                state.listHomeCategoryLoadError = false;
+            })
+
+            .addCase(listHomeCategory.fulfilled, (state, action) => {
+
+                state.listHomeCategoryLoading = false;
+                state.listHomeCategoryLoaded = true;
+                state.listHomeCategoryLoadError = false;
+                state.listhomecategory = action.payload;
+            })
+
+            .addCase(listHomeCategory.rejected, (state, action) => {
+
+                state.listHomeCategoryLoading = false;
+                state.listHomeCategoryLoaded = false;
+                state.listHomeCategoryLoadError = true;
+
+            })
+
+            .addCase(deleteHomeCategory.pending, (state) => {
+
+                state.deleteHomeCategoryLoading = true;
+                state.deleteHomeCategoryLoaded = false;
+                state.deleteHomeCategoryLoadError = false;
+            })
+
+            .addCase(deleteHomeCategory.fulfilled, (state, action) => {
+
+                state.deleteHomeCategoryLoading = false;
+                state.deleteHomeCategoryLoaded = true;
+                state.deleteHomeCategoryLoadError = false;
+                state.listhomecategory = action.payload;
+            })
+
+            .addCase(deleteHomeCategory.rejected, (state, action) => {
+
+                state.deleteHomeCategoryLoading = false;
+                state.deleteHomeCategoryLoaded = false;
+                state.deleteHomeCategoryLoadError = true;
+
+            })
+
+
+            .addCase(listHomeBrand.pending, (state) => {
+
+                state.listHomeBrandLoading = true;
+                state.listHomeBrandLoaded = false;
+                state.listHomeBrandLoadError = false;
+            })
+
+            .addCase(listHomeBrand.fulfilled, (state, action) => {
+
+                state.listHomeBrandLoading = false;
+                state.listHomeBrandLoaded = true;
+                state.listHomeBrandLoadError = false;
+                state.listhomecategory = action.payload;
+            })
+
+            .addCase(listHomeBrand.rejected, (state, action) => {
+
+                state.listHomeBrandLoading = false;
+                state.listHomeBrandLoaded = false;
+                state.listHomeBrandLoadError = true;
+
+            })
+
+
+            .addCase(addHomePageBrand.pending, (state, action) => {
+                state.addHomeBrandLoading = true;
+                state.addHomeBrandLoaded = false;
+                state.addHomeBrandLoadError = false;
+            })
+
+            .addCase(addHomePageBrand.fulfilled, (state, action) => {
+                state.addHomeBrandLoading = false;
+                state.addHomeBrandLoaded = true;
+                state.addHomeBrandLoadError = false;
+            })
+
+            .addCase(addHomePageBrand.rejected, (state, action) => {
+                state.addHomeBrandLoading = false;
+                state.addHomeBrandLoaded = false;
+                state.addHomeBrandLoadError = true;
+            })
+
+            .addCase(deleteHomeBrand.pending, (state) => {
+
+                state.deleteHomeBrandLoading = true;
+                state.deleteHomeBrandLoaded = false;
+                state.deleteHomeBrandLoadError = false;
+            })
+
+            .addCase(deleteHomeBrand.fulfilled, (state, action) => {
+
+                state.deleteHomeBrandLoading = false;
+                state.deleteHomeBrandLoaded = true;
+                state.deleteHomeBrandLoadError = false;
+                state.listhomecategory = action.payload;
+            })
+
+            .addCase(deleteHomeBrand.rejected, (state, action) => {
+
+                state.deleteHomeBrandLoading = false;
+                state.deleteHomeBrandLoaded = false;
+                state.deleteHomeBrandLoadError = true;
+
+            })
+
+
+            .addCase(createSeason.pending, (state, action) => {
+                state.createSeasonLoading = true;
+                state.createSeasonLoaded = false;
+                state.createSeasonLoadError = false;
+            })
+
+            .addCase(createSeason.fulfilled, (state, action) => {
+                state.createSeasonLoading = false;
+                state.createSeasonLoaded = true;
+                state.createSeasonLoadError = false;
+            })
+
+            .addCase(createSeason.rejected, (state, action) => {
+                state.createSeasonLoading = false;
+                state.createSeasonLoaded = false;
+                state.createSeasonLoadError = true;
+            })
+
+
+
+            .addCase(deleteSeason.pending, (state) => {
+
+                state.deleteSeasonLoading = true;
+                state.deleteSeasonLoaded = false;
+                state.deleteSeasonLoadError = false;
+            })
+
+            .addCase(deleteSeason.fulfilled, (state, action) => {
+
+                state.deleteSeasonLoading = false;
+                state.deleteSeasonLoaded = true;
+                state.deleteSeasonLoadError = false;
+            })
+
+            .addCase(deleteSeason.rejected, (state, action) => {
+
+                state.deleteSeasonLoading = false;
+                state.deleteSeasonLoaded = false;
+                state.deleteSeasonLoadError = true;
+
+            })
+
+            .addCase(updateSeason.pending, (state) => {
+
+                state.updateSeasonLoading = true;
+                state.updateSeasonLoaded = false;
+                state.updateSeasonLoadError = false;
+            })
+
+            .addCase(updateSeason.fulfilled, (state, action) => {
+
+                state.updateSeasonLoading = false;
+                state.updateSeasonLoaded = true;
+                state.updateSeasonLoadError = false;
+            })
+
+            .addCase(updateSeason.rejected, (state, action) => {
+
+                state.updateSeasonLoading = false;
+                state.updateSeasonLoaded = false;
+                state.updateSeasonLoadError = true;
+
+            })
+
+
+            .addCase(createAds.pending, (state, action) => {
+                state.createAdsLoading = true;
+                state.createAdsLoaded = false;
+                state.createAdsLoadError = false;
+            })
+
+            .addCase(createAds.fulfilled, (state, action) => {
+                state.createAdsLoading = false;
+                state.createAdsLoaded = true;
+                state.createAdsLoadError = false;
+            })
+
+            .addCase(createAds.rejected, (state, action) => {
+                state.createAdsLoading = false;
+                state.createAdsLoaded = false;
+                state.createAdsLoadError = true;
+            })
+
+            
+            .addCase(deleteAds.pending, (state) => {
+
+                state.deleteAdsLoading = true;
+                state.deleteAdsLoaded = false;
+                state.deleteAdsLoadError = false;
+            })
+
+            .addCase(deleteAds.fulfilled, (state, action) => {
+
+                state.deleteAdsLoading = false;
+                state.deleteAdsLoaded = true;
+                state.deleteAdsLoadError = false;
+            })
+
+            .addCase(deleteAds.rejected, (state, action) => {
+
+                state.deleteAdsLoading = false;
+                state.deleteAdsLoaded = false;
+                state.deleteAdsLoadError = true;
+
+            })
+
+            .addCase(updateAds.pending, (state) => {
+
+                state.updateAdsLoading = true;
+                state.updateAdsLoaded = false;
+                state.updateAdsLoadError = false;
+            })
+
+            .addCase(updateAds.fulfilled, (state, action) => {
+
+                state.updateAdsLoading = false;
+                state.updateAdsLoaded = true;
+                state.updateAdsLoadError = false;
+            })
+
+            .addCase(updateAds.rejected, (state, action) => {
+
+                state.updateAdsLoading = false;
+                state.updateAdsLoaded = false;
+                state.updateAdsLoadError = true;
+
+            })
+        
+            
+            
     }
 })
 

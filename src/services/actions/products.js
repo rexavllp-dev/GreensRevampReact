@@ -319,5 +319,16 @@ export const products = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
+    },
+
+    topTrendingProducts: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/get_all_top_tending_products')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
     }
+
+
+    
 }
