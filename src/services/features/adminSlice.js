@@ -67,6 +67,11 @@ const initialState = {
     isTotalCountDashboardLoaded: false,
     isTotalCountDashboardLoadError: false,
     totalCountDashboard: {},
+
+    isAllRolesLoading: false,
+    isAllRolesLoaded: false,
+    isAllRolesLoadError: false,
+    allRoles: [],
 }
 
 
@@ -205,6 +210,18 @@ export const getTotalSales = createAsyncThunk('getTotalSales', async ({ filterBy
 export const getTotalCountDashboard = createAsyncThunk('getTotalCountDashboard', async ({ }, thunkAPI) => {
     try {
         const response = await admin.getTotalCountDashboard();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
+//get all roles
+export const getAllRoles = createAsyncThunk('getAllRoles', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.getAllRoles()
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -473,6 +490,26 @@ const adminSlice = createSlice({
                 state.isTotalCountDashboardLoading = false;
                 state.isTotalCountDashboardLoaded = false;
                 state.isTotalCountDashboardLoadError = true;
+            })
+
+            //Get all roles
+            .addCase(getAllRoles.pending, (state, action) => {
+                state.isAllRolesLoading = true;
+                state.isAllRolesLoaded = false;
+                state.isAllRolesLoadError = false;
+            })
+
+            .addCase(getAllRoles.fulfilled, (state, action) => {
+                state.isAllRolesLoading = false;
+                state.isAllRolesLoaded = true;
+                state.isAllRolesLoadError = false;
+                state.allRoles = action.payload;
+            })
+
+            .addCase(getAllRoles.rejected, (state, action) => {
+                state.isAllRolesLoading = false;
+                state.isAllRolesLoaded = false;
+                state.isAllRolesLoadError = true;
             })
     }
 })

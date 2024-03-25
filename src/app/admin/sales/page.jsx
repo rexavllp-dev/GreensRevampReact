@@ -19,7 +19,7 @@ export default function Sales() {
         {
             id: 2,
             name: 'Discounts',
-            url: '/admin/discounts',
+            url: '/admin/sales/discounts',
         },
     ];
 

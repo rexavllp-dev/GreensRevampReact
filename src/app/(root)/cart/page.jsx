@@ -400,8 +400,15 @@ const Cart = () => {
             {
                 (saveForLater?.result?.savedProducts?.length > 0) &&
                 <div className="itemcard-wrapper">
-                    <div className="header">
-                        <CustomTypography content="Products Saved for later" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                    <div className="header ">
+                        <div className="flex gap-2">
+                            <CustomTypography content="Products Saved for later" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                            {
+                                saveForLater?.saveForLaterCount ?
+                                    <CustomTypography content={`(${saveForLater?.saveForLaterCount})`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                    : null
+                            }
+                        </div>
 
                         <div className="scrollbuttons">
                             <CustomIconButton variant={'secondary'}
@@ -445,7 +452,14 @@ const Cart = () => {
                 wishlistProducts?.result?.allWishlist?.length ?
                     <div className="itemcard-wrapper">
                         <div className="header">
-                            <CustomTypography content="Add products from your wishlist" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                            <div className="flex gap-2">
+                                <CustomTypography content="Add products from your wishlist" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                                {
+                                    wishlistProducts?.wishlistCount ?
+                                        <CustomTypography content={`(${wishlistProducts?.wishlistCount})`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                                        : null
+                                }
+                            </div>
 
                             <div className="scrollbuttons">
                                 <CustomIconButton variant={'secondary'}

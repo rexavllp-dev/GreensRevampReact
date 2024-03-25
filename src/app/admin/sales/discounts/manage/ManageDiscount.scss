@@ -1,0 +1,47 @@
+.manage-discount {
+  padding: 20px 20px;
+
+  .breadcrumb {
+    padding-bottom: 18px;
+  }
+
+  .title {
+    padding-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .backbtn {
+      cursor: pointer;
+      padding-top: 3px;
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    .searchinput {
+      width: 300px;
+      margin-bottom: 20px;
+    }
+
+    .right {
+      display: flex;
+      gap: 20px;
+    }
+  }
+
+  .form {
+    display: flex;
+    gap: 50px;
+
+    .stack {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+  }
+}

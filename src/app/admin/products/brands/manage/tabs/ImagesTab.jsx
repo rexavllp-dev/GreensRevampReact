@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 
-const ImagesTab = ({id, data}) => {
+const ImagesTab = ({ id, data }) => {
 
     const router = useRouter()
 
@@ -36,7 +36,7 @@ const ImagesTab = ({id, data}) => {
     }
 
     const handleDeleteImage = (img) => {
-        
+
 
     }
 
@@ -48,36 +48,30 @@ const ImagesTab = ({id, data}) => {
 
     return (
         <div className='brandstab'>
-            <div className="stack mb-3">
+            <div className='flex gap-5'>
+                <div className="stack mb-3">
 
-                <CustomTypography content='Logo' color="BLACK" size="MEDIUM" weight="REGULAR" />
-                <ImageUpload
-                    name={'brd_logo'}
-                    handleFileUpload={handleFileUpload}
-                    images={[data?.result?.brd_logo]}
-                    handleDeleteImage={handleDeleteImage}
-                    haveUploadSize={true}
-                    uploadSize={{
-                        "width": '1920',
-                        "height": '1080'
-                    }}
-                />
+                    <CustomTypography content='Logo' color="BLACK" size="MEDIUM" weight="REGULAR" />
+                    <ImageUpload
+                        name={'brd_logo'}
+                        isProductImg={true}
+                        handleFileUpload={handleFileUpload}
+                        images={[{ url: data?.result?.brd_logo }]}
+                        handleDeleteImage={handleDeleteImage}
+                    />
 
-            </div>
+                </div>
 
-            <div className="stack">
-                <CustomTypography content='Banner Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
-                <ImageUpload
-                    name={'brd_banner'}
-                    handleFileUpload={handleFileUpload}
-                    images={[data?.result?.brd_banner]}
-                    handleDeleteImage={handleDeleteImage}
-                    haveUploadSize={true}
-                    uploadSize={{
-                        "width": '1920',
-                        "height": '1080'
-                    }}
-                />
+                <div className="stack">
+                    <CustomTypography content='Banner Image' color="BLACK" size="MEDIUM" weight="REGULAR" />
+                    <ImageUpload
+                        name={'brd_banner'}
+                        isProductImg={true}
+                        handleFileUpload={handleFileUpload}
+                        images={[{ url: data?.result?.brd_banner }]}
+                        handleDeleteImage={handleDeleteImage}
+                    />
+                </div>
             </div>
             <div className="flex justify-end mt-3">
                 <CustomButton label='Save Changes' onClick={() => handleSubmit()} />

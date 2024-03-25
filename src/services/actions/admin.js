@@ -109,5 +109,13 @@ export const admin = {
                 .catch(error => reject(error))
         })
     },
+    //Get all roles
+    getAllRoles: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get(`/admin/roles/get_all_roles`)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
 }

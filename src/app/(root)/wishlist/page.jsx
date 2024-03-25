@@ -115,8 +115,13 @@ const Wishlist = () => {
 
     return (
         <div className='wishlist-container'>
-            <div className="title">
+            <div className="title flex gap-2">
                 <CustomTypography content="Wishlist" color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                {
+                    wishlistProducts?.wishlistCount ?
+                        <CustomTypography content={`(${wishlistProducts?.wishlistCount})`} color="BLACK" size="LARGE" weight="SEMI-BOLD" />
+                        : null
+                }
             </div>
 
             {

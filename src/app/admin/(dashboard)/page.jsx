@@ -8,7 +8,7 @@ import { cancelledOrdersColumns, companyVerificationColumns, expiringProductsCol
 import { getAllOrdersByAdmin } from "@/services/features/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTypography from "@/library/typography/CustomTypography";
-import ChartComponent from "@/components/chart/ChartComponent";
+// import ChartComponent from "@/components/chart/ChartComponent";
 import { Select, SelectItem } from "@nextui-org/react";
 import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts, getTotalCountDashboard, getTotalOrderCount, getTotalSales } from "@/services/features/adminSlice";
 
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
         <div className="admin-dashboard">
             <div className='top'>
                 <div className="charts">
-                    <ChartComponent options={options} series={series} />
+                    {/* <ChartComponent options={options} series={series} /> */}
                 </div>
 
 

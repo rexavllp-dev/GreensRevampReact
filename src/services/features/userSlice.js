@@ -75,7 +75,7 @@ const initialState = {
 
     isPasswordUpdating: false,
     isPasswordUpdated: false,
-    isPasswordUpdateError: false
+    isPasswordUpdateError: false,
 }
 
 
@@ -262,7 +262,6 @@ export const updatePassword = createAsyncThunk('updatePassword', async ({ data }
         return thunkAPI.rejectWithValue(error.response.data);
     }
 })
-
 
 
 const userSlice = createSlice({

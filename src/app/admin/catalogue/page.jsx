@@ -82,35 +82,35 @@ export default function Catalogue() {
                 )
             }
         },
-        {
-            field: 'action',
-            minWidth: 150,
-            filter: false,
-            cellRenderer: (params) => {
-                return (
-                    <Dropdown>
-                        <DropdownTrigger>
-                            <div style={{ display: 'flex', height: '100%', alignItems: 'center', paddingLeft: '10px', cursor: 'pointer' }}>
-                                <IoMdMore size={20} />
-                            </div>
-                        </DropdownTrigger>
-                        <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                            <DropdownSection title="Actions" showDivider={false}>
-                                <DropdownItem
-                                    key="edit"
-                                    description="Allows you to edit the file"
-                                    onClick={() => {
-                                        router.push(`/admin/catalogue/manage/?id=${params.data?.id}`)
-                                    }}
-                                >
-                                    Edit
-                                </DropdownItem>
-                            </DropdownSection>
-                        </DropdownMenu>
-                    </Dropdown>
-                )
-            }
-        }
+        // {
+        //     field: 'action',
+        //     minWidth: 150,
+        //     filter: false,
+        //     cellRenderer: (params) => {
+        //         return (
+        //             <Dropdown>
+        //                 <DropdownTrigger>
+        //                     <div style={{ display: 'flex', height: '100%', alignItems: 'center', paddingLeft: '10px', cursor: 'pointer' }}>
+        //                         <IoMdMore size={20} />
+        //                     </div>
+        //                 </DropdownTrigger>
+        //                 <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+        //                     <DropdownSection title="Actions" showDivider={false}>
+        //                         <DropdownItem
+        //                             key="edit"
+        //                             description="Allows you to edit the file"
+        //                             onClick={() => {
+        //                                 router.push(`/admin/catalogue/manage/?id=${params.data?.id}`)
+        //                             }}
+        //                         >
+        //                             Edit
+        //                         </DropdownItem>
+        //                     </DropdownSection>
+        //                 </DropdownMenu>
+        //             </Dropdown>
+        //         )
+        //     }
+        // }
     ]);
 
     useEffect(() => {
