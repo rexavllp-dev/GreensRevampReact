@@ -57,7 +57,7 @@ const AdminLogin = () => {
         if (!formData.email_or_mobile?.length) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                email_or_mobile: { error: true, message: 'Email or Mobile is required' }
+                email_or_mobile: { error: true, message: 'Email is required' }
             }));
             isValid = false;
         }

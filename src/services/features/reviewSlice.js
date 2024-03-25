@@ -17,6 +17,10 @@ const initialState = {
     isAllReviewsByUserLoaded: false,
     isAllReviewsByUserLoadError: false,
     allReviewsByUser: [],
+    
+    isUpdateReviewLoading: false,
+    isUpdateReviewLoaded: false,
+    isUpdateReviewError: false,
 }
 
 // Get all reivews by product id
@@ -42,9 +46,20 @@ export const createReview = createAsyncThunk('createReview', async ({ data }, th
 })
 
 //get all review s by user
-export const getAllReviewsByUser = createAsyncThunk('getAllReviewsByUser', async ({  }, thunkAPI) => {
+export const getAllReviewsByUser = createAsyncThunk('getAllReviewsByUser', async ({ }, thunkAPI) => {
     try {
         const response = await reviews.getAllReviewsByUser();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+//update review 
+export const updateReview = createAsyncThunk('updateReview', async ({ data, id }, thunkAPI) => {
+    try {
+        const response = await reviews.updateReview({ data, id });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -109,6 +124,22 @@ const reviewSlice = createSlice({
                 state.isAllReviewsByUserLoading = false;
                 state.isAllReviewsByUserLoaded = false;
                 state.isAllReviewsByUserLoadError = true;
+            })
+
+            .addCase(updateReview.pending, (state) => {
+                state.isUpdateReviewLoading = true;
+                state.isUpdateReviewLoaded = false;
+                state.isUpdateReviewError = false;
+            })
+            .addCase(updateReview.fulfilled, (state, action) => {
+                state.isUpdateReviewLoading = false;
+                state.isUpdateReviewLoaded = true;
+                state.isUpdateReviewError = false;
+            })
+            .addCase(updateReview.rejected, (state, action) => {
+                state.isUpdateReviewLoading = false;
+                state.isUpdateReviewLoaded = false;
+                state.isUpdateReviewError = true;
             })
     }
 })

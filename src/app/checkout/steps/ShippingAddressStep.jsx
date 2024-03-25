@@ -176,6 +176,7 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress, err
                                 isInvalid={errors.address_line_2.error}
                                 errMsg={errors.address_line_2.message}
                             />
+                            <CustomTypography content='Billing Address' color="BLACK" size="REGULAR" weight="MEDIUM" />
                             <CustomInput name='address_line_2' type='text'
                                 maxLength={100}
                                 placeholder='Address Line 2' label={'Address Line 2'}
@@ -196,9 +197,6 @@ const ShippingAddressStep = ({ onSubmit, formData, setFormData, userAddress, err
                                 placeholder='Zip Code' label={'Zip Code'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.zip_code}
-                                isRequired={true}
-                                isInvalid={errors.zip_code.error}
-                                errMsg={errors.zip_code.message}
                             />
                             <CustomTextarea label={'Delivery Remarks'}
                                 placeholder={'Delivery Remarks'}

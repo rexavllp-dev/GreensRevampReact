@@ -1,5 +1,6 @@
 'use client'
 
+import ReactStars from "react-rating-stars-component";
 import BreadCrumbs from "@/components/breadcrumbs/BreadCrumbs";
 import CustomTypography from "@/library/typography/CustomTypography";
 import SearchInput from "@/library/input/searchinput/SearchInput";
@@ -14,6 +15,7 @@ import { Avatar, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, Dr
 import { CameraIcon } from "@/components/customicons/CameraIcon";
 import { IoMdMore } from "react-icons/io";
 import { getAllProductReviews } from "@/services/features/productSlice";
+import ReviewModal from "./components/ReviewModal";
 
 
 export default function Reviews() {
@@ -21,39 +23,70 @@ export default function Reviews() {
     const dispatch = useDispatch();
 
     const { allReviews } = useSelector(state => state.products)
+    const { isUpdateReviewLoaded } = useSelector(state => state.reviews)
 
     useEffect(() => {
         dispatch(getAllProductReviews({}))
-    }, [])
+    }, [isUpdateReviewLoaded]);
 
     const [columnDefs] = useState([
-        { headerName: 'Id', field: 'id', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        { headerName: 'Id', field: 'reviewId', checkboxSelection: true, headerCheckboxSelection: true, filter: false },
+        // {
+        //     headerName: 'Logo', field: 'brd_logo',
+        //     cellRenderer: (params) => {
+        //         return (
+        //             <Avatar showFallback src={params.data?.brd_logo} fallback={
+        //                 <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
+        //             } />
+        //         )
+        //     }
+        // },
         {
-            headerName: 'Logo', field: 'brd_logo',
+            headerName: 'Review Heading', field: 'heading_review'
+        },
+        {
+            headerName: 'Review', field: 'review'
+        },
+        {
+            headerName: 'Rating', field: 'rating',
             cellRenderer: (params) => {
+                const rating = params.data?.rating;
                 return (
-                    <Avatar showFallback src={params.data?.brd_logo} fallback={
-                        <CameraIcon className="animate-pulse w-6 h-6 text-default-500" fill="currentColor" size={16} />
-                    } />
+                    <ReactStars
+                        count={5}
+                        value={rating}
+                        edit={false}
+                        size={20}
+                        isHalf={true}
+                        emptyIcon={<i className="far fa-star"></i>}
+                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                        fullIcon={<i className="fa fa-star"></i>}
+                        activeColor="#ffd700"
+                    />
                 )
             }
         },
         {
-            headerName: 'Name', field: 'brd_name'
-        },
-        {
             headerName: 'Status', field: 'brand_status',
             cellRenderer: (params) => {
-                const isActive = params.data?.brand_status;
+                const isActive = params.data?.is_approved;
                 return (
                     <Chip color={isActive ? "success" : "danger"} variant="dot">{isActive ? "Active" : "Inactive"}</Chip>
                 )
             }
         },
         {
-            headerName: 'Created', field: 'created_at'
+            headerName: 'Created', field: 'createdAt'
         }
     ]);
+
+
+    const [open, setOpen] = useState(false);
+    const [editData, setEditData] = useState({})
+    const handleRowClick = (data) => {
+        setEditData(data)
+        setOpen(true)
+    }
 
 
     return (
@@ -78,7 +111,8 @@ export default function Reviews() {
                         onClick={() =>} /> */}
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allReviews?.result} />
+            <CustomTable columnDefs={columnDefs} rowData={allReviews?.result} onRowClicked={handleRowClick} />
+            <ReviewModal open={open} handleClose={() => setOpen(false)} editData={editData} />
         </div>
     )
 }

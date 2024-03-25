@@ -2,9 +2,10 @@ import { Textarea } from '@nextui-org/react';
 import React from 'react';
 import './CustomTextarea.scss';
 
-const CustomTextarea = ({label, placeholder, name, value, onChange, disabled}) => {
+const CustomTextarea = ({ label, placeholder, name, value, onChange, disabled, isRequired }) => {
   return (
     <Textarea
+      isRequired={isRequired}
       variant="bordered"
       label={label}
       name={name}

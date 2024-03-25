@@ -107,7 +107,7 @@ export default function Brands() {
                         onClick={() => router.push('/admin/products/brands/manage')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allBrands?.data} />
+            <CustomTable columnDefs={columnDefs} rowData={allBrands?.data} onRowClicked={(value) => console.log(value)} />
         </div>
     )
 }

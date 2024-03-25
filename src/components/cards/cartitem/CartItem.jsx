@@ -10,6 +10,8 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import { createSaveForLater } from '@/services/features/productSlice'
 import React from 'react'
+import Link from 'next/link'
+import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal'
 
 export default function CartItem({ data }) {
 
@@ -22,13 +24,29 @@ export default function CartItem({ data }) {
     const [isLoggedIn, setIsLoggedIn] = React.useState(token && token !== "" && token !== "undefined")
 
     const [count, setCount] = React.useState(data?.quantity);
+    const [isConfirmationOpen, setConfirmationOpen] = React.useState(false);
 
-    const handleRemoveItemFromCart = (prdId) => {
-        dispatch(deleteProductFromCart({ id: prdId })).then((res) => {
+    const handleRemoveItemFromCart = (saveForLater) => {
+        setConfirmationOpen(false)
+        if (saveForLater) {
+            dispatch(createSaveForLater({
+                data: {
+                    product_id: data?.productId
+                }
+            })).then((res) => {
+                if (res.payload?.success) {
+
+                } else {
+
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+
+        dispatch(deleteProductFromCart({ id: data?.productId })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message, {
-                    toastId: 'success1',
-                });
+                toast.success(res.payload?.message);
             } else {
                 toast.error(res.payload?.message);
             }
@@ -37,8 +55,16 @@ export default function CartItem({ data }) {
         })
     }
 
-    const handleSaveForLater = () => {
 
+    const handleDeleteBtn = () => {
+        if (isLoggedIn) {
+            setConfirmationOpen(true);
+        } else {
+            handleRemoveItemFromCart(false);
+        }
+    }
+
+    const handleSaveForLater = () => {
         if (isLoggedIn) {
             dispatch(createSaveForLater({
                 data: {
@@ -46,12 +72,15 @@ export default function CartItem({ data }) {
                 }
             })).then((res) => {
                 if (res.payload?.success) {
-                    toast.success(res.payload?.message, {
-                        toastId: 'success1',
-                    });
-                    handleRemoveItemFromCart(data?.productId);
+                    toast.success(res.payload?.message);
+
+                    dispatch(deleteProductFromCart({ id: data?.productId })).then((res) => {
+
+                    }).catch((err) => {
+                        console.log(err)
+                    })
                 } else {
-                    toast.error(res.payload?.message);
+
                 }
             }).catch((err) => {
                 console.log(err)
@@ -120,7 +149,7 @@ export default function CartItem({ data }) {
                 setCount(data?.quantity);
             }
         }).catch((err) => {
-            console.log(err)
+            console.log(err);
         })
     }
 
@@ -128,9 +157,11 @@ export default function CartItem({ data }) {
     return (
         <div className="cart-item">
             <div className="image-wrapper">
-                <div className="image pb-1 cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
-                    <Image width={100} height={100} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />
-                </div>
+                <Link href={'/products/' + data?.productId}>
+                    <div className="image pb-1 cursor-pointer">
+                        <Image width={100} height={100} alt="product" src={data?.image ? data?.image : 'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'} />
+                    </div>
+                </Link>
                 <div className='countbtn'>
                     <button onClick={() => updateCount('reduce')}>-</button>
                     <input
@@ -154,28 +185,33 @@ export default function CartItem({ data }) {
                 {/* <CountButton count={data.quantity} updateCount={updateCount} /> */}
             </div>
             <div className="details">
-                <div className="title cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
-                    <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
-                </div>
 
-                <div className="others cursor-pointer" onClick={() => router.push('/products/' + data?.productId)}>
-                    <div className="flex gap-2">
-                        {
-                            (parseFloat(data?.product_price) > parseFloat(data?.priceVat)) ?
-                                <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
-                                    color="GRAY" size="MEDIUM"
-                                    weight="MEDIUM" style={{ textDecoration: 'line-through' }}
-                                />
-                                :
-                                <></>
-                        }
-                        <CustomTypography content={`AED ${parseFloat(data?.priceVat)?.toFixed(2)}`}
-                            color="BLACK" size="MEDIUM" weight="SEMI-BOLD"
-                        />
+                <Link href={'/products/' + data?.productId}>
+                    <div className="title cursor-pointer" >
+                        <CustomTypography content={data?.name} color="BLACK" size="MEDIUM" weight="SEMI-BOLD" />
                     </div>
-                    {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
+                </Link>
+
+                <Link href={'/products/' + data?.productId}>
+                    <div className="others cursor-pointer" >
+                        <div className="flex gap-2">
+                            {
+                                (parseFloat(data?.product_price) > parseFloat(data?.priceVat)) ?
+                                    <CustomTypography content={`AED ${parseFloat(data?.product_price)?.toFixed(2)}`}
+                                        color="GRAY" size="MEDIUM"
+                                        weight="MEDIUM" style={{ textDecoration: 'line-through' }}
+                                    />
+                                    :
+                                    <></>
+                            }
+                            <CustomTypography content={`AED ${parseFloat(data?.priceVat)?.toFixed(2)}`}
+                                color="BLACK" size="MEDIUM" weight="SEMI-BOLD"
+                            />
+                        </div>
+                        {/* <CustomTypography content="Variant" color="BLACK" size="MEDIUM" weight="REGULAR" />
                     <CustomTypography content="Option" color="BLACK" size="MEDIUM" weight="REGULAR" /> */}
-                </div>
+                    </div>
+                </Link>
 
                 <div className='btn'>
                     {/* <CustomButton variant='teritary' label='Save for Later'/> */}
@@ -185,7 +221,7 @@ export default function CartItem({ data }) {
                         }}
                     >Save for Later</button>
                     <div className="removebtn" onClick={() => {
-                        handleRemoveItemFromCart(data?.productId)
+                        handleDeleteBtn();
                     }}>
                         <CustomTypography content="Remove"
                             style={{ cursor: 'pointer', borderBottom: '1px solid black' }}
@@ -195,6 +231,15 @@ export default function CartItem({ data }) {
                     </div>
                 </div>
             </div>
+            <ConfirmationModal
+                isOpen={isConfirmationOpen}
+                onClose={() => handleRemoveItemFromCart(false)}
+                onConfirm={() => handleRemoveItemFromCart(true)}
+                title="Do you want save this product for later?"
+                successText="SAVE FOR LATER"
+                cancelText="No, thanks!"
+                message={data?.name}
+            />
         </div>
     )
 }

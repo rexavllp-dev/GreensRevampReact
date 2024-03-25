@@ -92,12 +92,14 @@ const Navbar = () => {
                                 <CountryDropdown />
                             </div>
 
-                            <div className="item" onClick={() => { router.push('/wishlist') }}>
-                                <div className="icon">
-                                    <Image src={heartIcon} />
+                            <Link href={'/wishlist'}>
+                                <div className="item">
+                                    <div className="icon">
+                                        <Image src={heartIcon} />
+                                    </div>
+                                    {/* <p className='item-label'>Wishlist</p> */}
                                 </div>
-                                {/* <p className='item-label'>Wishlist</p> */}
-                            </div>
+                            </Link>
 
 
                             {

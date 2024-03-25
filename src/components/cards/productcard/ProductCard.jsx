@@ -16,8 +16,10 @@ import { IoMdHeart, IoMdStar } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { FaStar } from 'react-icons/fa';
 import { addNotifyProducts } from '@/services/features/notifyProductSlice';
+import Link from 'next/link';
+import { removeSaveForLaterProduct } from '@/services/features/productSlice';
 
-const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove, hideNotifyBtn }) => {
+const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, haveRemoveBtn, handleRemove, hideNotifyBtn, isSaveForLater, wishlistLabel }) => {
 
   const { getTranslation } = useLanguage();
   const router = useRouter()
@@ -38,11 +40,21 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
     dispatch(addProductToCart({ data: productData })).then((res) => {
       if (res.payload?.success) {
         toast.success(res.payload?.message);
+
+        if (isSaveForLater) {
+          dispatch(removeSaveForLaterProduct({ id: data?.save_for_later_id })).then((res) => {
+            if (res.payload?.success) {
+              // toast.success(res.payload?.message)
+            } else {
+              // toast.error(res.payload?.message)
+            }
+          }).catch(err => console.log(err));
+        }
       } else {
         toast.error(res.payload?.message);
       }
     }).catch((err) => {
-      console.log(err)
+      console.log(err);
     })
   }
 
@@ -106,7 +118,7 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
   return (
     <div className='productcard'>
       {
-        data?.wishlist_id == null ?
+        (wishlistLabel ? data[wishlistLabel] : data?.wishlist_id) == null ?
           <div className="icon cursor-pointer" onClick={() => handleAddToWishlist(id)}>
             {/* <Image src={heartIconBlack} width={16} height={16} alt='icon' /> */}
             <CiHeart size={16} />
@@ -277,13 +289,26 @@ const ProductCard = ({ img, title, specialPrice, normalPrice, rating, id, data, 
                     }
                   </>
                   :
-                  <button className={'productbtn'} onClick={() => {
-                    handleAddToCart()
-                  }}>
-                    <div className='productbtn_text' >
-                      {getTranslation('add_to_cart')}
-                    </div >
-                  </button >
+                  <>
+                    {
+                      (data?.productoptions && data?.productoptions[0]?.optionId != null) ?
+                        <Link href={`/products/${id}`}>
+                          <button className={'productbtn'}>
+                            <div className='productbtn_text' >
+                              Options
+                            </div >
+                          </button >
+                        </Link>
+                        :
+                        <button className={'productbtn'} onClick={() => {
+                          handleAddToCart()
+                        }}>
+                          <div className='productbtn_text' >
+                            {getTranslation('add_to_cart')}
+                          </div >
+                        </button >
+                    }
+                  </>
               }
             </div>
         }

@@ -14,13 +14,14 @@ import { getAllUsers } from "@/services/features/userSlice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Chip, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/react";
 import { IoMdMore } from "react-icons/io";
+import { getAllRoles } from "@/services/features/adminSlice";
 
 
 export default function Users() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const { allUsers } = useSelector(state => state.users)
+    const { allUsers } = useSelector(state => state.users);
 
 
 
@@ -161,7 +162,7 @@ export default function Users() {
                         onClick={() => router.push('/admin/advanced/users/create')} />
                 </div>
             </div>
-            <CustomTable columnDefs={columnDefs} rowData={allUsers?.result} />
+            <CustomTable columnDefs={columnDefs} rowData={allUsers?.result} onRowClicked={() => { }} />
         </div>
     )
 }

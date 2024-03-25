@@ -3,15 +3,22 @@ import React from 'react'
 import { IoIosStar } from 'react-icons/io'
 import { IoStarOutline, IoStarSharp } from 'react-icons/io5'
 import CustomTypography from '@/library/typography/CustomTypography'
-import { Divider, Select, SelectItem } from '@nextui-org/react'
+import { Divider, Image, Select, SelectItem } from '@nextui-org/react'
 import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
 import './Review.scss'
 import { MdKeyboardArrowLeft } from 'react-icons/md';
+import ReactStars from "react-rating-stars-component";
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { getAllReviewsByUser } from '@/services/features/reviewSlice';
+import Link from 'next/link';
 
 const MyReviews = () => {
-
+    const dispatch = useDispatch();
+    const router = useRouter();
     const [sortBy, setSortBy] = React.useState('');
     const [filters, setFilters] = React.useState('');
+    const { allReviewsByUser } = useSelector((state) => state.reviews)
 
     const sortOptions = [
         {
@@ -30,6 +37,13 @@ const MyReviews = () => {
             value: 'All'
         }
     ];
+
+    React.useEffect(() => {
+        dispatch(getAllReviewsByUser({}))
+    }, [])
+
+
+
     return (
         <div className="review_section">
             <div className="header mb-3">
@@ -40,30 +54,7 @@ const MyReviews = () => {
                     <CustomTypography content={'My Reviews'} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
                 </div>
             </div>
-            <div style={{ width: '500px' }} className='flex gap-3 mt-5'>
-                <Select
-                    size={'md'}
-                    label="Filters"
-                    variant='underlined'
-                    // labelPlacement='outside'
-                    // placeholder='Filters'
-                    className="max-w-xs"
-                    selectedKeys={[filters]}
-                    // onSelectionChange={setSortBy}
-                    onChange={(e) => {
-                        if (e.target?.value !== sortBy) {
-                            setFilters(e.target.value)
-                        }
-                    }}
-                >
-                    {
-                        filterOptions.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                            </SelectItem>
-                        ))
-                    }
-                </Select>
+            <div style={{ width: '200px' }} className='flex gap-3 mt-5'>
                 <Select
                     size={'md'}
                     label="Sort By"
@@ -89,53 +80,61 @@ const MyReviews = () => {
                 </Select>
             </div>
 
-            <div className="reviews mt-3">
-                <div className="star mb-3">
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoStarOutline />
-                </div>
+            {
+                allReviewsByUser?.result?.map((review, id) => (
+                    <>
+                        <div className="reviews mt-3">
+                            <div className="product flex gap-4 items-center">
+                                <Image radius='none' width={80} height={80} src={review?.image_url} alt='review-img' />
+                                <CustomTypography content={review?.prd_name} size='MEDIUM-SMALL' weight='MEDIUM' />
+                            </div>
+                            <div className="star mb-3">
+                                <ReactStars
+                                    count={5}
+                                    value={review?.rating}
+                                    edit={false}
+                                    size={20}
+                                    isHalf={true}
+                                    emptyIcon={<i className="far fa-star"></i>}
+                                    halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                    fullIcon={<i className="fa fa-star"></i>}
+                                    activeColor="#ffd700"
+                                />
+                            </div>
+                            <div className='flex gap-3 mb-3'>
+                                {
+                                    review?.reviewimages?.map((image) => (
+                                        <div key={image?.id}>
+                                            <Image radius='none' width={80} height={80} src={image?.url} alt='review-img' />
+                                        </div>
+                                    ))
+                                }
+                            </div>
 
-                <div className="title mb-3">
-                    <CustomTypography content='Header' size='MEDIUM-SMALL' weight='MEDIUM' />
-                </div>
-                <div className="description">
-                    <CustomTypography content='All my favorites in one bag, plus the bag is super neat love the witch! Lots of candy enough to feed trick or treaters and to keep some for yourself! I always like to offer variety to kids who trick or treat at my house so this assortment is great for that.' size='MEDIUM-SMALL' weight='REGUALR' />
-                </div>
-                <div className="username mb-3">
-                    <CustomTypography content='@username' size='MEDIUM-SMALL' weight='MEDIUM' />
-                </div>
-                <div className="like_dislike mb-3 flex gap-2">
-                    <AiOutlineLike color='#32893b' />
-                    <AiOutlineDislike color='#32893b' />
-                </div>
-            </div>
-            <Divider className='mt-3 mb-3' />
-            <div className="reviews mt-3">
-                <div className="star mb-3">
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoStarOutline />
-                </div>
+                            <div className="title mb-3">
+                                <CustomTypography content={review?.heading_review} size='MEDIUM-SMALL' weight='MEDIUM' />
+                            </div>
+                            <div className="description">
+                                <CustomTypography content={review?.review} size='MEDIUM-SMALL' weight='REGUALR' />
+                            </div>
+                            <div className="username mb-3">
+                                <CustomTypography content={'@' + review?.usr_firstname} size='MEDIUM-SMALL' weight='MEDIUM' />
+                            </div>
+                            <div className="like_dislike mb-3 flex gap-2">
+                                <AiOutlineLike color='#32893b' />
+                                <AiOutlineDislike color='#32893b' />
+                            </div>
 
-                <div className="title mb-3">
-                    <CustomTypography content='Header' size='MEDIUM-SMALL' weight='MEDIUM' />
-                </div>
-                <div className="description">
-                    <CustomTypography content='All my favorites in one bag, plus the bag is super neat love the witch! Lots of candy enough to feed trick or treaters and to keep some for yourself! I always like to offer variety to kids who trick or treat at my house so this assortment is great for that.' size='MEDIUM-SMALL' weight='REGUALR' />
-                </div>
-                <div className="username mb-3">
-                    <CustomTypography content='@username' size='MEDIUM-SMALL' weight='MEDIUM' />
-                </div>
-                <div className="like_dislike mb-3 flex gap-2">
-                    <AiOutlineLike color='#32893b' />
-                    <AiOutlineDislike color='#32893b' />
-                </div>
-            </div>
+                            <Link href={`/products/review/edit/${review?.reviewId}`}>
+                                <button className='edit-review-btn mt-2'>
+                                    <CustomTypography content={'Edit Review'} size='MEDIUM-SMALL' weight='MEDIUM' />
+                                </button>
+                            </Link>
+                        </div>
+                        <Divider className='mt-3 mb-3' />
+                    </>
+                ))
+            }
             <Divider className='mt-3 mb-3' />
         </div>
     )

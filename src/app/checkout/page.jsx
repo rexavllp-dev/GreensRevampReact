@@ -168,20 +168,6 @@ const Checkout = () => {
             }));
         }
 
-        // Validate zipcode
-        if (!formData.zip_code?.trim()) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                zip_code: { error: true, message: 'Zip code is required' }
-            }));
-            isValid = false;
-        } else {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                zip_code: { error: false, message: '' }
-            }));
-        }
-
         // Validate email
         if (!isEmailValid(formData.customer_email)) {
             setErrors((prevErrors) => ({
@@ -285,10 +271,6 @@ const Checkout = () => {
         // }
     }
 
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
 
     useEffect(() => {
         dispatch(getCartProducts({}))?.then((res) => {

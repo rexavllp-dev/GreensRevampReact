@@ -44,7 +44,7 @@ const SeoTab = ({ id, data }) => {
             dispatch(updateBrandSeo({ data: data, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
-    
+
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -52,11 +52,11 @@ const SeoTab = ({ id, data }) => {
             }).catch((err) => {
                 console.log(err);
             })
-        }else{
+        } else {
             dispatch(createBrandSeo({ data: data })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
-    
+
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -71,28 +71,31 @@ const SeoTab = ({ id, data }) => {
 
     return (
         <div className="brandstab ">
-            <div className="stack mb-3">
-                <CustomInput name='meta_title' type='text'
-                    maxLength={100}
-                    placeholder='Meta Title' label={'Meta Title'}
-                    onChange={(e) => { handleInputChange({ e }) }}
-                    value={formData.meta_title}
-                />
-                <div className="mt-3">
-                    <CustomTextarea label={'Meta Description'}
-                        placeholder={'Meta Description'}
-                        name={'meta_script'} value={formData.meta_script}
+            <div className="forms">
+
+                <div className="stack mb-3">
+                    <CustomInput name='meta_title' type='text'
+                        maxLength={100}
+                        placeholder='Meta Title' label={'Meta Title'}
+                        onChange={(e) => { handleInputChange({ e }) }}
+                        value={formData.meta_title}
+                    />
+                    <div className="mt-3">
+                        <CustomTextarea label={'Meta Description'}
+                            placeholder={'Meta Description'}
+                            name={'meta_script'} value={formData.meta_script}
+                            onChange={(e) => { handleInputChange({ e }) }} />
+                    </div>
+                </div>
+
+                <div className="stack mb-3">
+                    <CustomTextarea label={'Meta Scripts'}
+                        placeholder={'Meta Scripts'}
+                        name={'meta_description'} value={formData.meta_description}
                         onChange={(e) => { handleInputChange({ e }) }} />
                 </div>
             </div>
-
-            <div className="stack mb-3">
-                <CustomTextarea label={'Meta Scripts'}
-                    placeholder={'Meta Scripts'}
-                    name={'meta_description'} value={formData.meta_description}
-                    onChange={(e) => { handleInputChange({ e }) }} />
-            </div>
-            <div className="savebtn">
+            <div className="savebtn flex justify-end">
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => handleSubmit()} />
             </div>
         </div>

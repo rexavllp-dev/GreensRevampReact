@@ -43,7 +43,8 @@ const MediaUpload = ({ name, label, placeholder, isRequired, haveInfo, info, isI
             </div>
 
             <label className={isInvalid ? 'mediaupload mediaupload-invalid' : 'mediaupload'} >
-                <input name={name} type="file" hidden id='file' onChange={handleFileUpload} />
+                <input name={name} type="file" hidden id='file'
+                    onChange={handleFileUpload} />
                 <p>{value?.name ? value.name : placeholder}</p>
                 <div className='icon'>
                     <UploadIcon />

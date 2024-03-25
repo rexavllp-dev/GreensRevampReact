@@ -2,9 +2,9 @@
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
 
-export default function ConfirmationModal({ isOpen, onClose, onConfirm, title, message }) {
+export default function ConfirmationModal({ isOpen, onClose, onConfirm, title, message, successText, cancelText }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} style={{ zIndex: 2000 }}>
+    <Modal isOpen={isOpen} onClose={onClose} style={{ zIndex: 4000 }}>
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
         <ModalBody>
@@ -12,10 +12,10 @@ export default function ConfirmationModal({ isOpen, onClose, onConfirm, title, m
         </ModalBody>
         <ModalFooter>
           <Button variant="light" onPress={onClose}>
-            Cancel
+            {cancelText || 'Cancel'}
           </Button>
           <Button color="success" onPress={onConfirm}>
-            Confirm
+            {successText || 'Confirm'}
           </Button>
         </ModalFooter>
       </ModalContent>

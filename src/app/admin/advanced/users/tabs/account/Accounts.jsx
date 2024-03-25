@@ -17,11 +17,14 @@ import { isEmailValid } from '@/utils/helpers/IsEmailValid';
 import { toast } from 'react-toastify';
 import { FaRegEdit } from "react-icons/fa";
 import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
+import { getAllRoles } from '@/services/features/adminSlice';
 
 const Accounts = ({ userId }) => {
 
 
     const dispatch = useDispatch();
+
+    const { allRoles } = useSelector(state => state.admin);
 
     const [selectedTab, setSelectedTab] = React.useState("");
     const roles = [
@@ -41,6 +44,7 @@ const Accounts = ({ userId }) => {
         mobile: '',
         email: '',
         password: '',
+        is_role: '',
         confirm_password: '',
         status: false,
         attempt_blocked: false,
@@ -91,6 +95,10 @@ const Accounts = ({ userId }) => {
             error: false,
             message: ''
         },
+        is_role: {
+            error: false,
+            message: ''
+        },
         confirm_password: {
             error: false,
             message: ''
@@ -102,13 +110,13 @@ const Accounts = ({ userId }) => {
 
     React.useEffect(() => {
         if (userId) {
-            dispatch(getSingleUser(userId))
+            dispatch(getSingleUser(userId));
         }
     }, [userId])
 
     React.useEffect(() => {
-        console.log(formData)
-    }, [formData])
+        dispatch(getAllRoles({}))
+    }, []);
 
     useEffect(() => {
         if (singleUser) {
@@ -119,6 +127,7 @@ const Accounts = ({ userId }) => {
                 mobile: singleUser?.result?.usr_mobile_number,
                 usr_mobile_country_code: singleUser?.result?.usr_mobile_country_code,
                 email: singleUser?.result?.usr_email,
+                is_role: singleUser?.result?.is_role,
                 status: singleUser?.result?.status,
                 notes: singleUser?.result?.notes,
                 status: singleUser?.result?.is_status,
@@ -259,6 +268,7 @@ const Accounts = ({ userId }) => {
                 "usr_mobile_number": formData.mobile,
                 "usr_mobile_country_code": formData.usr_mobile_country_code,
                 "usr_email": formData.email,
+                "is_role": formData.is_role,
                 "notes": formData.notes,
                 "is_status": formData.status,
                 "attempt_blocked": formData.attempt_blocked
@@ -338,7 +348,13 @@ const Accounts = ({ userId }) => {
                         errMsg={errors.mobile.message}
                         disabled={isDisabled}
                     />
-                    <CustomSelect label={'Roles'} isRequired={true} data={roles} disabled={isDisabled} />
+                    <CustomSelect label={'Roles'} isRequired={true} data={allRoles?.result}
+                        optionValue={'id'}
+                        name={'is_role'}
+                        optionLabel={'role_name'}
+                        disabled={isDisabled} value={formData.is_role?.toString()}
+                        onChange={(e) => {  handleInputChange({ e }) }}
+                    />
                     <CustomToggleButton label='Status' isRequired={true} value={formData.status}
                         onChange={(value) => { setFormData((prev) => ({ ...prev, status: value })) }}
                         disabled={isDisabled}

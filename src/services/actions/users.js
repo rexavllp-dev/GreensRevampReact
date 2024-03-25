@@ -168,9 +168,8 @@ export const users = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
-    }
+    },
 
-    
 
     
 }

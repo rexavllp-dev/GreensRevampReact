@@ -154,7 +154,7 @@ const PriceTab = ({ id, data }) => {
                     <CustomInput name='product_price' type='text'
                         maxLength={100}
                         placeholder='Price' label={'Price'}
-                        // isRequired={true}
+                        isRequired={true}
                         onChange={(e) => { handleInputChange({ e }) }}
                         value={formData.product_price}
                         disabled={isDisabled}
@@ -174,6 +174,7 @@ const PriceTab = ({ id, data }) => {
                                 info={"Percentage: Reduces the price by a certain percentage. Fixed: Subtracts a specific amount directly from the original price."}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 disabled={isDisabled}
+                                isRequired={true}
                             />
 
                             <CustomInput
@@ -182,7 +183,7 @@ const PriceTab = ({ id, data }) => {
                                 maxLength={100}
                                 placeholder='Discount'
                                 label={'Discount'}
-                                // isRequired={true}
+                                isRequired={true}
                                 disabled={isDisabled}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.special_price}

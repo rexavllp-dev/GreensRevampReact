@@ -78,11 +78,12 @@ const NotifiedProducts = () => {
     const router = useRouter();
     const recommendedProdRef = React.useRef();
     const { notifyProducts, isNotifyProductsRemoved } = useSelector((state) => state.notifyProducts)
+    const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
 
 
     useEffect(() => {
         dispatch(getNotifiedProducts({}));
-    }, [isNotifyProductsRemoved])
+    }, [isNotifyProductsRemoved, isWishlistRemoved, isProductAddedToWishlist]);
 
 
     const handleNav = (ref, direction) => {
@@ -119,6 +120,7 @@ const NotifiedProducts = () => {
                         {
                             notifyProducts?.result?.allNotifyProducts?.map(product => (
                                 <ProductCard id={product.product_id} key={product.product_id} title={product.prd_name}
+                                    wishlistLabel={'wishlistId'}
                                     specialPrice={product?.prdPrice[0]?.specialPrice}
                                     normalPrice={product?.prdPrice[0]?.price}
                                     rating={product.rating}

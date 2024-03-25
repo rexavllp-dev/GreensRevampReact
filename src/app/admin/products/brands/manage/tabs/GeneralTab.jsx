@@ -40,7 +40,7 @@ const GeneralTab = ({ id, data }) => {
             brd_name: formData.brd_name,
             brand_status: formData.brand_status
         }
-        if (data?.result?.id) {
+        if (id) {
             dispatch(updateBrand({ data: data, id: id })).then((res) => {
                 if (res.payload?.success) {
                     toast.success(res.payload.message);
@@ -71,7 +71,7 @@ const GeneralTab = ({ id, data }) => {
 
     return (
         <div className='brandstab'>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 max-w-[500px]">
                 <CustomInput name='brd_name' type='text'
                     maxLength={100}
                     placeholder='Title' label={'Title'}

@@ -8,7 +8,7 @@ import { cancelledOrdersColumns, companyVerificationColumns, expiringProductsCol
 import { getAllOrdersByAdmin } from "@/services/features/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTypography from "@/library/typography/CustomTypography";
-import ChartComponent from "@/components/chart/ChartComponent";
+// import ChartComponent from "@/components/chart/ChartComponent";
 import { Select, SelectItem } from "@nextui-org/react";
 import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts, getTotalCountDashboard, getTotalOrderCount, getTotalSales } from "@/services/features/adminSlice";
 
@@ -19,8 +19,8 @@ export default function AdminDashboard() {
     const [tableData, setTableData] = React.useState([])
     const [tableColumns, setTableColumns] = React.useState(orderColumns || [])
     const [key, setKey] = React.useState('')
-    const [salesFilterBy, setSalesFilterBy] = React.useState('today')
     const [totalOrdersFilterBy, setTotalOrdersFilterBy] = React.useState('today')
+    const [totalSalesFilterBy, setTotalSalesFilterBy] = React.useState('today')
 
     const { latestOrders, latestCancelledOrders, latestReturnedOrders,
         latestReplacedOrders, outOfStockProducts, expiredTradeLicenses,
@@ -28,7 +28,10 @@ export default function AdminDashboard() {
         totalSales, totalOrderCount } = useSelector((state) => state.admin);
 
     React.useEffect(() => {
-        dispatch(getTotalSales({ filterBy: salesFilterBy, fromDate: null, toDate: null }))
+        dispatch(getTotalSales({ filterBy: totalSalesFilterBy, fromDate: null, toDate: null }))
+    }, [totalSalesFilterBy])
+
+    React.useEffect(() => {
         dispatch(getTotalOrderCount({}))
         dispatch(getTotalCountDashboard({}))
     }, [])
@@ -197,14 +200,22 @@ export default function AdminDashboard() {
         data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
     }];
 
-    const sortOptions = [
+    const totalSalesOptions = [
         {
             label: 'Today',
             value: 'today'
         },
         {
             label: 'This week',
-            value: 'oldest'
+            value: 'week'
+        },
+        {
+            label: 'This month',
+            value: 'month'
+        },
+        {
+            label: 'This year',
+            value: 'year'
         }
     ];
     const totalOrderOptions = [
@@ -221,7 +232,7 @@ export default function AdminDashboard() {
         <div className="admin-dashboard">
             <div className='top'>
                 <div className="charts">
-                    <ChartComponent options={options} series={series} />
+                    {/* <ChartComponent options={options} series={series} /> */}
                 </div>
 
 
@@ -230,7 +241,7 @@ export default function AdminDashboard() {
                         <div className="total-sales">
                             <div className="left">
                                 <CustomTypography content={"AED"} weight="SEMI-BOLD" color="BLACK" size="MEDIUM" />
-                                <CustomTypography content={"5000"} weight="BOLD" color="BLACK" size="LARGE" />
+                                <CustomTypography content={totalSales?.result ? (totalSales?.result[0]?.totalSales !== null ? totalSales?.result[0]?.totalSales.toFixed(2) : 0) : 0} weight="BOLD" color="BLACK" size="LARGE" />
                             </div>
                             <div className="right">
                                 <div style={{ width: "140px" }}>
@@ -240,15 +251,13 @@ export default function AdminDashboard() {
                                         variant='bordered'
                                         placeholder=''
                                         className="max-w-xs"
-                                        selectedKeys={[]}
+                                        selectedKeys={[totalSalesFilterBy]}
                                         onChange={(e) => {
-                                            // if (e.target?.value !== sortBy) {
-                                            //     setSortBy(e.target.value)
-                                            // }
+                                            setTotalSalesFilterBy(e.target.value)
                                         }}
                                     >
                                         {
-                                            sortOptions.map((option) => (
+                                            totalSalesOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </SelectItem>

@@ -32,6 +32,7 @@ import Badge from '@/components/badges/Badge';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { addNotifyProducts } from '@/services/features/notifyProductSlice';
 import Link from 'next/link';
+import { getAllReviewsByProductId } from '@/services/features/reviewSlice';
 
 
 const products = [
@@ -136,8 +137,13 @@ const ProductDetails = ({ params }) => {
             data: ''
         },
     ]);
-    const { singleProduct, optionValues, allVariantsByProduct, allOptionsByProduct, productOptions, relatedProducts } = useSelector((state) => state.products)
+    const { singleProduct, optionValues,
+        allVariantsByProduct,
+        allOptionsByProduct, productOptions,
+        relatedProducts } = useSelector((state) => state.products)
+
     const { bulkStatusData } = useSelector((state) => state.bulk)
+    const { allReviewsByProduct } = useSelector((state) => state.reviews)
     const { isWishlistRemoved, isProductAddedToWishlist } = useSelector((state) => state.wishlist)
 
 
@@ -182,6 +188,7 @@ const ProductDetails = ({ params }) => {
     useEffect(() => {
         dispatch(getAllRelatedProducts({ id: params.id }))
         dispatch(getBulkStatus({ id: params.id }))
+        dispatch(getAllReviewsByProductId({ id: params.id }))
     }, [])
 
     useEffect(() => {
@@ -221,7 +228,7 @@ const ProductDetails = ({ params }) => {
     }, [singleProduct])
 
     // Add to cart
-    const handleAddToCart = () => {
+    const handleAddToCart = async (showToast) => {
         const productData = {
             productId: params.id,
             quantity: count,
@@ -229,7 +236,11 @@ const ProductDetails = ({ params }) => {
 
         dispatch(addProductToCart({ data: productData })).then((res) => {
             if (res.payload?.success) {
-                toast.success(res.payload?.message);
+                if (showToast) {
+                    toast.success(res.payload?.message);
+                }else{
+                    router.push('/cart')
+                }
             } else {
                 toast.error(res.payload?.message);
             }
@@ -318,7 +329,7 @@ const ProductDetails = ({ params }) => {
     const updateCount = (operator) => {
 
         if (operator === 'add') {
-            if (count === maxQty) {
+            if (count >= maxQty) {
                 if (!isBulkApproved) {
                     setContactVisible(true)
                 }
@@ -326,7 +337,7 @@ const ProductDetails = ({ params }) => {
                 setCount((prevCount) => prevCount + 1);
             }
         } else {
-            setContactVisible(false)
+            // setContactVisible(false)
             if (count > 1) {
                 setCount((prevCount) => prevCount - 1);
             }
@@ -443,7 +454,7 @@ const ProductDetails = ({ params }) => {
                                     ((expandedIndex === index) && (index === 4)) ?
                                         (
                                             <div className="w-full reviews_section">
-                                                <ReviewSection />
+                                                <ReviewSection data={allReviewsByProduct?.result} />
 
                                             </div>
                                         )
@@ -518,7 +529,8 @@ const ProductDetails = ({ params }) => {
                                                 }}>
 
                                                     <Image src={obj.product_img[0]?.url}
-                                                        width={42} height={42} alt="product" />
+                                                        width={42} height={42} alt="product"
+                                                    />
                                                     {/* <Image src='https://s3-alpha-sig.figma.com/img/83f1/f1aa/47babafeb1fa2ad5a9e6d4ad6a1fa7c6?Expires=1706486400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=B7AQ6H~eFtpLSY5zTJnv9wu2ZfRGGISN0bl6z4TtqUXEYBlLml2fGrgDPsvqut8gVaoEa6nAqkUQe~xu6swKQO8ohOGquwuWsMLOiVgc0EvQOF6wCBHP~ZQ6WUGqNAbBI1gm9HJWRZAjsVoAerLxMS64n7PF7NQ4TKkgqEgwbyIX8UqeO7TE36XIgK6bb12rymXEPY7AFvpeZLQaEKmBKTVRb81v6ECeLhT1pApInPCVKcXDQlV3k-IsMuPM5zClYqBxCzJarcuJ2WYDbByPCrYhSH9pXCEhI2WMyl5xbj5ux9t0Zzh-POVu~sy6WdO4IOBwry9ZVtWKqtg8pCNhTQ__'
                                             width={42} height={42} alt="product" /> */}
                                                 </div>
@@ -645,8 +657,16 @@ const ProductDetails = ({ params }) => {
                                         onChange={(e) => {
                                             const value = e.target.value;
                                             // Check if the value is a valid number, within the range, and not exceeding the maximum length
-                                            if (!isNaN(value) && value >= 0 && value <= maxQty) {
+                                            // if (!isNaN(value) && value >= 0 && value <= maxQty) {
+                                            //     setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
+                                            // }
+                                            if (!isNaN(value) && value >= 0) {
                                                 setCount(isNaN(parseInt(value)) ? '' : parseInt(value)); // Update count state
+                                                if (!isNaN(parseInt(value)) && (parseInt(value) > parseInt(maxQty))) {
+                                                    if (!isBulkApproved) {
+                                                        setContactVisible(true)
+                                                    }
+                                                }
                                             }
                                         }}
                                     />
@@ -662,13 +682,13 @@ const ProductDetails = ({ params }) => {
                                 </div>
 
                                 <CustomButton variant='transparent' label='Buy Now' onClick={() => {
-                                    router.push('/cart')
+                                    handleAddToCart(false);
                                 }} />
                                 <CustomButton
                                     variant='primary'
                                     label='Add to Cart'
                                     onClick={() => {
-                                        handleAddToCart()
+                                        handleAddToCart(true)
                                     }}
                                 />
 
@@ -763,7 +783,7 @@ const ProductDetails = ({ params }) => {
 
             <div className="itemcard-wrapper ">
                 <div className="header">
-                    <CustomTypography content="Recommendations based on your interests" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                    <CustomTypography content="Customers also brought" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
                     <div className="scrollbuttons">
                         <CustomIconButton variant={'secondary'}

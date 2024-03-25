@@ -122,7 +122,7 @@ const Maps = ({ formData, handleInputChange, setFormData, citiesByCountryCode, i
                             /> */}
                             <CustomInput name='address_line_1' type='text'
                                 maxLength={100}
-                                placeholder='Address Line 1' label={'Address Line 1'}
+                                placeholder='Location' label={'Location'}
                                 onChange={(e) => { handleInputChange({ e }) }}
                                 value={formData.address_line_1}
                                 isRequired={isRequired}

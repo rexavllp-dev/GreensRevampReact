@@ -77,13 +77,20 @@ const OrderDetails = ({ params }) => {
                                 Cancel Order
                             </button>
                     }
-                    <div className='flex gap-2 cursor-pointer'>
-                        <FiDownload size={20} />
-                        <CustomTypography content={"Invoice"}
-                            style={{ textDecoration: "underline", display: 'inline' }}
-                            color='BLACK'
-                            size='MEDIUM' weight='SEMI-BOLD' />
-                    </div>
+                    <>
+                        {
+                            (singleOrder?.result && singleOrder?.result[0]?.op_is_cancel) ?
+                                <></>
+                                :
+                                <div className='flex gap-2 cursor-pointer'>
+                                    <FiDownload size={20} />
+                                    <CustomTypography content={"Invoice"}
+                                        style={{ textDecoration: "underline", display: 'inline' }}
+                                        color='BLACK'
+                                        size='MEDIUM' weight='SEMI-BOLD' />
+                                </div>
+                        }
+                    </>
                 </div>
             </div>
 

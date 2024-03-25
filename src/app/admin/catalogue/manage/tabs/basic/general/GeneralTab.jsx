@@ -94,6 +94,23 @@ const GeneralTab = ({ id, data }) => {
         shipping_and_returns: ''
     })
 
+    const [errors, setErrors] = React.useState({
+        prd_name: { error: false, message: '' },
+        prd_description: { error: false, message: '' },
+        prd_tax_class: { error: false, message: '' },
+        prd_storage_type: { error: false, message: '' },
+        dimensions_and_more_info: { error: false, message: '' },
+        shipping_and_returns: { error: false, message: '' },
+        prd_tags: { error: false, message: '' },
+        expiry_date: { error: false, message: '' },
+        prd_return_type: { error: false, message: '' },
+        categories: { error: false, message: '' },
+        prd_brand_id: { error: false, message: '' },
+        prd_sales_unit: { error: false, message: '' },
+        use_and_care: { error: false, message: '' },
+    });
+
+
 
     useEffect(() => {
         if (data?.data) {
@@ -130,6 +147,10 @@ const GeneralTab = ({ id, data }) => {
         }
     }, [id])
 
+    useEffect(() => {
+        console.log(errors);
+    }, [errors])
+
 
 
 
@@ -139,6 +160,139 @@ const GeneralTab = ({ id, data }) => {
         }))
     }
 
+    const validateForm = () => {
+        let isValid = true;
+
+        // Validate product name
+        if (!formData.prd_name?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_name: { error: true, message: 'Product name is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_name: { error: false, message: '' }
+            }));
+        }
+
+        // Validate product description
+        if (!formData.prd_description?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_description: { error: true, message: 'Product description is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_description: { error: false, message: '' }
+            }));
+        }
+
+        // Validate tax class
+        if (!formData.prd_tax_class) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_tax_class: { error: true, message: 'Tax class is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_tax_class: { error: false, message: '' }
+            }));
+        }
+
+        // Validate storage type
+        if (!formData.prd_storage_type) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_storage_type: { error: true, message: 'Storage type is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_storage_type: { error: false, message: '' }
+            }));
+        }
+
+        // Validate shipping & returns
+        if (!formData.shipping_and_returns?.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                shipping_and_returns: { error: true, message: 'Shipping & returns information is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                shipping_and_returns: { error: false, message: '' }
+            }));
+        }
+
+        // Validate product return type
+        if (!formData.prd_return_type) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_return_type: { error: true, message: 'Product return type is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_return_type: { error: false, message: '' }
+            }));
+        }
+
+        // Validate categories
+        if (!formData.categories || formData.categories.length === 0) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                categories: { error: true, message: 'At least one category must be selected' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                categories: { error: false, message: '' }
+            }));
+        }
+
+        // Validate brand
+        if (!formData.prd_brand_id) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_brand_id: { error: true, message: 'Brand is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_brand_id: { error: false, message: '' }
+            }));
+        }
+
+        // Validate sales unit
+        if (!formData.prd_sales_unit) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_sales_unit: { error: true, message: 'Sales unit is required' }
+            }));
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                prd_sales_unit: { error: false, message: '' }
+            }));
+        }
+
+        // Add more validations for other fields as needed...
+
+        return isValid;
+    };
 
 
 
@@ -211,12 +365,18 @@ const GeneralTab = ({ id, data }) => {
                                             onChange={(e) => { handleInputChange({ e }) }}
                                             value={formData.prd_name}
                                             disabled={isDisabled}
+                                            isRequired={true}
+                                            isInvalid={errors.prd_name.error}
+                                            errMsg={errors.prd_name.message}
                                         />
                                         <CustomTextarea label={'Description'}
                                             placeholder={'Description'}
                                             name={'prd_description'} value={formData.prd_description}
                                             onChange={(e) => { handleInputChange({ e }) }}
                                             disabled={isDisabled}
+                                            isRequired={true}
+                                            isInvalid={errors.prd_description.error}
+                                            errMsg={errors.prd_description.message}
                                         />
                                     </Tab>
                                 ))
@@ -228,10 +388,16 @@ const GeneralTab = ({ id, data }) => {
                     <CustomSelect label={'Tax Class'} value={formData.prd_tax_class}
                         data={taxClasses} name={'prd_tax_class'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.prd_tax_class.error}
+                        errMsg={errors.prd_tax_class.message}
                     />
                     <CustomSelect label={'Storage Type'} value={formData.prd_storage_type}
                         data={storageTypes} name={'prd_storage_type'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.prd_storage_type.error}
+                        errMsg={errors.prd_storage_type.message}
                     />
                     <CustomTextarea label={'Dimensions & More Info'}
                         placeholder={'Dimensions & More Info'}
@@ -244,6 +410,9 @@ const GeneralTab = ({ id, data }) => {
                         name={'shipping_and_returns'} value={formData.shipping_and_returns}
                         onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.shipping_and_returns.error}
+                        errMsg={errors.shipping_and_returns.message}
                     />
 
                 </div>
@@ -273,22 +442,35 @@ const GeneralTab = ({ id, data }) => {
                         onChange={(value) => { setFormData({ ...formData, show_expiry_on_dashboard: value }) }}
                     />
                     <CustomSelect label={'Product Return Type'} value={formData.prd_return_type} data={returnTypes}
-                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} disabled={isDisabled} />
+                        name={'prd_return_type'} onChange={(e) => { handleInputChange({ e }) }} disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.prd_return_type.error}
+                        errMsg={errors.prd_return_type.message}
+                    />
 
                     <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories}
-                        name={'prd_categories'} onChange={(e) => { handleInputChange({ e }) }}
+                        name={'categories'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.categories.error}
+                        errMsg={errors.categories.message}
                     />
 
                     <CustomSelect label={'Brand'} value={formData.prd_brand_id} data={allBrands?.data}
                         optionValue={'id'} optionLabel={'brd_name'}
                         name={'prd_brand_id'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.prd_brand_id.error}
+                        errMsg={errors.prd_brand_id.message}
                     />
 
                     <CustomSelect label={'Sales Unit'} value={formData.prd_sales_unit} data={saleUnits}
                         name={'prd_sales_unit'} onChange={(e) => { handleInputChange({ e }) }}
                         disabled={isDisabled}
+                        isRequired={true}
+                        isInvalid={errors.prd_sales_unit.error}
+                        errMsg={errors.prd_sales_unit.message}
                     />
 
 
@@ -312,12 +494,20 @@ const GeneralTab = ({ id, data }) => {
 
             <div className="savebtn gap-3">
                 <CustomButton variant="transparent" label="Save and Exit" loading={loading} onClick={() => {
-                    setIsExit(true);
-                    setConfirmationOpen(true)
+                    if (validateForm()) {
+                        setIsExit(true);
+                        setConfirmationOpen(true)
+                    } else {
+                        toast.error(Object.values(errors).find(error => error.error)?.message)
+                    }
                 }} />
                 <CustomButton variant="primary" label="Save Changes" loading={loading} onClick={() => {
-                    setIsExit(false);
-                    setConfirmationOpen(true)
+                    if (validateForm()) {
+                        setIsExit(false);
+                        setConfirmationOpen(true)
+                    } else {
+                        toast.error(Object.values(errors).find(error => error.error)?.message)
+                    }
                 }}
                 />
             </div>

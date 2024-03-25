@@ -36,7 +36,7 @@ const MiniCart = ({ isOpen, setIsOpen, toggleDrawer }) => {
                 direction='right'
                 className='bla bla bla'
                 size={360}
-                enableOverlay={true}
+                enableOverlay={false}
                 overlayOpacity={0}
                 zIndex={3000}
             >
