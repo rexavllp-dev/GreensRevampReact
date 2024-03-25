@@ -8,7 +8,7 @@ import Axios from "../axios/Axios";
 const cookies = new Cookies()
 // const token = cookies.get('accessToken')
 const token = typeof window !== "undefined" && window.localStorage.getItem('accessToken')
-const isUserLoggedIn = token && token !== "" && token !== "undefined";
+const isLogged = token && token !== "" && token !== "undefined";
 
 const initialState = {
     isLoggedIn: false,
@@ -16,7 +16,7 @@ const initialState = {
     isUserLogging: false,
     isUserLogged: false,
     isUserLoginError: false,  
-    isLoggedIn: isUserLoggedIn,
+    isUserLoggedIn: isLogged,
 
     isOAuthVerifying: false,
     isOAuthVerified: false,
