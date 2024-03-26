@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLanguage } from '@/providers/LanguageProvider';
 import appConfig from '@/config/appConfig';
 import { listHomeCategory, listHomeBrand, listHomeSeason, listHomeAds } from "@/services/features/adminSlice";
-import { topTrendingProducts, recentViews } from "@/services/features/productSlice";
+import { topTrendingProducts, recommenedProducts } from "@/services/features/productSlice";
 
 
 // import { useWindowWidth } from '@react-hook/window-size';
@@ -68,7 +68,9 @@ const HomePage = () => {
   const [homeseason, setHomeseasons]                      = React.useState([]);
   const [homeads, setHomeAds]                             = React.useState([]);
   const [toptrendingproducts, setToptrendingproducts]     = React.useState([]);
-  
+  const [recommenedproducts, setRecommenedProducts]     = React.useState([]);  
+
+  const {isUserLoggedIn} = useSelector(state=> state.auth);
 
   useEffect(() => {
 
@@ -126,17 +128,14 @@ const HomePage = () => {
     })
 
 
-    dispatch(recentViews({})).then((response) => {
+    dispatch(recommenedProducts({})).then((response) => {
       if (response.payload?.success) {
-        recentViews(response.payload.result);
+        setRecommenedProducts(response.payload.result);
       }
     }).catch((err) => {
         console.log(err);
     })
 
-
-    
-    
 
 
   }, [])
@@ -610,34 +609,34 @@ const HomePage = () => {
         
         {/* Events section ended  */}
 
-        {/* Recently viewed section started  */}
-        <div className="categories-wrapper ">
-          <div className="header">
-            <div className="leftsection"></div>
-            <CustomTypography content={getTranslation('recently_viewed')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+        {isUserLoggedIn &&
+          <div className="categories-wrapper ">
+            <div className="header">
+              <div className="leftsection"></div>
+              <CustomTypography content={getTranslation('recently_viewed')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
 
-            <div className="scrollbuttons">
-              <CustomIconButton variant={'secondary'}
-                iconColor={'#32893B'} icon={"ArrowLeft"}
-                onClick={() => handleNav('recentProductsRef', 'left')}
-              />
-              <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                backgroundColor={'#32893B'} icon={"ArrowRight"}
-                onClick={() => handleNav('recentProductsRef', 'right')}
-              />
-            </div>   
+              <div className="scrollbuttons">
+                <CustomIconButton variant={'secondary'}
+                  iconColor={'#32893B'} icon={"ArrowLeft"}
+                  onClick={() => handleNav('recentProductsRef', 'left')}
+                />
+                <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                  backgroundColor={'#32893B'} icon={"ArrowRight"}
+                  onClick={() => handleNav('recentProductsRef', 'right')}
+                />
+              </div>   
 
-          </div> 
-          <div className="categories" ref={recentProductsRef}>
-            {
-              products.map(product => (
-                <ProductCard key={product.id} title={product.title} price={product.price}
-                  previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
-              ))
-            }
+            </div> 
+            <div className="categories" ref={recentProductsRef}>
+              {
+                recommenedproducts.map(product => (
+                  <ProductCard key={product.id} title={product.title} price={product.price}
+                    previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
+                ))
+              }
+            </div>
           </div>
-        </div>
-        {/* Recently viewed section ended  */}
+        }
 
 
         {/* Top treding products section started  */}

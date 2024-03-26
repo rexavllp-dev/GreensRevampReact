@@ -183,6 +183,14 @@ const initialState = {
     isTopTrendingLoaded: false,
     isTopTrendingLoadError: false,
     topTrendingProducts: [],
+
+
+    isRecommenedProductsLoading: false,
+    isRecommenedProductsLoaded: false,
+    isRecommenedProductsLoadError: false,
+    recommenedproducts: [],
+
+    
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query, sort }, thunkAPI) => {
@@ -599,9 +607,9 @@ export const topTrendingProducts = createAsyncThunk('topTrendingProducts', async
 
 
 
-export const recentViews = createAsyncThunk('recentViews', async ({}, thunkAPI) => {
+export const recommenedProducts = createAsyncThunk('recommenedProducts', async ({}, thunkAPI) => {
     try {
-        const response = await products.recentViews();
+        const response = await products.recommenedProducts();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1368,6 +1376,28 @@ const productSlice = createSlice({
                 state. isTopTrendingLoaded = false;
                 state. isTopTrendingLoadError = true;
             })
+
+            .addCase(recommenedProducts.pending, (state, action) => {
+                state. isRecommenedProductsLoading = true;
+                state. isRecommenedProductsLoaded = false;
+                state. isRecommenedProductsLoadError = false;
+            })
+
+            .addCase(recommenedProducts.fulfilled, (state, action) => {
+                state. isRecommenedProductsLoading = false;
+                state. isRecommenedProductsLoaded = true;
+                state. isRecommenedProductsLoadError = false;
+                state.recommenedproducts = action.payload;
+            })
+
+            .addCase(recommenedProducts.rejected, (state, action) => {
+                state. isRecommenedProductsLoading = false;
+                state. isRecommenedProductsLoaded = false;
+                state. isRecommenedProductsLoadError = true;
+            })
+
+
+            
     }
 })
 

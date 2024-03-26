@@ -327,8 +327,16 @@ export const products = {
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
+    },
+
+    recommenedProducts: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/get_all_order_recommended_products')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
     }
 
-
+    
     
 }
