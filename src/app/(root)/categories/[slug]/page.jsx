@@ -1,15 +1,15 @@
 "use client";
 import React from 'react'
-import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../public/images';
+import { ProductImg, categoryImg1, categoryImg2, categoryImg3, categoryImg4 } from '../../../../../public/images';
 import CategoryCard from '@/components/cards/categorycard/CategoryCard';
 import useWindowSize from '@/hooks/useWindowSize';
 import CustomIconButton from '@/library/iconbutton/CustomIconButton';
 import CustomTypography from '@/library/typography/CustomTypography';
-import './ProductList.scss';
+import './Categories.scss';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
 
-const ProductList = () => {
+const Categories = () => {
 
     const itemRef = React.useRef()
     const { width, height } = useWindowSize();
@@ -127,7 +127,7 @@ const ProductList = () => {
     }
 
     return (
-        <div className="productlist-wrapper">
+        <div className="category-wrapper">
 
             <BreadCrumbs/>
             <div className="itemcard-wrapper">
@@ -141,7 +141,7 @@ const ProductList = () => {
                 <div className="items" ref={itemRef}>
                     {
                         categories.map((category) => (
-                            <CategoryCard key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
+                            <CategoryCard haveGradient={true} key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
                                 title={category.title} haveTitle={true} img={category.img} />
                         ))
                     }
@@ -159,7 +159,7 @@ const ProductList = () => {
                 <div className="items" ref={itemRef}>
                     {
                         categories.map((category) => (
-                            <CategoryCard key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
+                            <CategoryCard haveGradient={true}  key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
                                 title={category.title} haveTitle={true} img={category.img} />
                         ))
                     }
@@ -196,4 +196,4 @@ const ProductList = () => {
     )
 }
 
-export default ProductList
+export default Categories

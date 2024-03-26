@@ -67,3 +67,11 @@ export const companyVerificationColumns = [
     {name: 'STATUS', uid: 'status', sortable: true},
     {name: 'ACTIONS', uid: 'actions'},
 ]
+
+export const brandColumns = [
+    {name: 'BRAND ID', uid: 'id', sortable: true},
+    {name: 'LOGO', uid: 'brd_logo', sortable: true},
+    {name: 'BRAND', uid: 'brd_name', sortable: true},
+    {name: 'STATUS', uid: 'brand_status', sortable: true},
+    {name: 'ACTIONS', uid: 'actions'},
+]
