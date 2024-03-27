@@ -9,8 +9,9 @@ import { getAllOrdersByAdmin } from "@/services/features/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTypography from "@/library/typography/CustomTypography";
 // import ChartComponent from "@/components/chart/ChartComponent";
-import { Select, SelectItem } from "@nextui-org/react";
-import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts, getTotalCountDashboard, getTotalOrderCount, getTotalSales } from "@/services/features/adminSlice";
+import { Button, Select, SelectItem } from "@nextui-org/react";
+import { getAllMinQtyProducts, getExpiredProducts, getExpiredTradeLicenses, getLatestCancelledOrders, getLatestOrders, getLatestReplacedOrders, getLatestReturnedOrders, getOutOfStockProducts, getPendingCompanyApprovals, getTotalCountDashboard, getTotalOrderCount, getTotalSales } from "@/services/features/adminSlice";
+import CustomButton from "@/library/buttons/CustomButton";
 
 
 export default function AdminDashboard() {
@@ -19,12 +20,13 @@ export default function AdminDashboard() {
     const [tableData, setTableData] = React.useState([])
     const [tableColumns, setTableColumns] = React.useState(orderColumns || [])
     const [key, setKey] = React.useState('')
-    const [totalOrdersFilterBy, setTotalOrdersFilterBy] = React.useState('today')
+    const [totalOrdersFilterBy, setTotalOrdersFilterBy] = React.useState('all')
     const [totalSalesFilterBy, setTotalSalesFilterBy] = React.useState('today')
 
     const { latestOrders, latestCancelledOrders, latestReturnedOrders,
         latestReplacedOrders, outOfStockProducts, expiredTradeLicenses,
         expiredProducts, allMinQtyProducts, totalCountDashboard,
+        pendingCompanyApprovals,
         totalSales, totalOrderCount } = useSelector((state) => state.admin);
 
     React.useEffect(() => {
@@ -32,9 +34,13 @@ export default function AdminDashboard() {
     }, [totalSalesFilterBy])
 
     React.useEffect(() => {
-        dispatch(getTotalOrderCount({}))
+        dispatch(getPendingCompanyApprovals({}))
         dispatch(getTotalCountDashboard({}))
     }, [])
+
+    React.useEffect(() => {
+        dispatch(getTotalOrderCount({filter: totalOrdersFilterBy}))
+    }, [totalOrdersFilterBy])
 
     React.useEffect(() => {
         if (selectedTab === 0) {
@@ -46,7 +52,7 @@ export default function AdminDashboard() {
         } else if (selectedTab === 1) {
 
             dispatch(getLatestCancelledOrders({}))
-            setTableData(latestCancelledOrders?.result?.data || [])
+            setTableData(latestCancelledOrders?.result?.canceledOrders || [])
             setTableColumns(cancelledOrdersColumns)
 
         } else if (selectedTab === 2) {
@@ -84,7 +90,10 @@ export default function AdminDashboard() {
             dispatch(getExpiredTradeLicenses({}))
             setTableData(expiredTradeLicenses?.result?.data || [])
             setTableColumns(expiringTradeLicensesColumn)
-
+        } else if (selectedTab === 10) {
+            dispatch(getPendingCompanyApprovals({}))
+            setTableData(pendingCompanyApprovals?.result || [])
+            setTableColumns(companyVerificationColumns)
         }
     }, [selectedTab])
 
@@ -94,7 +103,7 @@ export default function AdminDashboard() {
             setKey('orderId')
         }
         else if (selectedTab === 1) {
-            setTableData(latestCancelledOrders?.result?.data || [])
+            setTableData(latestCancelledOrders?.result?.canceledOrders || [])
             setKey('id')
         } else if (selectedTab === 2) {
             setTableData(latestReturnedOrders?.result?.data || [])
@@ -108,8 +117,10 @@ export default function AdminDashboard() {
             setTableData(allMinQtyProducts?.result?.data || [])
         } else if (selectedTab === 9) {
 
+        } else if (selectedTab === 10) {
+            setTableData(pendingCompanyApprovals?.result || [])
         }
-    }, [latestOrders, latestCancelledOrders, latestReturnedOrders, latestReplacedOrders, outOfStockProducts, expiredProducts, allMinQtyProducts])
+    }, [latestOrders, latestCancelledOrders, latestReturnedOrders, latestReplacedOrders, outOfStockProducts, expiredProducts, allMinQtyProducts, pendingCompanyApprovals])
 
 
 
@@ -124,6 +135,12 @@ export default function AdminDashboard() {
             id: 1,
             title: "Latest Cancelled Orders",
             count: totalCountDashboard?.result?.totalCanceledOrders,
+            column: orderColumns
+        },
+        {
+            id: 10,
+            title: "Pending Company Approvals",
+            count: pendingCompanyApprovals?.result?.length,
             column: orderColumns
         },
         {
@@ -220,12 +237,24 @@ export default function AdminDashboard() {
     ];
     const totalOrderOptions = [
         {
+            label: 'All',
+            value: 'all'
+        },
+        {
             label: 'Today',
             value: 'today'
         },
         {
             label: 'This week',
-            value: 'week'
+            value: 'weekly'
+        },
+        {
+            label: 'This month',
+            value: 'monthly'
+        },
+        {
+            label: 'This year',
+            value: 'yearly'
         }
     ];
     return (
@@ -309,12 +338,24 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="companytable">
-                        <div className="title">
+                    <div className="count-card-wrapper">
+                        <div className="counttable h-full">
+                            <div className="title flex justify-between items-center">
+                                <CustomTypography content={"Notifications"} weight="BOLD" color="BLACK" size="MEDIUM" />
+                            </div>
+                            <div className="items-wrapper">
+                                <div className="item items-center gap-3">
+                                    <p className="label">{`Pending Company Approvals (${pendingCompanyApprovals?.result?.length})`}</p>
+                                    {/* <Button color='primary' onClick={() => setSelectedTab(10)}>View</Button> */}
+                                    <CustomButton label="View" variant="transparent" onClick={() => setSelectedTab(10)} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="title">
                             <CustomTypography content={"Company verifications"} weight="BOLD" color="BLACK" size="MEDIUM" />
                         </div>
-                        <DashboardTable columns={companyVerificationColumns} data={allOrders?.result || []} />
-                    </div> */}
+                        <DashboardTable columns={companyVerificationColumns} data={pendingCompanyApprovals?.result || []} /> */}
 
                 </div>
 
@@ -336,6 +377,6 @@ export default function AdminDashboard() {
             <div className="dashboard-table">
                 <DashboardTable columns={tableColumns} data={tableData || []} />
             </div>
-        </div>
+        </div >
     )
 }

@@ -567,7 +567,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
               else {
                 return (
                   <div className="item" key={index}>
-                    <Link href={item.link}>
+                    <Link href={'/categories/' + item.link}>
                       <div className="title">
 
                         {item.isIcon ?

@@ -141,6 +141,11 @@ const initialState = {
     isAllRolesLoaded: false,
     isAllRolesLoadError: false,
     allRoles: [],
+
+    isPendingCompanyApprovalLoading: false,
+    isPendingCompanyApprovalLoaded: false,
+    isPendingCompanyApprovalLoadError: false,
+    pendingCompanyApprovals: [],
 }
 
 
@@ -256,9 +261,9 @@ export const getExpiredTradeLicenses = createAsyncThunk('getExpiredTradeLicenses
 })
 
 //get total order count
-export const getTotalOrderCount = createAsyncThunk('getTotalOrderCount', async ({ }, thunkAPI) => {
+export const getTotalOrderCount = createAsyncThunk('getTotalOrderCount', async ({filter }, thunkAPI) => {
     try {
-        const response = await admin.getTotalOrderCount();
+        const response = await admin.getTotalOrderCount(filter);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -359,7 +364,7 @@ export const addHomePageBrand = createAsyncThunk('addHomePageBrand', async ({ da
 export const deleteHomeBrand = createAsyncThunk('deleteHomeBrand', async ({ data }, thunkAPI) => {
     try {
 
-   
+
         const response = await admin.deleteHomeBrand({ data });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -386,7 +391,7 @@ export const listHomeSeason = createAsyncThunk('listHomeSeason', async ({ }, thu
 export const createSeason = createAsyncThunk('createSeason', async ({ data }, thunkAPI) => {
 
     try {
-      
+
         const response = await admin.createSeason({ data });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -444,7 +449,7 @@ export const listHomeAds = createAsyncThunk('listHomeAds', async ({ }, thunkAPI)
 export const createAds = createAsyncThunk('createAds', async ({ data }, thunkAPI) => {
 
     try {
-      
+
         const response = await admin.createAds({ data });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -500,6 +505,18 @@ export const getAllRoles = createAsyncThunk('getAllRoles', async ({ }, thunkAPI)
     }
 })
 
+//get company approvals
+export const getPendingCompanyApprovals = createAsyncThunk('getPendingCompanyApprovals', async ({ }, thunkAPI) => {
+    try {
+        const response = await admin.getPendingCompanyApprovals()
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+
 
 
 const adminSlice = createSlice({
@@ -548,12 +565,9 @@ const adminSlice = createSlice({
                 state.isHomeBannerLoaded = true;
                 state.isHomeBannerLoadError = false;
                 state.homebanners = action.payload;
-
-
             })
 
             .addCase(listBanner.rejected, (state, action) => {
-
                 state.isHomeBannerLoading = false;
                 state.isHomeBannerLoaded = false;
                 state.isHomeBannerLoadError = true;
@@ -783,7 +797,7 @@ const adminSlice = createSlice({
             })
 
 
-       
+
             .addCase(listHomeCategory.pending, (state) => {
 
                 state.listHomeCategoryLoading = true;
@@ -980,7 +994,7 @@ const adminSlice = createSlice({
                 state.createAdsLoadError = true;
             })
 
-            
+
             .addCase(deleteAds.pending, (state) => {
 
                 state.deleteAdsLoading = true;
@@ -1024,9 +1038,9 @@ const adminSlice = createSlice({
                 state.updateAdsLoadError = true;
 
             })
-        
-            
-            
+
+
+
             //Get all roles
             .addCase(getAllRoles.pending, (state, action) => {
                 state.isAllRolesLoading = true;
@@ -1045,6 +1059,26 @@ const adminSlice = createSlice({
                 state.isAllRolesLoading = false;
                 state.isAllRolesLoaded = false;
                 state.isAllRolesLoadError = true;
+            })
+
+            //Get company approvals
+            .addCase(getPendingCompanyApprovals.pending, (state, action) => {
+                state.isPendingCompanyApprovalLoading = true;
+                state.isPendingCompanyApprovalLoaded = false;
+                state.isPendingCompanyApprovalLoadError = false;
+            })
+
+            .addCase(getPendingCompanyApprovals.fulfilled, (state, action) => {
+                state.isPendingCompanyApprovalLoading = false;
+                state.isPendingCompanyApprovalLoaded = true;
+                state.isPendingCompanyApprovalLoadError = false;
+                state.pendingCompanyApprovals = action.payload;
+            })
+
+            .addCase(getPendingCompanyApprovals.rejected, (state, action) => {
+                state.isPendingCompanyApprovalLoading = false;
+                state.isPendingCompanyApprovalLoaded = false;
+                state.isPendingCompanyApprovalLoadError = true;
             })
     }
 })

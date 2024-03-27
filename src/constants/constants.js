@@ -63,8 +63,11 @@ export const expiringTradeLicensesColumn = [
 ]
 
 export const companyVerificationColumns = [
-    {name: 'NAME', uid: 'name', sortable: true},
-    {name: 'STATUS', uid: 'status', sortable: true},
+    {name: 'FIRST NAME', uid: 'usr_firstname', sortable: true},
+    {name: 'LAST NAME', uid: 'usr_lastname', sortable: true},
+    {name: 'EMAIL', uid: 'usr_email', sortable: true},
+    {name: 'COMPANY NAME', uid: 'company_name', sortable: true},
+    {name: 'STATUS', uid: 'approval_status', sortable: true},
     {name: 'ACTIONS', uid: 'actions'},
 ]
 

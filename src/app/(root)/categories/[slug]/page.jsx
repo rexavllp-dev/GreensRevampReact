@@ -8,12 +8,16 @@ import CustomTypography from '@/library/typography/CustomTypography';
 import './Categories.scss';
 import ProductCard from '@/components/cards/productcard/ProductCard';
 import BreadCrumbs from '@/components/breadcrumbs/BreadCrumbs';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubCategoriesBySlug } from '@/services/features/categorySlice';
 
 const Categories = () => {
 
     const itemRef = React.useRef()
     const { width, height } = useWindowSize();
     const isMobileView = width < 767;
+    const dispatch = useDispatch();
+    const { subcategoriesBySlug } = useSelector(state => state.categories)
 
 
     const categories = [
@@ -115,6 +119,10 @@ const Categories = () => {
     ]
 
 
+    React.useEffect(() => {
+        dispatch(getSubCategoriesBySlug({ slug: 'ingredients' }));
+    }, [])
+
     /** Decrements or increments scollLeft property to scroll left or right respectively */
     const handleNav = (ref, direction) => {
         if (ref === "itemRef") {
@@ -129,10 +137,32 @@ const Categories = () => {
     return (
         <div className="category-wrapper">
 
-            <BreadCrumbs/>
+            <BreadCrumbs />
             <div className="itemcard-wrapper">
                 <div className="header">
-                    <CustomTypography content="Cake Decorations" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                    <CustomTypography content={subcategoriesBySlug?.result?.category?.cat_name} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+                    <div className="scrollbuttons">
+                        <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('itemRef', 'left')} />
+                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('itemRef', 'right')} />
+                    </div>
+                </div>
+                <div className="items" ref={itemRef}>
+                    {
+                        subcategoriesBySlug?.result?.subCategories?.map((category) => (
+                            <CategoryCard haveGradient={true} key={category?.id}
+                                cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
+                                title={category?.cat_name}
+                                haveTitle={true} img={category?.cat_logo || ''}
+                                url={'/products/search/?q=' + category?.cat_name}
+                            />
+                        ))
+                    }
+                </div>
+            </div>
+
+            {/* <div className="itemcard-wrapper">
+                <div className="header">
+                    <CustomTypography content="Curated Collections" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
                     <div className="scrollbuttons">
                         <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('itemRef', 'left')} />
                         <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('itemRef', 'right')} />
@@ -146,52 +176,39 @@ const Categories = () => {
                         ))
                     }
                 </div>
-            </div>
+            </div> */}
 
-            <div className="itemcard-wrapper">
-                <div className="header">
-                    <CustomTypography content="Curated Collections" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'} iconColor={'#32893B'} icon={"ArrowLeft"} onClick={() => handleNav('itemRef', 'left')} />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'} backgroundColor={'#32893B'} icon={"ArrowRight"} onClick={() => handleNav('itemRef', 'right')} />
+            {
+                subcategoriesBySlug?.result?.category?.cat_name ? (
+                    <div className="itemcard-wrapper ">
+                        <div className="header">
+                            <CustomTypography content={"Popular Picks in " + (subcategoriesBySlug?.result?.category?.cat_name || '')} weight="SEMI-BOLD" color="BLACK" size="LARGE" />
+
+                            <div className="scrollbuttons">
+                                <CustomIconButton variant={'secondary'}
+                                    iconColor={'#32893B'} icon={"ArrowLeft"}
+                                    onClick={() => handleNav('recentProductsRef', 'left')}
+                                />
+                                <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
+                                    backgroundColor={'#32893B'} icon={"ArrowRight"}
+                                    onClick={() => handleNav('recentProductsRef', 'right')}
+                                />
+                            </div>
+
+                        </div>
+                        <div className="items" ref={itemRef}>
+                            {
+                                products.map(product => (
+                                    <ProductCard key={product.id} title={product.title} price={product.price}
+                                        previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
+                                ))
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="items" ref={itemRef}>
-                    {
-                        categories.map((category) => (
-                            <CategoryCard haveGradient={true}  key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
-                                title={category.title} haveTitle={true} img={category.img} />
-                        ))
-                    }
-                </div>
-            </div>
+                )
+                    : <></>
+            }
 
-
-            <div className="itemcard-wrapper ">
-                <div className="header">
-                    <CustomTypography content="Popular Picks in Cake Decorations" weight="SEMI-BOLD" color="BLACK" size="LARGE" />
-
-                    <div className="scrollbuttons">
-                        <CustomIconButton variant={'secondary'}
-                            iconColor={'#32893B'} icon={"ArrowLeft"}
-                            onClick={() => handleNav('recentProductsRef', 'left')}
-                        />
-                        <CustomIconButton variant={'primary'} iconColor={'#ffffff'}
-                            backgroundColor={'#32893B'} icon={"ArrowRight"}
-                            onClick={() => handleNav('recentProductsRef', 'right')}
-                        />
-                    </div>
-
-                </div>
-                <div className="items" ref={itemRef}>
-                    {
-                        products.map(product => (
-                            <ProductCard key={product.id} title={product.title} price={product.price}
-                                previous_price={product.previous_price} rating={product.rating} img={ProductImg} />
-                        ))
-                    }
-                </div>
-            </div>
         </div>
     )
 }
