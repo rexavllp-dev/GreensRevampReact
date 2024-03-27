@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLanguage } from '@/providers/LanguageProvider';
 import appConfig from '@/config/appConfig';
 import { listHomeCategory, listHomeBrand, listHomeSeason, listHomeAds } from "@/services/features/adminSlice";
-import { topTrendingProducts, recommenedProducts } from "@/services/features/productSlice";
+import { topTrendingProducts, recommenedProducts, getRecentlyViewedProducts } from "@/services/features/productSlice";
 
 
 // import { useWindowWidth } from '@react-hook/window-size';
@@ -63,14 +63,14 @@ const HomePage = () => {
   const trendingProductsRef = useRef();
   const professionalsRef = useRef();
 
-  const [homecategories, setHomeCategories]               = React.useState([]);
-  const [homebrands, setHomeBrands]                       = React.useState([]);
-  const [homeseason, setHomeseasons]                      = React.useState([]);
-  const [homeads, setHomeAds]                             = React.useState([]);
-  const [toptrendingproducts, setToptrendingproducts]     = React.useState([]);
-  const [recommenedproducts, setRecommenedProducts]     = React.useState([]);  
+  const [homecategories, setHomeCategories] = React.useState([]);
+  const [homebrands, setHomeBrands] = React.useState([]);
+  const [homeseason, setHomeseasons] = React.useState([]);
+  const [homeads, setHomeAds] = React.useState([]);
+  const [toptrendingproducts, setToptrendingproducts] = React.useState([]);
+  const [recommenedproducts, setRecommenedProducts] = React.useState([]);
 
-  const {isUserLoggedIn} = useSelector(state=> state.auth);
+  const { isUserLoggedIn } = useSelector(state => state.auth);
 
   useEffect(() => {
 
@@ -80,7 +80,7 @@ const HomePage = () => {
 
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
 
@@ -89,17 +89,17 @@ const HomePage = () => {
         setHomeBrands(response.payload.result);
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
 
     dispatch(listHomeSeason({})).then((response) => {
       if (response.payload?.success) {
-          setHomeseasons(response.payload.result);
-          //console.log(response.payload.result);
+        setHomeseasons(response.payload.result);
+        //console.log(response.payload.result);
       }
     }).catch((err) => {
-          console.log(err);
+      console.log(err);
     })
 
 
@@ -108,7 +108,7 @@ const HomePage = () => {
         setHomeAds(response.payload.result);
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
     dispatch(listHomeAds({})).then((response) => {
@@ -116,7 +116,7 @@ const HomePage = () => {
         setHomeAds(response.payload.result);
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
     dispatch(topTrendingProducts({})).then((response) => {
@@ -124,16 +124,16 @@ const HomePage = () => {
         setToptrendingproducts(response.payload.result);
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
 
-    dispatch(recommenedProducts({})).then((response) => {
+    dispatch(getRecentlyViewedProducts({})).then((response) => {
       if (response.payload?.success) {
         setRecommenedProducts(response.payload.result);
       }
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     })
 
 
@@ -496,7 +496,7 @@ const HomePage = () => {
             {
               homecategories.map((category) => (
                 <CategoryCard key={category.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
-                  title={category.cat_name} haveTitle={true} img={category.cat_logo? category.cat_logo : ''} />
+                  title={category.cat_name} haveTitle={true} img={category.cat_logo ? category.cat_logo : ''} />
               ))
             }
           </div>
@@ -529,7 +529,7 @@ const HomePage = () => {
                 :
                 homebrands?.map((brand) => (
                   <CategoryCard key={brand.brd_name}
-                    img={brand.brd_logo? brand.brd_logo : ''}
+                    img={brand.brd_logo ? brand.brd_logo : ''}
                     cardWidth={isMobileView ? 94 : 140} cardHeight={isMobileView ? 94 : 140}
                     haveTitle={false}
                   // imgPadding={30}
@@ -572,7 +572,7 @@ const HomePage = () => {
             {
               homeseason.map((obj) => (
                 <CategoryCard key={obj.id} cardWidth={isMobileView ? 123 : 266} cardHeight={isMobileView ? 123 : 266}
-                  title={obj.season_name} haveTitle={true} img={obj.season_image? obj.season_image : ''} />
+                  title={obj.season_name} haveTitle={true} img={obj.season_image ? obj.season_image : ''} />
               ))
             }
           </div>
@@ -590,7 +590,7 @@ const HomePage = () => {
 
         {/* Events section started  */}
 
-        { homeads.map((val) => {
+        {homeads.map((val) => {
           return <div className="events">
             <ImageCard
               img={val.ads_image}
@@ -603,10 +603,10 @@ const HomePage = () => {
             />
           </div>
 
-          })
+        })
         }
 
-        
+
         {/* Events section ended  */}
 
         {isUserLoggedIn &&
@@ -624,9 +624,9 @@ const HomePage = () => {
                   backgroundColor={'#32893B'} icon={"ArrowRight"}
                   onClick={() => handleNav('recentProductsRef', 'right')}
                 />
-              </div>   
+              </div>
 
-            </div> 
+            </div>
             <div className="categories" ref={recentProductsRef}>
               {
                 recommenedproducts.map(product => (
@@ -660,8 +660,22 @@ const HomePage = () => {
           <div className="categories" ref={trendingProductsRef}>
             {
               toptrendingproducts.map(product => (
-                <ProductCard key={product.id} title={product.title} price={product.price}
-                  previous_price={product.previous_price} rating={product.rating} img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
+                <ProductCard
+                 id={product.id}
+                  key={product.id}
+                   title={product.prd_name}
+                  // specialPrice={''}
+                  // normalPrice={''}
+                  rating={product.rating}
+                  data={product}
+                  img={product?.productimages ?
+                    product?.productimages[0]?.url :
+                    'https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg'
+                  }
+                />
+                // <ProductCard key={product.id} title={product.title} price={product.price}
+                //   previous_price={product.previous_price} rating={product.rating} 
+                //   img={"https://greensecombucket.s3.ap-south-1.amazonaws.com/images/image%204%20%281%29.png"} />
               ))
             }
           </div>

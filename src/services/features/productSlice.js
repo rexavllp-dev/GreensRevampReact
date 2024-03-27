@@ -174,9 +174,9 @@ const initialState = {
     isSaveForLaterLoadError: false,
     saveForLater: [],
 
-    isSaveForLaterRemoving:false,
-    isSaveForLaterRemoved:false,
-    isSaveForLaterRemoveError:false,
+    isSaveForLaterRemoving: false,
+    isSaveForLaterRemoved: false,
+    isSaveForLaterRemoveError: false,
 
 
     isTopTrendingLoading: false,
@@ -190,7 +190,12 @@ const initialState = {
     isRecommenedProductsLoadError: false,
     recommenedproducts: [],
 
-    
+    isRecentlyViewedProductsLoading: false,
+    isRecentlyViewedProductsLoaded: false,
+    isRecentlyViewedProductsLoadError: false,
+    recentlyViewedProducts: [],
+
+
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async ({ search_query, sort }, thunkAPI) => {
@@ -333,7 +338,7 @@ export const createOption = createAsyncThunk('createOption', async ({ data }, th
     }
 })
 
-export const updateOption = createAsyncThunk('updateOption', async ({ data, id}, thunkAPI) => {
+export const updateOption = createAsyncThunk('updateOption', async ({ data, id }, thunkAPI) => {
     try {
         const response = await products.updateOption(data, id);
         return thunkAPI.fulfillWithValue(response.data);
@@ -518,7 +523,7 @@ export const createProductReviewByAdmin = createAsyncThunk('createProductReviewB
     }
 })
 
-export const getAllProductReviews = createAsyncThunk('getAllProductReviews', async ({  }, thunkAPI) => {
+export const getAllProductReviews = createAsyncThunk('getAllProductReviews', async ({ }, thunkAPI) => {
     try {
         const response = await products.getAllProductReviews();
         return thunkAPI.fulfillWithValue(response.data);
@@ -584,7 +589,7 @@ export const getSaveForLater = createAsyncThunk('getSaveForLater', async ({ }, t
 })
 
 //remove for later- get
-export const removeSaveForLaterProduct = createAsyncThunk('removeSaveForLaterProduct', async ({id }, thunkAPI) => {
+export const removeSaveForLaterProduct = createAsyncThunk('removeSaveForLaterProduct', async ({ id }, thunkAPI) => {
     try {
         const response = await products.removeSaveForLaterProduct(id);
         return thunkAPI.fulfillWithValue(response.data);
@@ -595,7 +600,7 @@ export const removeSaveForLaterProduct = createAsyncThunk('removeSaveForLaterPro
 })
 
 
-export const topTrendingProducts = createAsyncThunk('topTrendingProducts', async ({}, thunkAPI) => {
+export const topTrendingProducts = createAsyncThunk('topTrendingProducts', async ({ }, thunkAPI) => {
     try {
         const response = await products.topTrendingProducts();
         return thunkAPI.fulfillWithValue(response.data);
@@ -607,9 +612,19 @@ export const topTrendingProducts = createAsyncThunk('topTrendingProducts', async
 
 
 
-export const recommenedProducts = createAsyncThunk('recommenedProducts', async ({}, thunkAPI) => {
+export const recommenedProducts = createAsyncThunk('recommenedProducts', async ({ }, thunkAPI) => {
     try {
         const response = await products.recommenedProducts();
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const getRecentlyViewedProducts = createAsyncThunk('getRecentlyViewedProducts', async ({ }, thunkAPI) => {
+    try {
+        const response = await products.getRecentlyViewedProducts();
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -1359,45 +1374,62 @@ const productSlice = createSlice({
 
 
             .addCase(topTrendingProducts.pending, (state, action) => {
-                state. isTopTrendingLoading = true;
-                state. isTopTrendingLoaded = false;
-                state. isTopTrendingLoadError = false;
+                state.isTopTrendingLoading = true;
+                state.isTopTrendingLoaded = false;
+                state.isTopTrendingLoadError = false;
             })
 
             .addCase(topTrendingProducts.fulfilled, (state, action) => {
-                state. isTopTrendingLoading = false;
-                state. isTopTrendingLoaded = true;
-                state. isTopTrendingLoadError = false;
+                state.isTopTrendingLoading = false;
+                state.isTopTrendingLoaded = true;
+                state.isTopTrendingLoadError = false;
                 state.topTrendingProducts = action.payload;
             })
 
             .addCase(topTrendingProducts.rejected, (state, action) => {
-                state. isTopTrendingLoading = false;
-                state. isTopTrendingLoaded = false;
-                state. isTopTrendingLoadError = true;
+                state.isTopTrendingLoading = false;
+                state.isTopTrendingLoaded = false;
+                state.isTopTrendingLoadError = true;
             })
 
             .addCase(recommenedProducts.pending, (state, action) => {
-                state. isRecommenedProductsLoading = true;
-                state. isRecommenedProductsLoaded = false;
-                state. isRecommenedProductsLoadError = false;
+                state.isRecommenedProductsLoading = true;
+                state.isRecommenedProductsLoaded = false;
+                state.isRecommenedProductsLoadError = false;
             })
 
             .addCase(recommenedProducts.fulfilled, (state, action) => {
-                state. isRecommenedProductsLoading = false;
-                state. isRecommenedProductsLoaded = true;
-                state. isRecommenedProductsLoadError = false;
+                state.isRecommenedProductsLoading = false;
+                state.isRecommenedProductsLoaded = true;
+                state.isRecommenedProductsLoadError = false;
                 state.recommenedproducts = action.payload;
             })
 
             .addCase(recommenedProducts.rejected, (state, action) => {
-                state. isRecommenedProductsLoading = false;
-                state. isRecommenedProductsLoaded = false;
-                state. isRecommenedProductsLoadError = true;
+                state.isRecommenedProductsLoading = false;
+                state.isRecommenedProductsLoaded = false;
+                state.isRecommenedProductsLoadError = true;
             })
 
+            .addCase(getRecentlyViewedProducts.pending, (state, action) => {
+                state.isRecentlyViewedProductsLoading = true;
+                state.isRecentlyViewedProductsLoaded = false;
+                state.isRecentlyViewedProductsLoadError = false;
+            })
 
-            
+            .addCase(getRecentlyViewedProducts.fulfilled, (state, action) => {
+                state.isRecentlyViewedProductsLoading = false;
+                state.isRecentlyViewedProductsLoaded = true;
+                state.isRecentlyViewedProductsLoadError = false;
+                state.recentlyViewedProducts = action.payload;
+            })
+
+            .addCase(getRecentlyViewedProducts.rejected, (state, action) => {
+                state.isRecentlyViewedProductsLoading = false;
+                state.isRecentlyViewedProductsLoaded = false;
+                state.isRecentlyViewedProductsLoadError = true;
+            })
+
     }
 })
 
