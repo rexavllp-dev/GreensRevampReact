@@ -3,13 +3,13 @@ import Axios from '../axios/Axios.js';
 export const admin = {
 
     // Update Banner
-    updateBanner: ({ data, id}) => {
+    updateBanner: ({ data, id }) => {
 
         return new Promise((resolve, reject) => {
 
             Axios.put('admin/banner/update_banner/' + id, data)
-            .then(response => resolve(response))
-            .catch(error => reject(error))
+                .then(response => resolve(response))
+                .catch(error => reject(error))
 
         })
 
@@ -23,11 +23,11 @@ export const admin = {
         })
     },
 
-     // List banner
+    // List banner
     listBanner: () => {
         return new Promise((resolve, reject) => {
             Axios.get('admin/banner/get_all_banners/')
-            .then(response => resolve(response))
+                .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
@@ -49,7 +49,7 @@ export const admin = {
     },
 
 
-    
+
     getLatestReplacedOrders: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/dashboard/get_all_latest_replacement')
@@ -74,35 +74,35 @@ export const admin = {
         })
     },
 
-    getAllMinQtyProducts: () => {   
+    getAllMinQtyProducts: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/dashboard/get_all_products_min_qty')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
-    getExpiredTradeLicenses: () => {   
+    getExpiredTradeLicenses: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/dashboard/get_all_expired_trade_licenses')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
-    getTotalOrderCount: () => {   
+    getTotalOrderCount: (filter) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/admin/dashboard/get_all_total_orders')
+            Axios.get('/admin/dashboard/get_all_total_orders?filter=' + filter)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
-    getTotalSales: ({ filterBy, fromDate, toDate }) => {   
+    getTotalSales: ({ filterBy, fromDate, toDate }) => {
         return new Promise((resolve, reject) => {
-            Axios.get('/admin/dashboard/get_all_total_sales?filterBy='+ filterBy + '&fromDate=' + fromDate + '&toDate=' + toDate)
+            Axios.get('/admin/dashboard/get_all_total_sales?filterBy=' + filterBy + '&fromDate=' + fromDate + '&toDate=' + toDate)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
-    getTotalCountDashboard: () => {   
+    getTotalCountDashboard: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/dashboard/get_all_total_counts')
                 .then(response => resolve(response))
@@ -118,7 +118,7 @@ export const admin = {
         })
     },
 
-    addHomePageCategory: ({data}) => {   
+    addHomePageCategory: ({ data }) => {
 
         return new Promise((resolve, reject) => {
             Axios.post('/admin/homepage_category/create_homepage_category', data)
@@ -127,7 +127,7 @@ export const admin = {
         })
     },
 
-    listHomeCategory: () => {   
+    listHomeCategory: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/homepage_category/get_all_homepage_categories')
                 .then(response => resolve(response))
@@ -135,7 +135,7 @@ export const admin = {
         })
     },
 
-    deleteHomeCategory: ({data}) => {   
+    deleteHomeCategory: ({ data }) => {
         return new Promise((resolve, reject) => {
             Axios.delete(`/admin/homepage_category/delete_homepage_category?data=${JSON.stringify(data)}`)
                 .then(response => resolve(response))
@@ -144,7 +144,7 @@ export const admin = {
     },
 
 
-    listHomeCategory: () => {   
+    listHomeCategory: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/homepage_category/get_all_homepage_categories')
                 .then(response => resolve(response))
@@ -153,16 +153,16 @@ export const admin = {
     },
 
 
-    listHomeBrand: () => {   
+    listHomeBrand: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/homepage_brand/get_all_homepage_brands')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
-    },    
+    },
 
 
-    addHomePageBrand: ({data}) => {   
+    addHomePageBrand: ({ data }) => {
 
         return new Promise((resolve, reject) => {
             Axios.post('/admin/homepage_brand/create_homepage_brand', data)
@@ -171,7 +171,7 @@ export const admin = {
         })
     },
 
-    deleteHomeBrand: ({data}) => {   
+    deleteHomeBrand: ({ data }) => {
         return new Promise((resolve, reject) => {
             Axios.delete(`/admin/homepage_brand/delete_homepage_brand?data=${JSON.stringify(data)}`)
                 .then(response => resolve(response))
@@ -179,7 +179,7 @@ export const admin = {
         })
     },
 
-    listHomeSeason: () => {   
+    listHomeSeason: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/seasons/get_all_seasons')
                 .then(response => resolve(response))
@@ -187,16 +187,16 @@ export const admin = {
         })
     },
 
-    getSeason: ({id}) => {   
+    getSeason: ({ id }) => {
 
         return new Promise((resolve, reject) => {
-            Axios.get('/admin/seasons/get_season/'+id)
+            Axios.get('/admin/seasons/get_season/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
-    createSeason: ({data}) => {   
+    createSeason: ({ data }) => {
 
         return new Promise((resolve, reject) => {
             Axios.post('/admin/seasons/create_season', data)
@@ -205,16 +205,16 @@ export const admin = {
         })
     },
 
-    updateSeason: ({data, id}) => {   
+    updateSeason: ({ data, id }) => {
 
         return new Promise((resolve, reject) => {
-            Axios.put('/admin/seasons/update_season/'+id, data)
+            Axios.put('/admin/seasons/update_season/' + id, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
-    deleteSeason: ({data, id}) => {   
+    deleteSeason: ({ data, id }) => {
 
         return new Promise((resolve, reject) => {
             Axios.delete(`/admin/seasons/delete_season?data=${JSON.stringify(data)}`)
@@ -224,7 +224,7 @@ export const admin = {
     },
 
 
-    listHomeAds: () => {   
+    listHomeAds: () => {
         return new Promise((resolve, reject) => {
             Axios.get('/admin/ads/get_all_ads')
                 .then(response => resolve(response))
@@ -232,16 +232,16 @@ export const admin = {
         })
     },
 
-    getAds: ({id}) => {   
+    getAds: ({ id }) => {
 
         return new Promise((resolve, reject) => {
-            Axios.get('/admin/ads/get_ads/'+id)
+            Axios.get('/admin/ads/get_ads/' + id)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
-    createAds: ({data}) => {   
+    createAds: ({ data }) => {
 
         return new Promise((resolve, reject) => {
             Axios.post('/admin/ads/create_ads', data)
@@ -250,16 +250,16 @@ export const admin = {
         })
     },
 
-    updateAds: ({data, id}) => {   
+    updateAds: ({ data, id }) => {
 
         return new Promise((resolve, reject) => {
-            Axios.put('/admin/ads/update_ads/'+id, data)
+            Axios.put('/admin/ads/update_ads/' + id, data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
     },
 
-    deleteAds: ({data, id}) => {   
+    deleteAds: ({ data, id }) => {
 
         return new Promise((resolve, reject) => {
             Axios.delete(`/admin/ads/delete_ads?data=${JSON.stringify(data)}`)
@@ -268,10 +268,16 @@ export const admin = {
         })
     },
 
+    getPendingCompanyApprovals: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/admin/dashboard/get_all_company_pending_approval')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
-    
-    
-    
-    
+
+
+
 
 }

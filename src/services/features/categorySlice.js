@@ -36,6 +36,12 @@ const initialState = {
     isMainCategoryTreeLoaded: false,
     isMainCategoryTreeLoadError: false,
     maincategories: [],    
+
+    isSubCategoriesBySlugLoading: false,
+    isSubCategoriesBySlugLoaded: false,
+    isSubCategoriesBySlugLoadError: false,
+    subcategoriesBySlug: [],
+
 }
 
 export const getCategoryTree = createAsyncThunk('getCategoryTree', async (data, thunkAPI) => {
@@ -117,7 +123,15 @@ export const deleteCategoryImage = createAsyncThunk('deleteCategoryImage', async
 })
 
 
-
+export const getSubCategoriesBySlug = createAsyncThunk('getSubCategoriesBySlug', async ({slug}, thunkAPI) => {
+    try {
+        const response = await categories.getSubCategoriesBySlug(slug);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
 
 
 
@@ -253,6 +267,24 @@ const categorySlice = createSlice({
                 state.isDeleteImageLoading = false;
                 state.isDeleteImageLoaded = false;
                 state.isDeleteImageError = true;
+            })
+
+            //Get sub categories by slug
+            .addCase(getSubCategoriesBySlug.pending, (state, action) => {
+                state.isSubCategoriesBySlugLoading = true;
+                state.isSubCategoriesBySlugLoaded = false;
+                state.isSubCategoriesBySlugLoadError = false;
+            })
+            .addCase(getSubCategoriesBySlug.fulfilled, (state, action) => {
+                state.isSubCategoriesBySlugLoading = false;
+                state.isSubCategoriesBySlugLoaded = true;
+                state.isSubCategoriesBySlugLoadError = false;
+                state.subcategoriesBySlug = action.payload;
+            })
+            .addCase(getSubCategoriesBySlug.rejected, (state, action) => {
+                state.isSubCategoriesBySlugLoading = false;
+                state.isSubCategoriesBySlugLoaded = false;
+                state.isSubCategoriesBySlugLoadError = true;
             })
     }
 })

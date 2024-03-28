@@ -323,7 +323,7 @@ export const products = {
 
     topTrendingProducts: () => {
         return new Promise((resolve, reject) => {
-            Axios.get('/get_all_top_tending_products')
+            Axios.get('/products/get_all_top_tending_products')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
@@ -331,11 +331,21 @@ export const products = {
 
     recommenedProducts: () => {
         return new Promise((resolve, reject) => {
-            Axios.get('/get_all_order_recommended_products')
+            Axios.get('/products/get_all_order_recommended_products')
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })
-    }
+    },
+
+    getRecentlyViewedProducts: () => {
+        return new Promise((resolve, reject) => {
+            Axios.get('/products/get_all_recommended_products')
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+
 
     
     

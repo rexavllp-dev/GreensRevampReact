@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Chip } from "@nextui-org/react";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+import Link from "next/link";
 
 export default function DashboardTable({ columns, data, key }) {
 
@@ -32,9 +34,9 @@ export default function DashboardTable({ columns, data, key }) {
                 );
             case "actions":
                 return (
-                    <div className="relative flex justify-end items-center gap-2">
-
-                    </div>
+                    <Link href={`/admin/advanced/verification/${user.id}`}>
+                        <MdOutlineRemoveRedEye size={20} />
+                    </Link>
                 );
             default:
                 return cellValue;

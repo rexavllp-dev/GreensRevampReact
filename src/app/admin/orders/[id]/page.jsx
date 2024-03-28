@@ -17,6 +17,7 @@ import CustomButton from '@/library/buttons/CustomButton';
 import OrderUpdateModal from '@/components/modal/order/update/OrderUpdateModal';
 import CancelOrderModal from '@/components/modal/order/update/CancelOrderModal';
 import CancelIndividualOrderModal from '@/components/modal/order/update/CancelIndividualOrderModal';
+import OrderItems from './tabs/orderitems/OrderItems';
 
 const OrderDetails = ({ params }) => {
 
@@ -25,10 +26,8 @@ const OrderDetails = ({ params }) => {
 
     const { singleOrder, allOrderItems } = useSelector((state) => state.order);
 
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
     const [isCancelOrderModalOpen, setIsCancelOrderModalOpen] = React.useState(false);
-    const [isCancelIndividualOrderModalOpen, setIsCancelIndividualOrderModalOpen] = React.useState(false);
-    const [editData, setEditData] = React.useState({});
+
 
     const order = singleOrder?.result ? singleOrder?.result[0] : {};
 
@@ -40,16 +39,21 @@ const OrderDetails = ({ params }) => {
     const tabs = [
         {
             id: 1,
+            label: "Order Items",
+            component: <OrderItems data={order} allOrderItems={allOrderItems} />
+        },
+        {
+            id: 2,
             label: "Order Information",
             component: <OrderInformation data={order} />
         },
         {
-            id: 2,
+            id: 3,
             label: "Account Information",
             component: <AccountInformation data={order} />
         },
         {
-            id: 3,
+            id: 4,
             label: "Address",
             component: <AddressInformation data={order} />
         },
@@ -60,15 +64,7 @@ const OrderDetails = ({ params }) => {
 
     }
 
-    const handleShowStatus = (item) => {
-        if (item?.op_is_cancel) {
-            return 'Cancelled';
-        } else if (item?.op_is_return) {
-            return 'Returned';
-        } else {
-            return 'Pending';
-        }
-    };
+
 
     return (
         <div className='order-details-admin'>
@@ -91,50 +87,9 @@ const OrderDetails = ({ params }) => {
 
             <CustomTabs tabs={tabs} />
 
-            <Table className='ml-5 mr-5 mt-5' border={true} aria-label="Example static collection table">
-                <TableHeader>
-                    <TableColumn>PRODUCT</TableColumn>
-                    <TableColumn>UNIT PRICE</TableColumn>
-                    <TableColumn>QUANTITY</TableColumn>
-                    <TableColumn>LINE TOTAL</TableColumn>
-                    <TableColumn>REFUND TYPE</TableColumn>
-                    <TableColumn>STATUS</TableColumn>
-                    <TableColumn>ACTION</TableColumn>
-                </TableHeader>
-                <TableBody>
-                    {
-                        allOrderItems?.result?.map((item, index) => {
-                            return (
-                                <TableRow key={item.id}>
-                                    <TableCell>{item?.prd_name}</TableCell>
-                                    <TableCell>{item?.op_unit_price}</TableCell>
-                                    <TableCell>{item?.op_qty}</TableCell>
-                                    <TableCell>{item?.op_line_total}</TableCell>
-                                    <TableCell>{item?.refund_type}</TableCell>
-                                    <TableCell>{handleShowStatus(item)}</TableCell>
-                                    <TableCell className='flex flex-col gap-3'>
-                                        <CustomButton variant="primary" label='Cancel Product'
-                                            onClick={() => {
-                                                setEditData({ ...item })
-                                                setIsCancelIndividualOrderModalOpen(true)
-                                            }}
-                                        />
-                                        <CustomButton variant="transparent" label='Update Product'
-                                            onClick={() => {
-                                                setEditData({ ...item })
-                                                setIsUpdateModalOpen(true)
-                                            }} />
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })
-                    }
+          
 
-                </TableBody>
-            </Table>
-
-            <OrderUpdateModal open={isUpdateModalOpen} handleClose={() => setIsUpdateModalOpen(false)} editData={editData} />
-            <CancelIndividualOrderModal open={isCancelIndividualOrderModalOpen} handleClose={() => setIsCancelIndividualOrderModalOpen(false)} editData={editData} />
+          
             <CancelOrderModal open={isCancelOrderModalOpen} handleClose={() => setIsCancelOrderModalOpen(false)} id={params.id} />
         </div>
     )

@@ -18,6 +18,8 @@ import { getAllBrands } from '@/services/features/brandSlice';
 import { FaRegEdit } from 'react-icons/fa';
 import ConfirmationModal from '@/components/modal/confirmation-modal/ConfirmationModal';
 import CustomCheckbox from '@/library/checkbox/CustomCheckbox';
+import { getCategoryTree } from '@/services/features/categorySlice';
+import AutoComplete from '@/components/autocomplete/AutoComplete';
 
 const GeneralTab = ({ id, data }) => {
 
@@ -41,6 +43,7 @@ const GeneralTab = ({ id, data }) => {
     const [loading, setLoading] = React.useState(false);
     const [isExit, setIsExit] = React.useState(false);
     const { allBrands } = useSelector(state => state.brands);
+    const { allcategories, isCategoryTreeLoaded } = useSelector(state => state.categories)
 
     const categories = [
         { label: 'category1', value: 1 },
@@ -137,6 +140,7 @@ const GeneralTab = ({ id, data }) => {
 
     useEffect(() => {
         dispatch(getAllBrands())
+        dispatch(getCategoryTree({}))
     }, [])
 
     useEffect(() => {
@@ -448,13 +452,25 @@ const GeneralTab = ({ id, data }) => {
                         errMsg={errors.prd_return_type.message}
                     />
 
-                    <CustomMultiSelect label={'Categories'} value={formData.categories} data={categories}
+                    <CustomMultiSelect label={'Categories'} value={formData.categories} data={allcategories?.data}
                         name={'categories'} onChange={(e) => { handleInputChange({ e }) }}
+                        optionLabel={'name'}
+                        optionValue={'id'}
                         disabled={isDisabled}
                         isRequired={true}
                         isInvalid={errors.categories.error}
                         errMsg={errors.categories.message}
                     />
+
+                    {/* <AutoComplete
+                        data={allcategories?.data}
+                        label={'Category'}
+                        optionLabel={'name'}
+                        optionValue={'id'}
+                        name={'categories'}
+                        value={formData.categories}
+                        setValue={(value) => { setFormData((prev) => ({ ...prev, categories: value })) }}
+                    /> */}
 
                     <CustomSelect label={'Brand'} value={formData.prd_brand_id} data={allBrands?.data}
                         optionValue={'id'} optionLabel={'brd_name'}

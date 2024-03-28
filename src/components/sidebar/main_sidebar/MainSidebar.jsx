@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Cookies } from 'react-cookie';
 import { logout } from '@/services/features/authSlice';
 import { getMainTree } from "@/services/features/categorySlice";
+import Link from 'next/link';
 
 
 const cookies = new Cookies();
@@ -29,10 +30,10 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
   const dispatch = useDispatch();
 
   const [user, setUser] = React.useState(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')))
-  const { isLoggedIn, authCount} = useSelector(state => state.auth);
-  const { maincategories, isMainCategoryTreeLoaded} = useSelector(state => state.categories)
+  const { isLoggedIn, authCount } = useSelector(state => state.auth);
+  const { maincategories, isMainCategoryTreeLoaded } = useSelector(state => state.categories)
   const [categoryTreeData, setCategoryTreeData] = useState([]);
-  
+
 
   useEffect(() => {
     setUser(typeof window !== "undefined" && window.localStorage.getItem('user') && (window.localStorage.getItem('user') !== 'undefined') && JSON.parse(window.localStorage.getItem('user')));
@@ -49,15 +50,15 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
   }, [])
 
   useEffect(() => {
-    if(isMainCategoryTreeLoaded){
+    if (isMainCategoryTreeLoaded) {
 
       setCategoryTreeData(maincategories.data);
       console.log(categoryTreeData);
 
     }
   }, [maincategories])
-  
-  
+
+
 
 
   const menuItems = [
@@ -70,7 +71,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
       isActive: false,
       isMobile: false,
       isMainMenu: true,
-      children:categoryTreeData
+      children: categoryTreeData
     },
     {
       id: 2,
@@ -382,12 +383,12 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
 
   useEffect(() => {
 
-      setNavItems(menuItems);
-      
+    setNavItems(menuItems);
+
   }, [categoryTreeData])
 
   useEffect(() => {
-    
+
     switch (routeModule) {
       case 'categories':
         setParentMenu([])
@@ -426,7 +427,7 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
       setMenuTitles((prev => ([...prev, item.title])))
       setNavItems(item.children);
       setIsMainMenu(false)
-    }else {
+    } else {
       router.push(item.link);
       onClose();
     }
@@ -566,32 +567,35 @@ const MainSidebar = ({ open, onClose, routeModule }) => {
               else {
                 return (
                   <div className="item" key={index}>
-                    <div className="title">
+                    <Link href={'/categories/' + item.link}>
+                      <div className="title">
 
-                      {item.isIcon ?
-                        <div className="logo">
-                          <div className="img">
-                            <Image src={item.icon}
-                              fill objectFit='cover' alt='logo' />
-                          </div>
-                        </div>
-                        :
-                        <div className="img">
-                          {
-                            item.icon ?
+                        {item.isIcon ?
+                          <div className="logo">
+                            <div className="img">
                               <Image src={item.icon}
                                 fill objectFit='cover' alt='logo' />
-                              :
-                              <ImgThumb />
-                          }
-                        </div>
-                      }
+                            </div>
+                          </div>
+                          :
+                          <div className="img">
+                            {
+                              item.icon ?
+                                <Image src={item.icon}
+                                  fill objectFit='cover' alt='logo' />
+                                :
+                                <ImgThumb />
+                            }
+                          </div>
+                        }
 
-                      <CustomTypography content={item.title} color={item.color ? item.color : 'BLACK'} size='MEDIUM' weight='MEDIUM' />
-                    </div>
+                        <CustomTypography content={item.title} color={item.color ? item.color : 'BLACK'} size='MEDIUM' weight='MEDIUM' />
+                      </div>
+                    </Link>
+
                     {item.children.length != 0 ?
-                    <Image src={KeyArrowRight} alt='arrow' width={24} height={24} onClick={() => handleItemClick(item, navItems)} />
-                    : ''}
+                      <Image src={KeyArrowRight} alt='arrow' width={24} height={24} onClick={() => handleItemClick(item, navItems)} />
+                      : ''}
                   </div>
                 )
               }

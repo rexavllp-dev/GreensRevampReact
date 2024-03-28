@@ -12,6 +12,7 @@ import SearchInput from '@/library/input/searchinput/SearchInput';
 import { Select, SelectItem } from '@nextui-org/react';
 import { getDrivers, getWarehouseUsers } from '@/services/features/userSlice';
 import { getAllTransactions } from '@/services/features/paymentSlice';
+import CustomButton from '@/library/buttons/CustomButton';
 
 const Discounts = () => {
     const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const Discounts = () => {
             minWidth: 150
         },
         {
-            headerName: 'Transaction ID',   
+            headerName: 'Transaction ID',
             field: 'stripe_transaction_id',
             minWidth: 150
         },
@@ -71,6 +72,10 @@ const Discounts = () => {
         router.push(`/admin/orders/${data?.orderId}`)
     }
 
+    const handleCreateDiscount = () => {
+        router.push('/admin/sales/discounts/manage')
+    }
+
     return (
         <div className='transactions-wrapper'>
 
@@ -91,7 +96,7 @@ const Discounts = () => {
                     />
                 </div>
                 <div className="right">
-
+                    <CustomButton label={"Add New"} variant='primary' height='40px' onClick={() => handleCreateDiscount()} />
                 </div>
             </div>
 

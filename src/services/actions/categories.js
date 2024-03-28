@@ -76,6 +76,15 @@ export const categories = {
         })
     },
 
+    getSubCategoriesBySlug: (slug) => {
+
+        return new Promise((resolve, reject) => {
+            Axios.get('/categories/get-sub-categories/'+ slug)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
     
     
 }

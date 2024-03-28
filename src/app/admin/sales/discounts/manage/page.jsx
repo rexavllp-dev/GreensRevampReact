@@ -15,6 +15,10 @@ import AutoComplete from '@/components/autocomplete/AutoComplete';
 import { useEffect } from 'react';
 import { getAllBrands } from '@/services/features/brandSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import MultiSelectTable from '@/components/customtable/MultiSelectTable';
+import { brandColumns } from '@/constants/constants';
+import { Button } from '@nextui-org/react';
+import { getCategoryTree } from '@/services/features/categorySlice';
 
 const discountTypes = [
     { label: 'Percentage', value: "percentage" },
@@ -26,14 +30,16 @@ const discountAppliedTypes = [
     { label: 'Category', value: 'category' },
 ]
 const ManageDiscount = () => {
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const dispatch = useDispatch();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const { allBrands } = useSelector(state => state.brands);
+    const { allcategories, isCategoryTreeLoaded } = useSelector(state => state.categories)
     let id = searchParams.get('id');
 
 
-    const [isDisabled, setIsDisabled] = React.useState(false)
-    const { allBrands } = useSelector(state => state.brands);
+    const [isDisabled, setIsDisabled] = React.useState(false);
+    const [addedBrand, setAddedBrand] = React.useState('');
 
     const [formData, setFormData] = React.useState({
         prd_name: '',
@@ -46,12 +52,17 @@ const ManageDiscount = () => {
 
     useEffect(() => {
         dispatch(getAllBrands())
+        dispatch(getCategoryTree({}))
     }, [])
 
     const handleInputChange = ({ e }) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
         }))
+    }
+
+    const handleAdd = () => {
+
     }
 
     return (
@@ -66,8 +77,8 @@ const ManageDiscount = () => {
                     </div>
                     <CustomTypography content={"Create Discount"} weight="BOLD" color="BLACK" size="SUPER-LARGE" />
                 </div>
-                <div className="exportbtn">
-                    {/* <CustomButton label={"Export"} variant='transparent' height='40px' /> */}
+                <div className="addnewbtn">
+                 
                 </div>
             </div>
             <div className="form">
@@ -106,8 +117,25 @@ const ManageDiscount = () => {
                         disabled={isDisabled}
                         isRequired={true}
                     />
+                    <div className="flex gap-2 items-center">
+                        <AutoComplete data={allBrands?.data}
+                            label={'Add Brand'}
+                            optionLabel={'brd_name'}
+                            optionValue={'id'} value={addedBrand}
+                            setValue={(value) => { setAddedBrand(value); }}
+                        />
+                        <Button color='primary' onClick={() => handleAdd()}>Add</Button>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <AutoComplete data={allcategories?.data}
+                            label={'Add Category'}
+                            optionLabel={'name'}
+                            optionValue={'id'} value={addedBrand}
+                            setValue={(value) => { setAddedBrand(value); }}
+                        />
+                        <Button color='primary' onClick={() => handleAdd()}>Add</Button>
+                    </div>
 
-                    <AutoComplete data={allBrands?.data} optionLabel={'brd_name'} optionValue={'id'} />
 
                 </div>
 
@@ -150,6 +178,9 @@ const ManageDiscount = () => {
                     />
 
                 </div>
+            </div>
+            <div className='mt-5'>
+                <MultiSelectTable columns={brandColumns} data={allBrands?.data || []} />
             </div>
         </div >
     )
