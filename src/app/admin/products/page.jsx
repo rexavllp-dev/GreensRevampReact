@@ -23,16 +23,6 @@ export default function ProductsTab() {
       url: '/admin/products/categories',
     },
     {
-      id: 4,
-      name: 'Attributes',
-      url: '/admin/attributes',
-    },
-    {
-      id: 5,
-      name: 'Attribute Sets',
-      url: '/admin/attribute-sets',
-    },
-    {
       id: 6,
       name: 'Brands',
       url: '/admin/products/brands',
@@ -43,18 +33,13 @@ export default function ProductsTab() {
       url: '/admin/products/tags',
     },
     {
-      id: 8,
-      name: 'Options',
-      url: '/admin/options',
-    },
-    {
       id:9,
       name: 'Reviews',
       url: '/admin/products/review',
     },
     {
       id:10,
-      name: 'Bulk',
+      name: 'Bulk Purchase Requests',
       url: '/admin/bulk',
     }
 
