@@ -6,7 +6,7 @@ import CustomButton from '@/library/buttons/CustomButton';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getOrder } from '@/services/features/orderSlice';
 import { useDispatch } from 'react-redux';
-import { getStripeUrl } from '@/services/features/paymentSlice';
+import { getStripeUrl, payFailed } from '@/services/features/paymentSlice';
 import { toast } from 'react-toastify';
 
 const OrderFailed = () => {
@@ -17,7 +17,17 @@ const OrderFailed = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-  }, [])
+    dispatch(payFailed({ data: { order_id: orderId } })).then((res) => {
+      if (res.payload?.success) {
+        // toast.success("Payment completed successfully", {
+        //   toastId: 'success1',
+        // });
+        console.log("Payment failed")
+      } else {
+        // toast.error(res.payload?.message);
+      }
+    }).catch(err => console.log(err));
+  }, [orderId]);
 
   const handleRetry = () => {
     const data = { order_id: orderId };
@@ -25,7 +35,7 @@ const OrderFailed = () => {
       if (res?.payload?.success) {
         let stripeUrl = res?.payload?.url;
         window.open(stripeUrl, '_self');
-      }else {
+      } else {
         toast.error(res?.payload?.message);
       }
     }).catch((err) => {

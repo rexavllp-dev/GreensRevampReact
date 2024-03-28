@@ -4,7 +4,7 @@ import './OrderDetails.scss'
 import CustomTypography from '@/library/typography/CustomTypography'
 import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { Select, SelectItem } from '@nextui-org/react'
-import { cancelOrder, getOrder, getUserOrders } from '@/services/features/orderSlice';
+import { cancelOrder, getAllOrderItems, getOrder, getUserOrders } from '@/services/features/orderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -17,10 +17,11 @@ const OrderDetails = ({ params }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { singleOrder } = useSelector((state) => state.order)
+    const { singleOrder, allOrderItems } = useSelector((state) => state.order)
 
     React.useEffect(() => {
         dispatch(getOrder({ id: params.id }));
+        dispatch(getAllOrderItems({ id: params.id }));
     }, [params.id]);
 
     const handleCancelOrder = () => {
@@ -99,7 +100,7 @@ const OrderDetails = ({ params }) => {
 
             <div className="orderitems">
                 {
-                    singleOrder?.result?.map((item, i) => {
+                   allOrderItems?.result?.map((item, i) => {
                         return (
                             <div className="orderitem">
                                 <div className="flex items-center gap-3">
@@ -142,13 +143,13 @@ const OrderDetails = ({ params }) => {
                                         :
 
                                         <div className="flex gap-3">
-                                            <button className='detailsbtn mt-5' onClick={() => handleCancelOrderItem(item?.orderItemId)} >
+                                            <button className='detailsbtn mt-5' onClick={() => handleCancelOrderItem(item?.itemId)} >
                                                 Cancel
                                             </button>
-                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/return/${item?.orderItemId}`)}>
+                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/return/${item?.itemId}`)}>
                                                 Return
                                             </button>
-                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/replace/${item?.orderItemId}`)}>
+                                            <button className='detailsbtn mt-5' onClick={() => router.push(`/user/purchase-history/replace/${item?.itemId}`)}>
                                                 Replace
                                             </button>
                                         </div>

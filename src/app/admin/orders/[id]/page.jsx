@@ -24,7 +24,9 @@ const OrderDetails = ({ params }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { singleOrder, allOrderItems } = useSelector((state) => state.order);
+    const { singleOrder, allOrderItems,
+        isOrderQuantityUpdated, isIndividualOrderCanceled,
+        isReturnReplaceDriverAssigned } = useSelector((state) => state.order);
 
     const [isCancelOrderModalOpen, setIsCancelOrderModalOpen] = React.useState(false);
 
@@ -34,13 +36,13 @@ const OrderDetails = ({ params }) => {
     React.useEffect(() => {
         dispatch(getOrder({ id: params.id }));
         dispatch(getAllOrderItems({ id: params.id }));
-    }, [params.id]);
+    }, [params.id, isOrderQuantityUpdated, isIndividualOrderCanceled, isReturnReplaceDriverAssigned]);
 
     const tabs = [
         {
             id: 1,
             label: "Order Items",
-            component: <OrderItems data={order} allOrderItems={allOrderItems} />
+            component: <OrderItems orderId={params.id} data={order} allOrderItems={allOrderItems} />
         },
         {
             id: 2,
@@ -80,16 +82,19 @@ const OrderDetails = ({ params }) => {
                         (singleOrder?.result && singleOrder?.result[0]?.status_name === 'Canceled') ?
                             <CustomTypography content={'Cancelled'} weight="BOLD" color="RED" size="SUPER-LARGE" />
                             :
-                            <CustomButton variant="primary" label='Cancel Order' onClick={() => handleCancelOrder()} />
+                            (
+                                (order?.ord_order_status == 1) || (order?.ord_order_status == 2) || (order?.ord_order_status === null)
+                                    ?
+                                    <CustomButton variant="primary" label='Cancel Order' onClick={() => handleCancelOrder()} />
+                                    : <></>
+                            )
                     }
                 </div>
             </div>
 
             <CustomTabs tabs={tabs} />
 
-          
 
-          
             <CancelOrderModal open={isCancelOrderModalOpen} handleClose={() => setIsCancelOrderModalOpen(false)} id={params.id} />
         </div>
     )

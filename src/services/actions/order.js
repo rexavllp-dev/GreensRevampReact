@@ -147,9 +147,16 @@ export const order = {
 
 
     handleAssignDriver: (data) => {
-
         return new Promise((resolve, reject) => {
             Axios.post('/orders/assigndriver', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
+
+    handleAssignReturnReplaceDriver: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/orders/assign-return-replace-driver', data)
                 .then(response => resolve(response))
                 .catch(error => reject(error))
         })

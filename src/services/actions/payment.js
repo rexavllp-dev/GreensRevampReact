@@ -19,6 +19,14 @@ export const payment = {
                 .catch(error => reject(error))
         })
     },
+    //Pay failed
+    payFailed: (data) => {
+        return new Promise((resolve, reject) => {
+            Axios.post('/payment/pay_failed', data)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+        })
+    },
 
     //Get all transactions
     getAllTransactions: () => {

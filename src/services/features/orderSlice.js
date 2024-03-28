@@ -105,6 +105,10 @@ const initialState = {
     isAllReasonsLoadError: false,
     allReasons: [],
 
+    isReturnReplaceDriverAssigning: false,
+    isReturnReplaceDriverAssigned: false,
+    isReturnReplaceDriverAssigningError: false,
+
 }
 
 export const getAllOrdersByAdmin = createAsyncThunk('getAllOrdersByAdmin', async ({
@@ -171,9 +175,9 @@ export const getAllOrderItems = createAsyncThunk('getAllOrderItems', async ({ id
     }
 })
 
-export const getUserOrders = createAsyncThunk('getUserOrders', async ({ sort, filters}, thunkAPI) => {
+export const getUserOrders = createAsyncThunk('getUserOrders', async ({ sort, filters }, thunkAPI) => {
     try {
-        const response = await order.getUserOrders({ sort, filters});
+        const response = await order.getUserOrders({ sort, filters });
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
         // throw error
@@ -279,6 +283,18 @@ export const handleAssignDriver = createAsyncThunk('handleAssignDriver', async (
     try {
 
         const response = await order.handleAssignDriver(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const handleAssignReturnReplaceDriver = createAsyncThunk('handleAssignReturnReplaceDriver', async ({ data }, thunkAPI) => {
+    try {
+
+        const response = await order.handleAssignReturnReplaceDriver(data);
         return thunkAPI.fulfillWithValue(response.data);
 
     } catch (error) {
@@ -792,6 +808,25 @@ const orderSlice = createSlice({
                 state.isAllReasonsLoading = false;
                 state.isAllReasonsLoaded = false;
                 state.isAllReasonsLoadError = true;
+            })
+
+
+            .addCase(handleAssignReturnReplaceDriver.pending, (state, action) => {
+                state.isReturnReplaceDriverAssigning = true;
+                state.isReturnReplaceDriverAssigned = false;
+                state.isReturnReplaceDriverAssigningError = false;
+            })
+
+            .addCase(handleAssignReturnReplaceDriver.fulfilled, (state, action) => {
+                state.isReturnReplaceDriverAssigning = false;
+                state.isReturnReplaceDriverAssigned = true;
+                state.isReturnReplaceDriverAssigningError = false;
+            })
+
+            .addCase(handleAssignReturnReplaceDriver.rejected, (state, action) => {
+                state.isReturnReplaceDriverAssigning = false;
+                state.isReturnReplaceDriverAssigned = false;
+                state.isReturnReplaceDriverAssigningError = true;
             })
     }
 })

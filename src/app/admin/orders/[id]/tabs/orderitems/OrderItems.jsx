@@ -6,13 +6,17 @@ import { convertDate } from '@/utils/helpers/convertDate'
 import CancelIndividualOrderModal from '@/components/modal/order/update/CancelIndividualOrderModal';
 import OrderUpdateModal from '@/components/modal/order/update/OrderUpdateModal';
 import CustomButton from '@/library/buttons/CustomButton';
+import ReturnReplaceDriverModal from '@/components/modal/order/update/ReturnReplaceDriverModal';
 
 
-const OrderItems = ({ data, allOrderItems }) => {
+const OrderItems = ({ data, allOrderItems, orderId }) => {
 
     const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
     const [isCancelIndividualOrderModalOpen, setIsCancelIndividualOrderModalOpen] = React.useState(false);
+    const [isReturnReplaceDriverModalOpen, setIsReturnReplaceDriverModalOpen] = React.useState(false);
     const [editData, setEditData] = React.useState({});
+    const [isReturn, setIsReturn] = React.useState(false);
+    const [orderItemId, setOrderItemId] = React.useState('');
 
     const handleShowStatus = (item) => {
         if (data?.status_name === 'Canceled') {
@@ -25,7 +29,7 @@ const OrderItems = ({ data, allOrderItems }) => {
         }
         if (data?.ord_order_status == 5) {
 
-            if (item?.replaceProductId != null) {
+            if (item?.replaceId != null) {
                 if (item?.replace_status_name === null || item?.replace_status_name === "Pending") {
                     return <Chip color={"warning"} variant="dot">Replace Request Pending</Chip>
                 } else if (item?.replace_status_name === "Approved") {
@@ -38,7 +42,7 @@ const OrderItems = ({ data, allOrderItems }) => {
                     return <Chip color={"success"} variant="dot">Replaced</Chip>
                 }
 
-            } else if (item?.returnProductId != null) {
+            } else if (item?.returnId != null) {
 
                 if (item?.return_status_name === null || item?.return_status_name === "Pending") {
                     return <Chip color={"warning"} variant="dot">Return Request Pending</Chip>
@@ -51,23 +55,22 @@ const OrderItems = ({ data, allOrderItems }) => {
                 } else if (item?.return_status_name === "Returned") {
                     return <Chip color={"success"} variant="dot">Return</Chip>
                 }
-            }
-            else if (item?.op_is_cancel) {
-                return '';
-            } else if (item?.op_is_return) {
-                return '';
             } else {
-
+                return <Chip color={"success"} variant="dot">Completed</Chip>
             }
         };
 
+        if (data?.ord_order_status == 1) {
+            return <Chip color={"success"} variant="dot">Pending</Chip>
+        }
+
     };
-    
+
     const renderActionButton = (item) => {
         if (data?.status_name === 'Canceled') {
             return ''
         }
-        if (data?.ord_order_status == 1 || data?.ord_order_status == 2) {
+        if (data?.ord_order_status == 1 || data?.ord_order_status == 2 || data?.ord_order_status === null) {
             return (
                 <>
                     <CustomButton variant="primary" label='Cancel Product'
@@ -86,19 +89,19 @@ const OrderItems = ({ data, allOrderItems }) => {
         }
         if (data?.ord_order_status == 5) {
 
-            if (item?.replaceProductId != null) {
+            if (item?.replaceId != null) {
                 if (item?.replace_status_name === null || item?.replace_status_name === "Pending") {
                     return (
                         <>
                             <CustomButton variant="primary" label='Assign Driver'
                                 onClick={() => {
-                                    setEditData({ ...item })
-                                    // setIsCancelIndividualOrderModalOpen(true)
+                                    setIsReturn(false);
+                                    setOrderItemId(item?.itemId);
+                                    setIsReturnReplaceDriverModalOpen(true);
                                 }}
                             />
                             <CustomButton variant="transparent" label='Reject Request'
                                 onClick={() => {
-                                    setEditData({ ...item })
                                     // setIsUpdateModalOpen(true)
                                 }} />
                         </>
@@ -113,20 +116,21 @@ const OrderItems = ({ data, allOrderItems }) => {
                     return ""
                 }
 
-            } else if (item?.returnProductId != null) {
+            } else if (item?.returnId != null) {
 
                 if (item?.return_status_name === null || item?.return_status_name === "Pending") {
                     return (
                         <>
                             <CustomButton variant="primary" label='Assign Driver'
                                 onClick={() => {
-                                    setEditData({ ...item })
-                                    // setIsCancelIndividualOrderModalOpen(true)
+                                    setIsReturn(true);
+                                    setOrderItemId(item?.itemId);
+                                    setIsReturnReplaceDriverModalOpen(true)
                                 }}
                             />
                             <CustomButton variant="transparent" label='Reject Request'
                                 onClick={() => {
-                                    setEditData({ ...item })
+
                                     // setIsUpdateModalOpen(true)
                                 }} />
                         </>
@@ -141,13 +145,6 @@ const OrderItems = ({ data, allOrderItems }) => {
                     //returned item
                     return ""
                 }
-            }
-            else if (item?.op_is_cancel) {
-                return '';
-            } else if (item?.op_is_return) {
-                return '';
-            } else {
-
             }
         };
     };
@@ -179,7 +176,6 @@ const OrderItems = ({ data, allOrderItems }) => {
                                             {
                                                 renderActionButton(item)
                                             }
-
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -188,8 +184,20 @@ const OrderItems = ({ data, allOrderItems }) => {
 
                     </TableBody>
                 </Table>
-                <OrderUpdateModal open={isUpdateModalOpen} handleClose={() => setIsUpdateModalOpen(false)} editData={editData} />
-                <CancelIndividualOrderModal open={isCancelIndividualOrderModalOpen} handleClose={() => setIsCancelIndividualOrderModalOpen(false)} editData={editData} />
+                <OrderUpdateModal open={isUpdateModalOpen}
+                    handleClose={() => setIsUpdateModalOpen(false)} editData={editData}
+                />
+
+                <CancelIndividualOrderModal open={isCancelIndividualOrderModalOpen}
+                    handleClose={() => setIsCancelIndividualOrderModalOpen(false)} editData={editData}
+                />
+
+                <ReturnReplaceDriverModal open={isReturnReplaceDriverModalOpen}
+                    handleClose={() => setIsReturnReplaceDriverModalOpen(false)}
+                    isReturn={isReturn} orderId={orderId}
+                    orderItemId={orderItemId}
+                />
+
             </CardBody>
         </Card>
     )

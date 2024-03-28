@@ -29,7 +29,7 @@ export default function QcDashboard() {
   
 
   const { dashboardOrders, isDriverAssigned } = useSelector(state => state.order);
-  const { allDrivers }      = useSelector(state => state.users);
+  const { allDrivers } = useSelector(state => state.users);
   
   
   const [modalData, setModalData] = React.useState({});

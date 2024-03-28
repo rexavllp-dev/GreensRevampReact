@@ -13,6 +13,12 @@ const initialState = {
     isPayCompleted: false,
     isPayCompleteError: false,
 
+
+    isPayFailLoading: false,
+    isPayFailed: false,
+    isPayFailError: false,
+
+
     isAllTransactionsLoading: false,
     isAllTransactionsLoaded: false,
     isAllTransactionsLoadError: false,
@@ -37,6 +43,19 @@ export const payComplete = createAsyncThunk('payComplete', async ({ data }, thun
     try {
 
         const response = await payment.payComplete(data);
+        return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+        // throw error
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
+export const payFailed = createAsyncThunk('payFailed', async ({ data }, thunkAPI) => {
+
+    try {
+
+        const response = await payment.payFailed(data);
         return thunkAPI.fulfillWithValue(response.data);
 
     } catch (error) {
@@ -98,6 +117,23 @@ const paymentSlice = createSlice({
                 state.isPayCompleting = false;
                 state.isPayCompleted = false;
                 state.isPayCompleteError = true;
+            })
+
+            // Pay failed
+            .addCase(payFailed.pending, (state, action) => {
+                state.isPayFailLoading = true;
+                state.isPayFailed = false;
+                state.isPayFailError = false;
+            })
+            .addCase(payFailed.fulfilled, (state, action) => {
+                state.isPayFailLoading = false;
+                state.isPayFailed = true;
+                state.isPayFailError = false;
+            })
+            .addCase(payFailed.rejected, (state, action) => {
+                state.isPayFailLoading = false;
+                state.isPayFailed = false;
+                state.isPayFailError = true;
             })
 
             //Get all transactions
