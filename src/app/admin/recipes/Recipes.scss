@@ -1,0 +1,22 @@
+.recipe-settings-wrapper {
+    padding: 20px 20px 70px 20px;
+  
+    .title {
+      padding-bottom: 30px;
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+    
+    .recipe-settings {
+        display: grid;
+        width: 100%;
+        justify-content:flex-start;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(265px, auto));
+        
+        // @include for_breakpoint("small-screen", "mobile") {
+            //   grid-template-columns: repeat(auto-fit, minmax(164px, auto));
+            // }
+      }
+          
+    }

@@ -11,19 +11,6 @@ export default function AdvancedSettings() {
             name: 'Pages',
             url: '/admin/pages',
         },
-        // Media
-        {
-            id: 2,
-            name: 'Media',
-            url: '/admin/media',
-        },
-        // Verification Settings
-        // {
-        //     id: 19,
-        //     name: 'Verification',
-        //     url: '/admin/advanced/verification',
-        // },
-        // Users
         {
             id: 4,
             name: 'Users',
@@ -38,24 +25,6 @@ export default function AdvancedSettings() {
             id: 3,
             name: 'Menu',
             url: '/admin/menu',
-        },
-        // Facebook Feed
-        {
-            id: 5,
-            name: 'Facebook Feed',
-            url: '/admin/facebook-feed',
-        },
-        // Localization
-        {
-            id: 6,
-            name: 'Localization',
-            url: '/admin/localization',
-        },
-        // Tools
-        {
-            id: 7,
-            name: 'Tools',
-            url: '/admin/tools',
         },
         // Reports
         {
